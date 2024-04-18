@@ -1,0 +1,9 @@
+[submodule ".config/tmux/plugins/tmux-powerline"]
+	path = .config/tmux/plugins/tmux-powerline
+	url = https://github.com/erikw/tmux-powerline.git
+[submodule ".config/tmux/plugins/tmux-sessionx"]
+	path = .config/tmux/plugins/tmux-sessionx
+	url = https://github.com/tmux-plugins/tmux-sessionist.git
+[submodule ".config/tmux/plugins/tpm"]
+	path = .config/tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git

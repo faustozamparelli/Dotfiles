@@ -1,0 +1,16 @@
+[user]
+	name = faustozamparelli
+	email = fausto.zamparelli@gmail.com
+
+#delta
+[core]
+    pager = delta
+	excludesFile = ~/.config/git/.gitignore
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+[merge]
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
