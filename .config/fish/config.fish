@@ -20,9 +20,6 @@ if status is-interactive
   set -Ua fish_user_paths $JAVA_HOME/bin
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
 
-  #Add exec to path
-  set -Ux fish_user_paths $HOME/dotfiles/.config/bin $fish_user_paths
-
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin
 
@@ -32,9 +29,9 @@ if status is-interactive
   # Pyenv Initialization
   pyenv init - | source
 
-  fzf_configure_bindings --directory=\cf --git_status=\cgs --git_log=\cgl --variables= --processes=
-  set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
-  set fzf_fd_opts --hidden 
+  #fifc
+  set -Ux fifc_editor nvim
+  set -U fifc_fd_opts --hidden
 
   # Aliases
   alias g++ "g++-13 -std=c++2a"
@@ -50,6 +47,11 @@ if status is-interactive
   alias man tldr
   alias o open
   alias py "python3"
+  alias cat "bat"
+  alias c "bat"
+
+  #bat theme
+  set -gx BAT_THEME "Dracula"
 
   #set git clone
   function gcl
@@ -64,10 +66,16 @@ if status is-interactive
 
   #eza (ll / lla)
   if type -q eza
-    alias l "eza -l -g --icons"
+    alias l "eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+    alias ls "l"
     alias la "l -a"
     alias lt "la -T -L=2"
   end
+
+  # fzf.fish
+  fzf_configure_bindings --directory=\cf --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
+  set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
+  set fzf_fd_opts --hidden 
 
   # open tmux at login, but not in VS Code
   if not set -q TMUX

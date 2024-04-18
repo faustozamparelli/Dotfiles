@@ -79,18 +79,18 @@
 			;; super + a
 			[:!CTO#QWEa "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"]
 			[:!CTOS#QWERa "/opt/homebrew/bin/yabai -m space --toggle padding ; /opt/homebrew/bin/yabai -m space --toggle gap"]
-			[:!QWE#CTOa :illumination_decrement]
+			[:!QWE#CTOa :display_brightness_decrement]
 			[:!QWES#CTORa "/opt/homebrew/bin/yabai -m space --balance"]
 			;; super + d
-			[:!QWE#CTOd :display_brightness_decrement]
+			[:!QWE#CTOd :illumination_decrement]
 			;; super + s
 			[:!CTO#QWEs "/opt/homebrew/bin/yabai -m space --focus prev"]
 			[:!CTOS#QWERs "/opt/homebrew/bin/yabai -m window --space prev && /opt/homebrew/bin/yabai -m space --focus prev && /opt/homebrew/bin/yabai -m window --focus last"]
-			[:!QWE#CTOs :illumination_increment]
+			[:!QWE#CTOs :display_brightness_increment]
 			[:!QWES#CTORs "/opt/homebrew/bin/yabai -m window --display prev && /opt/homebrew/bin/yabai -m space --display prev"]
 			;; super + f
 			[:!CTO#QWEf "/opt/homebrew/bin/yabai -m space --focus next"]
-			[:!QWE#CTOf :display_brightness_increment]
+			[:!QWE#CTOf :illumination_increment]
 			[:!CTOS#QWERf "/opt/homebrew/bin/yabai -m window --space next && /opt/homebrew/bin/yabai -m space --focus next && /opt/homebrew/bin/yabai -m window --focus last"]
 			[:!QWES#CTORf "/opt/homebrew/bin/yabai -m window --display next && /opt/homebrew/bin/yabai -m space --display next"]
 			;;super + e 
