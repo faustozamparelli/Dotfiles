@@ -1,5 +1,6 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
+config.disable_default_key_bindings = true
 local keybindings = require 'keybindings'
 config.keys = keybindings
 

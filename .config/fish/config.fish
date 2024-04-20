@@ -45,10 +45,13 @@ if status is-interactive
   alias tk "tmux kill-server"
   alias jp "jupyter notebook"
   alias man tldr
-  alias o open
+  alias o "code -r" 
   alias py "python3"
   alias cat "bat"
-  alias c "bat"
+  alias b "bat"
+  alias c "clear"
+  alias del "command rm"
+  alias rm "trash"
 
   #bat theme
   set -gx BAT_THEME "Dracula"

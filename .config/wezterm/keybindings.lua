@@ -56,6 +56,16 @@ local keybindings = {
       action = wezterm.action{SendString = "\x13\x70"},
     },
     {
+      key = 'h',
+      mods = 'CMD|SHIFT',
+      action = wezterm.action{SendString = "\x13\x7b"},
+    },
+    {
+      key = 'l',
+      mods = 'CMD|SHIFT',
+      action = wezterm.action{SendString = "\x13\x7d"},
+    },
+    {
       key = 'b',
       mods = 'CMD',
       action = wezterm.action{SendString = "\x13\x62"},
@@ -66,8 +76,8 @@ local keybindings = {
       action = wezterm.action{SendString = "\x13\x77"},
     },
     {
-      key = 'H',
-      mods = 'CMD',
+      key = 'h',
+      mods = 'CMD|OPT',
       action = wezterm.action{SendString = "\x13\x68"},
     },
     {
@@ -76,8 +86,8 @@ local keybindings = {
       action = wezterm.action{SendString = "\x1b\x5b\x44"},
     },
     {
-      key = 'J',
-      mods = 'CMD',
+      key = 'j',
+      mods = 'CMD|OPT',
       action = wezterm.action{SendString = "\x13\x6a"},
     },
     {
@@ -86,8 +96,8 @@ local keybindings = {
       action = wezterm.action{SendString = "\x13\x5b\x42"},
     },
     {
-      key = 'K',
-      mods = 'CMD',
+      key = 'k',
+      mods = 'CMD|OPT',
       action = wezterm.action{SendString = "\x13\x6b"},
     },
     {
@@ -96,8 +106,8 @@ local keybindings = {
       action = wezterm.action{SendString = "\x13\x5b\x42"},
     },
     {
-      key = 'L',
-      mods = 'CMD',
+      key = 'l',
+      mods = 'CMD|OPT',
       action = wezterm.action{SendString = "\x13\x6c"},
     },
     {
@@ -131,6 +141,11 @@ local keybindings = {
       action = wezterm.action{SendString = "\x13\x78"},
     },
     {
+      key = 'q',
+      mods = 'CMD',
+      action = wezterm.action{SendString = "\x13\x77"},
+    },
+    {
       key = 'UpArrow',
       mods = 'CMD',
       action = wezterm.action{SendString = "\x13\x1b\x5b\x41"},
@@ -149,6 +164,16 @@ local keybindings = {
       key = 'RightArrow',
       mods = 'CMD',
       action = wezterm.action{SendString = "\x13\x1b\x5b\x43"},
+    },
+    {
+      key = 'c',
+      mods = 'CMD',
+      action = wezterm.action{CopyTo="Clipboard"},
+    },
+    {
+      key = 'v',
+      mods = 'CMD',
+      action = wezterm.action{PasteFrom="Clipboard"},
     },
 }
 

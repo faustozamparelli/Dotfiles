@@ -223,5 +223,8 @@
   "breadcrumbs.enabled": false,
   "r.lsp.diagnostics": false,
   "gitlens.plusFeatures.enabled": false,
-  "update.mode": "manual"
+  "update.mode": "manual",
+  "git.confirmSync": false,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true
 }
