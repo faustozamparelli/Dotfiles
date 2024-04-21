@@ -49,9 +49,10 @@ if status is-interactive
   alias py "python3"
   alias cat "bat"
   alias b "bat"
-  alias c "clear"
+  alias cl "clear"
   alias del "command rm"
   alias rm "trash"
+  alias c "cd"
 
   #bat theme
   set -gx BAT_THEME "Dracula"
@@ -69,15 +70,15 @@ if status is-interactive
 
   #eza (ll / lla)
   if type -q eza
-    alias l "eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+    alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions"
     alias ls "l"
-    alias la "l -a"
-    alias lt "la -T -L=2"
+    alias la "eza --long --total-size -a --no-time --no-user --no-permissions"
+    alias lt "exa --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
   end
 
   # fzf.fish
   fzf_configure_bindings --directory=\cf --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
-  set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
+  #set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
   set fzf_fd_opts --hidden 
 
   # open tmux at login, but not in VS Code

@@ -153,7 +153,6 @@
   "pylint.args": ["cv2"],
   "python.languageServer": "Pylance",
   "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
-  "symbols.hidesExplorerArrows": false,
   "path-intellisense.showHiddenFiles": true,
   "path-intellisense.autoTriggerNextSuggestion": true,
   "sqltools.connections": [
@@ -201,7 +200,7 @@
   "git.autofetch": false,
   "workbench.colorTheme": "Shades of Purple",
   "workbench.tree.renderIndentGuides": "onHover",
-  "workbench.tree.indent": 17,
+  "workbench.tree.indent": 10,
   "workbench.sideBar.location": "right",
   "workbench.activityBar.location": "hidden",
   "errorLens.enabledDiagnosticLevels": ["warning", "info"],
@@ -222,9 +221,10 @@
   "workbench.editor.enablePreview": false,
   "breadcrumbs.enabled": false,
   "r.lsp.diagnostics": false,
-  "gitlens.plusFeatures.enabled": false,
   "update.mode": "manual",
   "git.confirmSync": false,
   "python.analysis.typeCheckingMode": "basic",
-  "python.analysis.autoImportCompletions": true
+  "python.analysis.autoImportCompletions": true,
+  "terminal.integrated.defaultLocation": "editor",
+  "python.analysis.nodeExecutable": "/opt/homebrew/bin/node"
 }
