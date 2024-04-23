@@ -41,7 +41,7 @@
           }
           [:##escape :right_control :macbook]
           [:##non_us_backslash :escape]
-          [:!CTOcaps_lock :escape]
+          [:!CTOcaps_lock :!Tc]
           [:!QSj :end]
           [:!QSk :home]
 

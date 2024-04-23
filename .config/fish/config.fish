@@ -81,6 +81,15 @@ if status is-interactive
   fzf_configure_bindings --directory=\cz --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
   set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
   set fzf_fd_opts --hidden --type=f
+  set fzf_git_status_opts --bind "enter:execute(git diff {})"
+  set fzf_git_log_opts --bind "enter:execute(git show {})"
+  set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
+  set fzf_processes_opts --bind "enter:execute(kill -9 {})"
+
+  function fish_user_key_bindings
+    # Bind Ctrl + f to run the tmux-sessionizer.sh script
+    bind \cf '/opt/homebrew/bin/bash ~/.config/tmux/tmux-sessionizer.sh'
+  end
 
   # open tmux at login, but not in VS Code
   if not set -q TMUX

@@ -64,6 +64,7 @@ yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
 yabai -m rule --add app="^SF Symbols" manage=off
 yabai -m rule --add app="^Shottr" manage=off
+yabai -m rule --add app="^iAnyGo$" manage=off
 
 #configure height of sketchybar
 yabai -m config external_bar all:32:0
