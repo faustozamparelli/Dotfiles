@@ -1,7 +1,0 @@
-{
-    "diagnostics.globals": [
-        "vim",
-        "buffer_index",
-        "buffer_number"
-    ]
-}

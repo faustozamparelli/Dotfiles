@@ -53,6 +53,7 @@ if status is-interactive
   alias del "command rm"
   alias rm "trash"
   alias c "cd"
+  alias e "exit"
 
   #bat theme
   set -gx BAT_THEME "Dracula"
@@ -77,9 +78,9 @@ if status is-interactive
   end
 
   # fzf.fish
-  fzf_configure_bindings --directory=\cf --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
-  #set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
-  set fzf_fd_opts --hidden 
+  fzf_configure_bindings --directory=\cz --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
+  set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
+  set fzf_fd_opts --hidden --type=f
 
   # open tmux at login, but not in VS Code
   if not set -q TMUX

@@ -7,11 +7,8 @@ return {
 
       configs.setup({
         ensure_installed = {
-          "c",
           "lua",
-          "vim",
           "vimdoc",
-          "query",
           "typescript",
           "python",
           "rust",
@@ -19,18 +16,17 @@ return {
           "go",
           "java",
           "bash",
+          "fish",
           "markdown",
-          "markdown_inline",
         },
-        sync_install = true,
+        sync_install = false,
         auto_install = true,
         highlight = {
           enable = true,
-          additional_vim_regex_highlighting = true,
+          additional_vim_regex_highlighting = false,
         },
-        indent = { enable = true },
-        markid = {enable = true}
       })
     end,
-  },
+    },
 }
+

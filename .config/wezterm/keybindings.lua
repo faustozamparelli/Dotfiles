@@ -77,48 +77,68 @@ local keybindings = {
     },
     {
       key = 'h',
-      mods = 'CMD|OPT',
+      mods = 'CMD|CTRL',
       action = wezterm.action{SendString = "\x13\x68"},
     },
     {
+        key = 'j',
+        mods = 'CMD|CTRL',
+        action = wezterm.action{SendString = "\x13\x6a"},
+    },
+    {
+        key = 'k',
+        mods = 'CMD|CTRL',
+        action = wezterm.action{SendString = "\x13\x6b"},
+    },
+    {
+        key = 'l',
+        mods = 'CMD|CTRL',
+        action = wezterm.action{SendString = "\x13\x6c"},
+    },
+    {
       key = 'h',
-      mods = 'CMD|CTRL',
-      action = wezterm.action{SendString = "\x1b\x5b\x44"},
+      mods = 'CMD|OPT|CTRL',
+      action = wezterm.action{SendString = "\x13\x1b\x5b\x44"},
     },
     {
       key = 'j',
-      mods = 'CMD|OPT',
-      action = wezterm.action{SendString = "\x13\x6a"},
-    },
-    {
-      key = 'j',
-      mods = 'CMD|CTRL',
-      action = wezterm.action{SendString = "\x13\x5b\x42"},
+      mods = 'CMD|OPT|CTRL',
+      action = wezterm.action{SendString = "\x13\x1b\x5b\x42"},
     },
     {
       key = 'k',
-      mods = 'CMD|OPT',
-      action = wezterm.action{SendString = "\x13\x6b"},
+      mods = 'CMD|OPT|CTRL',
+      action = wezterm.action{SendString = "\x13\x1b\x5b\x41"},
     },
     {
-      key = 'k',
-      mods = 'CMD|CTRL',
-      action = wezterm.action{SendString = "\x13\x5b\x42"},
+        key = 'l',
+        mods = 'CMD|OPT|CTRL',
+        action = wezterm.action{SendString = "\x13\x1b\x5b\x43"},
     },
+--  {
+--      key = 'H',
+--      mods = 'CMD|OPT|CTRL',
+--      action = wezterm.action{SendString = "\x1b\x5b\x44"},
+--  },
+--  {
+--      key = 'J',
+--      mods = 'CMD|OPT|CTRL',
+--      action = wezterm.action{SendString = "\x13\x5b\x42"},
+--  },
+--  {
+--      key = 'K',
+--      mods = 'CMD|OPT|CTRL',
+--      action = wezterm.action{SendString = "\x13\x5b\x42"},
+--  },
+--  {
+--      key = 'L',
+--      mods = 'CMD|OPT|CTRL',
+--      action = wezterm.action{SendString = "\x13\x5b\x43"},
+--  },
     {
-      key = 'l',
-      mods = 'CMD|OPT',
-      action = wezterm.action{SendString = "\x13\x6c"},
-    },
-    {
-      key = 'l',
-      mods = 'CMD|CTRL',
-      action = wezterm.action{SendString = "\x13\x5b\x43"},
-    },
-    {
-      key = 'n',
-      mods = 'CMD',
-      action = wezterm.action{SendString = "\x13\x76"},
+        key = 'n',
+        mods = 'CMD',
+        action = wezterm.action{SendString = "\x13\x76"},
     },
     {
       key = 'r',
@@ -144,26 +164,6 @@ local keybindings = {
       key = 'q',
       mods = 'CMD',
       action = wezterm.action{SendString = "\x13\x77"},
-    },
-    {
-      key = 'UpArrow',
-      mods = 'CMD',
-      action = wezterm.action{SendString = "\x13\x1b\x5b\x41"},
-    },
-    {
-      key = 'DownArrow',
-      mods = 'CMD',
-      action = wezterm.action{SendString = "\x13\x1b\x5b\x42"},
-    },
-    {
-      key = 'LeftArrow',
-      mods = 'CMD',
-      action = wezterm.action{SendString = "\x13\x1b\x5b\x44"},
-    },
-    {
-      key = 'RightArrow',
-      mods = 'CMD',
-      action = wezterm.action{SendString = "\x13\x1b\x5b\x43"},
     },
     {
       key = 'c',
