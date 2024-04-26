@@ -50,8 +50,7 @@ if status is-interactive
   alias cat "bat"
   alias b "bat"
   alias cl "clear"
-  alias del "command rm"
-  alias rm "trash"
+  alias r "trash"
   alias c "cd"
   alias e "exit"
 
@@ -74,7 +73,7 @@ if status is-interactive
     alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions"
     alias ls "l"
     alias la "eza --long --total-size -a --no-time --no-user --no-permissions"
-    alias lt "exa --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
+    alias lt "eza --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
   end
 
   # fzf.fish
