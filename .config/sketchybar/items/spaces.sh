@@ -15,9 +15,9 @@ done
 
 sketchybar --add item space_separator left                             \
            --set space_separator icon="􀆊"                                \
-                                 icon.color=$LEFT_COLOR \
-                                 icon.padding_left=4                   \
+                                 icon.color=$WHITE \
+                                 icon.padding_left=0                   \
                                  label.drawing=off                     \
-                                 background.drawing=off                \
+                                 background.color=$BAR_COLOR \
                                  script="$PLUGIN_DIR/space_windows.sh" \
            --subscribe space_separator space_windows_change                           

@@ -3,6 +3,7 @@
 
 export WHITE=0xffffffff
 export BLACK=0xff000000
+export GRAY=0xff808080
 
 # -- Teal Scheme --
 # export BAR_COLOR=0xff001f30
