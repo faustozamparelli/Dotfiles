@@ -50,7 +50,8 @@ if status is-interactive
   alias cat "bat"
   alias b "bat"
   alias cl "clear"
-  alias r "trash"
+  alias del "trash_move.sh"
+  alias delx "trash_empty.sh"
   alias c "cd"
   alias e "exit"
 
@@ -77,7 +78,7 @@ if status is-interactive
   end
 
   # fzf.fish
-  fzf_configure_bindings --directory=\cz --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp
+  fzf_configure_bindings  --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp #--directory=\cs
   set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
   set fzf_fd_opts --hidden --type=f
   set fzf_git_status_opts --bind "enter:execute(git diff {})"
@@ -87,7 +88,8 @@ if status is-interactive
 
   function fish_user_key_bindings
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \cf '/opt/homebrew/bin/bash ~/.config/tmux/tmux-sessionizer.sh'
+    bind \cf '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
+    bind \cd '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
   end
 
   # open tmux at login, but not in VS Code
