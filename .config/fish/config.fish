@@ -78,7 +78,7 @@ if status is-interactive
   end
 
   # fzf.fish
-  fzf_configure_bindings  --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp #--directory=\cs
+  fzf_configure_bindings  --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cs
   set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
   set fzf_fd_opts --hidden --type=f
   set fzf_git_status_opts --bind "enter:execute(git diff {})"

@@ -47,7 +47,7 @@ export RIGHT_BG_COLOR=0xff8948ff
 export LEFT_BG_COLOR=0xff8948ff
 export LEFT_COLOR=$BLACK
 export LEFT_UNSELECTED=$WHITE
-export MUSIC=$WHITE
+export MUSIC=$BLACK
 export MUSIC_BG=0x00ffffff
 
 
