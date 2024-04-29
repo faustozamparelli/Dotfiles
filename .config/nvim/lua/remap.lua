@@ -12,7 +12,7 @@ vim.keymap.set("n", "<S-q>", "<cmd>:wq<CR>")
 vim.api.nvim_set_keymap("n", "<S-w>", ":w | so<CR>", {})
 vim.keymap.set("n", "<S-e>", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
 vim.keymap.set("n", "m", "mzJ`z")
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 --leader commands:
