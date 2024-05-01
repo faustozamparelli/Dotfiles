@@ -9,6 +9,7 @@ vim.api.nvim_set_keymap("n", "<leader>t", ":terminal<CR>i", {})
 
 --Shift commands:
 vim.keymap.set("n", "<S-q>", "<cmd>:wq<CR>")
+vim.keymap.set("n", "<leader>q", "<cmd>:bd<CR>")
 vim.api.nvim_set_keymap("n", "<S-w>", ":w | so<CR>", {})
 vim.keymap.set("n", "<S-e>", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
 vim.keymap.set("n", "m", "mzJ`z")
@@ -49,3 +50,10 @@ vim.api.nvim_set_keymap("n", "<C-J>", "<C-w>j", { noremap = true, silent = true 
 vim.api.nvim_set_keymap("n", "<C-K>", "<C-w>k", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-L>", "<C-w>l", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-H>", "<C-w>h", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap(
+	"n",
+	"<Esc>d",
+	"<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>",
+	{ noremap = true, silent = true }
+)

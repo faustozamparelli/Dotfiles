@@ -74,7 +74,8 @@ if status is-interactive
     alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions"
     alias ls "l"
     alias la "eza --long --total-size -a --no-time --no-user --no-permissions"
-    alias lt "eza --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
+    # alias lt "eza --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
+     alias lt "tre"
   end
 
   # fzf.fish
@@ -88,8 +89,8 @@ if status is-interactive
 
   function fish_user_key_bindings
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \cf '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
-    bind \cd '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
+    bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
+    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
   end
 
   # open tmux at login, but not in VS Code

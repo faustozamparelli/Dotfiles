@@ -1,4 +1,5 @@
 vim.o.shell = "/opt/homebrew/bin/fish"
+vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.g.mapleader = " "
 vim.keymap.set("n", "U", "<C-r>")
 vim.opt.relativenumber = true

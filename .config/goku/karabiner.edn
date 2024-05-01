@@ -12,7 +12,8 @@
           [:##left_control :left_option :macbook]
           [:##left_control :right_control :k7pro]
           [:##left_option :left_command :macbook]
-          [:##left_option :!QWright_option :k7pro]
+          ; [:##left_option :!QWright_option :k7pro]
+          [:##delete_forward :!QWright_option :k7pro]
           [:##right_control :right_option]
           {
               :from {:apple_vendor_top_case_key_code :keyboard_fn}

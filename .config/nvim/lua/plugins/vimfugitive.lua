@@ -1,7 +1,7 @@
 return {
-    "tpope/vim-fugitive",
-    config = function()
-      vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
-      vim.keymap.set("n", "<leader>gl", "<Cmd>Gclog<CR>")
-    end,
+	"tpope/vim-fugitive",
+	config = function()
+		vim.api.nvim_set_keymap("n", "<C-g>", ":Git<CR>", { noremap = true, silent = true })
+		vim.api.nvim_set_keymap("n", "<leader>gl", ":Gclog<CR>", { noremap = true, silent = true })
+	end,
 }

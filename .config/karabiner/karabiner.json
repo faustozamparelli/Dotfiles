@@ -96,7 +96,7 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "left_option",
+            "key_code" : "delete_forward",
             "modifiers" : {
               "optional" : [ "any" ]
             }

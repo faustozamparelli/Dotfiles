@@ -18,9 +18,9 @@ if venv_path ~= nil then
 	vim.g.pip3_path = venv_path .. "/bin/pip"
 else
 	local pyenv_python = io.popen("pyenv which python"):read("*a")
-	vim.g.python3_host_prog = pyenv_python:sub(1, -2) -- Remove trailing newline
+	vim.g.python3_host_prog = pyenv_python:sub(1, -2)
 	local pyenv_pip = io.popen("pyenv which pip"):read("*a")
-	vim.g.pip3_path = pyenv_pip:sub(1, -2) -- Remove trailing newline
+	vim.g.pip3_path = pyenv_pip:sub(1, -2)
 end
 
 require("settings")
