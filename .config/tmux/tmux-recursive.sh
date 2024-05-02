@@ -31,9 +31,10 @@ if [[ -d $selected ]]; then
         sleep 0.3
         tmux send-keys 'C-s' C-m
     else
-        # If Enter was pressed, cd into the directory in the current window
+        # If Enter was pressed, cd into the directory in the current window and rename the window
         tmux send-keys "cd $selected" C-m
         tmux send-keys 'C-s' C-m
+        tmux rename-window "$name"
     fi
 elif [[ -f $selected ]]; then
     # If file, determine the action based on the key pressed
@@ -43,7 +44,8 @@ elif [[ -f $selected ]]; then
         tmux new-window -n "$name" -c "$parent_dir"
         tmux send-keys "nvim $(basename "$selected")" C-m
     else
-        # If Enter was pressed, open the file in the current window
+        # If Enter was pressed, open the file in the current window and rename the window
         tmux send-keys "cd $parent_dir && nvim $(basename "$selected")" C-m
+        tmux rename-window "$name"
     fi
 fi

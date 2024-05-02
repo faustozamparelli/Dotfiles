@@ -54,6 +54,8 @@ if status is-interactive
   alias delx "trash_empty.sh"
   alias c "cd"
   alias e "exit"
+  alias finder "yazi"
+  alias t "ts-node"
 
   #bat theme
   set -gx BAT_THEME "Dracula"

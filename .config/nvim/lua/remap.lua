@@ -1,7 +1,7 @@
 vim.keymap.set("n", "<C-c>", "<cmd>nohlsearch<CR>")
 vim.api.nvim_set_keymap("n", "F", "$", {})
 vim.api.nvim_set_keymap("n", "S", "^", {})
-vim.api.nvim_set_keymap("n", "<leader><leader>", ":w<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader><leader>", ":w<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
@@ -57,3 +57,4 @@ vim.api.nvim_set_keymap(
 	"<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>",
 	{ noremap = true, silent = true }
 )
+vim.api.nvim_set_keymap("i", "<C-c>", "<plug>(copilot-dismiss)<C-c>", { noremap = true, silent = true })

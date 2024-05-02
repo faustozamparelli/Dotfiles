@@ -67,7 +67,7 @@ return {
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
 					-- Jump to the type of the word under your cursor.
-					--  Useful when you're not sure what type a variable is and you want to see
+					--  Useful when you're not sure what type a variable is and you want to seels
 					--  the definition of its *type*, not where it was *defined*.
 					map("<leader>d", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 
@@ -168,7 +168,7 @@ return {
 				--    https://github.com/pmizio/typescript-tools.nvim
 				--
 				-- But for many setups, the LSP (`tsserver`) will work just fine
-				-- tsserver = {},
+				tsserver = {},
 				--
 
 				lua_ls = {
