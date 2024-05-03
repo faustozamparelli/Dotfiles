@@ -1,5 +1,5 @@
 vim.o.shell = "/opt/homebrew/bin/fish"
-vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
+--vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.g.mapleader = " "
 vim.keymap.set("n", "U", "<C-r>")
@@ -23,7 +23,7 @@ vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.inccommand = "split"
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 15
 vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 vim.o.hlsearch = true
