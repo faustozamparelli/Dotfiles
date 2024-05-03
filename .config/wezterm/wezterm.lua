@@ -11,7 +11,7 @@ config.colors = {
 	background = "rgb(0, 0, 0)",
 }
 config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
-config.font_size = 17.5
+config.font_size = 15.8
 
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
