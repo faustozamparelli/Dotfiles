@@ -13,6 +13,7 @@ if status is-interactive
   set -gx PIPENV_PYTHON "$PYENV_ROOT/shims/python"
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
+  set -gx GIT_CONFIG ~/.config/git/.gitconfig
 
   # Add directories to PATH
   set -Ua fish_user_paths /opt/homebrew/bin
