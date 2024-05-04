@@ -10,7 +10,7 @@ else
         selected=$1
     else
         # First, search for files and directories at depth 1 in ~/ and ~/.config/
-        result=$(find ~/ ~/.config/ ~/Downloads/ ~/Developer/ /Volumes/SD/ -mindepth 1 -maxdepth 1 -type d | fzf --expect=ctrl-space)
+        result=$(find ~/ ~/.config/ ~/Downloads/ ~/Developer/ -mindepth 1 -maxdepth 1 -type d | fzf --expect=ctrl-space)
         key=$(head -1 <<< "$result")
         selected=$(tail -1 <<< "$result")
     fi
