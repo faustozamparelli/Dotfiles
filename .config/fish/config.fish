@@ -14,6 +14,9 @@ if status is-interactive
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
 
+  set -x PNPM_HOME "/Users/faustozamparelli/Library/pnpm"
+  set -x PATH $PNPM_HOME $PATH
+
   # Add directories to PATH
   set -Ua fish_user_paths /opt/homebrew/bin
   set -Ua fish_user_paths $PYENV_ROOT/bin
