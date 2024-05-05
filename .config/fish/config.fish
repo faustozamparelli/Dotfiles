@@ -8,8 +8,8 @@ if status is-interactive
   #thefuck
   thefuck --alias | source 
 
-  # Environment Variables
   set -gx PYENV_ROOT "$HOME/.pyenv"
+  # Environment Variables
   set -gx PIPENV_PYTHON "$PYENV_ROOT/shims/python"
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
