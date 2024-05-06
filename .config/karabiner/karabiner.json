@@ -209,7 +209,7 @@
           "from" : {
             "key_code" : "j",
             "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
+              "mandatory" : [ "left_command", "left_shift" ]
             }
           },
           "to" : [ {
@@ -227,7 +227,7 @@
           "from" : {
             "key_code" : "k",
             "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
+              "mandatory" : [ "left_command", "left_shift" ]
             }
           },
           "to" : [ {
