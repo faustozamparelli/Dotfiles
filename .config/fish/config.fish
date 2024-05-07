@@ -58,7 +58,8 @@ if status is-interactive
   alias tk "tmux kill-server"
   alias jp "jupyter notebook"
   alias man tldr
-  alias o "code -r" 
+  # alias o "code -r" 
+   alias o "open"
   alias py "python3"
   alias cat "bat"
   alias b "bat"
