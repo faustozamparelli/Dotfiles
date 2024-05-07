@@ -36,6 +36,16 @@ if status is-interactive
   set -Ux fifc_editor nvim
   set -U fifc_fd_opts --hidden
 
+  #renaming tmux window
+  function cd
+    builtin cd $argv; and tmux rename-window (basename $PWD)
+  end
+
+  function z_tmux
+    __zoxide_z $argv; and tmux rename-window (basename $PWD)
+  end
+
+
   # Aliases
   alias g++ "g++-13 -std=c++2a"
   alias gcc "gcc-13 -std=c17"
@@ -56,6 +66,7 @@ if status is-interactive
   alias del "trash_move.sh"
   alias delx "trash_empty.sh"
   alias c "cd"
+  alias z "z_tmux"
   alias e "exit"
   alias finder "yazi"
   alias t "ts-node"
