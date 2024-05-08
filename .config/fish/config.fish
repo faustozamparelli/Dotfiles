@@ -60,7 +60,7 @@ if status is-interactive
   alias jp "jupyter notebook"
   alias man tldr
   # alias o "code -r" 
-   alias o "open"
+  alias o "open"
   alias py "python3"
   alias cat "bat"
   alias b "bat"
@@ -72,6 +72,9 @@ if status is-interactive
   alias e "exit"
   alias finder "yazi"
   alias t "ts-node"
+
+  #setting up the ssh
+  alias mcstudio 'ssh -i ~/.ssh/key1-mcstudio faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
 
   #bat theme
   set -gx BAT_THEME "Dracula"
@@ -112,9 +115,9 @@ if status is-interactive
   end
 
   # open tmux at login, but not in VS Code
-  if not set -q TMUX
-    if test "$TERM_PROGRAM" != "vscode"
-      exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+    if not set -q TMUX
+      if test "$TERM_PROGRAM" != "vscode"
+          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+      end
     end
-  end
 end
