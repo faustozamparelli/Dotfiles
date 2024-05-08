@@ -23,6 +23,7 @@ return {
 					i = {
 						["<C-b>"] = require("telescope.actions").select_horizontal,
 						["<C-n>"] = require("telescope.actions").select_vertical,
+						["<C-x>"] = require("telescope.actions").delete_buffer,
 					},
 				},
 			},

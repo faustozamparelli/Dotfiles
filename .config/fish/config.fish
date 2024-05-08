@@ -8,8 +8,8 @@ if status is-interactive
   #thefuck
   thefuck --alias | source 
 
-  # Environment Variables
   set -gx PYENV_ROOT "$HOME/.pyenv"
+  # Environment Variables
   set -gx PIPENV_PYTHON "$PYENV_ROOT/shims/python"
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
@@ -22,6 +22,7 @@ if status is-interactive
   set -Ua fish_user_paths $PYENV_ROOT/bin
   set -Ua fish_user_paths $JAVA_HOME/bin
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
+  set -Ua fish_user_paths /usr/local/bin/
 
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin

@@ -10,7 +10,7 @@ fi
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    result=$(find ~/Developer/ ~/Downloads/ /Volumes/SD/ ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ -mindepth 1 -type f | fzf --expect=ctrl-space)
+    result=$(find ~/Developer/ ~/Downloads/ ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ -mindepth 1 -type f | fzf --expect=ctrl-space)
     key=$(head -1 <<< "$result")
     selected=$(tail -1 <<< "$result")
 fi

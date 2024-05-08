@@ -3,7 +3,7 @@
 source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors
 
 IP_ADDRESS=$(scutil --nwi | grep address | sed 's/.*://' | tr -d ' ' | head -1)
-UPDOWN=$(ifstat -i "en0" -b 0.1 1 | tail -n1)
+UPDOWN=$(ifstat -i "en1" -b 0.1 1 | tail -n1)
 DOWN=$(echo "$UPDOWN" | awk "{ print \$1 }" | cut -f1 -d ".")
 DOWN_FORMAT=""
 if [ "$DOWN" -gt "999" ]; then
