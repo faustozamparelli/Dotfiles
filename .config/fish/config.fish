@@ -116,14 +116,12 @@ if status is-interactive
 '
   end
 
+  eval (ssh-agent -c)
+  ssh-add ~/.ssh/github
 
   # open tmux at login, but not in VS Code
     if not set -q TMUX
       if test "$TERM_PROGRAM" != "vscode"
-          if set -q SSH_CLIENT
-              eval (ssh-agent -c)
-              ssh-add ~/.ssh/github
-          end
           exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
       end
     end
