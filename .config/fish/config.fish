@@ -112,6 +112,9 @@ if status is-interactive
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
     bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
+
+    bind \ej '~/.config/tmux/tmux-layouts.sh
+'
   end
 
   # open tmux at login, but not in VS Code
