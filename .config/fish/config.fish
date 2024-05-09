@@ -123,8 +123,8 @@ if status is-interactive
           if set -q SSH_CLIENT
               eval (ssh-agent -c)
               ssh-add ~/.ssh/github
-              exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
           end
+          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
       end
     end
 end
