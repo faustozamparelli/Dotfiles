@@ -76,6 +76,13 @@ if status is-interactive
   alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
   alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
 
+  function cpmcstudio
+    scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:$argv[1] $argv[2]
+  end
+
+  function cpmcpro
+    scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:$argv[1] $argv[2]
+  end
   #bat theme
   set -gx BAT_THEME "Dracula"
 
