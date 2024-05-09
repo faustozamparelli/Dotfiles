@@ -73,7 +73,8 @@ if status is-interactive
   alias t "ts-node"
 
   #setting up the ssh
-  alias mcstudio 'ssh -i ~/.ssh/key1-mcstudio faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
+  alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
+  alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
 
   #bat theme
   set -gx BAT_THEME "Dracula"
@@ -112,12 +113,12 @@ if status is-interactive
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
     bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
-    bind \ej '~/.config/tmux/tmux-layouts.sh
-'
+    bind \ej '~/.config/tmux/tmux-layouts.sh'
   end
 
   eval (ssh-agent -c)
-  ssh-add ~/.ssh/github
+  ssh-add ~/.ssh/mcstudio
+  ssh-add ~/.ssh/mcpro
 
   # open tmux at login, but not in VS Code
     if not set -q TMUX
