@@ -116,9 +116,16 @@ if status is-interactive
     bind \ej '~/.config/tmux/tmux-layouts.sh'
   end
 
-  eval (ssh-agent -c)
-  ssh-add ~/.ssh/mcstudio
-  ssh-add ~/.ssh/mcpro
+  # Set up SSH agent to authenticate to GitHub
+    eval (ssh-agent -c) &>/dev/null
+    switch (hostname)
+        case "FaustosacStudio.homenet.telecomitalia.it"
+            ssh-add ~/.ssh/mcstudio &>/dev/null
+        case "Faustos-MacBook-Pro.local"
+            ssh-add ~/.ssh/mcpro &>/dev/null
+        case '*'
+            echo "Unknown machine"
+    end
 
   # open tmux at login, but not in VS Code
     if not set -q TMUX
