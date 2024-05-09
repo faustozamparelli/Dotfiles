@@ -46,7 +46,6 @@ if status is-interactive
     __zoxide_z $argv; and tmux rename-window (basename $PWD)
   end
 
-
   # Aliases
   alias g++ "g++-13 -std=c++2a"
   alias gcc "gcc-13 -std=c17"
@@ -117,10 +116,15 @@ if status is-interactive
 '
   end
 
+
   # open tmux at login, but not in VS Code
     if not set -q TMUX
       if test "$TERM_PROGRAM" != "vscode"
-          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+          if set -q SSH_CLIENT
+              eval (ssh-agent -c)
+              ssh-add ~/.ssh/github
+              exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+          end
       end
     end
 end
