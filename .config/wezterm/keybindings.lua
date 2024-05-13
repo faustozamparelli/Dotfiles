@@ -185,6 +185,11 @@ local keybindings = {
 		mods = "CMD",
 		action = wezterm.action({ SendString = "\x1b\x64" }),
 	},
+	{
+		key = "s",
+		mods = "CMD",
+		action = wezterm.action({ SendString = "\x13\x73" }),
+	},
 }
 
 return keybindings

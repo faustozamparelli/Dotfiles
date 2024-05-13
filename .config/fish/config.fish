@@ -97,6 +97,16 @@ if status is-interactive
     end
   end
 
+  # for yazi
+  function yy
+	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+	yazi $argv --cwd-file="$tmp"
+	if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+		cd -- "$cwd"
+	end
+	rm -f -- "$tmp"
+  end
+
   #eza (ll / lla)
   if type -q eza
     alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions"

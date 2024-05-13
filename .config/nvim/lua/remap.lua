@@ -8,7 +8,7 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 vim.api.nvim_set_keymap("n", "<leader>t", ":terminal<CR>i", {})
 
 --Shift commands:
-vim.keymap.set("n", "<S-q>", "<cmd>:wq<CR>")
+vim.keymap.set("n", "<S-q>", "<cmd>:w<CR>:silent !tmux kill-window<CR>")
 vim.keymap.set("n", "<leader>q", "<cmd>:bd<CR>")
 vim.api.nvim_set_keymap("n", "<S-w>", ":w | so<CR>", {})
 vim.keymap.set("n", "<S-e>", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
