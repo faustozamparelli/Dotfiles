@@ -1,5 +1,8 @@
 local wezterm = require("wezterm")
 local keybindings = {
+	{ key = "=", mods = "CMD", action = "IncreaseFontSize" },
+	{ key = "-", mods = "CMD", action = "DecreaseFontSize" },
+	{ key = "0", mods = "CMD", action = "ResetFontSize" },
 	{
 		key = "1",
 		mods = "CMD",

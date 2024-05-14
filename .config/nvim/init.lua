@@ -23,6 +23,4 @@ else
 	vim.g.pip3_path = pyenv_pip:sub(1, -2)
 end
 
-require("settings")
-require("remap")
 require("lazy").setup("plugins")
