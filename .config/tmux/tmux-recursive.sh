@@ -26,11 +26,8 @@ name=$(basename "$selected")
 # Get the parent directory of the selected file
 parent_dir=$(dirname "$selected")
 
-# Open a new tmux window with the file name, cd into the parent directory, and open the file in nvim
-# The -d option prevents the new window from being immediately selected
-tmux new-window -d -n "$name" -c "$parent_dir"
+# Determine if the selection is a file or directory
 tmux send-keys "cd $parent_dir && nvim $(basename "$selected")" C-m
-tmux select-window -t :"$name"
 
 # # Determine if the selection is a file or directory
 # if [[ -d $selected ]]; then
