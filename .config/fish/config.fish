@@ -132,7 +132,7 @@ if status is-interactive
 
     bind \ej '~/.config/tmux/tmux-layouts.sh'
 
-    bind \eg 'nvim .'
+    bind \eg 'nvim'
   end
 
   # Set up SSH agent to authenticate to GitHub

@@ -34,7 +34,7 @@ else
     if [[ -d $selected ]]; then
           # If Enter was pressed, cd into the directory in the current window
           tmux send-keys "cd $selected" C-m
-          tmux send-keys 'C-s' C-m
+          tmux send-keys 'nvim .' C-m
     elif [[ -f $selected ]]; then
         # If file, determine the action based on the key pressed
         parent_dir=$(dirname "$selected")
