@@ -69,7 +69,7 @@ if status is-interactive
   alias c "cd"
   alias z "z_tmux"
   alias e "exit"
-  alias finder "yazi"
+  alias fi "yazi"
   alias t "ts-node"
 
   #setting up the ssh
