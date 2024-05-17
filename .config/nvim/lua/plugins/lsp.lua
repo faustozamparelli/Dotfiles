@@ -76,8 +76,8 @@ return {
 							},
 						},
 					},
-					html_lsp = {},
 				},
+				html = {},
 			}
 			require("mason").setup()
 			local ensure_installed = vim.tbl_keys(servers or {})
