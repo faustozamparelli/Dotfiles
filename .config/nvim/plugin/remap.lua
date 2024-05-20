@@ -75,7 +75,7 @@ set("n", "+", ":vertical resize +2<CR>", { noremap = true, silent = true })
 set("n", "_", ":vertical resize -2<CR>", { noremap = true, silent = true })
 
 -- run tmux scripts inside nvim
-set("n", "<Esc>d", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true })
+set("n", "<Esc>g", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true })
 set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = true })
 
 -- -- open diagnostics

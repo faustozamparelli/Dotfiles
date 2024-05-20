@@ -51,5 +51,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+
+vim.cmd([[
+  autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call luaeval('require("nvim-possession").list()') | endif
+]])
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0

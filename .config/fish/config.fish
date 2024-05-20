@@ -127,12 +127,12 @@ if status is-interactive
 
   function fish_user_key_bindings
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
+    bind \eg '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
     bind \ej '~/.config/tmux/tmux-layouts.sh'
 
-    bind \eg 'nvim'
+    bind \ed 'nvim'
   end
 
   # Set up SSH agent to authenticate to GitHub
