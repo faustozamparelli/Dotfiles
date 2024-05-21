@@ -14,14 +14,19 @@ return {
 		vim.keymap.set("n", "<C-d>", function()
 			possession.list()
 		end)
-		vim.keymap.set("n", "<leader>sn", function()
+		vim.keymap.set("n", "<leader>ss", function()
 			possession.new()
-		end)
+		end, { desc = "Save session" })
 		vim.keymap.set("n", "<leader>su", function()
 			possession.update()
-		end)
+		end, { desc = "Update session" })
 		vim.keymap.set("n", "<leader>sd", function()
 			possession.delete()
-		end)
+		end, { desc = "Delete session" })
+		require("fzf-lua").setup({
+			files = {
+				header = false,
+			},
+		})
 	end,
 }
