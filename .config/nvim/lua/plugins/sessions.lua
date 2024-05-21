@@ -9,15 +9,14 @@ return {
 			sessions = {
 				sessions_path = vim.fn.expand("~/.config/nvim/sessions/"),
 			},
-			autosave = true,
 		})
 		vim.keymap.set("n", "<C-d>", function()
 			possession.list()
 		end)
-		vim.keymap.set("n", "<leader>ss", function()
+		vim.keymap.set("n", "<leader>sn", function()
 			possession.new()
 		end, { desc = "Save session" })
-		vim.keymap.set("n", "<leader>su", function()
+		vim.keymap.set("n", "<leader>ss", function()
 			possession.update()
 		end, { desc = "Update session" })
 		vim.keymap.set("n", "<leader>sd", function()

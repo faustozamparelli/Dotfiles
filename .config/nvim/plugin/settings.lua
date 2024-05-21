@@ -43,17 +43,12 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 vim.cmd([[cnoremap <Down> <C-n>]])
 vim.cmd([[cnoremap <Up> <C-p>]])
---highlight yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-})
 
-vim.cmd([[
-  autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call luaeval('require("nvim-possession").list()') | endif
-]])
+vim.cmd([[ autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
+vim.cmd("autocmd BufWritePre no-neck-pain.md setlocal buftype=nofile")
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0
+
+-- vim.cmd([[
+-- autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif
+-- ]])
