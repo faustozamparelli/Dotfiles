@@ -9,6 +9,9 @@ return {
 			sessions = {
 				sessions_path = vim.fn.expand("~/.config/nvim/sessions/"),
 			},
+			autoswitch = {
+				enabled = true,
+			},
 		})
 		vim.keymap.set("n", "<C-d>", function()
 			possession.list()

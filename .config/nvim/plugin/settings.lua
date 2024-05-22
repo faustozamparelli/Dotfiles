@@ -44,8 +44,9 @@ vim.api.nvim_create_autocmd("TermOpen", {
 vim.cmd([[cnoremap <Down> <C-n>]])
 vim.cmd([[cnoremap <Up> <C-p>]])
 
+vim.cmd([[autocmd BufRead,BufWrite ~/.config/nvim/notes/* set nobuflisted bufhidden=wipe]])
 vim.cmd([[ autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
-vim.cmd("autocmd BufWritePre no-neck-pain.md setlocal buftype=nofile")
+
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0
 

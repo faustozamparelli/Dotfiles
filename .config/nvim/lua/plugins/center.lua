@@ -3,8 +3,8 @@ return {
 	version = "*",
 	config = function()
 		vim.keymap.set("n", "<leader>f", "<cmd>:NoNeckPain<CR>")
-		vim.keymap.set("n", "0", "<cmd>:NoNeckPainWidthUp<CR>")
-		vim.keymap.set("n", "9", "<cmd>:NoNeckPainWidthDown<CR>")
+		vim.keymap.set("n", "<C-]>", "<cmd>:NoNeckPainWidthUp<CR>")
+		vim.keymap.set("n", "<C-[>", "<cmd>:NoNeckPainWidthDown<CR>")
 		require("no-neck-pain").setup({
 			buffers = {
 				scratchPad = {
