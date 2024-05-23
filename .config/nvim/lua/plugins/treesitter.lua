@@ -18,6 +18,8 @@ return {
 					"bash",
 					"fish",
 					"markdown",
+					"r",
+					"rnoweb",
 				},
 				sync_install = false,
 				auto_install = true,

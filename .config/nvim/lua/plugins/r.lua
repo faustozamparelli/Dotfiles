@@ -1,5 +1,6 @@
 return {
 	"R-nvim/R.nvim",
+	dependencies = { "R-nvim/cmp-r" },
 	config = function()
 		-- Create a table with the options to be passed to setup()
 		local opts = {
@@ -11,6 +12,7 @@ return {
 					-- opportunity to create mappings local to buffers.
 					vim.api.nvim_buf_set_keymap(0, "n", "<Enter>", "<Plug>RDSendLine", {})
 					vim.api.nvim_buf_set_keymap(0, "v", "<Enter>", "<Plug>RSendSelection", {})
+					vim.api.nvim_buf_set_keymap(0, "n", "<LocalLeader>h", "<cmd>:RMapsDesc<CR>", {})
 				end,
 			},
 			min_editor_width = 72,
@@ -30,6 +32,11 @@ return {
 			opts.objbr_auto_start = true
 		end
 		require("r").setup(opts)
+		require("cmp").setup({
+			sources = {
+				{ name = "cmp_r" },
+			},
+		})
 	end,
 	lazy = false,
 }
