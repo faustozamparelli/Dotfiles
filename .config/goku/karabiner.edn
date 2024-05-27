@@ -141,8 +141,12 @@
           [:!Wk :up_arrow]
           [:!Wj :down_arrow]
           [:!Wl :right_arrow]
-          [:!WSk :home]
-          [:!WSj :end]
+          [:!WSk :!Sup_arrow]
+          [:!WSj :!Sdown_arrow]
+          [:!WSl :!Sright_arrow]
+          [:!WSh :!Sleft_arrow]
+          ; [:!WSk :home]
+          ; [:!WSj :end]
       ]}
   ]
 }

@@ -37,6 +37,9 @@ return {
 				{ name = "cmp_r" },
 			},
 		})
+		vim.cmd([[
+         autocmd FileType r setlocal wrap
+        ]])
 	end,
 	lazy = false,
 }

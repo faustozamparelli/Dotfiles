@@ -27,6 +27,9 @@ if status is-interactive
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin
 
+  #Api keys
+  set -Ux GROQ_API_KEY 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
+
   #Adding the bare directory for my dotfiles
   alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 

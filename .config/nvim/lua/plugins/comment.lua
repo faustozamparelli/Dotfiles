@@ -1,9 +1,15 @@
 return {
-    'numToStr/Comment.nvim',
-    opts = {},
-    lazy = false,
-    config = function()
-        require('Comment').setup()
-    end
-    --gc, gb
+	"numToStr/Comment.nvim",
+	opts = {},
+	lazy = false,
+	config = function()
+		require("Comment").setup({
+			toggler = {
+				line = "cm",
+			},
+			opleader = {
+				line = "cm",
+			},
+		})
+	end,
 }
