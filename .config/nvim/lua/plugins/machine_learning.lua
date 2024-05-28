@@ -1,10 +1,9 @@
 return {
 	{
-		"goerz/jupytext.vim",
-		init = function()
-			-- will use `# %%` to define cells
-			vim.g.jupytext_fmt = "py:percent"
-		end,
+		"GCBallesteros/jupytext.nvim",
+		config = true,
+		-- Depending on your nvim distro or config you may need to make the loading not lazy
+		-- lazy=false,
 	},
 	{
 		"jpalardy/vim-slime",
@@ -29,6 +28,7 @@ return {
 			-- 	vim.cmd.SlimeConfig,
 			-- 	{ noremap = true, desc = "Open slime configuration" }
 			-- )
+			vim.api.nvim_set_keymap("n", "<leader>cn", "o# %%<Esc>o", { noremap = true, silent = true })
 			vim.keymap.set("x", "<leader>e", "<Plug>SlimeRegionSend", { noremap = true, desc = "send line to tmux" })
 			vim.keymap.set(
 				"n",
