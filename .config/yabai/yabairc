@@ -74,6 +74,7 @@ yabai -m rule --add app="^Things$" manage=off
 yabai -m rule --add app="^Clock$" manage=off
 yabai -m rule --add app="^R$" manage=off
 yabai -m rule --add app="^Python$" manage=off
+yabai -m rule --add app="^Reminders$" manage=off
 
 #configure height of sketchybar
 yabai -m config external_bar all:32:0
