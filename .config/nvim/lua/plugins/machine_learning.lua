@@ -21,21 +21,21 @@ return {
 				vim.fn.search(vim.g.slime_cell_delimiter, "b")
 			end
 
-			vim.keymap.set("n", "<leader>e", vim.cmd.SlimeSend, { noremap = true, desc = "send line to term" })
+			vim.api.nvim_set_keymap("n", "<Enter>", ":SlimeSendCurrentLine<CR>", { noremap = true, silent = true })
 			-- vim.keymap.set(
 			-- 	"n",
 			-- 	"<leader>cv",
 			-- 	vim.cmd.SlimeConfig,
 			-- 	{ noremap = true, desc = "Open slime configuration" }
 			-- )
-			vim.api.nvim_set_keymap("n", "<leader>cn", "o# %%<Esc>o", { noremap = true, silent = true })
-			vim.keymap.set("x", "<leader>e", "<Plug>SlimeRegionSend", { noremap = true, desc = "send line to tmux" })
-			vim.keymap.set(
-				"n",
-				"<leader>ep",
-				"<Plug>SlimeParagraphSend",
-				{ noremap = true, desc = "Send Paragraph with Slime" }
-			)
+			vim.api.nvim_set_keymap("n", "<leader>cn", "o# %%<Esc>o<Esc>", { noremap = true, silent = true })
+			vim.keymap.set("x", "<Enter>", "<Plug>SlimeRegionSend", { noremap = true, desc = "send line to tmux" })
+			-- vim.keymap.set(
+			--     "n",
+			--     "<leader>ep",
+			--     "<Plug>SlimeParagraphSend",
+			--     { noremap = true, desc = "Send Paragraph with Slime" }
+			-- )
 			vim.keymap.set(
 				"n",
 				"<leader>ck",
