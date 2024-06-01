@@ -51,6 +51,7 @@ if status is-interactive
   end
 
   # Aliases
+  alias dev 'open http://localhost:3000; npm run dev'
   alias g++ "g++-13 -std=c++2a"
   alias gcc "gcc-13 -std=c17"
 
