@@ -10,7 +10,7 @@ fi
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    result=$(find ~/Developer/ ~/Downloads/ ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ -mindepth 1 -type f | gum filter --limit 1 --placeholder 'Pick a file' --prompt='🎯')
+    result=$(fd . -t f --exclude node_modules --exclude '*.txt' --exclude '*.log' --exclude '*.json' --exclude '*.xml' ~/Developer/ ~/Downloads/ ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ | fzf --prompt='🎯 ')
     key=$(head -1 <<< "$result")
     selected=$(tail -1 <<< "$result")
 fi
@@ -27,7 +27,7 @@ name=$(basename "$selected")
 parent_dir=$(dirname "$selected")
 
 # Determine if the selection is a file or directory
-tmux send-keys "cd $parent_dir && nvim $(basename "$selected")" C-m
+tmux send-keys "cd $parent_dir && n $(basename "$selected")" C-m
 
 # # Determine if the selection is a file or directory
 # if [[ -d $selected ]]; then

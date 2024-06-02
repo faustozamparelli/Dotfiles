@@ -7,7 +7,7 @@ return {
 		local possession = require("nvim-possession")
 		possession.setup({
 			sessions = {
-				sessions_path = vim.fn.expand("~/.config/nvim/sessions/"),
+				sessions_path = vim.fn.expand("~/.config/nvimheavy/sessions/"),
 			},
 			autoswitch = {
 				enabled = true,

@@ -4,6 +4,8 @@ if status is-interactive
   #Set VIM as the default editor + alias
   set -gx EDITOR nvim
   alias n nvim
+  alias nh 'NVIM_APPNAME=nvimheavy nvim'
+  alias nn nvim_configuration_swticher.sh 
 
   #thefuck
   thefuck --alias | source 
@@ -75,7 +77,8 @@ if status is-interactive
   alias z "z_tmux"
   alias e "exit"
   alias fi "yazi"
-  alias t "ts-node"
+  alias ts "ts-node"
+  alias t "taskwarrior-tui"
 
   #setting up the ssh
   alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
@@ -132,12 +135,12 @@ if status is-interactive
 
   function fish_user_key_bindings
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \eg '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
+    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
     bind \ej '~/.config/tmux/tmux-layouts.sh'
 
-    bind \ed 'nvim'
+    #bind \ee 'nvim'
   end
 
   # Set up SSH agent to authenticate to GitHub

@@ -10,7 +10,7 @@ else
         selected=$1
     else
         # First, search for files and directories at depth 1 in ~/ and ~/.config/
-        result=$(find ~/ ~/.config/ ~/Downloads/ ~/Developer/ -mindepth 1 -maxdepth 1 -type d | gum filter --limit 1 --placeholder 'Pick a directory' --prompt='🧃')
+        result=$(fd . -t d --max-depth 1 ~/ ~/.config/ ~/Downloads/ ~/Developer/ | fzf --prompt='🧃  ')
         key=$(head -1 <<< "$result")
         selected=$(tail -1 <<< "$result")
     fi
@@ -34,7 +34,7 @@ else
     if [[ -d $selected ]]; then
           # If Enter was pressed, cd into the directory in the current window
           tmux send-keys "cd $selected" C-m
-          tmux send-keys 'nvim .' C-m
+          tmux send-keys 'n .' C-m
     elif [[ -f $selected ]]; then
         # If file, determine the action based on the key pressed
         parent_dir=$(dirname "$selected")

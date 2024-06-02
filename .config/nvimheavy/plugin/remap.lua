@@ -11,8 +11,7 @@ set("n", "F", "$", { silent = true })
 set("n", "S", "^", { silent = true })
 
 --save the file
---set("n", "<leader><leader>", ":w<CR>:lua vim.lsp.buf.format()<CR>", { silent = true })
-set("n", "<leader><leader>", ":w<CR>", { silent = true })
+set("n", "<leader><leader>", ":w<CR>:lua vim.lsp.buf.format()<CR>", { silent = true })
 
 -- previous/next diagnostic
 set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
