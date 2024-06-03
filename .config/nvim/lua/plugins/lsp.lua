@@ -1,196 +1,294 @@
 return {
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		config = function()
-			local configs = require("nvim-treesitter.configs")
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+            local configs = require("nvim-treesitter.configs")
 
-			configs.setup({
-				ensure_installed = {
-					"lua",
-					"json",
-					"vimdoc",
-					"javascript",
-					"typescript",
-					"python",
-					"rust",
-					"cpp",
-					"go",
-					-- "java",
-					"bash",
-					"fish",
-					"markdown",
-					"html",
-					-- "r",
-					-- "rnoweb",
-				},
-				sync_install = false,
-				auto_install = false,
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = false,
-				},
-				indent = {
-					enable = true,
-				},
-			})
-		end,
-	},
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			"stevearc/conform.nvim",
-		},
-		config = function()
-			local capabilities = nil
-			if pcall(require, "cmp_nvim_lsp") then
-				capabilities = require("cmp_nvim_lsp").default_capabilities()
-			end
+            configs.setup({
+                ensure_installed = {
+                    "lua",
+                    "json",
+                    "vimdoc",
+                    "javascript",
+                    "typescript",
+                    "python",
+                    "rust",
+                    "cpp",
+                    "go",
+                    -- "java",
+                    "bash",
+                    "fish",
+                    "markdown",
+                    "html",
+                    -- "r",
+                    -- "rnoweb",
+                },
+                sync_install = false,
+                auto_install = false,
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false,
+                },
+                indent = {
+                    enable = true,
+                },
+            })
+        end,
+    },
+    {
+        'folke/neodev.nvim',
+        event = 'VeryLazy',
+        dependencies = {
+            'neovim/nvim-lspconfig',
+        },
+        ft = { 'lua' },
+        config = true,
+    },
+    {
+        'junnplus/lsp-setup.nvim',
+        dependencies = {
+            'neovim/nvim-lspconfig',
+            'williamboman/mason.nvim',
+            'williamboman/mason-lspconfig.nvim',
+            'folke/neodev.nvim'
+        },
+        init = function()
+            vim.lsp.set_log_level('debug')
+            require('vim.lsp.log').set_format_func(vim.inspect)
 
-			local lspconfig = require("lspconfig")
+            local rounded = { border = 'rounded' }
+            vim.diagnostic.config({ float = rounded, underline = false })
+            local with_rounded = function(handler)
+                return vim.lsp.with(handler, rounded)
+            end
+            vim.lsp.handlers['textDocument/hover'] = with_rounded(vim.lsp.handlers.hover)
+            vim.lsp.handlers['textDocument/signatureHelp'] = with_rounded(vim.lsp.handlers.signature_help)
+        end,
+        opts = {
+            mappings = {
+                gd = function() require('telescope.builtin').lsp_definitions() end,
+                gi = function() require('telescope.builtin').lsp_implementations() end,
+                gr = function() require('telescope.builtin').lsp_references() end,
+                ['<space>f'] = vim.lsp.buf.format,
+            },
+            inlay_hints = {
+                enabled = true,
+                debug = true,
+            },
+            servers = {
+                eslint = {},
+                pylsp = {
+                    settings = {
+                        pylsp = {
+                            configurationSources = { 'flake8' },
+                            plugins = {
+                                pycodestyle = {
+                                    enabled = false,
+                                },
+                                mccabe = {
+                                    enabled = false,
+                                },
+                                pyflakes = {
+                                    enabled = false,
+                                },
+                                flake8 = {
+                                    enabled = true,
+                                },
+                                black = {
+                                    enabled = true,
+                                }
+                            }
+                        }
+                    }
+                },
+                yamlls = {
+                    settings = {
+                        yaml = {
+                            keyOrdering = false
+                        }
+                    }
+                },
+                zk = {},
+                jsonls = {},
+                bashls = {},
+                tsserver = {
+                    settings = {
+                        typescript = {
+                            inlayHints = {
+                                includeInlayParameterNameHints = 'all',
+                                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                includeInlayFunctionParameterTypeHints = true,
+                                includeInlayVariableTypeHints = true,
+                                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                                includeInlayPropertyDeclarationTypeHints = true,
+                                includeInlayFunctionLikeReturnTypeHints = true,
+                                includeInlayEnumMemberValueHints = true,
+                            }
+                        },
+                    }
+                },
+                clojure_lsp = {},
+                dockerls = {},
+                jsonnet_ls = {},
+                helm_ls = {},
+                zls = {
+                    cmd = { '/Users/jun/Documents/workspace/zls/zig-out/bin/zls', '--enable-debug-log' },
+                    settings = {
+                        zls = {
+                            enable_inlay_hints = true,
+                            inlay_hints_show_builtin = true,
+                            inlay_hints_exclude_single_argument = true,
+                            inlay_hints_hide_redundant_param_names = true,
+                            inlay_hints_hide_redundant_param_names_last_token = true,
+                        }
+                    }
+                },
+                gopls = {
+                    settings = {
+                        gopls = {
+                            gofumpt = true,
+                            -- staticcheck = true,
+                            usePlaceholders = true,
+                            codelenses = {
+                                gc_details = true,
+                            },
+                            hints = {
+                                rangeVariableTypes = true,
+                                parameterNames = true,
+                                constantValues = true,
+                                assignVariableTypes = true,
+                                compositeLiteralFields = true,
+                                compositeLiteralTypes = true,
+                                functionTypeParameters = true,
+                            },
+                        },
+                    },
+                },
+                bufls = {},
+                html = {},
+                lua_ls = {
+                    settings = {
+                        Lua = {
+                            workspace = {
+                                checkThirdParty = false,
+                            },
+                            hint = {
+                                enable = true,
+                                arrayIndex = 'Disable',
+                            },
+                        }
+                    }
+                },
+                ['rust_analyzer@nightly'] = {
+                    settings = {
+                        ['rust-analyzer'] = {
+                            diagnostics = {
+                                disabled = { 'unresolved-proc-macro' },
+                            },
+                            cargo = {
+                                loadOutDirsFromCheck = true,
+                            },
+                            procMacro = {
+                                enable = true,
+                            },
+                            inlayHints = {
+                                closureReturnTypeHints = {
+                                    enable = true
+                                },
+                            },
+                            cache = {
+                                warmup = false,
+                            }
+                        },
+                    },
+                }
+            }
+        },
+    },
+    {
+        'ray-x/lsp_signature.nvim',
+        event = 'VeryLazy',
+        config = true,
+    },
+    {
+        'hrsh7th/nvim-cmp',
+        event = 'InsertEnter',
+        dependencies = {
+            'hrsh7th/cmp-vsnip',
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/vim-vsnip',
+            'hrsh7th/vim-vsnip-integ',
+            'hrsh7th/cmp-buffer',
+            'onsails/lspkind-nvim',
+            'windwp/nvim-autopairs',
+            'hrsh7th/cmp-cmdline',
+        },
+        config = function()
+            local cmp = require('cmp')
+            local types = require('cmp.types')
+            local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+            local opts = {
+                formatting = {
+                    format = function(entry, vim_item)
+                        vim_item.kind = require('lspkind').presets.default[vim_item.kind] .. ' ' .. vim_item.kind
 
-			local servers = {
-				bashls = true,
-				gopls = {
-					settings = {
-						gopls = {
-							hints = {
-								assignVariableTypes = true,
-								compositeLiteralFields = true,
-								compositeLiteralTypes = true,
-								constantValues = true,
-								functionTypeParameters = true,
-								parameterNames = true,
-								rangeVariableTypes = true,
-							},
-						},
-					},
-				},
-				lua_ls = {
-					server_capabilities = {
-						semanticTokensProvider = vim.NIL,
-					},
-				},
-				rust_analyzer = true,
-				svelte = true,
-				templ = true,
-				cssls = true,
-
-				-- Probably want to disable formatting for this lang server
-				tsserver = {
-					server_capabilities = {
-						documentFormattingProvider = false,
-					},
-				},
-				biome = true,
-				prettier = true,
-
-				jsonls = true,
-				-- TODO: Check if i still need the filtypes stuff i had before
-				clangd = {
-					-- TODO: Could include cmd, but not sure those were all relevant flags.
-					--    looks like something i would have added while i was floundering
-					init_options = { clangdFileStatus = true },
-					filetypes = { "c" },
-				},
-			}
-
-			local servers_to_install = vim.tbl_filter(function(key)
-				local t = servers[key]
-				if type(t) == "table" then
-					return not t.manual_install
-				else
-					return t
-				end
-			end, vim.tbl_keys(servers))
-
-			require("mason").setup()
-			local ensure_installed = {
-				"stylua",
-				"lua_ls",
-				"delve",
-				-- "tailwind-language-server",
-			}
-
-			vim.list_extend(ensure_installed, servers_to_install)
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-			for name, config in pairs(servers) do
-				if config == true then
-					config = {}
-				end
-				config = vim.tbl_deep_extend("force", {}, {
-					capabilities = capabilities,
-				}, config)
-
-				lspconfig[name].setup(config)
-			end
-
-			local disable_semantic_tokens = {
-				lua = true,
-			}
-
-			vim.api.nvim_create_autocmd("LspAttach", {
-				callback = function(args)
-					local bufnr = args.buf
-					local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
-
-					local settings = servers[client.name]
-					if type(settings) ~= "table" then
-						settings = {}
-					end
-
-					local builtin = require("telescope.builtin")
-
-					vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
-					vim.keymap.set("n", "gd", builtin.lsp_definitions, { buffer = 0 })
-					vim.keymap.set("n", "gr", builtin.lsp_references, { buffer = 0 })
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
-					vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
-
-					vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
-					vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
-
-					local filetype = vim.bo[bufnr].filetype
-					if disable_semantic_tokens[filetype] then
-						client.server_capabilities.semanticTokensProvider = nil
-					end
-
-					-- Override server capabilities
-					if settings.server_capabilities then
-						for k, v in pairs(settings.server_capabilities) do
-							if v == vim.NIL then
-								---@diagnostic disable-next-line: cast-local-type
-								v = nil
-							end
-
-							client.server_capabilities[k] = v
-						end
-					end
-				end,
-			})
-
-			-- Autoformatting Setup
-			require("conform").setup({
-				formatters_by_ft = {
-					lua = { "stylua" },
-					html = { "prettier" },
-				},
-			})
-
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				callback = function(args)
-					require("conform").format({
-						bufnr = args.buf,
-						lsp_fallback = true,
-						quiet = true,
-					})
-				end,
-			})
-		end,
-	},
+                        -- set a name for each source
+                        vim_item.menu = ({
+                            buffer = '[Buf]',
+                            nvim_lsp = '[LSP]',
+                            luasnip = '[Snip]',
+                            nvim_lua = '[Lua]',
+                            latex_symbols = '[Latex]',
+                        })[entry.source.name]
+                        return vim_item
+                    end,
+                },
+                window = {
+                    completion = cmp.config.window.bordered(),
+                    documentation = cmp.config.window.bordered(),
+                },
+                snippet = {
+                    expand = function(args)
+                        vim.fn['vsnip#anonymous'](args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    -- ['<Tab>'] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
+                    -- ['<S-Tab>'] = function(fallback)
+                    --     local function input(keys, mode)
+                    --         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, true, true), mode or 'i',
+                    --             true)
+                    --     end
+                    --
+                    --     if vim.fn.pumvisible() == 1 then
+                    --         input('<C-p>', 'n')
+                    --     elseif vim.fn['vsnip#jumpable']() == -1 then
+                    --         input('<Plug>(vsnip-jump-prev)')
+                    --     else
+                    --         fallback()
+                    --     end
+                    -- end,
+                    ['<C-y>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                    ['<CR>'] = function(fallback)
+                        fallback()
+                    end,
+                    ['<C-e>'] = function(fallback)
+                        fallback()
+                    end,
+                }),
+                completion = {
+                    completeopt = 'menu,menuone,noselect',
+                },
+                preselect = types.cmp.PreselectMode.None,
+                sources = {
+                    { name = 'nvim_lsp' },
+                    { name = 'buffer' },
+                    { name = 'vsnip' },
+                },
+            }
+            cmp.setup(opts)
+            cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
+        end,
+    }
 }

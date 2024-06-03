@@ -26,3 +26,5 @@ else
 end
 
 require("lazy").setup("plugins")
+require("settings.remap")
+require("settings.settings")

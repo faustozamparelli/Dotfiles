@@ -3,7 +3,7 @@ vim.o.shell = "/opt/homebrew/bin/fish"
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.g.mapleader = " "
 vim.keymap.set("n", "U", "<C-r>")
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 vim.opt.mouse = ""
 vim.opt.showmode = false
 vim.opt.wrap = false
@@ -31,21 +31,18 @@ vim.o.incsearch = true
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.writebackup = false
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = "| ", trail = "·", nbsp = "␣" }
 vim.cmd([[set laststatus=3]])
-vim.api.nvim_create_autocmd("TermOpen", {
-	pattern = "*",
-	callback = function()
-		vim.opt_local.relativenumber = false
-		vim.opt_local.signcolumn = "no"
-	end,
-})
 vim.cmd([[cnoremap <Down> <C-n>]])
 vim.cmd([[cnoremap <Up> <C-p>]])
 
 vim.cmd([[autocmd BufRead,BufWrite ~/.config/nvim/notes/* set nobuflisted bufhidden=wipe]])
-vim.cmd([[ autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
+vim.cmd([[autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
+
+vim.wo.foldlevel = 99
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0
@@ -53,3 +50,11 @@ vim.cmd([[ autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-posse
 -- vim.cmd([[
 -- autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif
 -- ]])
+
+-- vim.api.nvim_create_autocmd("TermOpen", {
+--     pattern = "*",
+--     callback = function()
+--         vim.opt_local.relativenumber = false
+--         vim.opt_local.signcolumn = "no"
+--     end,
+-- })
