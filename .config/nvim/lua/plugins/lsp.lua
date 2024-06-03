@@ -58,7 +58,7 @@ return {
             require('vim.lsp.log').set_format_func(vim.inspect)
 
             local rounded = { border = 'rounded' }
-            vim.diagnostic.config({ float = rounded, underline = false })
+            vim.diagnostic.config({ float = rounded, underline = false, virtual_text = false })
             local with_rounded = function(handler)
                 return vim.lsp.with(handler, rounded)
             end
@@ -70,7 +70,7 @@ return {
                 gd = function() require('telescope.builtin').lsp_definitions() end,
                 gi = function() require('telescope.builtin').lsp_implementations() end,
                 gr = function() require('telescope.builtin').lsp_references() end,
-                ['<space>f'] = vim.lsp.buf.format,
+                -- ['<space>f'] = vim.lsp.buf.format,
             },
             inlay_hints = {
                 enabled = true,
@@ -290,5 +290,42 @@ return {
             cmp.setup(opts)
             cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
         end,
+    },
+    {
+        "folke/trouble.nvim",
+        opts = {}, -- for default options, refer to the configuration section for custom setup.
+        cmd = "Trouble",
+        keys = {
+            {
+                "E",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Diagnostics (Trouble)",
+            },
+            -- {
+            --     "<leader>xX",
+            --     "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+            --     desc = "Buffer Diagnostics (Trouble)",
+            -- },
+            -- {
+            --     "<leader>cs",
+            --     "<cmd>Trouble symbols toggle focus=false<cr>",
+            --     desc = "Symbols (Trouble)",
+            -- },
+            -- {
+            --     "<leader>cl",
+            --     "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+            --     desc = "LSP Definitions / references / ... (Trouble)",
+            -- },
+            -- {
+            --     "<leader>xL",
+            --     "<cmd>Trouble loclist toggle<cr>",
+            --     desc = "Location List (Trouble)",
+            -- },
+            -- {
+            --     "<leader>xQ",
+            --     "<cmd>Trouble qflist toggle<cr>",
+            --     desc = "Quickfix List (Trouble)",
+            -- },
+        },
     }
 }

@@ -21,6 +21,7 @@ return {
                 use_default_keymaps = false,
                 keymaps = {
                     ["<CR>"] = "actions.select",
+                    ["<C-o>"] = "actions.open_external",
                     ["<C-c>"] = "actions.close",
                     ["s"] = "actions.change_sort",
                 },
@@ -81,5 +82,5 @@ return {
         config = function()
             require("ibl").setup({ scope = { show_start = false, show_end = false, show_exact_scope = false } })
         end
-    }
+    },
 }

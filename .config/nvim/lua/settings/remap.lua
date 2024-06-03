@@ -81,7 +81,7 @@ set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = 
 
 vim.api.nvim_set_keymap(
     "n",
-    "<S-e>",
+    "<C-e>",
     [[:lua YankDiagnosticError()<CR>]],
     { noremap = true, silent = true, desc = "Copy error" }
 )
