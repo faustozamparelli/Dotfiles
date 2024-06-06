@@ -102,7 +102,8 @@
           [:!QWE#CTOe "/opt/homebrew/bin/yabai -m window --toggle split"]
           [:!QWES#CTORe "/opt/homebrew/bin/yabai -m space --rotate 90"]
           ;;super + w
-          [:!CTO#QWEw "osascript -e 'tell application \"System Events\" to keystroke \"w\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"] [:!QWE#CTOw "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2"]
+          [:!CTO#QWEw "osascript -e 'tell application \"System Events\" to keystroke \"w\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
+          [:!QWE#CTOw "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2"]
           ;super + q
           [:!CTO#QWEq "osascript -e 'tell application \"System Events\" to keystroke \"q\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
           [:!QWE#CTOq "if pgrep yabai > /dev/null; then /opt/homebrew/bin/yabai --stop-service; else /opt/homebrew/bin/yabai --start-service; fi"]
