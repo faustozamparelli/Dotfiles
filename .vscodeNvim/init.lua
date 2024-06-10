@@ -1,6 +1,7 @@
 vim.o.shell = "/opt/homebrew/bin/fish"
 --vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
 vim.g.mapleader = " "
+vim.opt.clipboard = "unnamedplus"
 -- vim.opt.relativenumber = true
 -- vim.opt.mouse = ""
 -- vim.opt.showmode = false
@@ -10,7 +11,6 @@ vim.g.mapleader = " "
 -- vim.opt.shiftwidth = 4
 -- vim.opt.expandtab = true
 -- vim.opt.smartindent = true
--- vim.opt.clipboard = "unnamedplus"
 -- vim.opt.breakindent = true
 -- vim.opt.ignorecase = true
 -- vim.opt.smartcase = true
