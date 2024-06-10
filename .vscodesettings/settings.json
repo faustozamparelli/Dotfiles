@@ -1,5 +1,4 @@
-{
-  "extensions.experimental.affinity": {
+{  "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
   "vscode-neovim.neovimInitVimPaths.darwin": "/Users/faustozamparelli/.vscodeNvim/init.lua",

@@ -65,6 +65,7 @@ yabai -m rule --add app="^iAnyGo$" manage=off
 yabai -m rule --add app="^Clock$" manage=off
 yabai -m rule --add app="^R$" manage=off
 yabai -m rule --add app="^Python$" manage=off
+yabai -m rule --add app="^Notion Calendar$" manage=off
 yabai -m rule --add label="Little Arc" app="^Arc$" title="^Space.*" manage=off
 
 #configure height of sketchybar

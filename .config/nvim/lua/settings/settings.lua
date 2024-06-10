@@ -38,7 +38,7 @@ vim.cmd([[cnoremap <Down> <C-n>]])
 vim.cmd([[cnoremap <Up> <C-p>]])
 
 vim.cmd([[autocmd BufRead,BufWrite ~/.config/nvim/notes/* set nobuflisted bufhidden=wipe]])
-vim.cmd([[autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
+-- vim.cmd([[autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
 
 vim.wo.foldlevel = 99
 vim.wo.foldmethod = "expr"
