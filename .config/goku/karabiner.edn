@@ -4,6 +4,7 @@
   :devices {
       :macbook [{:vendor_id 1452 :product_id 835}]
       :k7pro [{:vendor_id 13364 :product_id 624}]
+      :v8 [{:vendor_id 13364 :product_id 897}]
   }
   :main [
       {:des "Configure modifier keys on macbook keyboard", :rules [
@@ -14,7 +15,7 @@
           [:##left_option :left_command :macbook]
           ; [:##left_option :!QWright_option :k7pro]
           [:##delete_forward :!QWright_option :k7pro]
-          [:##right_control :right_option]
+          [:##right_control :right_option :macbook :k7pro]
           {
               :from {:apple_vendor_top_case_key_code :keyboard_fn}
               :to [{:key_code :right_control}]
@@ -42,7 +43,8 @@
           }
           [:##escape :right_control :macbook]
           [:##non_us_backslash :escape]
-          [:!CTOcaps_lock :!Tc]
+          [:!CTOcaps_lock :!Tc :macbook :k7pro]
+          [:!CTOa :!Tc :v8]
           [:!CSj :end :macbook]
           [:!CSk :home :macbook]
 
