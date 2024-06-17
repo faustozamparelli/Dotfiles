@@ -1,9 +1,9 @@
--- vim.o.shell = "/opt/homebrew/bin/fish"
---vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
+vim.o.shell = "/opt/homebrew/bin/fish"
+vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
 vim.g.mapleader = " "
 vim.opt.clipboard = "unnamedplus"
 -- vim.opt.relativenumber = true
--- vim.opt.mouse = ""
+vim.opt.mouse = ""
 -- vim.opt.showmode = false
 -- vim.opt.wrap = false
 -- vim.opt.tabstop = 4
@@ -36,17 +36,17 @@ vim.opt.clipboard = "unnamedplus"
 -- vim.cmd([[autocmd BufRead,BufWrite ~/.config/nvim/notes/* set nobuflisted bufhidden=wipe]])
 -- vim.cmd([[autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif ]])
 
--- vim.wo.foldlevel = 99
--- vim.wo.foldmethod = "expr"
--- vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
--- local set = vim.keymap.set
+vim.wo.foldlevel = 99
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+local set = vim.keymap.set
 
 -- -- dismiss copilot suggestions
 -- set("i", "<C-c>", "<plug>(copilot-dismiss)<C-c>", { silent = true })
 
 -- -- end/start of line
--- set("n", "F", "$", { silent = true })
--- set("n", "S", "^", { silent = true })
+set("n", "F", "$", { silent = true })
+set("n", "S", "^", { silent = true })
 
 -- -- previous/next diagnostic
 -- set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
@@ -69,8 +69,8 @@ vim.opt.clipboard = "unnamedplus"
 -- set("n", "m", "mzJ`z", { silent = true })
 
 -- -- move the line up/down while selected
--- set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
--- set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
+set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
+set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 -- -- move half a screen up/down in normal mode
 -- set("n", "J", "<C-d>zz", { silent = true })
 -- set("n", "K", "<C-u>zz", { silent = true })
