@@ -26,9 +26,7 @@ if status is-interactive
   set -Ua fish_user_paths $JAVA_HOME/bin
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
   set -Ua fish_user_paths /usr/local/bin/
-  set -gx PATH $HOME/.local/share/bob/v0.9.5/nvim-macos/bin $PATH
-
-
+  set -Ua fish_user_paths $HOME/.local/share/bob
 
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin

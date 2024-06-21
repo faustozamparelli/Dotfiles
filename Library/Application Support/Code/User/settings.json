@@ -37,7 +37,9 @@
     "sideBar.border": "#572592",
     "editorGroup.border": "#572592",
     "editorGutter.background": "#000000",
-    "editorCursor.background": "#000000"
+    "editorCursor.background": "#000000",
+    "quickInput.background": "#000000",
+    "quickInputList.focusBackground": "#572592",
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
@@ -147,7 +149,6 @@
   "breadcrumbs.enabled": false,
   "update.mode": "manual",
   "git.confirmSync": false,
-  "window.customTitleBarVisibility": "never",
   "vscode-neovim.compositeTimeout": 100,
   "git.openRepositoryInParentFolders": "never",
   "git.enableSmartCommit": true,
@@ -242,7 +243,9 @@
       ]
     }
   },
-  "workbench.colorTheme": "GitHub Dark"
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.editor.editorActionsLocation": "titleBar",
+  "window.customTitleBarVisibility": "never"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
