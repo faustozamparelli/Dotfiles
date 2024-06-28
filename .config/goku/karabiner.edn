@@ -43,11 +43,11 @@
           }
           [:##escape :right_control :macbook]
           [:##non_us_backslash :escape]
-          [:!CTOcaps_lock :!Tc :macbook :k7pro]
-          [:!CTOa :!Tc :v8]
+          [:!CTOa :!Tc]
           [:!CSj :end :macbook]
           [:!CSk :home :macbook]
-          [:!CTOcaps_lock "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen" :v8]
+          ;; super + capslock
+          [:!CTOcaps_lock "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"]
 
           ;; [:##right_arrow :right_control]
           ;; [:##left_arrow :right_option]
@@ -84,7 +84,6 @@
           [:!CTOS#QWERl "/opt/homebrew/bin/yabai -m window --warp east"]
           [:!QWES#CTORl "/opt/homebrew/bin/yabai -m window --resize right:20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:20:0 2> /dev/null"]	
           ;; super + a
-          [:!CTO#QWEa "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen" :macbook :k7pro]
           [:!CTOS#QWERa "/opt/homebrew/bin/yabai -m space --toggle padding ; /opt/homebrew/bin/yabai -m space --toggle gap"]
           [:!QWE#CTOa :display_brightness_decrement]
           [:!QWES#CTORa "/opt/homebrew/bin/yabai -m space --balance"]

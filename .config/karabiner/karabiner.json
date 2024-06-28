@@ -202,25 +202,6 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "caps_lock",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "c",
-            "modifiers" : [ "left_control" ]
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
             "key_code" : "a",
             "modifiers" : {
               "mandatory" : [ "left_command", "left_control", "left_option" ]
@@ -229,13 +210,6 @@
           "to" : [ {
             "key_code" : "c",
             "modifiers" : [ "left_control" ]
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 13364,
-              "product_id" : 897
-            } ],
-            "type" : "device_if"
           } ],
           "type" : "basic"
         }, {
@@ -283,13 +257,6 @@
           },
           "to" : [ {
             "shell_command" : "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 13364,
-              "product_id" : 897
-            } ],
-            "type" : "device_if"
           } ],
           "type" : "basic"
         } ]
@@ -523,25 +490,6 @@
           },
           "to" : [ {
             "shell_command" : "/opt/homebrew/bin/yabai -m window --resize right:20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:20:0 2> /dev/null"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "a",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_control", "left_option" ],
-              "optional" : [ "right_command", "right_control", "right_option" ]
-            }
-          },
-          "to" : [ {
-            "shell_command" : "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
           } ],
           "type" : "basic"
         }, {
