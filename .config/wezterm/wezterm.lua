@@ -8,13 +8,19 @@ config.default_prog = { "/opt/homebrew/bin/fish" }
 
 config.color_scheme = "Wez (Gogh)"
 config.colors = {
-	background = "rgb(0, 0, 0)",
+    background = "rgb(0, 0, 0)",
 }
 config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
-config.font_size = 15.8
+-- config.font_size = 15.8
+config.font_size = 14
 
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
 config.enable_scroll_bar = false
+
+-- config.window_background_image = "/Users/faustozamparelli/Library/Mobile Documents/com~apple~CloudDocs/Downloads/Wallpapers/Warp/Warp-1.jpg"
+-- config.window_background_image_hsb = {
+--     brightness = 0.1
+-- }
 
 return config

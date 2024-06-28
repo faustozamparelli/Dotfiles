@@ -39,14 +39,10 @@
     "editorGutter.background": "#000000",
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
-    "quickInputList.focusBackground": "#572592",
-    // "chat.avatarBackground": "#000000",
+    "quickInputList.focusBackground": "#572592"
+    // "chat.avatarBackground": "#000000"j,
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
-    // "statusBarItem.hoverBackground": "#000000",
-    // "statusBarItem.remoteBackground": "#000000",
-    // "statusBarItem.errorBackground": "#000000",
-    // "statusBarItem.warningBackground": "#000000",
     // "input.background": "#000000",
     // "inputOption.activeBackground": "#000000",
     // "inputValidation.errorBackground": "#000000",
@@ -181,6 +177,10 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.editor.editorActionsLocation": "titleBar",
+  "window.customTitleBarVisibility": "never",
+  "cSpell.language": "en,it,en-US",
   "highlight.regexes": {
     "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *TODO(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
       "filterFileRegex": ".*(?<!CHANGELOG.md)$",
@@ -243,9 +243,9 @@
       ]
     }
   },
-  "workbench.colorTheme": "GitHub Dark",
-  "workbench.editor.editorActionsLocation": "titleBar",
-  "window.customTitleBarVisibility": "never"
+  "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
+  "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
+  "latex-workshop.view.pdf.invert": 1
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {

@@ -274,6 +274,24 @@
             "type" : "device_if"
           } ],
           "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "caps_lock",
+            "modifiers" : {
+              "mandatory" : [ "left_command", "left_control", "left_option" ]
+            }
+          },
+          "to" : [ {
+            "shell_command" : "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 13364,
+              "product_id" : 897
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
         } ]
       }, {
         "description" : "Swap caps lock to backspace on macbook keyboard",
@@ -517,6 +535,13 @@
           },
           "to" : [ {
             "shell_command" : "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 1452,
+              "product_id" : 835
+            } ],
+            "type" : "device_if"
           } ],
           "type" : "basic"
         }, {

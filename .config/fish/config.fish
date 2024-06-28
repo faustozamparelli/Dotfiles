@@ -26,7 +26,7 @@ if status is-interactive
   set -Ua fish_user_paths $JAVA_HOME/bin
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
   set -Ua fish_user_paths /usr/local/bin/
-  set -Ua fish_user_paths $HOME/.local/share/bob
+  set -Ua fish_user_paths /Users/faustozamparelli/.local/share/bob/v0.9.5/nvim-macos/bin
 
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin
@@ -44,13 +44,8 @@ if status is-interactive
   set -Ux fifc_editor nvim
   set -U fifc_fd_opts --hidden
 
-  #renaming tmux window
-  function cd
-    builtin cd $argv; and tmux rename-window (basename $PWD)
-  end
-
   function z_tmux
-    __zoxide_z $argv; and tmux rename-window (basename $PWD)
+      __zoxide_z $argv
   end
 
   # Aliases
@@ -159,6 +154,14 @@ if status is-interactive
     if not set -q TMUX
       if test "$TERM_PROGRAM" != "vscode"
           exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+          #renaming tmux window
+          function cd
+              builtin cd $argv; and tmux rename-window (basename $PWD)
+          end
+
+          function z_tmux
+              __zoxide_z $argv; and tmux rename-window (basename $PWD)
+          end
       end
     end
 end
