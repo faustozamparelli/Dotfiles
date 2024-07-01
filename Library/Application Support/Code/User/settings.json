@@ -245,7 +245,8 @@
   },
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
-  "latex-workshop.view.pdf.invert": 1
+  "latex-workshop.view.pdf.invert": 1,
+  "workbench.activityBar.location": "hidden"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
