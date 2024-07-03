@@ -50,8 +50,8 @@ if status is-interactive
 
   # Aliases
   alias dev 'open http://localhost:3000; npm run dev'
-  alias g++ "g++-13 -std=c++2a"
-  alias gcc "gcc-13 -std=c17"
+  alias g++ "g++-14"
+  alias gcc "gcc-14"
 
   alias ghe "gh copilot explain"
   alias ghs "gh copilot suggest"
