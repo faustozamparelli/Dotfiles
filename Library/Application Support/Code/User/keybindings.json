@@ -131,10 +131,6 @@
     "command": "-workbench.action.toggleSidebarVisibility"
   },
   {
-    "key": "shift+cmd+u",
-    "command": "workbench.action.toggleAuxiliaryBar"
-  },
-  {
     "key": "alt+cmd+b",
     "command": "-workbench.action.toggleAuxiliaryBar"
   },
@@ -232,10 +228,6 @@
     "command": "-workbench.action.findInFiles"
   },
   {
-    "key": "ctrl+f",
-    "command": "workbench.action.quickOpen"
-  },
-  {
     "key": "cmd+p",
     "command": "-workbench.action.quickOpen"
   },
@@ -270,5 +262,17 @@
   {
     "key": "cmd+numpad0",
     "command": "-workbench.action.zoomReset"
+  },
+  {
+    "key": "shift+cmd+u",
+    "command": "workbench.action.focusAuxiliaryBar"
+  },
+  {
+    "key": "ctrl+f",
+    "command": "file-browser.open"
+  },
+  {
+    "key": "ctrl+s",
+    "command": "editor.action.sortLinesDescending"
   }
 ]

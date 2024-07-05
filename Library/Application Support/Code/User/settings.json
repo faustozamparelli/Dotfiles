@@ -6,7 +6,7 @@
   "editor.wordWrap": "on",
   "editor.accessibilitySupport": "off",
   "workbench.editor.showTabs": "multiple",
-  "editor.tabSize": 4,
+  "editor.tabSize": 2,
   "workbench.layoutControl.enabled": false,
   "workbench.startupEditor": "none",
   "workbench.tips.enabled": false,
@@ -149,22 +149,6 @@
   "git.openRepositoryInParentFolders": "never",
   "git.enableSmartCommit": true,
   "symbols.hidesExplorerArrows": false,
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "liveServer.settings.donotShowInfoMsg": true,
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "editor.autoClosingBrackets": "always",
   "editor.autoClosingComments": "always",
   "editor.autoClosingDelete": "always",
@@ -173,14 +157,10 @@
   "vscode-neovim.neovimExecutablePaths.darwin": "/Users/faustozamparelli/.local/share/bob/v0.9.5/nvim-macos/bin/nvim",
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
   "workbench.colorTheme": "GitHub Dark",
   "workbench.editor.editorActionsLocation": "titleBar",
-  "window.customTitleBarVisibility": "never",
-  "cSpell.language": "en,it,en-US",
+  "cSpell.language": "en,en-US,lorem",
   "highlight.regexes": {
     "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *TODO(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
       "filterFileRegex": ".*(?<!CHANGELOG.md)$",
@@ -246,7 +226,13 @@
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
   "latex-workshop.view.pdf.invert": 1,
-  "workbench.activityBar.location": "hidden"
+  "workbench.activityBar.location": "hidden",
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "window.customTitleBarVisibility": "never",
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.donotShowInfoMsg": true,
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
