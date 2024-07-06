@@ -1,0 +1,8 @@
+[
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "space space": "workspace::Save"
+    }
+  }
+]
