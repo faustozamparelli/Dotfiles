@@ -142,7 +142,7 @@ if status is-interactive
   # Set up SSH agent to authenticate to GitHub
     eval (ssh-agent -c) &>/dev/null
     switch (hostname)
-        case "FaustosacStudio.homenet.telecomitalia.it"
+        case "faustozamparelli"
             ssh-add ~/.ssh/mcstudio &>/dev/null
         case "Faustos-MacBook-Pro.local"
             ssh-add ~/.ssh/mcpro &>/dev/null

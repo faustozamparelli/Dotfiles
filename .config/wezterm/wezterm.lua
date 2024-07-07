@@ -11,12 +11,14 @@ config.colors = {
     background = "rgb(0, 0, 0)",
 }
 config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
--- config.font_size = 15.8
-config.font_size = 14
+config.font_size = 15.8
 
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
 config.enable_scroll_bar = false
+
+config.initial_cols = 141
+config.initial_rows = 62
 
 -- config.window_background_image = "/Users/faustozamparelli/Library/Mobile Documents/com~apple~CloudDocs/Downloads/Wallpapers/Warp/Warp-1.jpg"
 -- config.window_background_image_hsb = {
