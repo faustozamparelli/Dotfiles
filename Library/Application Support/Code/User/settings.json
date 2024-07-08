@@ -40,7 +40,7 @@
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
     "quickInputList.focusBackground": "#572592"
-    // "chat.avatarBackground": "#000000"j,
+    // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
     // "input.background": "#000000",
@@ -176,7 +176,8 @@
   },
   "[markdown]": {
     "editor.renderWhitespace": "all"
-}
+},
+  "editor.linkedEditing": true,
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
