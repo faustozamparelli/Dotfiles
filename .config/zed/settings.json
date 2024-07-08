@@ -9,9 +9,12 @@
   "format_on_save": "on",
   "experimental.theme_overrides": {
     "editor.foreground": "#a475ff",
-    "terminal.background": "#000000"
+    "terminal.background": "#000000",
+    "scrollbar.thumb.background": "#a475ff80"
   },
-  "shell": {
-    "program": "/opt/homebrew/bin/fish"
+  "terminal": {
+    "shell": {
+      "program": "fish"
+    }
   }
 }
