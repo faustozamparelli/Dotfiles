@@ -39,7 +39,7 @@
     "editorGutter.background": "#000000",
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
-    "quickInputList.focusBackground": "#572592"
+    "quickInputList.focusBackground": "#572592",
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
@@ -137,7 +137,6 @@
   "workbench.tree.renderIndentGuides": "onHover",
   "workbench.tree.indent": 10,
   "workbench.sideBar.location": "right",
-  "workbench.iconTheme": "symbols",
   "editor.hover.delay": 300,
   "workbench.hover.delay": 0,
   "editor.hover.hidingDelay": 1000,
@@ -158,7 +157,6 @@
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
-  "workbench.colorTheme": "GitHub Dark",
   "workbench.editor.editorActionsLocation": "titleBar",
   "cSpell.language": "en,en-US,lorem",
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
@@ -176,8 +174,10 @@
   },
   "[markdown]": {
     "editor.renderWhitespace": "all"
-},
+  },
   "editor.linkedEditing": true,
+  "workbench.iconTheme": "city-lights-icons-vsc",
+  "workbench.colorTheme": "Real Synth"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {

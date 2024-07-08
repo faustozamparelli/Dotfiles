@@ -3,6 +3,7 @@
   "ui_font_family": "Hack Nerd Font Mono",
   "buffer_font_family": "Hack Nerd Font Mono",
   "vim_mode": true,
+  "tab_size": 2,
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "autosave": "on_focus_change",
