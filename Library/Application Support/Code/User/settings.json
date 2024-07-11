@@ -39,7 +39,7 @@
     "editorGutter.background": "#000000",
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
-    "quickInputList.focusBackground": "#572592",
+    "quickInputList.focusBackground": "#572592"
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
@@ -173,11 +173,15 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.renderWhitespace": "all"
+    "editor.renderWhitespace": "all",
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
   "editor.linkedEditing": true,
   "workbench.iconTheme": "city-lights-icons-vsc",
-  "workbench.colorTheme": "Real Synth"
+  "workbench.colorTheme": "Real Synth",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {

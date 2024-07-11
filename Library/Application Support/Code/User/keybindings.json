@@ -274,5 +274,5 @@
   {
     "key": "ctrl+s",
     "command": "editor.action.sortLinesDescending"
-  }
+  },
 ]
