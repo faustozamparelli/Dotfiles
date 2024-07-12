@@ -68,6 +68,7 @@ yabai -m rule --add app="^Python$" manage=off
 yabai -m rule --add label="Little Arc" app="^Arc$" title="^Space.*" manage=off
 yabai -m rule --add app="^Terminal$" manage=off
 yabai -m rule --add app="^WezTerm$" manage=off
+yabai -m rule --add app="^TextEdit$" manage=off
 
 #configure height of sketchybar
 yabai -m config external_bar all:32:0

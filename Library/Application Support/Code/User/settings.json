@@ -157,6 +157,7 @@
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
+  "workbench.colorTheme": "Real Synth",
   "workbench.editor.editorActionsLocation": "titleBar",
   "cSpell.language": "en,en-US,lorem",
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
@@ -166,7 +167,6 @@
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "window.customTitleBarVisibility": "never",
   "liveServer.settings.donotVerifyTags": true,
   "liveServer.settings.donotShowInfoMsg": true,
   "[css]": {
