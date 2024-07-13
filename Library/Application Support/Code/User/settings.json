@@ -181,7 +181,8 @@
   "workbench.colorTheme": "Real Synth",
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "window.customTitleBarVisibility": "never"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
