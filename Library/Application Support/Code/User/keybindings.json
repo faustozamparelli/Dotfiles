@@ -275,4 +275,14 @@
     "key": "ctrl+s",
     "command": "editor.action.sortLinesDescending"
   },
+  {
+    "key": "ctrl+g",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active"
+  }
 ]

@@ -163,7 +163,6 @@
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
   "latex-workshop.view.pdf.invert": 1,
-  "workbench.activityBar.location": "hidden",
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
@@ -182,7 +181,10 @@
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "window.customTitleBarVisibility": "never"
+  "window.customTitleBarVisibility": "never",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
