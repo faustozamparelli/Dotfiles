@@ -153,7 +153,7 @@
   "editor.autoClosingDelete": "always",
   "editor.autoClosingOvertype": "always",
   "editor.autoClosingQuotes": "always",
-  "vscode-neovim.neovimExecutablePaths.darwin": "/Users/faustozamparelli/.local/share/bob/v0.9.5/nvim-macos/bin/nvim",
+  "vscode-neovim.neovimExecutablePaths.darwin": "/Users/faustozamparelli/.asdf/shims/nvim",
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
