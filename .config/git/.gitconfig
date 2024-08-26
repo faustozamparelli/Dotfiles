@@ -5,7 +5,7 @@
 #delta
 [core]
     pager = delta
-	excludesFile = ~/.config/git/.gitignore
+  	excludesFile = ~/.config/git/.gitignore
 [interactive]
     diffFilter = delta --color-only
 [delta]
@@ -14,3 +14,22 @@
     conflictstyle = diff3
 [diff]
     colorMoved = default
+
+[alias]
+  s = status -s
+  ps = push
+  pl = pull
+  st = status
+  conf = config --global --edit
+  co = commit
+  ch = checkout
+  chd = checkout .
+  rh = reset HEAD
+  aa = add -A
+  a = add .
+  pr = pull --rebase
+  br = branch
+  bra = branc -a
+  coa = commit -a --amend -no-edit
+  
+

@@ -75,6 +75,16 @@ if status is-interactive
   alias ts "ts-node"
   alias t "taskwarrior-tui"
 
+  function server
+      set current_dir (pwd)
+      if test (count $argv) -gt 0
+          set start_file $argv[1]
+      else
+          set start_file ""
+      end
+      live-server --mount=/:"$current_dir" "$start_file"
+  end
+
   #setting up the ssh
   alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
   alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
