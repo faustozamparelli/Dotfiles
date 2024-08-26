@@ -284,5 +284,21 @@
     "key": "ctrl+shift+g",
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+cmd+l",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    "key": "alt+cmd+right",
+    "command": "-workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+cmd+h",
+    "command": "workbench.action.previousEditor"
+  },
+  {
+    "key": "alt+cmd+left",
+    "command": "-workbench.action.previousEditor"
   }
 ]

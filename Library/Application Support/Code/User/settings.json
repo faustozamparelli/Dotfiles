@@ -39,7 +39,8 @@
     "editorGutter.background": "#000000",
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
-    "quickInputList.focusBackground": "#572592"
+    "quickInputList.focusBackground": "#572592",
+    "notebook.cellBorderColor": "#ffffff"
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
@@ -158,7 +159,6 @@
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
   "workbench.colorTheme": "Real Synth",
-  "workbench.editor.editorActionsLocation": "titleBar",
   "cSpell.language": "en,en-US,lorem",
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
@@ -184,7 +184,10 @@
   "window.customTitleBarVisibility": "never",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "workbench.statusBar.visible": false,
+  "workbench.activityBar.location": "hidden",
+  "workbench.editor.editorActionsLocation": "hidden"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
