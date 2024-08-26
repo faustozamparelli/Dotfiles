@@ -44,6 +44,15 @@ vim.wo.foldlevel = 99
 vim.wo.foldmethod = "expr"
 vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
+-- Highlight trailing whitespaces in Markdown files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.list = true
+    vim.opt_local.listchars:append("trail:·")
+  end,
+})
+
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0
 

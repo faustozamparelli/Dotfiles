@@ -94,4 +94,13 @@ return {
       require("ibl").setup({ scope = { show_start = false, show_end = false, show_exact_scope = false } })
     end
   },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+    config = function()
+      vim.keymap.set("n", "<leader>mp", "<CMD>MarkdownPreviewToggle<CR>", { desc = "Markdown Preview" })
+    end,
+  }
 }
