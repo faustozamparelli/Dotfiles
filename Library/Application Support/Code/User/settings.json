@@ -158,7 +158,7 @@
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
-  "workbench.colorTheme": "Real Synth",
+  "workbench.colorTheme": "Tomorrow Night Blue",
   "cSpell.language": "en,en-US,lorem",
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
