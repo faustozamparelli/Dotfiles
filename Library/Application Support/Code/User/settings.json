@@ -40,7 +40,10 @@
     "editorCursor.background": "#000000",
     "quickInput.background": "#000000",
     "quickInputList.focusBackground": "#572592",
-    "notebook.cellBorderColor": "#ffffff"
+    "notebook.cellBorderColor": "#ffffff",
+    "tab.activeForeground": "#572592",
+    "notebook.focusedCellBackground": "#572592",
+    "notebook.cellHoverBackground": "#0000",
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
