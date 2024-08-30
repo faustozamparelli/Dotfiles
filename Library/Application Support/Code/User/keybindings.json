@@ -316,5 +316,30 @@
     "key": "ctrl+enter",
     "command": "-notebook.cell.execute",
     "when": "notebookCellListFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code' || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelCount > 0 || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelSourceCount > 0 || inlineChatFocused && notebookCellChatFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code'"
+  },
+  {
+    "key": "o",
+    "command": "jupyter.notebookeditor.addcellbelow",
+    "when": "notebookEditorFocused && !inputFocus && !notebookOutputInputFocused"
+  },
+  {
+    "key": "shift+up",
+    "command": "notebook.cell.moveUp",
+    "when": "notebookEditorFocused && !inputFocus"
+  },
+  {
+    "key": "alt+up",
+    "command": "-notebook.cell.moveUp",
+    "when": "notebookEditorFocused && !inputFocus"
+  },
+  {
+    "key": "shift+down",
+    "command": "notebook.cell.moveDown",
+    "when": "notebookEditorFocused && !inputFocus"
+  },
+  {
+    "key": "alt+down",
+    "command": "-notebook.cell.moveDown",
+    "when": "notebookEditorFocused && !inputFocus"
   }
 ]
