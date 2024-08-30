@@ -43,7 +43,7 @@
     "notebook.cellBorderColor": "#ffffff",
     "tab.activeForeground": "#572592",
     "notebook.focusedCellBackground": "#572592",
-    "notebook.cellHoverBackground": "#0000",
+    "notebook.cellHoverBackground": "#0000"
     // "chat.avatarBackground": "#000000",
     // "titleBar.activeBackground": "#000000",
     // "titleBar.inactiveBackground": "#000000",
@@ -188,9 +188,9 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "workbench.editor.editorActionsLocation": "hidden",
   "workbench.statusBar.visible": false,
-  "workbench.activityBar.location": "hidden",
-  "workbench.editor.editorActionsLocation": "hidden"
+  "workbench.activityBar.location": "hidden"
 }
 // "terminal.integrated.defaultLocation": "editor",
 // "github.copilot.enable": {
