@@ -161,8 +161,29 @@
   "window.restoreWindows": "none",
   "editor.defaultColorDecorators": true,
   "editor.fontFamily": "Hack Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
-  "workbench.colorTheme": "Tomorrow Night Blue",
   "cSpell.language": "en,en-US,lorem",
+  "cSpell.languageSettings": [
+    // This one works with Python
+    {
+      "languageId": "python",
+      "includeRegExpList": ["/#.*/", "/('''|\"\"\")[^\\1]+?\\1/g", "strings"]
+    },
+    // This one works with JavaScript, Typescript, etc
+    {
+      "languageId": "javascript,typescript",
+      "includeRegExpList": ["CStyleComment", "strings"]
+    },
+    // Use with cpp or c files
+    {
+      "languageId": "cpp,c",
+      // Turn off compound words, because it is only checking strings.
+      "allowCompoundWords": false,
+      // Only check comments and strings
+      "includeRegExpList": ["CStyleComment", "string"],
+      // Exclude includes, because they are also strings.
+      "ignoreRegExpList": ["/#include.*/"]
+    }
+  ],
   "latex-workshop.view.pdf.color.dark.pageBorderColor": "black",
   "latex-workshop.view.pdf.color.dark.pageColorsBackground": "black",
   "latex-workshop.view.pdf.invert": 1,
