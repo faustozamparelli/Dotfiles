@@ -144,7 +144,6 @@ if status is-interactive
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
     bind \ej '~/.config/tmux/tmux-layouts.sh'
-
     #bind \ee 'nvim'
   end
 
