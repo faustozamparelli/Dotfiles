@@ -48,96 +48,11 @@
           [:!CSk :home :macbook]
           ;; super + capslock
           [:!CTOcaps_lock "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"]
-
-          ;; [:##right_arrow :right_control]
-          ;; [:##left_arrow :right_option]
-          ;; [:##down_arrow :left_option]
-          ;; {
-          ;; 	:from {:key_code :up_arrow}
-          ;; 	:to [{:apple_vendor_top_case_key_code :keyboard_fn}]
-          ;; 	:type :basic
-          ;; }
       ]}
       {:des "Swap caps lock to backspace on macbook keyboard", :rules [
           [:##caps_lock :delete_or_backspace]
           [:##delete_or_backspace :delete_forward :macbook]
           [:##delete_or_backspace :grave_accent_and_tilde :k7pro]
-      ]}
-      {:des "super keys", :rules [
-          ;; super + h
-          [:!CTO#QWEh "/opt/homebrew/bin/yabai -m window --focus west"]
-          [:!CTOS#QWERh "/opt/homebrew/bin/yabai -m window --warp west"]
-          [:!QWES#CTORh "/opt/homebrew/bin/yabai -m window --resize right:-20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:-20:0 2> /dev/null"]
-          ;; super + j
-          [:!CTO#QWEj "/opt/homebrew/bin/yabai -m window --focus south"]
-          [:!QWE#CTOj :mute]
-          [:!CTOS#QWERj "/opt/homebrew/bin/yabai -m window --warp south"]
-          [:!QWES#CTORj "/opt/homebrew/bin/yabai -m window --resize bottom:0:20 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize top:0:20 2> /dev/null"]	
-          ;; super + k
-          [:!CTO#QWEk "/opt/homebrew/bin/yabai -m window --focus north"]
-          [:!QWE#CTOk :volume_decrement] 
-          [:!CTOS#QWERk "/opt/homebrew/bin/yabai -m window --warp north"]
-          [:!QWES#CTORk "/opt/homebrew/bin/yabai -m window --resize bottom:0:-20 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize top:0:-20 2> /dev/null"]	
-          ;; super + l
-          [:!CTO#QWEl "/opt/homebrew/bin/yabai -m window --focus east"]
-          [:!QWE#CTOl :volume_increment]
-          [:!CTOS#QWERl "/opt/homebrew/bin/yabai -m window --warp east"]
-          [:!QWES#CTORl "/opt/homebrew/bin/yabai -m window --resize right:20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:20:0 2> /dev/null"]	
-          ;; super + a
-          [:!CTOS#QWERa "/opt/homebrew/bin/yabai -m space --toggle padding ; /opt/homebrew/bin/yabai -m space --toggle gap"]
-          [:!QWE#CTOa :display_brightness_decrement]
-          [:!QWES#CTORa "/opt/homebrew/bin/yabai -m space --balance"]
-          ;; super + d
-          [:!QWE#CTOd :illumination_decrement]
-          ;; super + s
-          [:!CTO#QWEs "/opt/homebrew/bin/yabai -m space --focus prev"]
-          [:!CTOS#QWERs "/opt/homebrew/bin/yabai -m window --space prev && /opt/homebrew/bin/yabai -m space --focus prev && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!QWE#CTOs :display_brightness_increment]
-          [:!QWES#CTORs "/opt/homebrew/bin/yabai -m window --display prev && /opt/homebrew/bin/yabai -m space --display prev"]
-          ;; super + f
-          [:!CTO#QWEf "/opt/homebrew/bin/yabai -m space --focus next"]
-          [:!QWE#CTOf :illumination_increment]
-          [:!CTOS#QWERf "/opt/homebrew/bin/yabai -m window --space next && /opt/homebrew/bin/yabai -m space --focus next && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!QWES#CTORf "/opt/homebrew/bin/yabai -m window --display next && /opt/homebrew/bin/yabai -m space --display next"]
-          ;;super + e 
-          [:!CTO#QWEe "osascript -e 'tell application \"System Events\" to keystroke \"m\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
-          [:!QWE#CTOe "/opt/homebrew/bin/yabai -m window --toggle split"]
-          [:!QWES#CTORe "/opt/homebrew/bin/yabai -m space --rotate 90"]
-          ;;super + w
-          [:!CTO#QWEw "osascript -e 'tell application \"System Events\" to keystroke \"w\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
-          [:!QWE#CTOw "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2"]
-          ;super + q
-          [:!CTO#QWEq "osascript -e 'tell application \"System Events\" to keystroke \"q\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
-          [:!QWE#CTOq "if pgrep yabai > /dev/null; then /opt/homebrew/bin/yabai --stop-service; else /opt/homebrew/bin/yabai --start-service; fi"]
-          ;;super + n
-          [:!QWE#CTOn :rewind]
-          ;;super + m 
-          [:!QWE#CTOm :play_or_pause]
-          ;;super + , 
-          [:!QWE#CTOcomma :fastforward]
-          ;;super + numbers
-          [:!CTO#QWE1 "/opt/homebrew/bin/yabai -m space --focus 1 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE2 "/opt/homebrew/bin/yabai -m space --focus 2 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE3 "/opt/homebrew/bin/yabai -m space --focus 3 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE4 "/opt/homebrew/bin/yabai -m space --focus 4 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE5 "/opt/homebrew/bin/yabai -m space --focus 5 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE6 "/opt/homebrew/bin/yabai -m space --focus 6 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE7 "/opt/homebrew/bin/yabai -m space --focus 7 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE8 "/opt/homebrew/bin/yabai -m space --focus 8 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-          [:!CTO#QWE9 "/opt/homebrew/bin/yabai -m space --focus 9 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
-
-          [:!CTOS#QWER1 "/opt/homebrew/bin/yabai -m window --space 1 && /opt/homebrew/bin/yabai -m space --focus 1 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER2 "/opt/homebrew/bin/yabai -m window --space 2 && /opt/homebrew/bin/yabai -m space --focus 2 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER3 "/opt/homebrew/bin/yabai -m window --space 3 && /opt/homebrew/bin/yabai -m space --focus 3 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER4 "/opt/homebrew/bin/yabai -m window --space 4 && /opt/homebrew/bin/yabai -m space --focus 4 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER5 "/opt/homebrew/bin/yabai -m window --space 5 && /opt/homebrew/bin/yabai -m space --focus 5 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER6 "/opt/homebrew/bin/yabai -m window --space 6 && /opt/homebrew/bin/yabai -m space --focus 6 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER7 "/opt/homebrew/bin/yabai -m window --space 7 && /opt/homebrew/bin/yabai -m space --focus 7 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER8 "/opt/homebrew/bin/yabai -m window --space 8 && /opt/homebrew/bin/yabai -m space --focus 8 && /opt/homebrew/bin/yabai -m window --focus last"]
-          [:!CTOS#QWER9 "/opt/homebrew/bin/yabai -m window --space 9 && /opt/homebrew/bin/yabai -m space --focus 9 && /opt/homebrew/bin/yabai -m window --focus last"]
-          ;;super + o
-          [:!CTO#QWEo "/opt/homebrew/bin/yabai -m space --create"]
-          [:!CTOS#QWERo "/opt/homebrew/bin/yabai -m space --destroy"]
       ]}
       {:des "keyboard arrows", :rules[
           [:!Wh :left_arrow]
@@ -153,6 +68,83 @@
       ]}
   ]
 }
+
+      ; {:des "super keys", :rules [
+      ;     ;; super + h
+      ;     [:!CTO#QWEh "/opt/homebrew/bin/yabai -m window --focus west"]
+      ;     [:!CTOS#QWERh "/opt/homebrew/bin/yabai -m window --warp west"]
+      ;     [:!QWES#CTORh "/opt/homebrew/bin/yabai -m window --resize right:-20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:-20:0 2> /dev/null"]
+      ;     ;; super + j
+      ;     [:!CTO#QWEj "/opt/homebrew/bin/yabai -m window --focus south"]
+      ;     [:!QWE#CTOj :mute]
+      ;     [:!CTOS#QWERj "/opt/homebrew/bin/yabai -m window --warp south"]
+      ;     [:!QWES#CTORj "/opt/homebrew/bin/yabai -m window --resize bottom:0:20 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize top:0:20 2> /dev/null"]	
+      ;     ;; super + k
+      ;     [:!CTO#QWEk "/opt/homebrew/bin/yabai -m window --focus north"]
+      ;     [:!QWE#CTOk :volume_decrement] 
+      ;     [:!CTOS#QWERk "/opt/homebrew/bin/yabai -m window --warp north"]
+      ;     [:!QWES#CTORk "/opt/homebrew/bin/yabai -m window --resize bottom:0:-20 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize top:0:-20 2> /dev/null"]	
+      ;     ;; super + l
+      ;     [:!CTO#QWEl "/opt/homebrew/bin/yabai -m window --focus east"]
+      ;     [:!QWE#CTOl :volume_increment]
+      ;     [:!CTOS#QWERl "/opt/homebrew/bin/yabai -m window --warp east"]
+      ;     [:!QWES#CTORl "/opt/homebrew/bin/yabai -m window --resize right:20:0 2> /dev/null || /opt/homebrew/bin/yabai -m window --resize left:20:0 2> /dev/null"]	
+      ;     ;; super + a
+      ;     [:!CTOS#QWERa "/opt/homebrew/bin/yabai -m space --toggle padding ; /opt/homebrew/bin/yabai -m space --toggle gap"]
+      ;     [:!QWE#CTOa :display_brightness_decrement]
+      ;     [:!QWES#CTORa "/opt/homebrew/bin/yabai -m space --balance"]
+      ;     ;; super + d
+      ;     [:!QWE#CTOd :illumination_decrement]
+      ;     ;; super + s
+      ;     [:!CTO#QWEs "/opt/homebrew/bin/yabai -m space --focus prev"]
+      ;     [:!CTOS#QWERs "/opt/homebrew/bin/yabai -m window --space prev && /opt/homebrew/bin/yabai -m space --focus prev && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!QWE#CTOs :display_brightness_increment]
+      ;     [:!QWES#CTORs "/opt/homebrew/bin/yabai -m window --display prev && /opt/homebrew/bin/yabai -m space --display prev"]
+      ;     ;; super + f
+      ;     [:!CTO#QWEf "/opt/homebrew/bin/yabai -m space --focus next"]
+      ;     [:!QWE#CTOf :illumination_increment]
+      ;     [:!CTOS#QWERf "/opt/homebrew/bin/yabai -m window --space next && /opt/homebrew/bin/yabai -m space --focus next && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!QWES#CTORf "/opt/homebrew/bin/yabai -m window --display next && /opt/homebrew/bin/yabai -m space --display next"]
+      ;     ;;super + e 
+      ;     [:!CTO#QWEe "osascript -e 'tell application \"System Events\" to keystroke \"m\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
+      ;     [:!QWE#CTOe "/opt/homebrew/bin/yabai -m window --toggle split"]
+      ;     [:!QWES#CTORe "/opt/homebrew/bin/yabai -m space --rotate 90"]
+      ;     ;;super + w
+      ;     [:!CTO#QWEw "osascript -e 'tell application \"System Events\" to keystroke \"w\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
+      ;     [:!QWE#CTOw "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2"]
+      ;     ;super + q
+      ;     [:!CTO#QWEq "osascript -e 'tell application \"System Events\" to keystroke \"q\" using command down' && /opt/homebrew/bin/yabai -m window --focus recent"]
+      ;     [:!QWE#CTOq "if pgrep yabai > /dev/null; then /opt/homebrew/bin/yabai --stop-service; else /opt/homebrew/bin/yabai --start-service; fi"]
+      ;     ;;super + n
+      ;     [:!QWE#CTOn :rewind]
+      ;     ;;super + m 
+      ;     [:!QWE#CTOm :play_or_pause]
+      ;     ;;super + , 
+      ;     [:!QWE#CTOcomma :fastforward]
+      ;     ;;super + numbers
+      ;     [:!CTO#QWE1 "/opt/homebrew/bin/yabai -m space --focus 1 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE2 "/opt/homebrew/bin/yabai -m space --focus 2 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE3 "/opt/homebrew/bin/yabai -m space --focus 3 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE4 "/opt/homebrew/bin/yabai -m space --focus 4 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE5 "/opt/homebrew/bin/yabai -m space --focus 5 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE6 "/opt/homebrew/bin/yabai -m space --focus 6 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE7 "/opt/homebrew/bin/yabai -m space --focus 7 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE8 "/opt/homebrew/bin/yabai -m space --focus 8 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;     [:!CTO#QWE9 "/opt/homebrew/bin/yabai -m space --focus 9 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
+      ;
+      ;     [:!CTOS#QWER1 "/opt/homebrew/bin/yabai -m window --space 1 && /opt/homebrew/bin/yabai -m space --focus 1 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER2 "/opt/homebrew/bin/yabai -m window --space 2 && /opt/homebrew/bin/yabai -m space --focus 2 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER3 "/opt/homebrew/bin/yabai -m window --space 3 && /opt/homebrew/bin/yabai -m space --focus 3 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER4 "/opt/homebrew/bin/yabai -m window --space 4 && /opt/homebrew/bin/yabai -m space --focus 4 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER5 "/opt/homebrew/bin/yabai -m window --space 5 && /opt/homebrew/bin/yabai -m space --focus 5 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER6 "/opt/homebrew/bin/yabai -m window --space 6 && /opt/homebrew/bin/yabai -m space --focus 6 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER7 "/opt/homebrew/bin/yabai -m window --space 7 && /opt/homebrew/bin/yabai -m space --focus 7 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER8 "/opt/homebrew/bin/yabai -m window --space 8 && /opt/homebrew/bin/yabai -m space --focus 8 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     [:!CTOS#QWER9 "/opt/homebrew/bin/yabai -m window --space 9 && /opt/homebrew/bin/yabai -m space --focus 9 && /opt/homebrew/bin/yabai -m window --focus last"]
+      ;     ;;super + o
+      ;     [:!CTO#QWEo "/opt/homebrew/bin/yabai -m space --create"]
+      ;     [:!CTOS#QWERo "/opt/homebrew/bin/yabai -m space --destroy"]
+      ; ]}
 ;; ;; super + period: switch to next display
 ;; [:!CTO#QWEperiod "/opt/homebrew/bin/yabai -m display --focus next || yabai -m display --focus first"]
 ;; [:!QWE#CTOperiod "/opt/homebrew/bin/yabai -m display --focus next || yabai -m display --focus first"]
