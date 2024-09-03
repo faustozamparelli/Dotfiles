@@ -7,11 +7,8 @@ if status is-interactive
   alias nh 'NVIM_APPNAME=nvimheavy nvim'
   alias nn nvim_configuration_swticher.sh 
 
-  #thefuck
-  thefuck --alias | source 
-
-  set -gx PYENV_ROOT "$HOME/.pyenv"
   # Environment Variables
+  set -gx PYENV_ROOT "$HOME/.pyenv"
   set -gx PIPENV_PYTHON "$PYENV_ROOT/shims/python"
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
@@ -40,6 +37,9 @@ if status is-interactive
 
   # Pyenv Initialization
   pyenv init - | source
+   
+  #thefuck
+  thefuck --alias | source 
 
   #fifc
   set -Ux fifc_editor nvim
@@ -96,6 +96,7 @@ if status is-interactive
   function cpmcpro
     scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:$argv[1] $argv[2]
   end
+
   #bat theme
   set -gx BAT_THEME "Dracula"
 
@@ -143,8 +144,7 @@ if status is-interactive
     bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
     bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
-    bind \ej '~/.config/tmux/tmux-layouts.sh'
-    #bind \ee 'nvim'
+    #bind \ej '~/.config/tmux/tmux-layouts.sh'
   end
 
   # Set up SSH agent to authenticate to GitHub
@@ -173,3 +173,5 @@ if status is-interactive
       end
     end
 end
+
+
