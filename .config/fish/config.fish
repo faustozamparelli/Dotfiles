@@ -8,8 +8,6 @@ if status is-interactive
   alias nn nvim_configuration_swticher.sh 
 
   # Environment Variables
-  set -gx PYENV_ROOT "$HOME/.pyenv"
-  set -gx PIPENV_PYTHON "$PYENV_ROOT/shims/python"
   set -gx JAVA_HOME /opt/homebrew/opt/openjdk
   set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
   set -Ux PIP_NO_CACHE_DIR true
@@ -19,7 +17,7 @@ if status is-interactive
 
   # Add directories to PATH
   set -Ua fish_user_paths /opt/homebrew/bin
-  set -Ua fish_user_paths $PYENV_ROOT/bin
+  # set -Ua fish_user_paths $PYENV_ROOT/bin
   set -Ua fish_user_paths $JAVA_HOME/bin
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
   set -Ua fish_user_paths /usr/local/bin/
@@ -35,9 +33,6 @@ if status is-interactive
   #Adding the bare directory for my dotfiles
   alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
-  # Pyenv Initialization
-  pyenv init - | source
-   
   #thefuck
   thefuck --alias | source 
 
