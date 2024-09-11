@@ -66,10 +66,7 @@
           ; [:!WSk :home]
           ; [:!WSj :end]
       ]}
-  ]
-}
-
-       {:des "super keys", :rules [
+      {:des "super keys", :rules [
       ;     ;; super + h
       ;     [:!CTO#QWEh "/opt/homebrew/bin/yabai -m window --focus west"]
       ;     [:!CTOS#QWERh "/opt/homebrew/bin/yabai -m window --warp west"]
@@ -144,7 +141,9 @@
       ;     ;;super + o
       ;     [:!CTO#QWEo "/opt/homebrew/bin/yabai -m space --create"]
       ;     [:!CTOS#QWERo "/opt/homebrew/bin/yabai -m space --destroy"]
-      ; ]}
+      ]}
+  ]
+}
 ;; ;; super + period: switch to next display
 ;; [:!CTO#QWEperiod "/opt/homebrew/bin/yabai -m display --focus next || yabai -m display --focus first"]
 ;; [:!QWE#CTOperiod "/opt/homebrew/bin/yabai -m display --focus next || yabai -m display --focus first"]
