@@ -54,7 +54,7 @@ if status is-interactive
   alias glg "tig"
   alias tk "tmux kill-server"
   alias jp "jupyter notebook"
-  alias man tldr
+  # alias man tldr
   # alias o "code -r" 
   alias o "open"
   alias py "python3"
