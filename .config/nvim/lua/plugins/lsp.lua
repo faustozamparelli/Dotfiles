@@ -390,6 +390,7 @@ return {
     require("mason").setup({})
     require("mason-lspconfig").setup({
       ensure_installed = {
+        "clangd",
         "tsserver",
         "eslint",
         "rust_analyzer",
@@ -414,6 +415,12 @@ return {
         lua_ls = function()
           local lua_opts = lsp.nvim_lua_ls()
           require("lspconfig").lua_ls.setup(lua_opts)
+        end,
+        clangd = function()
+          require("lspconfig").clangd.setup({
+            on_attach = lsp.on_attach,
+            capabilities = lsp.capabilities,
+          })
         end,
       },
     })

@@ -27,6 +27,11 @@ if status is-interactive
   #Adding texlive to path for vscode latex workshop
   set -gx PATH $PATH /opt/homebrew/opt/texlive/bin
 
+  # Adding the C and C++ include paths
+  set -gx C_INCLUDE_PATH /opt/homebrew/include
+  set -gx CPLUS_INCLUDE_PATH /opt/homebrew/include
+
+
   #Api keys
   set -Ux GROQ_API_KEY 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
 
@@ -40,8 +45,24 @@ if status is-interactive
   set -Ux fifc_editor nvim
   set -U fifc_fd_opts --hidden
 
+  function cd
+      # Change to the new directory
+      builtin cd $argv
+
+      # Rename the tmux window if inside a tmux session
+      if set -q TMUX
+          tmux rename-window (basename $PWD)
+      end
+  end
+
   function z_tmux
+      # Use zoxide to jump to the directory
       __zoxide_z $argv
+      
+      # Rename the tmux window if inside a tmux session
+      if set -q TMUX
+          tmux rename-window (basename $PWD)
+      end
   end
 
   # Aliases
