@@ -9,6 +9,7 @@
                 "rules": [
                     {
                         "description": "Mouse button 3 goes to focus on Music when not focussed on browser",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "conditions": [
@@ -27,6 +28,7 @@
                     },
                     {
                         "description": "Mouse button 6 goes to focus on Warp when not focussed on browser",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "conditions": [
@@ -45,6 +47,7 @@
                     },
                     {
                         "description": "Mouse button 5 goes to focus on browser when not focussed on browser",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "conditions": [
@@ -655,7 +658,8 @@
                 }
             ],
             "name": "Default",
-            "selected": true
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
         }
     ]
 }
