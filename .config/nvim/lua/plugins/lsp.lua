@@ -391,7 +391,7 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = {
         "clangd",
-        "tsserver",
+        "biome",
         "eslint",
         "rust_analyzer",
         "kotlin_language_server",

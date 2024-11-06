@@ -65,6 +65,43 @@ if status is-interactive
       end
   end
 
+  function zn
+    # Use zoxide to jump to the directory
+    __zoxide_z $argv
+    
+    # Check if the directory change was successful
+    if test $status -eq 0
+        # Open Neovim in the current directory
+        n .
+    else
+        echo "Directory not found!"
+    end
+  end
+
+function curljq
+    set curl_args
+    set jq_args
+
+    # Split arguments into curl and jq sections, use -- ''
+    set split false
+    for arg in $argv
+        if test "$arg" = "--"
+            set split true
+            continue
+        end
+        if test "$split" = true
+            set jq_args $jq_args $arg
+        else
+            set curl_args $curl_args $arg
+        end
+    end
+
+    # Use the absolute path to curl to avoid recursion
+    /usr/bin/curl -s $curl_args | jq $jq_args
+end
+# Alias the curl command to your custom function
+alias curl='curljq'
+
   # Aliases
   alias dev 'open http://localhost:3000; npm run dev'
   alias g++ "g++-14"
