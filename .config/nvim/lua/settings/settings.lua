@@ -1,4 +1,5 @@
 vim.o.shell = "/opt/homebrew/bin/fish"
+vim.opt.shellcmdflag = "-c"
 --vim.cmd([[autocmd VimEnter,VimLeave * silent !tmux set status]])
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.g.mapleader = " "

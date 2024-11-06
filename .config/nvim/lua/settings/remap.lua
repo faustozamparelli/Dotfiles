@@ -19,8 +19,8 @@ set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
 set("n", "]d", vim.diagnostic.goto_next, { silent = true })
 
 --open terminal and get out of insert mode
-set("n", "<leader>t", ":term<CR>i", { silent = true })
-set("t", "<Esc><Esc>", "<C-\\><C-n>", { silent = true })
+set("n", "<C-t>", ":term<CR>i", { silent = true })
+set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 -- quit the file and close tmux window
 set("n", "<C-w>", "<cmd>:w<CR>:silent !tmux kill-window<CR>", { silent = true })
