@@ -7467,5 +7467,9 @@
     "key": "space",
     "command": "-filesExplorer.openFilePreserveFocus",
     "when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsFolder && !inputFocus"
+  },
+  {
+    "key": "cmd+r",
+    "command": "file-browser.rename"
   }
 ]
