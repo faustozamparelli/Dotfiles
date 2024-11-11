@@ -7498,7 +7498,7 @@
     "when": "notebookCellListFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code' || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelCount > 0 || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelSourceCount > 0 || inlineChatFocused && notebookCellChatFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code'"
   },
   {
-    "key": "cmd+backspace",
+    "key": "d d",
     "command": "notebook.cell.delete",
     "when": "notebookEditorFocused && neovim.mode == 'normal'"
   },
@@ -7536,5 +7536,10 @@
     "key": "up",
     "command": "notebook.focusPreviousEditor",
     "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "i",
+    "command": "notebook.cell.edit",
+    "when": "notebookEditorFocused && !notebookCellEditorFocused"
   }
 ]
