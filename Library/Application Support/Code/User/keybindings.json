@@ -957,16 +957,6 @@
     "when": "isWorkspaceTrusted && jupyter.ispythonnotebook && !notebookKernel && notebookCellType == 'code' || isWorkspaceTrusted && jupyter.ispythonnotebook && notebookCellType == 'code' && notebookKernel =~ /^ms-toolsai.jupyter\\// && resource not in 'jupyter.notebookeditor.debugDocuments'"
   },
   {
-    "key": "ctrl+enter",
-    "command": "-jupyter.runcurrentcell",
-    "when": "editorTextFocus && isWorkspaceTrusted && jupyter.hascodecells && !editorHasSelection && !isCompositeNotebook && !notebookEditorFocused"
-  },
-  {
-    "key": "shift+enter",
-    "command": "-jupyter.runcurrentcelladvance",
-    "when": "editorTextFocus && isWorkspaceTrusted && jupyter.hascodecells && !editorHasSelection && !isCompositeNotebook && !notebookEditorFocused"
-  },
-  {
     "key": "f10",
     "command": "-jupyter.runByLineNext",
     "when": "notebookCellResource in 'jupyter.notebookeditor.runByLineCells'"
@@ -2826,11 +2816,6 @@
     "key": "enter",
     "command": "-notebook.cell.edit",
     "when": "notebookCellListFocused && notebookEditable && !editorHoverFocused && !inputFocus && !notebookOutputInputFocused"
-  },
-  {
-    "key": "ctrl+enter",
-    "command": "-notebook.cell.execute",
-    "when": "notebookCellListFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code' || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelCount > 0 || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelSourceCount > 0 || inlineChatFocused && notebookCellChatFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code'"
   },
   {
     "key": "alt+enter",
@@ -7021,17 +7006,8 @@
     "when": "terminalFocus"
   },
   {
-    "key": "ctrl+enter",
-    "command": "keybindings.editor.defineWhenExpression"
-  },
-  {
     "key": "shift+enter",
     "command": "keybindings.editor.defineKeybinding"
-  },
-  {
-    "key": "cmd+w",
-    "command": "workbench.action.terminal.kill",
-    "when": "terminalFocus"
   },
   {
     "key": "shift+cmd+t",
@@ -7277,11 +7253,11 @@
     "when": "!editorFocus && (sideBarVisible || foldersViewVisible)"
   },
   {
-    "key": "shift+cmd+h",
+    "key": "alt+cmd+h",
     "command": "workbench.action.moveEditorLeftInGroup"
   },
   {
-    "key": "shift+cmd+l",
+    "key": "alt+cmd+l",
     "command": "workbench.action.moveEditorRightInGroup"
   },
   {
@@ -7294,19 +7270,19 @@
     "when": "editorGroupEmpty && editorGroupFocused"
   },
   {
-    "key": "alt+cmd+l",
+    "key": "shift+alt+l",
     "command": "workbench.action.moveEditorToNextGroup"
   },
   {
-    "key": "alt+cmd+h",
+    "key": "shift+alt+h",
     "command": "workbench.action.moveEditorToPreviousGroup"
   },
   {
-    "key": "alt+cmd+j",
+    "key": "shift+alt+j",
     "command": "workbench.action.moveEditorToBelowGroup"
   },
   {
-    "key": "alt+cmd+k",
+    "key": "shift+alt+k",
     "command": "workbench.action.moveEditorToAboveGroup"
   },
   {
@@ -7440,7 +7416,7 @@
   {
     "key": "ctrl+enter",
     "command": "github.copilot.chat.explain",
-    "when": "neovim.mode == 'visual'"
+    "when": "editorFocus && neovim.mode == 'visual'"
   },
   {
     "key": "cmd+f3",
@@ -7471,5 +7447,79 @@
   {
     "key": "cmd+r",
     "command": "file-browser.rename"
+  },
+  {
+    "key": "shift+cmd+k",
+    "command": "workbench.action.terminal.moveToEditor",
+    "when": "terminalFocus && !terminalEditorFocus"
+  },
+  {
+    "key": "shift+cmd+k",
+    "command": "workbench.action.terminal.moveToTerminalPanel",
+    "when": "terminalEditorFocus"
+  },
+  {
+    "key": "cmd+l",
+    "command": "workbench.action.terminal.focusNext",
+    "when": "terminalFocus && !terminalEditorFocus"
+  },
+  {
+    "key": "cmd+h",
+    "command": "workbench.action.terminal.focusPrevious",
+    "when": "terminalFocus && !terminalEditorFocus"
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "keybindings.editor.defineWhenExpression"
+  },
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.terminal.kill",
+    "when": "terminalFocus && !terminalEditorFocus"
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "-jupyter.runcurrentcell",
+    "when": "editorTextFocus && isWorkspaceTrusted && jupyter.hascodecells && !editorHasSelection && !isCompositeNotebook && !notebookEditorFocused"
+  },
+  {
+    "key": "shift+enter",
+    "command": "-jupyter.runcurrentcelladvance",
+    "when": "editorTextFocus && isWorkspaceTrusted && jupyter.hascodecells && !editorHasSelection && !isCompositeNotebook && !notebookEditorFocused"
+  },
+  {
+    "key": "shift+enter",
+    "command": "notebook.cell.execute",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "-notebook.cell.execute",
+    "when": "notebookCellListFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code' || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelCount > 0 || !notebookCellExecuting && notebookCellType == 'code' && notebookCellListFocused || inlineChatFocused && notebookCellChatFocused && notebookKernelSourceCount > 0 || inlineChatFocused && notebookCellChatFocused && notebookMissingKernelExtension && !notebookCellExecuting && notebookCellType == 'code'"
+  },
+  {
+    "key": "cmd+backspace",
+    "command": "notebook.cell.delete",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "o",
+    "command": "notebook.cell.insertCodeCellBelow",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+o",
+    "command": "notebook.cell.insertCodeCellAbove",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "m",
+    "command": "notebook.cell.insertMarkdownCellAbove",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+m",
+    "command": "notebook.cell.insertMarkdownCellBelow",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
   }
 ]

@@ -51,5 +51,6 @@
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "git.autofetch": true,
-  "workbench.editor.enablePreview": false
+  "workbench.editor.enablePreview": false,
+    "terminal.integrated.confirmOnKill": "never",
 }
