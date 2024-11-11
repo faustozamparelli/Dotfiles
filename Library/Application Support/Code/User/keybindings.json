@@ -7521,5 +7521,20 @@
     "key": "shift+m",
     "command": "notebook.cell.insertMarkdownCellBelow",
     "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "notebook.execute",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "down",
+    "command": "notebook.focusNextEditor",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
+  },
+  {
+    "key": "up",
+    "command": "notebook.focusPreviousEditor",
+    "when": "notebookEditorFocused && neovim.mode == 'normal'"
   }
 ]
