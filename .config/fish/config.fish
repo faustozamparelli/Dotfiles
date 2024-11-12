@@ -25,7 +25,7 @@ if status is-interactive
   source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
   #Adding texlive to path for vscode latex workshop
-  set -gx PATH $PATH /opt/homebrew/opt/texlive/bin
+  set -Ux PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
 
   # Adding the C and C++ include paths
   set -gx C_INCLUDE_PATH /opt/homebrew/include

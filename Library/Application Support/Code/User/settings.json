@@ -46,11 +46,22 @@
   "workbench.preferredLightColorTheme": "__default__",
   "editor.linkedEditing": true,
   "latex-workshop.view.pdf.color.dark.backgroundColor": "#000000",
-  "gitlens.graph.layout": "editor",
-  "gitlens.views.commitDetails.files.layout": "list",
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "git.autofetch": true,
   "workbench.editor.enablePreview": false,
-    "terminal.integrated.confirmOnKill": "never",
+  "terminal.integrated.confirmOnKill": "never",
+  "explorer.confirmDelete": false,
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.linting.chktex.enabled": true,
+  "latex-workshop.linting.run": "onType",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": ["-pdf", "-interaction=nonstopmode", "%DOC%"]
+    }
+  ],
+  "editor.experimental.asyncTokenization": false
 }
