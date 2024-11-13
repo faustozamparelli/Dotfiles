@@ -31,7 +31,6 @@ if status is-interactive
   set -gx C_INCLUDE_PATH /opt/homebrew/include
   set -gx CPLUS_INCLUDE_PATH /opt/homebrew/include
 
-
   #Api keys
   set -Ux GROQ_API_KEY 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
 

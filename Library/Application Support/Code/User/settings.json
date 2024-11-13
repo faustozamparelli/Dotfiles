@@ -12,7 +12,6 @@
   "editor.minimap.enabled": false,
   "workbench.activityBar.location": "hidden",
   "workbench.editor.showTabs": "multiple",
-  "workbench.statusBar.visible": false,
   "cSpell.enabled": false,
   "workbench.colorTheme": "GitHub Dark Default",
   "workbench.sideBar.location": "right",
@@ -63,5 +62,8 @@
       "args": ["-pdf", "-interaction=nonstopmode", "%DOC%"]
     }
   ],
-  "editor.experimental.asyncTokenization": false
+  "editor.experimental.asyncTokenization": false,
+  "go.goroot": "/Users/faustozamparelli/.asdf/installs/golang/1.23.1/go",
+  "workbench.statusBar.visible": false,
+  "terminal.integrated.fontSize": 14.2
 }

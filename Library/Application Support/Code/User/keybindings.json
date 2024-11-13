@@ -7541,5 +7541,10 @@
     "key": "i",
     "command": "notebook.cell.edit",
     "when": "notebookEditorFocused && !notebookCellEditorFocused"
+  },
+  {
+    "key": "cmd+f",
+    "command": "workbench.action.terminal.focusFind",
+    "when": "terminalFocus || terminalEditorFocus"
   }
 ]
