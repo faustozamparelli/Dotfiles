@@ -7546,5 +7546,10 @@
     "key": "cmd+f",
     "command": "workbench.action.terminal.focusFind",
     "when": "terminalFocus || terminalEditorFocus"
+  },
+  {
+    "key": "c m",
+    "command": "editor.action.commentLine",
+    "when": "neovim.mode == 'visual'"
   }
 ]

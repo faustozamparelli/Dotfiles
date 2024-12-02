@@ -126,6 +126,7 @@ alias curl='curljq'
   alias fi "yazi"
   alias ts "ts-node"
   alias t "taskwarrior-tui"
+  alias code "code -r"
 
   function server
       set current_dir (pwd)
