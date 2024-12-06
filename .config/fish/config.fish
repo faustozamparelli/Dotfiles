@@ -3,7 +3,6 @@ if status is-interactive
 
   #Set VIM as the default editor + alias
   set -gx EDITOR nvim
-  alias n nvim
   alias nh 'NVIM_APPNAME=nvimheavy nvim'
   alias nn nvim_configuration_swticher.sh 
 
@@ -65,39 +64,60 @@ if status is-interactive
   end
 
   function zn
-    # Use zoxide to jump to the directory
-    __zoxide_z $argv
-    
-    # Check if the directory change was successful
-    if test $status -eq 0
-        # Open Neovim in the current directory
-        n .
-    else
-        echo "Directory not found!"
-    end
+      # Use zoxide to jump to the directory
+      __zoxide_z $argv
+      
+      # Check if the directory change was successful
+      if test $status -eq 0
+          # Rename the tmux window if inside a tmux session
+          if set -q TMUX
+              tmux rename-window (basename $PWD)
+          end
+
+          # Open Neovim in the current directory
+          n .
+      else
+          echo "Directory not found!"
+      end
   end
 
-function curljq
-    set curl_args
-    set jq_args
+function n
+    if test "$argv[1]" = "."
+        # Open Neovim in the current directory without renaming the tmux window
+        nvim .
+    else
+        # Rename the tmux window if inside a tmux session
+        if set -q TMUX
+            set file_or_dir (basename -- $argv[1])  # Use basename on the first argument
+            tmux rename-window $file_or_dir
+        end
 
-    # Split arguments into curl and jq sections, use -- ''
-    set split false
-    for arg in $argv
-        if test "$arg" = "--"
-            set split true
-            continue
-        end
-        if test "$split" = true
-            set jq_args $jq_args $arg
-        else
-            set curl_args $curl_args $arg
-        end
+        # Open Neovim with the provided argument(s)
+        nvim $argv
     end
-
-    # Use the absolute path to curl to avoid recursion
-    /usr/bin/curl -s $curl_args | jq $jq_args
 end
+
+  function curljq
+      set curl_args
+      set jq_args
+
+      # Split arguments into curl and jq sections, use -- ''
+      set split false
+      for arg in $argv
+          if test "$arg" = "--"
+              set split true
+              continue
+          end
+          if test "$split" = true
+              set jq_args $jq_args $arg
+          else
+              set curl_args $curl_args $arg
+          end
+      end
+
+      # Use the absolute path to curl to avoid recursion
+      /usr/bin/curl -s $curl_args | jq $jq_args
+  end
 # Alias the curl command to your custom function
 alias curl='curljq'
 
