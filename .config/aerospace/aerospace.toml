@@ -210,3 +210,7 @@ run = "move-node-to-workspace D"
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = "move-node-to-workspace S"
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = "move-node-to-workspace G"
+
