@@ -54,6 +54,12 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd({"FocusLost", "WinLeave"}, {
+  pattern = "*",
+  command = "silent! wall"
+})
+
+
 --vim.cmd([[highlight WinSeparator guibg=None]])
 --vim.wo.conceallevel = 0
 

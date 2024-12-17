@@ -68,5 +68,11 @@
   "editor.fontSize": 14,
   "redhat.telemetry.enabled": false,
   "errorLens.enabledDiagnosticLevels": ["warning", "info", "error"],
-  "jupyter.askForKernelRestart": false
+  "jupyter.askForKernelRestart": false,
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
 }
