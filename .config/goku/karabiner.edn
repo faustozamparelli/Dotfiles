@@ -5,14 +5,15 @@
       :macbook [{:vendor_id 1452 :product_id 835}]
       :k7pro [{:vendor_id 13364 :product_id 624}]
       :v8 [{:vendor_id 13364 :product_id 897}]
+      :60he [{:vendor_id 14139 product_id 4189}]
   }
   :main [
       {:des "Configure modifier keys on macbook keyboard", :rules [
           [:##left_command :!CTleft_option]
           [:##right_option :!QWright_option]
-          [:##left_control :left_option :macbook]
+          [:##left_control :left_option :macbook :60he]
           [:##left_control :right_control :k7pro]
-          [:##left_option :left_command :macbook]
+          [:##left_option :left_command :macbook :60he]
           ; [:##left_option :!QWright_option :k7pro]
           [:##delete_forward :!QWright_option :k7pro]
           [:##right_control :right_option :macbook :k7pro]
@@ -41,7 +42,7 @@
               :to [{:apple_vendor_top_case_key_code :keyboard_fn}]
               :type :basic
           }
-          [:##escape :right_control :macbook]
+          [:##escape :right_control :macbook :60he]
           [:##non_us_backslash :escape]
           [:!CTOa :!Tc]
           [:!CSj :end :macbook]
@@ -117,7 +118,7 @@
       ;     ;;super + m 
            [:!QWE#CTOm :play_or_pause]
       ;     ;;super + , 
-           [:!QWE#CTOcomma :fastforward]
+           [:!QWE#CTOcomma :fast_forward]
       ;     ;;super + numbers
       ;     [:!CTO#QWE1 "/opt/homebrew/bin/yabai -m space --focus 1 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
       ;     [:!CTO#QWE2 "/opt/homebrew/bin/yabai -m space --focus 2 && /opt/homebrew/bin/yabai -m window --focus frontmost"]
