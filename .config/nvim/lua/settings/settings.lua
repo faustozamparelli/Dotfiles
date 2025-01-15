@@ -61,7 +61,7 @@ vim.api.nvim_create_autocmd({"FocusLost", "WinLeave"}, {
 
 
 --vim.cmd([[highlight WinSeparator guibg=None]])
---vim.wo.conceallevel = 0
+vim.wo.conceallevel = 1 
 
 -- vim.cmd([[
 -- autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif

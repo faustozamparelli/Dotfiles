@@ -247,4 +247,6 @@ alias curl='curljq'
     end
 end
 
+set -U fish_user_paths $fish_user_paths $HOME/.emacs.d/bin
+
 
