@@ -40,8 +40,8 @@
     "*.pdf": "latex-workshop-pdf-hook"
   },
   "window.autoDetectColorScheme": true,
-  "workbench.preferredDarkColorTheme": "GitHub Dark Colorblind (Beta)",
-  "workbench.preferredLightColorTheme": "__default__",
+  "workbench.preferredDarkColorTheme": "__black__",
+  "workbench.preferredLightColorTheme": "GitHub Dark Dimmed",
   "editor.linkedEditing": true,
   "latex-workshop.view.pdf.color.dark.backgroundColor": "#000000",
   "window.commandCenter": false,

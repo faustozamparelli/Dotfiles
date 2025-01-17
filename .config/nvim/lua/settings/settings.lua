@@ -4,7 +4,8 @@ vim.opt.shellcmdflag = "-c"
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.g.mapleader = " "
 vim.keymap.set("n", "U", "<C-r>")
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
+vim.cmd('highlight CursorLineNr guifg=#FFFF00 ctermfg=yellow')
 vim.opt.mouse = ""
 vim.opt.showmode = false
 vim.opt.wrap = false
