@@ -239,7 +239,7 @@ alias curl='curljq'
 
   # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
   if not set -q TMUX
-      if test "$TERM_PROGRAM" != "vscode" -a "$VTERM" != "1"
+      if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
           exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
           # renaming tmux window
           function cd
