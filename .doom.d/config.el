@@ -41,12 +41,36 @@
       :desc "Open vterm here"
       "t" #'+vterm/here)
 
-;; org roam
 (use-package! org-roam
   :custom
-  (org-roam-directory (file-truename "/Users/faustozamparelli/Documents/Notes")) ; Set your desired directory
+  (org-roam-directory (file-truename "/Users/faustozamparelli/Documents/Notes"))
+  (org-roam-complete-everywhere t)
+  :bind (:map org-mode-map
+              ("C-M-i" . completion-at-point)) ;; Correct keybinding
   :config
-  (org-roam-db-autosync-mode))
+  (org-roam-db-autosync-mode)) ;; Enable automatic database synchronization
+
+  ;; Custom keybindings for Org Roam
+  (map! :leader
+        :prefix "r"  ;; New prefix for Org Roam
+        :desc "Org Roam Buffer" "b" #'org-roam-buffer-toggle
+        :desc "Find Org Roam Node" "f" #'org-roam-node-find
+        :desc "Insert Org Roam Node" "i" #'org-roam-node-insert)
+
+(after! org-capture
+  ;; Rebind finish capture
+  (define-key org-capture-mode-map (kbd "M-c") #'org-capture-finalize) ; Valid keybinding
+  ;; Rebind refile
+  (define-key org-capture-mode-map (kbd "M-r") #'org-capture-refile)   ; Valid keybinding
+  ;; Rebind abort
+  (define-key org-capture-mode-map (kbd "M-a") #'org-capture-kill))    ; Valid keybinding
+
+(use-package! org-roam-ui
+  :after org-roam ;; Ensure it loads after Org Roam
+  :hook (after-init . org-roam-ui-mode)
+  :config
+  ;; You can customize the server port if needed
+  (setq org-roam-ui-port 35901))
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
