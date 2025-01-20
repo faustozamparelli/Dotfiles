@@ -10,8 +10,44 @@
 
 ;; Remap C-c to act as ESC in insert mode
 (define-key evil-insert-state-map (kbd "C-c") 'evil-normal-state)
-;; Remap C-c to act as ESC in visual mode
+;; Remap C-c to act as ESC in visualmode
 (define-key evil-visual-state-map (kbd "C-c") 'evil-exit-visual-state)
+;; remove the highlight
+(map! :n "C-c" #'evil-ex-nohighlight)
+
+;; setting the default shell in vterm
+(setq vterm-shell "/opt/homebrew/bin/fish") ; Replace with the path to your Fish shell
+
+;; needed for org mode
+(setq ispell-program-name "/opt/homebrew/bin/aspell")
+
+;; change the headings in org mode
+(use-package! org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :config
+  ;; Customize headline bullets
+  (setq org-superstar-headline-bullets-list '("●" "○" "•" "◦" "‣")))
+
+;; double space = save
+(map! :leader
+      :desc "Save file"
+      "s" #'save-buffer)
+
+;;open vterm
+(map! :leader
+      :desc "Open vterm"
+      "T" #'vterm)
+(map! :leader
+      :desc "Open vterm here"
+      "t" #'+vterm/here)
+
+;; org roam
+(use-package! org-roam
+  :custom
+  (org-roam-directory (file-truename "/Users/faustozamparelli/Documents/Notes")) ; Set your desired directory
+  :config
+  (org-roam-db-autosync-mode))
+
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.

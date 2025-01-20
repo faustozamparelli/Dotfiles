@@ -47,31 +47,37 @@ if status is-interactive
       # Change to the new directory
       builtin cd $argv
 
-      # Rename the tmux window if inside a tmux session
+      # Check if tmux is running before renaming the window
       if set -q TMUX
-          tmux rename-window (basename $PWD)
+          if tmux has-session 2>/dev/null
+              tmux rename-window (basename $PWD)
+          end
       end
   end
 
   function z_tmux
       # Use zoxide to jump to the directory
       __zoxide_z $argv
-      
+
       # Rename the tmux window if inside a tmux session
       if set -q TMUX
-          tmux rename-window (basename $PWD)
+          if tmux has-session 2>/dev/null
+              tmux rename-window (basename $PWD)
+          end
       end
   end
 
   function zn
       # Use zoxide to jump to the directory
       __zoxide_z $argv
-      
+
       # Check if the directory change was successful
       if test $status -eq 0
           # Rename the tmux window if inside a tmux session
           if set -q TMUX
-              tmux rename-window (basename $PWD)
+              if tmux has-session 2>/dev/null
+                  tmux rename-window (basename $PWD)
+              end
           end
 
           # Open Neovim in the current directory
@@ -231,11 +237,11 @@ alias curl='curljq'
             echo "Unknown machine"
     end
 
-  # open tmux at login, but not in VS Code
-    if not set -q TMUX
-      if test "$TERM_PROGRAM" != "vscode"
+  # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
+  if not set -q TMUX
+      if test "$TERM_PROGRAM" != "vscode" -a "$VTERM" != "1"
           exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
-          #renaming tmux window
+          # renaming tmux window
           function cd
               builtin cd $argv; and tmux rename-window (basename $PWD)
           end
@@ -244,9 +250,10 @@ alias curl='curljq'
               __zoxide_z $argv; and tmux rename-window (basename $PWD)
           end
       end
-    end
+  end
 end
 
 set -U fish_user_paths $fish_user_paths $HOME/.emacs.d/bin
 
 
+alias emacs "emacsclient -n"
