@@ -8,6 +8,9 @@
 (setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 18 :weight 'medium :style 'normal))
 (setq doom-big-font (font-spec :family "Hack Nerd Font Mono" :size 28 :weight 'medium :style 'normal))
 
+(scroll-bar-mode -1)
+(set-fringe-mode 0)
+
 ;; Remap C-c to act as ESC in insert mode
 (define-key evil-insert-state-map (kbd "C-c") 'evil-normal-state)
 ;; Remap C-c to act as ESC in visualmode
@@ -28,7 +31,7 @@
   ;; Customize headline bullets
   (setq org-superstar-headline-bullets-list '("●" "○" "•" "◦" "‣")))
 
-;; double space = save
+;;space + s = save
 (map! :leader
       :desc "Save file"
       "s" #'save-buffer)
