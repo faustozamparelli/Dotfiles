@@ -2,10 +2,16 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
 (setq ns-use-proxy-icon nil)
 (setq frame-title-format nil)
+
+(setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 18 :weight 'medium :style 'normal))
+(setq doom-big-font (font-spec :family "Hack Nerd Font Mono" :size 28 :weight 'medium :style 'normal))
+
+;; Remap C-c to act as ESC in insert mode
+(define-key evil-insert-state-map (kbd "C-c") 'evil-normal-state)
+;; Remap C-c to act as ESC in visual mode
+(define-key evil-visual-state-map (kbd "C-c") 'evil-exit-visual-state)
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -39,7 +45,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -77,3 +83,23 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+
+
+
+;; Set initial window size
+;; Dynamically set the initial frame size and position to center the frame
+;; (setq initial-frame-alist
+;;       (let* ((screen-width (display-pixel-width))
+;;              (screen-height (display-pixel-height))
+;;              (frame-width 400) ;; Width in columns
+;;              (frame-height (/ screen-height (frame-char-height))) ;; Full screen height
+;;              (frame-pixel-width (* frame-width (frame-char-width)))
+;;              (frame-left (/ (- screen-width frame-pixel-width) 2))) ;; Center horizontally
+;;         `((width . ,frame-width)
+;;           (height . ,frame-height)
+;;           (top . 0)  ;; Start at the top of the screen
+;;           (left . ,frame-left))))
+
+;; Apply the same settings to new frames
+;; (setq default-frame-alist initial-frame-alist)

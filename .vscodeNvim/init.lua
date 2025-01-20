@@ -112,5 +112,3 @@ set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 -- -- run tmux scripts inside nvim
 -- set("n", "<Esc>g", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true })
 -- set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = true })
-
-

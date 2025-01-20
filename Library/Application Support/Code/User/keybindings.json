@@ -4695,16 +4695,6 @@
     "when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsFolder && !inputFocus"
   },
   {
-    "key": "ctrl+enter",
-    "command": "-explorer.openToSide",
-    "when": "explorerViewletFocus && foldersViewVisible && !inputFocus"
-  },
-  {
-    "key": "v",
-    "command": "-explorer.openToSide",
-    "when": "explorerViewletFocus && explorerViewletVisible && !inputFocus"
-  },
-  {
     "key": "tab",
     "command": "-file-browser.tabNext",
     "when": "inFileBrowser"
@@ -7503,11 +7493,6 @@
     "when": "notebookEditorFocused && neovim.mode == 'normal'"
   },
   {
-    "key": "c",
-    "command": "notebook.cell.insertCodeCellBelow",
-    "when": "notebookEditorFocused && neovim.mode == 'normal'"
-  },
-  {
     "key": "shift+c",
     "command": "notebook.cell.insertCodeCellAbove",
     "when": "notebookEditorFocused && neovim.mode == 'normal'"
@@ -7566,5 +7551,25 @@
     "key": "shift+enter",
     "command": "python.execInTerminal",
     "when": "neovim.mode == 'normal' && editorLangId == 'python'"
+  },
+  {
+    "key": "tab",
+    "command": "editor.action.indentLines",
+    "when": "neovim.mode == 'insert'"
+  },
+  {
+    "key": "cmd+d",
+    "command": "duplicate.execute",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "-explorer.openToSide",
+    "when": "explorerViewletFocus && foldersViewVisible && !inputFocus"
+  },
+  {
+    "key": "v",
+    "command": "-explorer.openToSide",
+    "when": "explorerViewletFocus && explorerViewletVisible && !inputFocus"
   }
 ]
