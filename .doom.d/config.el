@@ -21,9 +21,6 @@
 ;; setting the default shell in vterm
 (setq vterm-shell "/opt/homebrew/bin/fish") ; Replace with the path to your Fish shell
 
-;; needed for org mode
-(setq ispell-program-name "/opt/homebrew/bin/aspell")
-
 ;; change the headings in org mode
 (use-package! org-superstar
   :hook (org-mode . org-superstar-mode)
@@ -75,6 +72,35 @@
   ;; You can customize the server port if needed
   (setq org-roam-ui-port 35901))
 
+(setq doom-scratch-initial-major-mode 'org-mode)
+
+;; Disable line numbers in org-mode and markdown-mode
+;; (add-hook 'org-mode-hook (lambda () (display-line-numbers-mode -1)))
+;; (add-hook 'markdown-mode-hook (lambda () (display-line-numbers-mode -1)))
+
+(setq org-hide-emphasis-markers t)  ; Hide *markers* for bold, /italic/, etc.
+
+
+;; Define the left margin width for text-mode buffers
+(defvar +text-mode-left-margin-width 5
+  "The `left-margin-width' to be used in `text-mode' buffers.")
+
+;; Function to set up left margin in text-mode buffers
+(defun +setup-text-mode-left-margin ()
+  (when (and (derived-mode-p 'text-mode)
+             (eq (current-buffer) ; Check current buffer is active
+                 (window-buffer (frame-selected-window))))
+    (setq left-margin-width (if display-line-numbers
+                                0 +text-mode-left-margin-width))
+    (set-window-buffer (get-buffer-window (current-buffer))
+                       (current-buffer))))
+(add-hook 'window-configuration-change-hook #'+setup-text-mode-left-margin)
+(add-hook 'display-line-numbers-mode-hook #'+setup-text-mode-left-margin)
+(add-hook 'text-mode-hook #'+setup-text-mode-left-margin)
+(defadvice! +doom/toggle-line-numbers--call-hook-a ()
+  :after #'doom/toggle-line-numbers
+  (run-hooks 'display-line-numbers-mode-hook))
+(remove-hook 'text-mode-hook #'display-line-numbers-mode)
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -166,3 +192,12 @@
 
 ;; Apply the same settings to new frames
 ;; (setq default-frame-alist initial-frame-alist)
+
+
+
+;; Disable Flyspell globally
+;; (after! flyspell
+;;   (global-flyspell-mode -1))
+
+;; needed for org mode
+;;(setq ispell-program-name "/opt/homebrew/bin/aspell")
