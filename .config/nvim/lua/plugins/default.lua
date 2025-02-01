@@ -106,7 +106,6 @@ return {
       vim.keymap.set("n", "<leader>mp", "<CMD>MarkdownPreviewToggle<CR>", { desc = "Markdown Preview" })
     end,
   },
-
   {
     "thinca/vim-quickrun",
     keys = {
