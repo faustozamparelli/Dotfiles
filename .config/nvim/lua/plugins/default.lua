@@ -105,5 +105,18 @@ return {
     config = function()
       vim.keymap.set("n", "<leader>mp", "<CMD>MarkdownPreviewToggle<CR>", { desc = "Markdown Preview" })
     end,
-  }
+  },
+
+  {
+    "thinca/vim-quickrun",
+    keys = {
+      -- This keybinding will lazy-load the plugin when you press F5.
+      { "<leader>r", "<cmd>QuickRun<CR>", desc = "Run QuickRun" },
+    },
+    -- Optional: You can also configure the plugin here if needed.
+    config = function()
+      -- Any additional vim-quickrun configuration can go here.
+      -- For example, you can set up filetype-specific options.
+    end,
+  },
 }

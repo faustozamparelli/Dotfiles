@@ -1,4 +1,4 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -28,10 +28,21 @@
   ;; Customize headline bullets
   (setq org-superstar-headline-bullets-list '("●" "○" "•" "◦" "‣")))
 
-;;space + s = save
+(custom-set-faces
+ '(org-list-dt ((t (:foreground "white"))))) ;; Change "white" to a visible color
+
+;; save the file
+(defun my/save-all-buffers ()
+  "Save all buffers without prompting for confirmation."
+  (interactive)
+  (save-some-buffers t))
+
 (map! :leader
-      :desc "Save file"
-      "s" #'save-buffer)
+      :desc "Save all buffers"
+      "SPC" #'my/save-all-buffers)
+
+;;redo
+(map! :n "U" #'evil-redo)
 
 ;;open vterm
 (map! :leader
@@ -50,12 +61,12 @@
   :config
   (org-roam-db-autosync-mode)) ;; Enable automatic database synchronization
 
-  ;; Custom keybindings for Org Roam
-  (map! :leader
-        :prefix "r"  ;; New prefix for Org Roam
-        :desc "Org Roam Buffer" "b" #'org-roam-buffer-toggle
-        :desc "Find Org Roam Node" "f" #'org-roam-node-find
-        :desc "Insert Org Roam Node" "i" #'org-roam-node-insert)
+;; Custom keybindings for Org Roam
+(map! :leader
+      :prefix "r"  ;; New prefix for Org Roam
+      :desc "Org Roam Buffer" "b" #'org-roam-buffer-toggle
+      :desc "Find Org Roam Node" "f" #'org-roam-node-find
+      :desc "Insert Org Roam Node" "i" #'org-roam-node-insert)
 
 (after! org-capture
   ;; Rebind finish capture
@@ -102,6 +113,10 @@
   (run-hooks 'display-line-numbers-mode-hook))
 (remove-hook 'text-mode-hook #'display-line-numbers-mode)
 
+(after! org
+  (setq org-agenda-files '("~/Documents/Notes/20250126195749-agenda.org")))
+
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
@@ -140,6 +155,63 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
+(use-package! drag-stuff
+  :config
+  (drag-stuff-global-mode 1)
+  (map! :n "<up>" #'drag-stuff-up
+        :n "<down>" #'drag-stuff-down
+        :v "<up>" #'drag-stuff-up
+        :v "<down>" #'drag-stuff-down))
+
+(map! :leader
+      :prefix "w" ; Add a prefix for window-related commands
+      :desc "Split window vertically" "n" #'split-window-right
+      :desc "Split window horizontally" "b" #'split-window-below
+      :desc "Delete window" "w" #'delete-window)
+
+(evil-ex-define-cmd "q" 'kill-this-buffer)
+(evil-ex-define-cmd "wq" 'doom/save-and-kill-buffer)
+
+(map! :leader
+      :desc "Previous buffer" "h" #'previous-buffer
+      :desc "Next buffer" "l" #'next-buffer)
+
+(map! :map org-mode-map
+      "M-p" #'org-latex-preview)
+
+(use-package! cdlatex
+  :hook ((org-mode . turn-on-org-cdlatex)
+         (latex-mode . turn-on-cdlatex)))
+(after! org
+  (setq org-startup-with-latex-preview nil)  ;; Don't auto-preview on startup
+  (setq org-latex-create-formula-image-program 'imagemagick)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))  ;; Increase formula size
+
+(after! smartparens
+  (sp-local-pair 'org-mode "$" "$"))
+
+(setq-default tab-width 2)
+(after! evil
+  (setq evil-shift-width 2))
+(setq-default indent-tabs-mode nil)
+
+(after! org
+  (setq org-list-indent-offset 2)
+  (setq org-hide-leading-stars nil)
+  (setq org-superstar-prettify-item-bullets t))
+
+(after! apheleia
+  (apheleia-global-mode +1))  ;; Enable Apheleia globally
+
+;; Autoformat on save
+(add-hook 'before-save-hook 'apheleia-format-buffer)
+
+;; Ensure TAB indents correctly
+(map! :i "<tab>" #'indent-for-tab-command)
+(map! :map prog-mode-map :i "<tab>" #'indent-for-tab-command)
+
+;; Make sure electric-indent-mode is enabled
+(electric-indent-mode 1)
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

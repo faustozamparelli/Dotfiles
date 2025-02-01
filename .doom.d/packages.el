@@ -52,3 +52,5 @@
 (package! org-superstar)
 (package! org-roam)
 (package! org-roam-ui)
+(package! drag-stuff)
+(package! apheleia)
