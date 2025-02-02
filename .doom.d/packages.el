@@ -49,8 +49,8 @@
 ;; (unpin! t)
 
 (package! cyberpunk-theme)
-(package! org-superstar)
 (package! org-roam)
 (package! org-roam-ui)
 (package! drag-stuff)
 (package! apheleia)
+(package! org-modern)

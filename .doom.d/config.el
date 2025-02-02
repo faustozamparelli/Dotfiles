@@ -22,11 +22,11 @@
 (setq vterm-shell "/opt/homebrew/bin/fish") ; Replace with the path to your Fish shell
 
 ;; change the headings in org mode
-(use-package! org-superstar
-  :hook (org-mode . org-superstar-mode)
-  :config
-  ;; Customize headline bullets
-  (setq org-superstar-headline-bullets-list '("●" "○" "•" "◦" "‣")))
+;; (use-package! org-superstar
+;;   :hook (org-mode . org-superstar-mode)
+;;   :config
+;;   ;; Customize headline bullets
+;;   (setq org-superstar-headline-bullets-list '("●" "○" "•" "◦" "‣")))
 
 (custom-set-faces
  '(org-list-dt ((t (:foreground "white"))))) ;; Change "white" to a visible color
@@ -116,6 +116,7 @@
 (after! org
   (setq org-agenda-files '("~/Documents/Notes/20250126195749-agenda.org")))
 
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
@@ -206,12 +207,8 @@
 ;; Autoformat on save
 (add-hook 'before-save-hook 'apheleia-format-buffer)
 
-;; Ensure TAB indents correctly
-(map! :i "<tab>" #'indent-for-tab-command)
-(map! :map prog-mode-map :i "<tab>" #'indent-for-tab-command)
-
-;; Make sure electric-indent-mode is enabled
-(electric-indent-mode 1)
+(use-package! org-modern
+  :hook (org-mode . org-modern-mode))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

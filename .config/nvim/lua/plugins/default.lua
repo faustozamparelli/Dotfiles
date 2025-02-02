@@ -109,13 +109,16 @@ return {
   {
     "thinca/vim-quickrun",
     keys = {
-      -- This keybinding will lazy-load the plugin when you press F5.
       { "<leader>r", "<cmd>QuickRun<CR>", desc = "Run QuickRun" },
     },
-    -- Optional: You can also configure the plugin here if needed.
     config = function()
-      -- Any additional vim-quickrun configuration can go here.
-      -- For example, you can set up filetype-specific options.
+      vim.g.quickrun_config = {
+        cpp = {
+          command = "/opt/homebrew/bin/g++-14",
+          ["hook/time/enable"] = 1,
+          ["hook/time/precision"] = 3,
+        }
+      }
     end,
-  },
+  }
 }
