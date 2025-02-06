@@ -142,7 +142,7 @@ alias curl='curljq'
   # alias man tldr
   # alias o "code -r" 
   alias o "open"
-  alias py "python3"
+  alias py "python"
   alias cat "bat"
   alias b "bat"
   alias cl "clear"

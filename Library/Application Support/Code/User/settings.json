@@ -74,5 +74,6 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
-  }
+  },
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python"
 }
