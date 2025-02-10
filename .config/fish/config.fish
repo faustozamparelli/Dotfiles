@@ -21,7 +21,7 @@ if status is-interactive
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
   set -Ua fish_user_paths /usr/local/bin/
   set -Ua fish_user_paths /usr/local/bin/
-  source /opt/homebrew/opt/asdf/libexec/asdf.fish
+  source $ASDF_DIR/libexec/asdf.fish
 
   #Adding texlive to path for vscode latex workshop
   set -Ux PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin

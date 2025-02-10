@@ -54,7 +54,7 @@
 
 (use-package! org-roam
   :custom
-  (org-roam-directory (file-truename "/Users/faustozamparelli/Documents/Notes"))
+  (org-roam-directory (file-truename "/Users/faustozamparelli/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"))
   (org-roam-complete-everywhere t)
   :bind (:map org-mode-map
               ("C-M-i" . completion-at-point)) ;; Correct keybinding
@@ -114,7 +114,7 @@
 (remove-hook 'text-mode-hook #'display-line-numbers-mode)
 
 (after! org
-  (setq org-agenda-files '("~/Documents/Notes/20250126195749-agenda.org")))
+  (setq org-agenda-files '("~/Documents/Notes/20250126195749-agenda.org/Users/faustozamparelli/Documents/Notes/20250126195749-agenda.org")))
 
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
