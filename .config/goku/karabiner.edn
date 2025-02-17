@@ -5,15 +5,18 @@
       :macbook [{:vendor_id 1452 :product_id 835}]
       :k7pro [{:vendor_id 13364 :product_id 624}]
       :v8 [{:vendor_id 13364 :product_id 897}]
-      :60he [{:vendor_id 14139 product_id 4189}]
+      :60he [{:vendor_id 14139 :product_id 4189}]
+      :ace60 [{:vendor_id 16868 :product_id 8451}]
   }
   :main [
       {:des "Configure modifier keys on macbook keyboard", :rules [
           [:##left_command :!CTleft_option]
           [:##right_option :!QWright_option]
           [:##left_control :left_option :macbook :60he]
+          [:##left_control :left_option :ace60]
           [:##left_control :right_control :k7pro]
           [:##left_option :left_command :macbook :60he]
+          [:##left_option :left_command :ace60]
           ; [:##left_option :!QWright_option :k7pro]
           [:##delete_forward :!QWright_option :k7pro]
           [:##right_control :right_option :macbook :k7pro]

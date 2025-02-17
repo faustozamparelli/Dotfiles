@@ -117,6 +117,9 @@ return {
           command = "/opt/homebrew/bin/g++-14",
           ["hook/time/enable"] = 1,
           ["hook/time/precision"] = 3,
+        },
+        python = {
+          command = "python3"
         }
       }
     end,

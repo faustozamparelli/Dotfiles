@@ -1,0 +1,3 @@
+theme =  Dark Pastel
+macos-titlebar-style = hidden
+command = "/opt/homebrew/bin/fish"
