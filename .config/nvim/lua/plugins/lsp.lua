@@ -13,7 +13,7 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "pyright",         -- Python
-                    "tsserver",        -- TypeScript and JavaScript
+                    "ts_ls",        -- TypeScript and JavaScript
                     "gopls",           -- Go
                     "clangd",          -- C, C++
                     "html",            -- HTML
@@ -48,7 +48,7 @@ return {
             end
 
             -- Setup each server
-            local servers = { "pyright", "tsserver", "gopls", "clangd", "html", "cssls" }
+            local servers = { "pyright", "ts_ls", "gopls", "clangd", "html", "cssls" }
             for _, server in ipairs(servers) do
                 lspconfig[server].setup({
                     capabilities = capabilities,
