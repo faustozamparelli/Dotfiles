@@ -186,7 +186,7 @@
 (after! org
   (setq org-startup-with-latex-preview nil)  ;; Don't auto-preview on startup
   (setq org-latex-create-formula-image-program 'imagemagick)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))  ;; Increase formula size
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.1)))  ;; Increase formula size
 
 (after! smartparens
   (sp-local-pair 'org-mode "$" "$"))
@@ -209,6 +209,9 @@
 
 (use-package! org-modern
   :hook (org-mode . org-modern-mode))
+
+(add-to-list 'exec-path "/opt/homebrew/bin")
+(setenv "PATH" (concat "/opt/homebrew/bin:" (getenv "PATH")))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

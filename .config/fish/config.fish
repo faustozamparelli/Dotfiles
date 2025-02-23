@@ -1,4 +1,5 @@
 if status is-interactive
+  set -U fish_user_paths $HOME/.virtualenvs/ml/bin $fish_user_paths
   set fish_greeting ""
 
   #Set VIM as the default editor + alias

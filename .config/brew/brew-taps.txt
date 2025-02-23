@@ -1,0 +1,16 @@
+candid82/brew
+danielgatis/imgcat
+felixkratz/formulae
+homebrew/bundle
+homebrew/services
+jesseduffield/lazygit
+joshmedeski/sesh
+jstkdng/programs
+koekeishiya/formulae
+nikitabobko/tap
+oven-sh/bun
+railwaycat/emacsmacport
+shaunsingh/sfmono-nerd-font-ligaturized
+xwmx/taps
+yqrashawn/goku
+zegervdv/zathura

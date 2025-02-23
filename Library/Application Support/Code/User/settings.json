@@ -25,7 +25,6 @@
   "workbench.startupEditor": "none",
   "files.hotExit": "off",
   "window.restoreWindows": "none",
-  "github.copilot.chat.temporalContext.enabled": true,
   "github.copilot.chat.inlineChatCompletionTrigger.enabled": true,
   "github.copilot.chat.inlineChatHint.enabled": true,
   "github.copilot.chat.search.semanticTextResults": true,
@@ -75,5 +74,6 @@
     "markdown": false,
     "scminput": false
   },
-  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python"
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
+  "github.copilot.chat.editor.temporalContext.enabled": true
 }
