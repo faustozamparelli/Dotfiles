@@ -1,10 +1,4 @@
 if [[ $- == *i* ]]; then
-
-
-  # Automate brew packages
-  export HOMEBREW_INSTALL_HOOK=~/.config/brew/brew-tracker.sh
-  export HOMEBREW_UNINSTALL_HOOK=~/.config/brew/brew-tracker.sh
-
   # Environment Variables
   export ZSH="$HOME/.oh-my-zsh"
   export JAVA_HOME="/opt/homebrew/opt/openjdk"
@@ -59,6 +53,14 @@ if [[ $- == *i* ]]; then
   # fifc
   export fifc_editor=nvim
   export fifc_fd_opts="--hidden"
+
+  #making brew tracking automated
+  brew() {
+    command brew "$@"
+    if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" || "$1" == "upgrade" ]]; then
+        ~/.config/brew/brew-tracker.sh
+    fi
+  }
 
   # Enhanced `cd` function with tmux renaming
   function cd() {
