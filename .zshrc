@@ -19,9 +19,7 @@ if [[ $- == *i* ]]; then
   # Needed for zsh plugins
   source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
   plugins=(git zsh-vi-mode)
-
   source $ZSH/oh-my-zsh.sh
 
   # Set VIM as the default editor + alias
@@ -54,13 +52,19 @@ if [[ $- == *i* ]]; then
   export fifc_editor=nvim
   export fifc_fd_opts="--hidden"
 
+  # using the function to sync brew packages after pulling them from gh
+  source ~/.config/brew/brew-sync.sh
+
   #making brew tracking automated
   brew() {
-    command brew "$@"
-    if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" || "$1" == "upgrade" ]]; then
-        ~/.config/brew/brew-tracker.sh
+    if [[ -z "$BREW_SYNC_RUNNING" ]]; then
+      command brew "$@"
+      ~/.config/brew/sync-brew.sh
+    else
+      command brew "$@"
     fi
   }
+  
 
   # Enhanced `cd` function with tmux renaming
   function cd() {
@@ -136,6 +140,7 @@ if [[ $- == *i* ]]; then
   alias ts="ts-node"
   alias t="taskwarrior-tui"
   alias code="code -r"
+  alias qalc="qalc -s 'angle 2'"
 
   function server() {
     local current_dir
