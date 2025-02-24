@@ -5,6 +5,7 @@ candid82/brew/joker
 cmake
 colima
 commitizen
+coreutils
 docker
 docker-compose
 duf
