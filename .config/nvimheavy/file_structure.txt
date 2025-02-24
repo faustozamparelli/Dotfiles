@@ -1,8 +1,0 @@
-File structure:
-- Loaded on startup by nvim:
-    - init.vim: containing the lazy configuration and loading additional folders
-    - plugin folder: containing 
-    - after: loads after the entire configuration and inside it has the ftplugin (file specific configuration)
-    - colors: where nvim looks for the colorscheme
-- What does the init load:
-    - inside the lua folder it loads the plugin folder
