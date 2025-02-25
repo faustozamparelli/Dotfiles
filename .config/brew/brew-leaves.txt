@@ -55,6 +55,5 @@ unar
 wget
 yazi
 yqrashawn/goku/goku
-zola
 zsh-autosuggestions
 zsh-syntax-highlighting
