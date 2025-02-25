@@ -1,10 +1,11 @@
 if [[ $- == *i* ]]; then
   # Load oh-my-zsh plugins
+  export ZSH="/Users/$(whoami)/.oh-my-zsh"
   export PATH="/opt/homebrew/bin:$PATH"
   source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
   plugins=(git)
-  source ~/.oh-my-zsh/oh-my-zsh.sh
+  source $ZSH/oh-my-zsh.sh
 
   # Sync brew packages after pulling from GitHub
   source ~/.config/brew/brew-sync.sh
@@ -112,4 +113,6 @@ if [[ $- == *i* ]]; then
     zle -N fzf-history-widget
     bindkey '^R' fzf-history-widget
   fi
+
+  export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 fi
