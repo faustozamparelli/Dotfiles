@@ -22,8 +22,19 @@ if status is-interactive
   set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
   set -Ua fish_user_paths /usr/local/bin/
   set -Ua fish_user_paths /usr/local/bin/
-  source $ASDF_DIR/libexec/asdf.fish
+  # ASDF configuration code
+  if test -z $ASDF_DATA_DIR
+      set _asdf_shims "$HOME/.asdf/shims"
+  else
+      set _asdf_shims "$ASDF_DATA_DIR/shims"
+  end
 
+  # Do not use fish_add_path (added in Fish 3.2) because it
+  # potentially changes the order of items in PATH
+  if not contains $_asdf_shims $PATH
+      set -gx --prepend PATH $_asdf_shims
+  end
+  set --erase _asdf_shims
   #Adding texlive to path for vscode latex workshop
   set -Ux PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
 
@@ -214,8 +225,9 @@ alias curl='curljq'
   end
 
   # fzf.fish
-  fzf_configure_bindings  --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cs
+  fzf_configure_bindings --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cs
   set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
+  set fzf_history_opts --bind "enter:accept"
   set fzf_fd_opts --hidden --type=f
   set fzf_git_status_opts --bind "enter:execute(git diff {})"
   set fzf_git_log_opts --bind "enter:execute(git show {})"

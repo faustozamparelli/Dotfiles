@@ -6,22 +6,45 @@ return {
             require("mason").setup()
         end,
     },
+
+    -- Use mason-tool-installer.nvim to ensure external tools are installed
+    {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        config = function()
+            require("mason-tool-installer").setup {
+                ensure_installed = {
+                    "prettierd",  -- JS/TS/HTML/CSS formatter
+                    "black",      -- Python formatter
+                    "shfmt",      -- Bash/Zsh formatter
+                    "gofumpt",    -- Go formatter
+                    "eslint_d",   -- JS/TS linter
+                    "stylua",     -- Lua formatter
+                },
+                auto_update = false,
+                run_on_start = true,
+            }
+        end,
+    },
+
+    -- Mason LSP Config
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = { "williamboman/mason.nvim" },
         config = function()
             require("mason-lspconfig").setup({
                 ensure_installed = {
-                    "pyright",         -- Python
-                    "ts_ls",        -- TypeScript and JavaScript
-                    "gopls",           -- Go
-                    "clangd",          -- C, C++
-                    "html",            -- HTML
-                    "cssls",           -- CSS
+                    "pyright",    -- Python
+                    "ts_ls",   -- TypeScript and JavaScript (Fixed name)
+                    "gopls",      -- Go
+                    "clangd",     -- C, C++
+                    "html",       -- HTML
+                    "cssls",      -- CSS
+                    "bashls",     -- Bash/Zsh LSP
                 },
             })
         end,
     },
+
     -- LSP Configuration
     {
         "neovim/nvim-lspconfig",
@@ -48,15 +71,16 @@ return {
             end
 
             -- Setup each server
-            local servers = { "pyright", "ts_ls", "gopls", "clangd", "html", "cssls" }
+            local servers = { "pyright", "ts_ls", "gopls", "clangd", "html", "cssls", "bashls" }
             for _, server in ipairs(servers) do
                 lspconfig[server].setup({
                     capabilities = capabilities,
                     on_attach = on_attach,
                 })
             end
-          end,
+        end,
     },
+
     -- Auto-completion
     {
         "hrsh7th/nvim-cmp",
@@ -88,6 +112,7 @@ return {
             })
         end,
     },
+
     -- Null-LS for linting and formatting
     {
         "jose-elias-alvarez/null-ls.nvim",
@@ -96,14 +121,17 @@ return {
             local null_ls = require("null-ls")
             null_ls.setup({
                 sources = {
-                    null_ls.builtins.formatting.black, -- Python formatter
-                    null_ls.builtins.formatting.prettier, -- JS/TS/HTML/CSS formatter
-                    null_ls.builtins.formatting.gofmt, -- Go formatter
-                    null_ls.builtins.diagnostics.eslint, -- JS/TS linter
+                    null_ls.builtins.formatting.black,    -- Python formatter
+                    null_ls.builtins.formatting.prettierd, -- JS/TS/HTML/CSS formatter
+                    null_ls.builtins.formatting.gofumpt,  -- Go formatter
+                    null_ls.builtins.formatting.shfmt,    -- Shell script formatter
+                    null_ls.builtins.formatting.stylua,   -- Lua formatter
+                    null_ls.builtins.diagnostics.eslint,  -- JS/TS linter
                 },
             })
         end,
     },
+
     -- Snippets
     {
         "L3MON4D3/LuaSnip",
