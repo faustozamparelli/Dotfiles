@@ -1,125 +1,43 @@
 if [[ $- == *i* ]]; then
+  # Load oh-my-zsh plugins
+  export PATH="/opt/homebrew/bin:$PATH"
+  source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  plugins=(git)
+  source ~/.oh-my-zsh/oh-my-zsh.sh
+
+  # Sync brew packages after pulling from GitHub
+  source ~/.config/brew/brew-sync.sh
+
+  # Make zsh prompt minimal
+  export PROMPT='%~ %# '
+  # nvim default
+  export EDITOR=nvim
+
   # Environment Variables
   export ZSH="$HOME/.oh-my-zsh"
   export JAVA_HOME="/opt/homebrew/opt/openjdk"
   export GOKU_EDN_CONFIG_FILE="$HOME/.config/goku/karabiner.edn"
   export PIP_NO_CACHE_DIR=true
   export PNPM_HOME="$HOME/Library/pnpm"
+  export C_INCLUDE_PATH="/opt/homebrew/include"
+  export CPLUS_INCLUDE_PATH="/opt/homebrew/include"
 
   # Add directories to PATH
-  export PATH="/opt/homebrew/bin:$PATH"
   export PATH="/opt/homebrew/opt/openvpn/sbin:$PATH"
   export PATH="/usr/local/bin:$PATH"
   export PATH="$JAVA_HOME/bin:$PATH"
   export PATH="$PNPM_HOME:$PATH"
-
-  # Make zsh prompt minimal + ESC for vi mode
-  export PROMPT='%~ %# '
-
-  # Needed for zsh plugins
-  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  plugins=(git zsh-vi-mode)
-  source $ZSH/oh-my-zsh.sh
-
-  # Set VIM as the default editor + alias
-  export EDITOR=nvim
-  alias nh='NVIM_APPNAME=nvimheavy nvim'
-  alias nn='nvim_configuration_swticher.sh'
-
-  # Source asdf if available
-  if [ -f "$ASDF_DIR/libexec/asdf.sh" ]; then
-    source "$ASDF_DIR/libexec/asdf.sh"
-  fi
-
-  # Adding texlive to PATH for VS Code LaTeX workshop
+  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+  # Texlive to PATH for VS Code LaTeX workshop
   export PATH="$HOME/Library/TinyTeX/bin/universal-darwin:$PATH"
 
-  # Adding the C and C++ include paths
-  export C_INCLUDE_PATH="/opt/homebrew/include"
-  export CPLUS_INCLUDE_PATH="/opt/homebrew/include"
-
-  # API keys
-  export GROQ_API_KEY="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"
-
-  # Adding the bare directory for my dotfiles
-  alias bare='/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME'
-
-  # Thefuck alias
-  eval "$(thefuck --alias)"
-
-  # fifc
-  export fifc_editor=nvim
-  export fifc_fd_opts="--hidden"
-
-  # using the function to sync brew packages after pulling them from gh
-  source ~/.config/brew/brew-sync.sh
-
-  #making brew tracking automated
-  brew() {
-    if [[ -z "$BREW_SYNC_RUNNING" ]]; then
-      command brew "$@"
-      ~/.config/brew/sync-brew.sh
-    else
-      command brew "$@"
-    fi
-  }
-  
-
-  # Enhanced `cd` function with tmux renaming
-  function cd() {
-    builtin cd "$@" || return
-    if [[ -n "$TMUX" ]]; then
-      tmux rename-window "$(basename "$PWD")"
-    fi
-  }
-
-  function z_tmux() {
-    z "$@" || return
-    if [[ -n "$TMUX" ]]; then
-      tmux rename-window "$(basename "$PWD")"
-    fi
-  }
-
-  function zn() {
-    z "$@" || { echo "Directory not found!"; return; }
-    [[ -n "$TMUX" ]] && tmux rename-window "$(basename "$PWD")"
-    nvim .
-  }
-
-  function n() {
-    if [[ "$1" == "." ]]; then
-      nvim .
-    else
-      [[ -n "$TMUX" ]] && tmux rename-window "$(basename -- "$1")"
-      nvim "$@"
-    fi
-  }
-
-  function curljq() {
-    local curl_args=() jq_args=()
-    local split=false
-    for arg in "$@"; do
-      if [[ "$arg" == "--" ]]; then
-        split=true
-        continue
-      fi
-      if $split; then
-        jq_args+=("$arg")
-      else
-        curl_args+=("$arg")
-      fi
-    done
-    /usr/bin/curl -s "${curl_args[@]}" | jq "${jq_args[@]}"
-  }
-  alias curl='curljq'
 
   # Aliases
   alias dev='open http://localhost:3000; npm run dev'
   alias gcc="gcc-14"
   alias g++="g++-14"
   export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
   alias g="git"
   alias lg="lazygit"
   alias glg="tig"
@@ -141,8 +59,73 @@ if [[ $- == *i* ]]; then
   alias t="taskwarrior-tui"
   alias code="code -r"
   alias qalc="qalc -s 'angle 2'"
+  alias bare='/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME'
 
-  function server() {
+
+  # Make brew tracking automated
+  brew() {
+      command brew "$@"
+      if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" || "$1" == "upgrade" ]]; then
+          ~/.config/brew/brew-tracker.sh
+      fi
+      if [[ -z "$BREW_SYNC_RUNNING" ]]; then
+          ~/.config/brew/sync-brew.sh
+      fi
+  }
+
+  # Enhanced cd function with tmux renaming
+  cd() {
+    builtin cd "$@" || return
+    if [[ -n "$TMUX" ]]; then
+      tmux rename-window "$(basename "$PWD")"
+    fi
+  }
+
+  z_tmux() {
+    z "$@" || return
+    if [[ -n "$TMUX" ]]; then
+      tmux rename-window "$(basename "$PWD")"
+    fi
+  }
+
+  zn() {
+    z "$@" || { echo "Directory not found!"; return; }
+    [[ -n "$TMUX" ]] && tmux rename-window "$(basename "$PWD")"
+    nvim .
+  }
+
+  n() {
+    if [[ "$1" == "." ]]; then
+      nvim .
+    else
+      [[ -n "$TMUX" ]] && tmux rename-window "$(basename -- "$1")"
+      nvim "$@"
+    fi
+  }
+
+  curljq() {
+    local curl_args=() jq_args=()
+    local split=false
+    for arg in "$@"; do
+      if [[ "$arg" == "--" ]]; then
+        split=true
+        continue
+      fi
+      if $split; then
+        jq_args+=("$arg")
+      else
+        curl_args+=("$arg")
+      fi
+    done
+    /usr/bin/curl -s "${curl_args[@]}" | jq "${jq_args[@]}"
+  }
+  alias curl='curljq'
+
+
+  # use fuck as an alias 
+  eval "$(thefuck --alias)"
+
+  server() {
     local current_dir
     current_dir="$(pwd)"
     local start_file="${1:-}"
@@ -153,11 +136,11 @@ if [[ $- == *i* ]]; then
   alias mcstudio='ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
   alias mcpro='ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
 
-  function cpmcstudio() {
+  cpmcstudio() {
     scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:"$1" "$2"
   }
 
-  function cpmcpro() {
+  cpmcpro() {
     scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:"$1" "$2"
   }
 
@@ -165,7 +148,7 @@ if [[ $- == *i* ]]; then
   export BAT_THEME="Dracula"
 
   # Git clone shortcut
-  function gcl() {
+  gcl() {
     local repo_url="https://github.com/$1"
     if [[ -n "$2" ]]; then
       git clone "$repo_url" "$2"
@@ -175,7 +158,7 @@ if [[ $- == *i* ]]; then
   }
 
   # For yazi
-  function yy() {
+  yy() {
     local tmp
     tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"
@@ -193,9 +176,17 @@ if [[ $- == *i* ]]; then
     alias lt='tre'
   fi
 
-  # fzf key bindings
+  # fzf key bindings: override default Ctrl-R binding from oh-my-zsh
   if command -v fzf &>/dev/null; then
     export FZF_DEFAULT_OPTS="--bind 'enter:execute($EDITOR {})'"
+    fzf-history-widget() {
+      local selected
+      selected=$(fc -rl 1 | fzf --height 40% --reverse --query="$LBUFFER") && LBUFFER="$selected"
+      CURSOR=$#LBUFFER
+      zle reset-prompt
+    }
+    zle -N fzf-history-widget
+    bindkey '^R' fzf-history-widget
   fi
 
   # Set up SSH agent to authenticate to GitHub
@@ -206,108 +197,6 @@ if [[ $- == *i* ]]; then
     *) echo "Unknown machine" ;;
   esac
 
+  export PATH="$HOME/.emacs.d/bin:$PATH"
+  alias emacs="emacsclient -n"
 fi
-
-
-
-export PATH="$HOME/.emacs.d/bin:$PATH"
-
-alias emacs="emacsclient -n"
-
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
