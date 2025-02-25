@@ -10,7 +10,7 @@ if [[ $- == *i* ]]; then
   source ~/.config/brew/brew-sync.sh
 
   # Make zsh prompt minimal
-  export PROMPT='%~ %# '
+  export PROMPT="%~ %# "
   # nvim default
   export EDITOR=nvim
 
@@ -24,6 +24,7 @@ if [[ $- == *i* ]]; then
   export CPLUS_INCLUDE_PATH="/opt/homebrew/include"
 
   # Add directories to PATH
+  export PATH="$HOME/.emacs.d/bin:$PATH"
   export PATH="/opt/homebrew/opt/openvpn/sbin:$PATH"
   export PATH="/usr/local/bin:$PATH"
   export PATH="$JAVA_HOME/bin:$PATH"
@@ -32,9 +33,9 @@ if [[ $- == *i* ]]; then
   # Texlive to PATH for VS Code LaTeX workshop
   export PATH="$HOME/Library/TinyTeX/bin/universal-darwin:$PATH"
 
-
   # Aliases
-  alias dev='open http://localhost:3000; npm run dev'
+  alias emacs="emacsclient -n"
+  alias dev="open http://localhost:3000; npm run dev"
   alias gcc="gcc-14"
   alias g++="g++-14"
   export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
@@ -52,14 +53,13 @@ if [[ $- == *i* ]]; then
   alias del="trash_move.sh"
   alias delx="trash_empty.sh"
   alias c="cd"
-  alias z="z_tmux"
   alias e="exit"
-  alias fi="yazi"
   alias ts="ts-node"
+  alias n="nvim"
   alias t="taskwarrior-tui"
   alias code="code -r"
   alias qalc="qalc -s 'angle 2'"
-  alias bare='/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME'
+  alias bare="/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
 
   # Make brew tracking automated
@@ -69,93 +69,17 @@ if [[ $- == *i* ]]; then
           ~/.config/brew/brew-tracker.sh
       fi
       if [[ -z "$BREW_SYNC_RUNNING" ]]; then
-          ~/.config/brew/sync-brew.sh
+          ~/.config/brew/brew-sync.sh
       fi
   }
-
-  # Enhanced cd function with tmux renaming
-  cd() {
-    builtin cd "$@" || return
-    if [[ -n "$TMUX" ]]; then
-      tmux rename-window "$(basename "$PWD")"
-    fi
-  }
-
-  z_tmux() {
-    z "$@" || return
-    if [[ -n "$TMUX" ]]; then
-      tmux rename-window "$(basename "$PWD")"
-    fi
-  }
-
-  zn() {
-    z "$@" || { echo "Directory not found!"; return; }
-    [[ -n "$TMUX" ]] && tmux rename-window "$(basename "$PWD")"
-    nvim .
-  }
-
-  n() {
-    if [[ "$1" == "." ]]; then
-      nvim .
-    else
-      [[ -n "$TMUX" ]] && tmux rename-window "$(basename -- "$1")"
-      nvim "$@"
-    fi
-  }
-
-  curljq() {
-    local curl_args=() jq_args=()
-    local split=false
-    for arg in "$@"; do
-      if [[ "$arg" == "--" ]]; then
-        split=true
-        continue
-      fi
-      if $split; then
-        jq_args+=("$arg")
-      else
-        curl_args+=("$arg")
-      fi
-    done
-    /usr/bin/curl -s "${curl_args[@]}" | jq "${jq_args[@]}"
-  }
-  alias curl='curljq'
-
 
   # use fuck as an alias 
   eval "$(thefuck --alias)"
-
-  server() {
-    local current_dir
-    current_dir="$(pwd)"
-    local start_file="${1:-}"
-    live-server --mount=/:"$current_dir" "$start_file"
-  }
-
-  # SSH setup
-  alias mcstudio='ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
-  alias mcpro='ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
-
-  cpmcstudio() {
-    scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:"$1" "$2"
-  }
-
-  cpmcpro() {
-    scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:"$1" "$2"
-  }
+  
+  eval "$(zoxide init zsh)"
 
   # Bat theme
   export BAT_THEME="Dracula"
-
-  # Git clone shortcut
-  gcl() {
-    local repo_url="https://github.com/$1"
-    if [[ -n "$2" ]]; then
-      git clone "$repo_url" "$2"
-    else
-      git clone "$repo_url"
-    fi
-  }
 
   # For yazi
   yy() {
@@ -188,15 +112,4 @@ if [[ $- == *i* ]]; then
     zle -N fzf-history-widget
     bindkey '^R' fzf-history-widget
   fi
-
-  # Set up SSH agent to authenticate to GitHub
-  eval "$(ssh-agent -c)" &>/dev/null
-  case "$(hostname)" in
-    "faustozamparelli") ssh-add ~/.ssh/mcstudio &>/dev/null ;;
-    "Faustos-MacBook-Pro.local") ssh-add ~/.ssh/mcpro &>/dev/null ;;
-    *) echo "Unknown machine" ;;
-  esac
-
-  export PATH="$HOME/.emacs.d/bin:$PATH"
-  alias emacs="emacsclient -n"
 fi
