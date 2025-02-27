@@ -1,4 +1,10 @@
 if [[ $- == *i* ]]; then
+  export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+  # Make zsh prompt minimal
+  export PROMPT="%~ %# "
+  # nvim default
+  export EDITOR=nvim
+
   # Load oh-my-zsh plugins
   export ZSH="/Users/$(whoami)/.oh-my-zsh"
   export PATH="/opt/homebrew/bin:$PATH"
@@ -9,11 +15,6 @@ if [[ $- == *i* ]]; then
 
   # Sync brew packages after pulling from GitHub
   source ~/.config/brew/brew-sync.sh
-
-  # Make zsh prompt minimal
-  export PROMPT="%~ %# "
-  # nvim default
-  export EDITOR=nvim
 
   # Environment Variables
   export ZSH="$HOME/.oh-my-zsh"
@@ -116,6 +117,4 @@ if [[ $- == *i* ]]; then
     zle -N fzf-history-widget
     bindkey '^R' fzf-history-widget
   fi
-
-  export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 fi

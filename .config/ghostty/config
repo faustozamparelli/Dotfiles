@@ -5,8 +5,9 @@ command = /opt/homebrew/bin/fish --login --interactive
 #cursor-style-blink = false
 shell-integration-features = no-cursor
 
-font-size = 30
+font-size = 20
 font-family = "Liga SFMono Nerd Font"
+title = " "
 
 clipboard-read = allow
 clipboard-paste-protection = false
@@ -57,7 +58,7 @@ keybind = alt+shift+l=text:\x13\x1b\x5b\x43
 # More CMD bindings sending escape sequences
 keybind = cmd+n=text:\x13\x76
 keybind = cmd+r=text:\x13\x2c
-keybind = cmd+s=text:\x13\x73
+#keybind = cmd+s=text:\x13\x73
 keybind = cmd+t=text:\x13\x63
 keybind = cmd+shift+t=text:\x13\x43
 keybind = cmd+w=text:\x13\x78
