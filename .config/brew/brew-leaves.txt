@@ -28,7 +28,6 @@ htop
 hugo
 ifstat
 jesseduffield/lazygit/lazygit
-joshmedeski/sesh/sesh
 jq
 kondo
 latexindent
@@ -50,10 +49,12 @@ texlive
 thefuck
 tig
 tlrc
+tmux
 tre-command
 unar
 wget
 yazi
 yqrashawn/goku/goku
+zoxide
 zsh-autosuggestions
 zsh-syntax-highlighting
