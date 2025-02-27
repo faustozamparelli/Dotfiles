@@ -1,8 +1,9 @@
-#!/usr/bin/env fish
+#!/opt/homebrew/bin/fish
 
-set BREW_DIR $HOME/.config/brew
-set BREW_LEAVES "$BREW_DIR/brew-leaves.txt"
-set BREW_TAPS "$BREW_DIR/brew-taps.txt"
+# Set variables
+set BREW_DIR ~/.config/brew
+set BREW_LEAVES $BREW_DIR/brew-leaves.txt
+set BREW_TAPS $BREW_DIR/brew-taps.txt
 
 # Update leaves and taps
 brew leaves > $BREW_LEAVES

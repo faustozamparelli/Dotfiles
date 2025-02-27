@@ -66,10 +66,13 @@ if [[ $- == *i* ]]; then
   # Make brew tracking automated
   brew() {
       command brew "$@"
-      if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" || "$1" == "upgrade" ]]; then
+      # Run brew-tracker.sh only for commands that change installed packages,
+      # but not for upgrade/update commands.
+      if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" ]]; then
           ~/.config/brew/brew-tracker.sh
       fi
-      if [[ -z "$BREW_SYNC_RUNNING" ]]; then
+      # Only run brew-sync.sh if we're not in the middle of an upgrade/update
+      if [[ "$1" != "upgrade" && "$1" != "update" && -z "$BREW_SYNC_RUNNING" ]]; then
           ~/.config/brew/brew-sync.sh
       fi
   }

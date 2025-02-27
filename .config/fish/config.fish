@@ -67,21 +67,22 @@ if status is-interactive
       end
   end
 
+  source ~/.config/brew/brew-sync.fish
   function brew
-      # Run the real brew command with all arguments
+      # Run the actual brew command with all arguments.
       command brew $argv
 
-      # If the first argument is one of these commands, source the tracker script
-      if contains -- $argv[1] install uninstall tap untap upgrade
-          source ~/.config/brew/brew-tracker.fish
+      # If the first argument is one that should trigger tracking (but not for upgrade/update)
+      if test "$argv[1]" = "install" -o "$argv[1]" = "uninstall" -o "$argv[1]" = "tap" -o "$argv[1]" = "untap"
+          # Call brew-tracker (make sure to use the Fish version)
+          ~/.config/brew/brew-tracker.fish
       end
 
-      # If BREW_SYNC_RUNNING is not set, source the sync script
-      if not set -q BREW_SYNC_RUNNING
-          source ~/.config/brew/brew-sync.fish
+      # Run brew-sync only if not an upgrade or update and not already running
+      if test "$argv[1]" != "upgrade" -a "$argv[1]" != "update" -a -z "$BREW_SYNC_RUNNING"
+          ~/.config/brew/brew-sync.fish
       end
   end
-  source ~/.config/brew/brew-sync.fish
 
   function __zoxide_z
       # Use zoxide to jump to the directory
