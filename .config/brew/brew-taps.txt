@@ -4,7 +4,6 @@ felixkratz/formulae
 homebrew/bundle
 homebrew/services
 jesseduffield/lazygit
-joshmedeski/sesh
 jstkdng/programs
 koekeishiya/formulae
 nikitabobko/tap
