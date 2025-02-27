@@ -68,6 +68,3 @@ keybind = cmd+q=text:\x13\x77
 keybind = cmd+f=text:\x1b\x66
 keybind = cmd+d=text:\x1b\x64
 keybind = cmd+g=text:\x1b\x67
-
-# (Optional duplicate binding for cmd+s if needed)
-keybind = cmd+s=text:\x13\x73
