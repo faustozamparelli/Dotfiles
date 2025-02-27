@@ -29,6 +29,9 @@ if status is-interactive
       set _asdf_shims "$ASDF_DATA_DIR/shims"
   end
 
+  # Initialize zoxide (Brew-installed) for Fish shell
+  zoxide init fish | source
+
   # Do not use fish_add_path (added in Fish 3.2) because it
   # potentially changes the order of items in PATH
   if not contains $_asdf_shims $PATH
@@ -83,20 +86,6 @@ if status is-interactive
           ~/.config/brew/brew-sync.fish
       end
   end
-
-  function __zoxide_z
-      # Use zoxide to jump to the directory
-      zoxide $argv
-
-      # Check if the directory change was successful
-      if test $status -eq 0
-          return 0
-      else
-          return 1
-      end
-  end
-
-
 
   function z_tmux
       # Use zoxide to jump to the directory
