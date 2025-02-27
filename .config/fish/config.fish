@@ -67,6 +67,36 @@ if status is-interactive
       end
   end
 
+  function brew
+      # Run the real brew command with all arguments
+      command brew $argv
+
+      # If the first argument is one of these commands, source the tracker script
+      if contains -- $argv[1] install uninstall tap untap upgrade
+          source ~/.config/brew/brew-tracker.fish
+      end
+
+      # If BREW_SYNC_RUNNING is not set, source the sync script
+      if not set -q BREW_SYNC_RUNNING
+          source ~/.config/brew/brew-sync.fish
+      end
+  end
+  source ~/.config/brew/brew-sync.fish
+
+  function __zoxide_z
+      # Use zoxide to jump to the directory
+      zoxide $argv
+
+      # Check if the directory change was successful
+      if test $status -eq 0
+          return 0
+      else
+          return 1
+      end
+  end
+
+
+
   function z_tmux
       # Use zoxide to jump to the directory
       __zoxide_z $argv
@@ -217,7 +247,7 @@ alias curl='curljq'
 
   #eza (ll / lla)
   if type -q eza
-    alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+    alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions --grid"
     alias ls "l"
     alias la "eza --long --total-size -a --no-time --no-user --no-permissions"
     # alias lt "eza --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
@@ -247,7 +277,7 @@ alias curl='curljq'
     switch (hostname)
         case "faustozamparelli"
             ssh-add ~/.ssh/mcstudio &>/dev/null
-        case "Faustos-MacBook-Pro.local"
+        case "Federer.local"
             ssh-add ~/.ssh/mcpro &>/dev/null
         case '*'
             echo "Unknown machine"

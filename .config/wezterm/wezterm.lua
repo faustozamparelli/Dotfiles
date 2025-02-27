@@ -6,12 +6,12 @@ config.keys = keybindings
 
 config.default_prog = { "/opt/homebrew/bin/fish" }
 
-config.color_scheme = "Wez (Gogh)"
+config.color_scheme = "Modus-Vivendi"
 config.colors = {
     background = "rgb(0, 0, 0)",
 }
-config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
-config.font_size = 18
+config.font = wezterm.font("Liga SFMono Nerd Font")
+config.font_size = 25
 
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
