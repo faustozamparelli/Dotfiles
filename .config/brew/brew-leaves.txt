@@ -10,6 +10,7 @@ curl
 docker
 docker-compose
 duf
+eza
 fd
 felixkratz/formulae/borders
 ffmpegthumbnailer
