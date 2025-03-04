@@ -42,7 +42,6 @@ poppler
 pyenv
 qalculate-gtk
 radare2
-railwaycat/emacsmacport/emacs-mac
 ripgrep
 switchaudio-osx
 thefuck
