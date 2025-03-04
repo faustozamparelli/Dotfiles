@@ -1,5 +1,5 @@
 if [[ $- == *i* ]]; then
-  export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+  export ZSH_COMPDUMP=~/.cache/zcompdump/.zcompdump-$HOST
   # Make zsh prompt minimal
   export PROMPT="%~ %# "
   # nvim default
@@ -62,21 +62,6 @@ if [[ $- == *i* ]]; then
   alias code="code -r"
   alias qalc="qalc -s 'angle 2'"
   alias bare="/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
-
-
-  # Make brew tracking automated
-  brew() {
-      command brew "$@"
-      # Run brew-tracker.sh only for commands that change installed packages,
-      # but not for upgrade/update commands.
-      if [[ "$1" == "install" || "$1" == "uninstall" || "$1" == "tap" || "$1" == "untap" ]]; then
-          ~/.config/brew/brew-tracker.sh
-      fi
-      # Only run brew-sync.sh if we're not in the middle of an upgrade/update
-      if [[ "$1" != "upgrade" && "$1" != "update" && -z "$BREW_SYNC_RUNNING" ]]; then
-          ~/.config/brew/brew-sync.sh
-      fi
-  }
 
   # use fuck as an alias 
   eval "$(thefuck --alias)"
