@@ -34,7 +34,6 @@ kondo
 latexindent
 libgit2@1.7
 mycli
-neovim
 nmap
 node
 nowplaying-cli
