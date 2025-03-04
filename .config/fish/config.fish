@@ -245,14 +245,14 @@ alias curl='curljq'
   end
 
   # fzf.fish
-  fzf_configure_bindings --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cs
-  set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
-  set fzf_history_opts --bind "enter:accept"
-  set fzf_fd_opts --hidden --type=f
-  set fzf_git_status_opts --bind "enter:execute(git diff {})"
-  set fzf_git_log_opts --bind "enter:execute(git show {})"
-  set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
-  set fzf_processes_opts --bind "enter:execute(kill -9 {})"
+  # fzf_configure_bindings --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cd 
+  # set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
+  # set fzf_history_opts --bind "enter:accept"
+  # set fzf_fd_opts --hidden --type=f
+  # set fzf_git_status_opts --bind "enter:execute(git diff {})"
+  # set fzf_git_log_opts --bind "enter:execute(git show {})"
+  # set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
+  # set fzf_processes_opts --bind "enter:execute(kill -9 {})"
 
   function fish_user_key_bindings
     # Bind Ctrl + f to run the tmux-sessionizer.sh script
@@ -287,9 +287,9 @@ alias curl='curljq'
           end
       end
   end
+
+  set -U fish_user_paths $fish_user_paths $HOME/.emacs.d/bin
+  alias emacs "emacsclient -n"
+
 end
 
-set -U fish_user_paths $fish_user_paths $HOME/.emacs.d/bin
-
-
-alias emacs "emacsclient -n"

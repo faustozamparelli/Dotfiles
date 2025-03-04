@@ -2,46 +2,46 @@
 
 # If the script is being run from nvim, switch to the first free window and run the script from there
 if [[ $NVIM_LISTEN_ADDRESS ]]; then
-    tmux select-window -t 1
-    tmux send-keys '~/.config/tmux/tmux-dp1.sh' C-m
+	tmux select-window -t 1
+	tmux send-keys '~/.config/tmux/tmux-dp1.sh' C-m
 else
-    # Fuzzy search for files and directories
-    if [[ $# -eq 1 ]]; then
-        selected=$1
-    else
-        # First, search for files and directories at depth 1 in ~/ and ~/.config/
-        result=$(fd . -t d --max-depth 1 ~/ ~/.config/ ~/Downloads/ ~/Developer/ | fzf --prompt='🧃  ')
-        key=$(head -1 <<< "$result")
-        selected=$(tail -1 <<< "$result")
-    fi
+	# Fuzzy search for files and directories
+	if [[ $# -eq 1 ]]; then
+		selected=$1
+	else
+		# First, search for files and directories at depth 1 in ~/ and ~/.config/
+		result=$(fd . -t d --max-depth 1 ~/ ~/.config/ ~/Library/Mobile Documents/com~apple~CloudDocs/Documents ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/LongTerm ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/ShortTerm ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Developer | fzf --prompt='🧃  ')
+		key=$(head -1 <<<"$result")
+		selected=$(tail -1 <<<"$result")
+	fi
 
-    # Exit if no selection was made
-    if [[ -z $selected ]]; then
-        exit 0
-    fi
+	# Exit if no selection was made
+	if [[ -z $selected ]]; then
+		exit 0
+	fi
 
-    # Get the name of the selected directory or file
-    name=$(basename "$selected")
+	# Get the name of the selected directory or file
+	name=$(basename "$selected")
 
-    # Check if a window with the same name already exists
-    if tmux list-windows -F "#{window_name}" | grep -q "^$name$"; then
-        # If a window with the same name exists, switch to that window
-        tmux select-window -t "$name"
-        exit 0
-    fi
+	# Check if a window with the same name already exists
+	if tmux list-windows -F "#{window_name}" | grep -q "^$name$"; then
+		# If a window with the same name exists, switch to that window
+		tmux select-window -t "$name"
+		exit 0
+	fi
 
-    # Determine if the selection is a file or directory
-    if [[ -d $selected ]]; then
-          # If Enter was pressed, cd into the directory in the current window
-          tmux send-keys "cd $selected" C-m
-          tmux send-keys 'n .' C-m
-    elif [[ -f $selected ]]; then
-        # If file, determine the action based on the key pressed
-        parent_dir=$(dirname "$selected")
-        # If Enter was pressed, open the file in the current window
-        tmux send-keys "cd $parent_dir && nvim $(basename "$selected")" C-m
-        fi
-    fi
+	# Determine if the selection is a file or directory
+	if [[ -d $selected ]]; then
+		# If Enter was pressed, cd into the directory in the current window
+		tmux send-keys "cd $selected" C-m
+		tmux send-keys 'n .' C-m
+	elif [[ -f $selected ]]; then
+		# If file, determine the action based on the key pressed
+		parent_dir=$(dirname "$selected")
+		# If Enter was pressed, open the file in the current window
+		tmux send-keys "cd $parent_dir && nvim $(basename "$selected")" C-m
+	fi
+fi
 
 #     # Determine if the selection is a file or directory
 #     if [[ -d $selected ]]; then

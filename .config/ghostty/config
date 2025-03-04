@@ -1,5 +1,6 @@
 theme =  Dark Pastel
-command = /opt/homebrew/bin/fish --login --interactive
+#command = /usr/local/bin/fish --login --interactive
+confirm-close-surface = false
 
 #cursor-style = block
 #cursor-style-blink = false
@@ -43,26 +44,26 @@ keybind = cmd+shift+l=text:\x13\x7d
 keybind = cmd+b=text:\x13\x62
 keybind = cmd+e=text:\x13\x77
 
-# OPT (Alt) bindings for letters
-keybind = alt+h=text:\x13\x68
-keybind = alt+j=text:\x13\x6a
-keybind = alt+k=text:\x13\x6b
-keybind = alt+l=text:\x13\x6c
-
 # OPT+SHIFT bindings (for uppercase letters)
 keybind = alt+shift+h=text:\x13\x1b\x5b\x44
 keybind = alt+shift+j=text:\x13\x1b\x5b\x42
 keybind = alt+shift+k=text:\x13\x1b\x5b\x41
 keybind = alt+shift+l=text:\x13\x1b\x5b\x43
 
+# OPT (Alt) bindings for letters
+keybind = alt+h=text:\x13\x68
+keybind = alt+j=text:\x13\x6a
+keybind = alt+k=text:\x13\x6b
+keybind = alt+l=text:\x13\x6c
+
 # More CMD bindings sending escape sequences
 keybind = cmd+n=text:\x13\x76
-keybind = cmd+r=text:\x13\x2c
-#keybind = cmd+s=text:\x13\x73
+#keybind = cmd+r=text:\x13\x2c
+keybind = cmd+r=text:\x13\x73
 keybind = cmd+t=text:\x13\x63
 keybind = cmd+shift+t=text:\x13\x43
 keybind = cmd+w=text:\x13\x78
-keybind = cmd+q=text:\x13\x77
+#keybind = cmd+q=text:\x13\x77
 
 # Other CMD bindings sending escape sequences
 keybind = cmd+f=text:\x1b\x66

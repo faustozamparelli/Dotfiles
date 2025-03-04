@@ -107,12 +107,19 @@ if [[ $- == *i* ]]; then
 
   # fzf key bindings: override default Ctrl-R binding from oh-my-zsh
   if command -v fzf &>/dev/null; then
-    export FZF_DEFAULT_OPTS="--bind 'enter:execute($EDITOR {})'"
     fzf-history-widget() {
       local selected
-      selected=$(fc -rl 1 | fzf --height 40% --reverse --query="$LBUFFER") && LBUFFER="$selected"
-      CURSOR=$#LBUFFER
-      zle reset-prompt
+      selected=$(
+        fc -rl 1 \
+          | awk '{$1=""; sub(/^ /, ""); print}' \
+          | awk '!seen[$0]++' \
+          | fzf --height 40% --reverse --query="$LBUFFER"
+      )
+      if [[ -n "$selected" ]]; then
+        LBUFFER="$selected"
+        CURSOR=${#LBUFFER}
+        zle reset-prompt
+      fi
     }
     zle -N fzf-history-widget
     bindkey '^R' fzf-history-widget

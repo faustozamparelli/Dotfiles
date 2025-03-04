@@ -2,22 +2,22 @@
 
 # If the script is being run from nvim, switch to the first free window and run the script from there
 if [[ $NVIM_LISTEN_ADDRESS ]]; then
-    tmux select-window -t 1
-    tmux send-keys '~/.config/tmux/tmux-recursive.sh' C-m
+  tmux select-window -t 1
+  tmux send-keys '~/.config/tmux/tmux-recursive.sh' C-m
 fi
 
 # Recursive fuzzy search for files and directories
 if [[ $# -eq 1 ]]; then
-    selected=$1
+  selected=$1
 else
-    result=$(fd . -t f --exclude node_modules --exclude '*.txt' --exclude '*.log' --exclude '*.json' --exclude '*.xml' ~/Developer/ ~/Downloads/ ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ | fzf --prompt='🎯 ')
-    key=$(head -1 <<< "$result")
-    selected=$(tail -1 <<< "$result")
+  result=$(fd . -t f --exclude node_modules --exclude '*.txt' --exclude '*.log' --exclude '*.json' --exclude '*.xml' ~/Library/Mobile Documents/com~apple~CloudDocs/Documents ~/.config/fish/ ~/.config/tmux/ ~/.config/nvim/lua/ ~/.config/git/ ~/.config/yabai/ ~/.config/wezterm/ ~/.config/goku/ /usr/local/bin/ ~/.config/sketchybar/ | fzf --prompt='🎯 ')
+  key=$(head -1 <<<"$result")
+  selected=$(tail -1 <<<"$result")
 fi
 
 # Exit if no selection was made
 if [[ -z $selected ]]; then
-    exit 0
+  exit 0
 fi
 
 # Get the name of the selected directory or file
