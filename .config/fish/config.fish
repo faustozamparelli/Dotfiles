@@ -71,21 +71,6 @@ if status is-interactive
   end
 
   source ~/.config/brew/brew-sync.fish
-  function brew
-      # Run the actual brew command with all arguments.
-      command brew $argv
-
-      # If the first argument is one that should trigger tracking (but not for upgrade/update)
-      if test "$argv[1]" = "install" -o "$argv[1]" = "uninstall" -o "$argv[1]" = "tap" -o "$argv[1]" = "untap"
-          # Call brew-tracker (make sure to use the Fish version)
-          ~/.config/brew/brew-tracker.fish
-      end
-
-      # Run brew-sync only if not an upgrade or update and not already running
-      if test "$argv[1]" != "upgrade" -a "$argv[1]" != "update" -a -z "$BREW_SYNC_RUNNING"
-          ~/.config/brew/brew-sync.fish
-      end
-  end
 
   function z_tmux
       # Use zoxide to jump to the directory
