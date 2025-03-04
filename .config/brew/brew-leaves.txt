@@ -6,6 +6,7 @@ cmake
 colima
 commitizen
 coreutils
+curl
 docker
 docker-compose
 duf
@@ -45,7 +46,6 @@ radare2
 railwaycat/emacsmacport/emacs-mac
 ripgrep
 switchaudio-osx
-texlive
 thefuck
 tig
 tlrc
