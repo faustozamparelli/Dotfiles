@@ -18,6 +18,7 @@ file-formula
 fish
 fzf
 gh
+ghq
 git
 git-delta
 glow
