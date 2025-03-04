@@ -288,8 +288,7 @@ alias curl='curljq'
       end
   end
 
-  set -U fish_user_paths $fish_user_paths $HOME/.emacs.d/bin
+  set -U fish_user_paths $fish_user_paths $HOME/.config/emacs/bin
   alias emacs "emacsclient -n"
-
 end
 
