@@ -263,15 +263,15 @@ alias curl='curljq'
   end
 
   # Set up SSH agent to authenticate to GitHub
-    eval (ssh-agent -c) &>/dev/null
-    switch (hostname)
-        case "faustozamparelli"
-            ssh-add ~/.ssh/mcstudio &>/dev/null
-        case "Federer.local"
-            ssh-add ~/.ssh/mcpro &>/dev/null
-        case '*'
-            echo "Unknown machine"
-    end
+    # eval (ssh-agent -c) &>/dev/null
+    # switch (hostname)
+    #     case "faustozamparelli"
+    #         ssh-add ~/.ssh/mcstudio &>/dev/null
+    #     case "Federer.local"
+    #         ssh-add ~/.ssh/mcpro &>/dev/null
+    #     case '*'
+    #         echo "Unknown machine"
+    # end
 
   # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
   if not set -q TMUX
