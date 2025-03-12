@@ -122,6 +122,7 @@ return {
           command = "python3"
         }
       }
-    end,
+    end
   }
 }
+
