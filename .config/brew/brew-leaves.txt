@@ -3,10 +3,8 @@ bash
 bat
 candid82/brew/joker
 cmake
-colima
 commitizen
 coreutils
-curl
 docker
 docker-compose
 duf
@@ -34,6 +32,7 @@ kondo
 latexindent
 libgit2@1.7
 mycli
+neovim
 nmap
 node
 nowplaying-cli
@@ -45,6 +44,7 @@ radare2
 railwaycat/emacsmacport/emacs-mac
 ripgrep
 switchaudio-osx
+texlive
 thefuck
 tig
 tlrc
