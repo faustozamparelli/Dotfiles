@@ -68,7 +68,18 @@ vim.wo.conceallevel = 1
 
 -- remove the command line until needed
 vim.opt.cmdheight = 0
+--show the command line when recording a macro tho
+vim.api.nvim_create_autocmd("RecordingEnter", {
+  callback = function()
+    vim.opt.cmdheight = 1
+  end,
+})
 
+vim.api.nvim_create_autocmd("RecordingLeave", {
+  callback = function()
+    vim.opt.cmdheight = 0
+  end,
+})
 -- vim.cmd([[
 -- autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif
 -- ]])

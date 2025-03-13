@@ -1,0 +1,11 @@
+# Change window focus within space
+cmd + ctrl + alt - j : yabai -m window --focus south || yabai -m display --focus south
+cmd + ctrl + alt - k : yabai -m window --focus north || yabai -m display --focus north
+cmd + ctrl + alt - h : sh -c 'old=$(yabai -m query --windows --window | jq -r ".id"); yabai -m window --focus west; new=$(yabai -m query --windows --window | jq -r ".id"); if [ "$old" = "$new" ]; then yabai -m display --focus west; fi'
+cmd + ctrl + alt - l : sh -c 'old=$(yabai -m query --windows --window | jq -r ".id"); yabai -m window --focus east; new=$(yabai -m query --windows --window | jq -r ".id"); if [ "$old" = "$new" ]; then yabai -m display --focus east; fi'
+
+# Swap windows (with cross-display fallback)
+cmd + ctrl + alt + shift - j : yabai -m window --swap south
+cmd + ctrl + alt + shift - k : yabai -m window --swap north
+cmd + ctrl + alt + shift - h : sh -c 'WIN_ID=$(yabai -m query --windows --window | jq -r ".id"); yabai -m window --swap west; if [ $? -ne 0 ]; then yabai -m display --focus west; yabai -m window last --insert east; yabai -m window --focus "$WIN_ID"; yabai -m window --display prev; yabai -m window --focus "$WIN_ID"; fi'
+cmd + ctrl + alt + shift - l : sh -c 'WIN_ID=$(yabai -m query --windows --window | jq -r ".id"); yabai -m window --swap east; if [ $? -ne 0 ]; then yabai -m display --focus east; yabai -m window first --insert west; yabai -m window --focus "$WIN_ID"; yabai -m window --display next; yabai -m window --focus "$WIN_ID"; fi'
