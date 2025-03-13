@@ -54,13 +54,17 @@ return {
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local on_attach = function(_, bufnr)
-                local bufopts = { noremap = true, silent = true, buffer = bufnr }
-                vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-                vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
-                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-                vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, bufopts)
+              local bufopts = { noremap = true, silent = true, buffer = bufnr }
+              local builtin = require("telescope.builtin") -- Add this line
 
+              vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+              vim.keymap.set("n", "gr", builtin.lsp_references, bufopts) -- Use Telescope here
+              vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+              vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, bufopts)
+              vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+              vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+              vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+              vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, bufopts)
                 -- Auto-format on save
                 vim.api.nvim_create_autocmd("BufWritePre", {
                     buffer = bufnr,
@@ -99,10 +103,10 @@ return {
                     end,
                 },
                 mapping = {
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
+                    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+                    ["<Tab>"] = cmp.mapping.select_next_item(),
                     ["<C-Space>"] = cmp.mapping.complete(),
-                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
                 },
                 sources = {
                     { name = "nvim_lsp" },
