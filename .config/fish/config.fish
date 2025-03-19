@@ -69,9 +69,6 @@ if status is-interactive
           end
       end
   end
-
-  source ~/.config/brew/brew-sync.fish
-
   function z_tmux
       # Use zoxide to jump to the directory
       __zoxide_z $argv
