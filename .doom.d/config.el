@@ -5,8 +5,8 @@
 (setq ns-use-proxy-icon nil)
 (setq frame-title-format nil)
 
-(setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 18 :weight 'medium :style 'normal))
-(setq doom-big-font (font-spec :family "Hack Nerd Font Mono" :size 28 :weight 'medium :style 'normal))
+(setq doom-font (font-spec :family "Liga SFMono Nerd Font" :size 18 :weight 'medium :style 'normal))
+(setq doom-big-font (font-spec :family "Liga SFMono Nerd Font" :size 28 :weight 'medium :style 'normal))
 
 (scroll-bar-mode -1)
 (set-fringe-mode 0)
