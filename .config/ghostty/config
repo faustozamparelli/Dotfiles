@@ -14,7 +14,7 @@ clipboard-read = allow
 clipboard-paste-protection = false
 
 mouse-hide-while-typing = true
-keybind = global:cmd+s=toggle_quick_terminal
+keybind = global:cmd+a=toggle_quick_terminal
 
 # macOS specific features
 macos-titlebar-style = tabs
