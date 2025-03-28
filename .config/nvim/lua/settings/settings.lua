@@ -91,3 +91,11 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
 --         vim.opt_local.signcolumn = "no"
 --     end,
 -- })
+
+
+--wrap around in markdown files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  command = "setlocal wrap linebreak nolist"
+})
+

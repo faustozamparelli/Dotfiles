@@ -51,8 +51,8 @@ yabai -m rule --add app="^Karabiner-Elements$" manage=off
 yabai -m rule --add app="^Karabiner-EventViewer$" manage=off
 yabai -m rule --add app="^Calculator$" manage=off
 yabai -m rule --add app="^iPhone Mirroring$" manage=off
+yabai -m rule --add app="^Spotify$" manage=off
 # yabai -m rule --add app="^CleanMyMac X$" manage=off
-# yabai -m rule --add app="^Spotify$" manage=off
 # yabai -m rule --add app="^Calendar$" manage=off
 # yabai -m rule --add app="^FaceTime$" manage=off
 # yabai -m rule --add app="^Activity Monitor$" manage=off
