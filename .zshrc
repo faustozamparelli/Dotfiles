@@ -13,9 +13,6 @@ if [[ $- == *i* ]]; then
   plugins=(git)
   source $ZSH/oh-my-zsh.sh
 
-  # Sync brew packages after pulling from GitHub
-  source ~/.config/brew/brew-sync.sh
-
   # Environment Variables
   export ZSH="$HOME/.oh-my-zsh"
   export JAVA_HOME="/opt/homebrew/opt/openjdk"
