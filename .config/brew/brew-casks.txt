@@ -1,0 +1,9 @@
+alt-tab
+font-hack-nerd-font
+font-sf-mono-nerd-font-ligaturized
+ghostty
+homerow
+karabiner-elements
+raycast
+spotify
+visual-studio-code
