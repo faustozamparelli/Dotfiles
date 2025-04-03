@@ -66,14 +66,19 @@
   "terminal.integrated.fontSize": 14.5,
   "editor.fontSize": 14,
   "redhat.telemetry.enabled": false,
-  "errorLens.enabledDiagnosticLevels": ["warning", "info", "error"],
+  "errorLens.enabledDiagnosticLevels": ["info", "error"],
   "jupyter.askForKernelRestart": false,
   "github.copilot.enable": {
-    "*": false,
+    "*": true,
     "plaintext": false,
     "markdown": false,
     "scminput": false
   },
   "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
-  "github.copilot.chat.editor.temporalContext.enabled": true
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "notebook.output.textLineLimit": 100,
+  "svelte.enable-ts-plugin": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  }
 }
