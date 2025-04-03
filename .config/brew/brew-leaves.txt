@@ -9,6 +9,7 @@ docker-compose
 duf
 eza
 fd
+felixkratz/formulae/borders
 ffmpeg
 fish
 fzf
@@ -24,11 +25,12 @@ htop
 hugo
 jesseduffield/lazygit/lazygit
 jq
+koekeishiya/formulae/skhd
+koekeishiya/formulae/yabai
 kondo
 latexindent
 libgit2@1.7
 mycli
-neovim
 nmap
 node
 open-mpi
