@@ -1,0 +1,229 @@
+{  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "vscode-neovim.neovimInitVimPaths.darwin": "/Users/faustozamparelli/.vscodeNvim/init.lua",
+  "editor.accessibilitySupport": "off",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    "r": true
+  },
+  "workbench.editor.showTabs": "multiple",
+  "editor.tabSize": 4,
+  "workbench.layoutControl.enabled": false,
+  "workbench.startupEditor": "none",
+  "workbench.tips.enabled": false,
+  "workbench.colorCustomizations": {
+    "editor.background": "#000000",
+    "editorSuggestWidget.selectedBackground": "#231739",
+    "sideBar.background": "#000000",
+    "list.activeSelectionBackground": "#231739",
+    "list.inactiveSelectionBackground": "#231739",
+    "list.focusBackground": "#231739",
+    "list.hoverBackground": "#231739",
+    "editorGroupHeader.tabsBackground": "#000000",
+    "tab.activeBackground": "#231729",
+    "tab.inactiveBackground": "#000000",
+    "statusBar.background": "#000000",
+    "terminal.background": "#000000",
+    "panel.background": "#000000",
+    "editor.selectionBackground": "#572592",
+    "editor.selectionHighlightBackground": "#572592",
+    "editor.findMatchBackground": "#572592",
+    "editor.findMatchHighlightBackground": "#572592",
+    "editorGutter.background": "#000000",
+    "editorCursor.background": "#000000"
+  },
+  "r.rmarkdown.preview.autoRefresh": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.minimap.enabled": false,
+  "terminal.integrated.tabs.enabled": true,
+  "editor.renderWhitespace": "none",
+  "editor.renderLineHighlight": "none",
+  "editor.lightbulb.enabled": "off",
+  "editor.showFoldingControls": "never",
+  "editor.scrollbar.horizontal": "hidden",
+  "editor.scrollbar.vertical": "hidden",
+  "editor.overviewRulerBorder": false,
+  "editor.cursorBlinking": "solid",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.fontSize": 14,
+  "terminal.integrated.fontSize": 14,
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Hack Nerd Font Mono",
+  "terminal.integrated.fontFamily": "Hack Nerd Font Mono",
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.compactFolders": false,
+  "scm.diffDecorations": "none",
+  "extensions.ignoreRecommendations": true,
+  "terminal.integrated.defaultProfile.osx": "fish",
+  "zenMode.fullScreen": false,
+  "apc.electron": {
+    "titleBarStyle": "hiddenInset",
+    "backgroundColor": "#000000",
+    "trafficLightPosition": {
+      "x": 7,
+      "y": 5
+    }
+  },
+  "window.titleBarStyle": "native",
+  "apc.font.family": "Hack Nerd Font Mono",
+  "apc.menubar.compact": true,
+  "window.zoomLevel": 0.9,
+  "apc.header": {
+    "height": 23,
+    "fontSize": 14
+  },
+  "apc.statusBar": {
+    "position": "editor-top",
+    "fontSize": 13
+  },
+  "apc.listRow": {
+    "lists": ["explorer-folders-view", "quick-input-list", "results"],
+    "fontSize": 14
+  },
+  "apc.stylesheet": {
+    ".quick-input-widget.show-file-icons, .editor-widget.find-widget": "box-shadow: none !important",
+    ".filematch .monaco-icon-label:before, .custom-list-row.results .monaco-list-row .monaco-icon-label:before": "background-position: 0 bottom !important",
+    ".filematch .monaco-count-badge": "padding: 5px 6px 0 6px !important",
+    ".sidebar .title-label": "padding: 0 !important",
+    ".monaco-workbench .monaco-list:not(.element-focused):focus:before": "outline: none !important",
+    ".sidebar": "border: none !important",
+    ".quick-input-list-row div": "display: flex !important; align-items: center !important",
+    ".activitybar .monaco-action-bar .actions-container .action-item:last-child": "display: none !important",
+    ".panel .composite.title": "display: none !important",
+    ".sidebar .title-label h2": "line-height: 1.4 !important; font-size: 14px !important",
+    ".monaco-editor .scroll-decoration": "display: none !important; padding: 10px !important",
+    ".monaco-scrollable-element > .shadow.top": "display: none !important",
+    ".monaco-scrollable-element .tab-border-top-container": "display: none !important",
+    ".monaco-scrollable-element .breadcrumbs-below-tabsk": "display: none !important",
+    ".monaco-workbench .part.editor>.content .editor-group-container>.title>.tabs-and-actions-container.tabs-border-bottom:after": "display: none !important",
+    ".monaco-workbench .part.editor>.content .editor-group-container>.title": "padding-left: 52px !important",
+    ".explorer-folders-view": "zoom: 1.1",
+    ".monaco-workbench .pane-composite-part>.title>.composite-bar-container>.composite-bar>.monaco-action-bar .action-item.icon": "display: none !important",
+    ".monaco-workbench .global-actions": "display: none !important"
+    // ".monaco-pane-view .split-view-view:first-of-type>.pane>.pane-header": "display: none !important"
+    // ".monaco-pane-view .pane>.pane-header": "display: none !important",
+    // ".pane-body .viewpane-filter-container:not(:empty)": "display: none !important"
+  },
+  "window.customTitleBarVisibility": "never",
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "editor.lineNumbers": "relative",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.formatOnSaveMode": "file",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnType": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "isort.args": ["--profile", "black"],
+  "pylint.severity": {
+    "convention": "Hint",
+    "error": "Error",
+    "fatal": "Error",
+    "refactor": "Hint",
+    "warning": "Warning",
+    "info": "Hint"
+  },
+  "indentRainbow.indicatorStyle": "light",
+  "indentRainbow.lightIndicatorStyleLineWidth": 1,
+  "indentRainbow.ignoreErrorLanguages": ["markdown", "cpp"],
+  "indentRainbow.colors": [
+    "rgba(255,255,64,0.3)",
+    "rgba(127,255,127,0.3)",
+    "rgba(255,127,255,0.3)",
+    "rgba(79,236,236,0.3)"
+  ],
+  "flake8.args": [
+    "--ignore=E741, E226, E241, E203, E231",
+    "--max-line-length=120"
+  ],
+  "black-formatter.args": ["--line-length", "120"],
+  "pylint.args": ["cv2"],
+  "python.languageServer": "Pylance",
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
+  "path-intellisense.showHiddenFiles": true,
+  "path-intellisense.autoTriggerNextSuggestion": true,
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "DB",
+      "database": "test_db",
+      "username": "root",
+      "connectionTimeout": 30
+    }
+  ],
+  "workbench.editorAssociations": {
+    "*.pdf": "latex-workshop-pdf-hook"
+  },
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop"
+  },
+  "cpplint.cpplintPath": "/Users/faustozamparelli/.pyenv/shims/cpplint",
+  "cpplint.filters": [
+    "-legal/copyright",
+    "-build/namespaces",
+    "-runtime",
+    "-whitespace",
+    "-readability"
+  ],
+  "cSpell.enabled": false,
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "clang-format.executable": "/Users/faustozamparelli/.clang-format",
+  "terminal.integrated.enableMultiLinePasteWarning": "always",
+  "python.terminal.activateEnvironment": false,
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "strings": "on"
+  },
+  "editor.quickSuggestionsDelay": 0,
+  "git.autofetch": false,
+  "workbench.colorTheme": "Shades of Purple",
+  "workbench.tree.renderIndentGuides": "onHover",
+  "workbench.tree.indent": 10,
+  "workbench.sideBar.location": "right",
+  "workbench.activityBar.location": "hidden",
+  "errorLens.enabledDiagnosticLevels": ["warning", "info"],
+  "workbench.iconTheme": null,
+  "editor.hover.delay": 500,
+  "workbench.hover.delay": 0,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.pytestParameters": true,
+  "jupyter.enableExtendedPythonKernelCompletions": true,
+  "jupyter.exportWithOutputEnabled": true,
+  "editor.hover.hidingDelay": 10000,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "r.rmarkdown.codeLensCommands": [
+    "r.runCurrentChunk",
+    "r.runAboveChunks",
+    "r.runBelowChunks"
+  ],
+  "workbench.editor.enablePreview": false,
+  "breadcrumbs.enabled": false,
+  "r.lsp.diagnostics": false,
+  "update.mode": "manual",
+  "git.confirmSync": false,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "terminal.integrated.defaultLocation": "editor",
+  "python.analysis.nodeExecutable": "/opt/homebrew/bin/node"
+}
