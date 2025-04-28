@@ -2979,11 +2979,6 @@
     "when": "terminalTextSelectedInFocused || terminalFocus && terminalHasBeenCreated && terminalTextSelected || terminalFocus && terminalProcessSupported && terminalTextSelected || terminalFocus && terminalTextSelected && terminalTextSelectedInFocused || terminalHasBeenCreated && terminalTextSelected && terminalTextSelectedInFocused || terminalProcessSupported && terminalTextSelected && terminalTextSelectedInFocused"
   },
   {
-    "key": "ctrl+shift+`",
-    "command": "-workbench.action.terminal.new",
-    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
-  },
-  {
     "key": "f3",
     "command": "-workbench.action.terminal.findNext",
     "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
@@ -6956,10 +6951,6 @@
     "when": "inQuickOpen"
   },
   {
-    "key": "cmd+k",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
     "key": "cmd+j",
     "command": "workbench.files.action.focusFilesExplorer"
   },
@@ -6979,11 +6970,6 @@
   {
     "key": "ctrl+y",
     "command": "acceptSelectedSuggestion"
-  },
-  {
-    "key": "cmd+n",
-    "command": "workbench.action.terminal.new",
-    "when": "terminalFocus"
   },
   {
     "key": "shift+enter",
@@ -7589,5 +7575,20 @@
   {
     "key": "cmd+f",
     "command": "actions.find"
+  },
+  {
+    "key": "cmd+k",
+    "command": "-cursorai.action.generateInTerminal",
+    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported || terminalHasBeenCreated && terminalPromptBarVisible || terminalProcessSupported && terminalPromptBarVisible"
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "-workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   }
 ]
