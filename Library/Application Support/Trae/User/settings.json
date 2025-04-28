@@ -1,0 +1,68 @@
+{
+  "editor.accessibilitySupport": "off",
+  "vscode-neovim.neovimInitVimPaths.darwin": "/Users/faustozamparelli/.vscodeNvim/init.lua",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "vscode-neovim.neovimExecutablePaths.darwin": "/Users/faustozamparelli/.asdf/shims/nvim",
+  "files.autoSaveWhenNoErrors": true,
+  "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true,
+  "notebook.formatOnSave.enabled": true,
+  "editor.minimap.enabled": false,
+  "cSpell.enabled": false,
+  "workbench.colorTheme": "GitHub Dark Default",
+  "security.workspace.trust.untrustedFiles": "open",
+  "terminal.integrated.defaultProfile.osx": "fish",
+  "terminal.external.osxExec": "WezTerm.app",
+  "editor.fontFamily": "Hack Nerd Font Mono",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "files.hotExit": "off",
+  "window.zoomLevel": 1.2,
+  "window.restoreWindows": "none",
+  "terminal.integrated.persistentSessionReviveProcess": "never",
+  "terminal.integrated.tabs.defaultIcon": "error-small",
+  "terminal.integrated.tabs.location": "left",
+  "markdown.extension.toc.orderedList": true,
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.pdf": "latex-workshop-pdf-hook"
+  },
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "__black__",
+  "workbench.preferredLightColorTheme": "__default__",
+  "editor.linkedEditing": true,
+  "latex-workshop.view.pdf.color.dark.backgroundColor": "#000000",
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "git.autofetch": true,
+  "workbench.editor.enablePreview": false,
+  "terminal.integrated.confirmOnKill": "never",
+  "explorer.confirmDelete": false,
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.linting.chktex.enabled": true,
+  "latex-workshop.linting.run": "onType",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": ["-pdf", "-interaction=nonstopmode", "%DOC%"]
+    }
+  ],
+  "editor.experimental.asyncTokenization": false,
+  "go.goroot": "/Users/faustozamparelli/.asdf/installs/golang/1.23.3/go",
+  "workbench.statusBar.visible": false,
+  "terminal.integrated.fontSize": 14.5,
+  "editor.fontSize": 14,
+  "errorLens.enabledDiagnosticLevels": ["info", "error"],
+  "jupyter.askForKernelRestart": false,
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "notebook.output.textLineLimit": 100,
+  "svelte.enable-ts-plugin": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+}
