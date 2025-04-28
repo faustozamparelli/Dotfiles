@@ -59,7 +59,6 @@
   "errorLens.enabledDiagnosticLevels": ["info", "error"],
   "jupyter.askForKernelRestart": false,
   "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/ml/bin/python",
-  "github.copilot.chat.editor.temporalContext.enabled": true,
   "notebook.output.textLineLimit": 100,
   "svelte.enable-ts-plugin": true,
   "[svelte]": {
