@@ -148,7 +148,8 @@ alias curl='curljq'
   alias g++ "g++-14"
   set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
 
-  alias g git
+  alias gsp 'echo $(git status -s --porcelain)'
+  alias gcp 'git pull && git add . && git commit -m "$(gsp)" && git push'
   alias lg lazygit
   alias glg "tig"
   alias tk "tmux kill-server"
