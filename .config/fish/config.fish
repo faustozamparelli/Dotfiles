@@ -148,8 +148,20 @@ alias curl='curljq'
   alias g++ "g++-14"
   set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
 
-  alias gsp 'echo $(git status -s --porcelain)'
-  alias gcp 'git pull && git add . && git commit -m "$(gsp)" && git push'
+  function gcp
+      # prompt the user (with default fallback to your gsp output)
+      read -P "Commit message (leave blank to use git status summary): " msg
+      if test -z "$msg"
+          # if they hit enter without typing, use your gsp alias
+          set msg (gsp)
+      end
+
+      # pull, stage, commit & push
+      git pull
+      git add .
+      git commit -m "$msg"
+      git push
+  end
   alias lg lazygit
   alias glg "tig"
   alias tk "tmux kill-server"
