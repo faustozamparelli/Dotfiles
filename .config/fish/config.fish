@@ -148,20 +148,31 @@ alias curl='curljq'
   alias g++ "g++-14"
   set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
 
+  function gsp
+      git status -s --porcelain
+  end
+
   function gcp
-      # prompt the user (with default fallback to your gsp output)
-      read -P "Commit message (leave blank to use git status summary): " msg
+      # first, pull down any remote changes
+      git pull
+
+      # compute the default commit message up front
+      set default_msg (git status -s --porcelain)
+
+      # prompt the user (default is $default_msg)
+      read -P "Commit message (leave blank to use status summary): " msg
+
+      # if they just hit enter, use the default
       if test -z "$msg"
-          # if they hit enter without typing, use your gsp alias
-          set msg (gsp)
+          set msg $default_msg
       end
 
-      # pull, stage, commit & push
-      git pull
+      # stage, commit & push
       git add .
       git commit -m "$msg"
       git push
   end
+
   alias lg lazygit
   alias glg "tig"
   alias tk "tmux kill-server"
