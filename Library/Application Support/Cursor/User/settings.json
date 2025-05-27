@@ -44,15 +44,63 @@
   "workbench.editor.enablePreview": false,
   "terminal.integrated.confirmOnKill": "never",
   "explorer.confirmDelete": false,
+  "latex-workshop.latex.outDir": "%DIR%",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.ist",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.snm",
+    "*.nav",
+    "*.dvi",
+    "*.synctex.gz"
+  ],
+  "latex-workshop.latex.clean.outDir": {
+    "build": ["**/*"]
+  },
   "latex-workshop.latex.autoClean.run": "onBuilt",
-  "latex-workshop.linting.chktex.enabled": true,
-  "latex-workshop.linting.run": "onType",
-  "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.tools": [
     {
       "name": "latexmk",
       "command": "latexmk",
-      "args": ["-pdf", "-interaction=nonstopmode", "%DOC%"]
+      "args": [
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-shell-escape",
+        "-f",
+        "-gg",
+        "-pdflatex=xelatex",
+        "-aux-directory=%DIR%/build",
+        "-output-directory=%OUTDIR%",
+        "%DOCFILE%"
+      ]
+    },
+    {
+      "name": "clean_build",
+      "command": "rm",
+      "args": ["-rf", "%DIR%/build"]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (xelatex)",
+      "tools": ["latexmk", "clean_build"]
     }
   ],
   "editor.experimental.asyncTokenization": false,
