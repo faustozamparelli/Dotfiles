@@ -5,11 +5,14 @@ christian-kohler.path-intellisense
 esbenp.prettier-vscode
 formulahendry.auto-rename-tag
 franzgollhammer.spacecat
+github.copilot
+github.copilot-chat
 github.github-vscode-theme
 golang.go
 grapecity.gc-excelviewer
 humao.rest-client
 james-yu.latex-workshop
+kingleo.unzip
 mechatroner.rainbow-csv
 mrmlnc.vscode-duplicate
 ms-python.debugpy
