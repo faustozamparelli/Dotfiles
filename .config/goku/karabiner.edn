@@ -2,7 +2,8 @@
 ;; note: all the keys are in QWERTY because karabiner uses the hardware key
 {
   :devices {
-      :macbook [{:vendor_id 1452 :product_id 835}]
+      :air [{:vendor_id 1452 :product_id 591}]
+      :pro [{:vendor_id 1452 :product_id 835}]
       :k7pro [{:vendor_id 13364 :product_id 624}]
       :v8 [{:vendor_id 13364 :product_id 897}]
       :60he [{:vendor_id 14139 :product_id 4189}]
@@ -12,14 +13,14 @@
       {:des "Configure modifier keys on macbook keyboard", :rules [
           [:##left_command :!CTleft_option]
           [:##right_option :!QWright_option]
-          [:##left_control :left_option :macbook :60he]
+          [:##left_control :left_option :pro :60he]
           [:##left_control :left_option :ace60]
           [:##left_control :right_control :k7pro]
-          [:##left_option :left_command :macbook :60he]
+          [:##left_option :left_command :pro :60he]
           [:##left_option :left_command :ace60]
           ; [:##left_option :!QWright_option :k7pro]
           [:##delete_forward :!QWright_option :k7pro]
-          [:##right_control :right_option :macbook :k7pro]
+          [:##right_control :right_option :pro :k7pro]
           {
               :from {:apple_vendor_top_case_key_code :keyboard_fn}
               :to [{:key_code :right_control}]
@@ -45,17 +46,18 @@
             :to [{:apple_vendor_top_case_key_code :keyboard_fn}]
             :type :basic
           }
-          [:##escape :right_control :macbook :60he]
+          [:##escape :backslash]
+          [:##escape :right_control :pro :60he]
           [:##non_us_backslash :escape]
           [:!CTOa :!Tc]
-          [:!CSj :end :macbook]
-          [:!CSk :home :macbook]
+          [:!CSj :end :pro]
+          [:!CSk :home :pro]
           ;; super + capslock
           [:!CTOcaps_lock "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"]
       ]}
       {:des "Swap caps lock to backspace on macbook keyboard", :rules [
           [:##caps_lock :delete_or_backspace]
-          [:##delete_or_backspace :delete_forward :macbook]
+          [:##delete_or_backspace :delete_forward]
           [:##delete_or_backspace :grave_accent_and_tilde :k7pro]
       ]}
       {:des "keyboard arrows", :rules[
