@@ -144,8 +144,6 @@ alias curl='curljq'
   # Aliases
   alias dev 'open http://localhost:3000; npm run dev'
 
-  alias gcc "gcc-14"
-  alias g++ "g++-14"
   set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
 
   function gsp

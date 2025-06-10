@@ -37,5 +37,17 @@
   {
     "key": "shift+cmd+p",
     "command": "-workbench.action.showCommands"
+  },
+  {
+    "key": "shift+cmd+p",
+    "command": "file-browser.open"
+  },
+  {
+    "key": "cmd+n",
+    "command": "extension.advancedNewFile"
+  },
+  {
+    "key": "alt+cmd+n",
+    "command": "-extension.advancedNewFile"
   }
 ]

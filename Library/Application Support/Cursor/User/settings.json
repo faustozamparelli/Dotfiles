@@ -34,7 +34,7 @@
     "*.pdf": "latex-workshop-pdf-hook"
   },
   "window.autoDetectColorScheme": true,
-  "workbench.preferredDarkColorTheme": "__black__",
+  "workbench.preferredDarkColorTheme": "Real Synth",
   "workbench.preferredLightColorTheme": "__default__",
   "editor.linkedEditing": true,
   "latex-workshop.view.pdf.color.dark.backgroundColor": "#000000",
@@ -116,11 +116,146 @@
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
+  
+
   "cursor.cpp.disabledLanguages": ["plaintext", "markdown", "scminput"],
-  "github.copilot.enable": {
-    "*": false,
-    "plaintext": false,
-    "markdown": false,
-    "scminput": false
-  }
+    // --- General VS Code Settings for a Clean Black Theme ---
+    "editor.minimap.enabled": false, // Hides the code overview on the right
+    "editor.scrollbar.vertical": "hidden", // Hides the vertical scrollbar
+    "editor.scrollbar.horizontal": "hidden", // Hides the horizontal scrollbar
+    "editor.scrollbar.verticalScrollbarSize": 0, // Ensures no space is left by the vertical scrollbar
+    "editor.scrollbar.horizontalScrollbarSize": 0, // Ensures no space is left by the horizontal scrollbar
+    "window.menuBarVisibility": "compact", // Hides the traditional menu bar, accessible via Alt key
+
+    // --- Workbench Color Customizations (Black & Purple) ---
+    "workbench.colorCustomizations": {
+        "editor.background": "#000000",
+        "sideBar.background": "#000000",
+        "panel.background": "#000000",
+        "activityBar.background": "#000000",
+        "statusBar.background": "#000000",
+        "titleBar.activeBackground": "#000000",
+        "titleBar.inactiveBackground": "#000000",
+        "terminal.background": "#000000",
+        "editorGroupHeader.tabsBackground": "#000000",
+        "editorGroup.emptyBackground": "#000000",
+        "editorGroup.background": "#000000",
+        "quickInput.background": "#000000", // Command Palette, Quick Open background
+        "notifications.background": "#000000", // Notification popups
+        "editorSuggestWidget.background": "#000000", // Autocompletion suggestions
+        "editorHoverWidget.background": "#000000", // Hover popups
+        "debugConsole.background": "#000000",
+        "menu.background": "#000000",
+        "notificationCenter.background": "#000000",
+        "notificationToast.background": "#000000",
+
+
+        // Accent Colors (Purple: #9933FF)
+        "accentPurple": "#9933FF", // Custom variable for consistency (not directly used by VS Code, but good for reference)
+
+        // List and Tree View (e.g., Explorer, Search Results)
+        "list.activeSelectionBackground": "#9933FF",
+        "list.activeSelectionForeground": "#FFFFFF",
+        "list.hoverBackground": "#9933FF33", // Purple with some transparency on hover
+        "list.hoverForeground": "#FFFFFF",
+        "list.focusBackground": "#8000ff",
+        "list.focusForeground": "#FFFFFF",
+        "list.highlightForeground": "#9933FF", // Highlighted text in lists
+
+        // Buttons and Input Options
+        "button.background": "#9933FF",
+        "button.foreground": "#FFFFFF",
+        "button.hoverBackground": "#7A2BE2", // Slightly darker purple on hover
+        "inputOption.activeBackground": "#9933FF", // e.g., Regex/Match Case/Whole Word in Find Widget
+        "inputOption.activeBorder": "#9933FF",
+        "inputOption.activeForeground": "#FFFFFF",
+
+        // Badges (e.g., number of problems, source control changes)
+        "badge.background": "#9933FF",
+        "badge.foreground": "#FFFFFF",
+
+        // Progress Bar
+        "progressBar.background": "#9933FF",
+
+        // Scrollbar Slider (if visible)
+        "scrollbarSlider.activeBackground": "#9933FF",
+        "scrollbarSlider.hoverBackground": "#9933FF99", // Purple with some transparency
+        "scrollbarSlider.background": "#9933FF66", // Lighter purple for default state
+
+        // Text Selection
+        "editor.selectionBackground": "#9933FF77", // Purple with transparency for text selection
+        "selection.background": "#9933FF", // General selection background
+
+        // Cursor
+        "editorCursor.foreground": "#9933FF",
+
+        // Editor Line Numbers
+        "editorLineNumber.foreground": "#666666", // Dark gray for inactive line numbers
+        "editorLineNumber.activeForeground": "#9933FF", // Purple for active line number
+
+        // Git Decorations (e.g., in Explorer)
+        "gitDecoration.modifiedResourceForeground": "#9933FF", // Modified files
+        "gitDecoration.addedResourceForeground": "#9933FF", // Added files
+        "gitDecoration.untrackedResourceForeground": "#9933FF", // Untracked files
+
+        // Tab Bar
+        "tab.activeBackground": "#000000", // Active tab background
+        "tab.activeForeground": "#9933FF", // Active tab text color
+        "tab.inactiveBackground": "#000000",
+        "tab.inactiveForeground": "#666666", // Inactive tab text color
+        "tab.activeBorder": "#9933FF", // Purple border under active tab
+
+        // Focus and Border Colors (to maintain black or use purple accent)
+        "focusBorder": "#9933FF", // Border around focused elements
+        "widget.shadow": "#000000", // Ensure no subtle shadows
+        "sideBar.border": "#000000",
+        "panel.border": "#000000",
+        "statusBar.border": "#000000",
+        "editorGroup.border": "#000000",
+        "activityBar.border": "#000000",
+        "editorGroupHeader.tabsBorder": "#000000",
+        "button.border": "#000000",
+        "input.border": "#000000",
+        "dropdown.border": "#000000",
+        "menu.border": "#000000",
+        "menubar.selectionBorder": "#9933FF",
+        "tab.border": "#000000", // General tab borders
+        "tab.unfocusedActiveBorder": "#000000",
+        "tab.unfocusedInactiveBorder": "#000000",
+
+        // Quick Input/Command Palette
+        "quickInput.foreground": "#FFFFFF",
+        "quickInput.titleBackground": "#000000", // Title if quick input has one
+        "pickerGroup.foreground": "#9933FF", // Group headers in quick pick (e.g., "Recently Used")
+        "pickerGroup.border": "#000000",
+
+        // Notifications
+        "notificationCenterHeader.background": "#000000",
+        "notificationsErrorIcon.foreground": "#FF0000", // Red for errors
+        "notificationsInfoIcon.foreground": "#9933FF", // Purple for info
+        "notificationsWarningIcon.foreground": "#FFA500", // Orange for warnings
+
+        // Text Links
+        "textLink.foreground": "#9933FF",
+        "textLink.activeForeground": "#7A2BE2",
+
+        // Find Widget
+        "editor.findMatchBackground": "#9933FF88", // Purple for current find match
+        "editor.findMatchHighlightBackground": "#9933FF44", // Purple for other find matches
+        "editor.findRangeHighlightBackground": "#9933FF22", // Purple for find range
+        "editorWidget.background": "#000000", // Find widget background
+        "editorWidget.foreground": "#FFFFFF",
+
+        // Other common elements
+        "editorBracketHighlight.foreground1": "#9933FF", // Purple for bracket pair colorization
+        "editorBracketHighlight.foreground2": "#FFD700", // Gold for next bracket pair
+        "editorBracketHighlight.foreground3": "#00FFFF", // Cyan for third
+        // Add more bracket colors if you use them, or stick to just purple
+
+        "editorGutter.modifiedBackground": "#9933FF", // Gutter color for modified lines
+        "editorGutter.addedBackground": "#9933FF", // Gutter color for added lines
+        "editorGutter.deletedBackground": "#FF0000", // Red for deleted lines
+
+        "walkThrough.embeddedEditorBackground": "#000000" // Background for embedded editors in welcome/walkthrough pages
+    }
 }
