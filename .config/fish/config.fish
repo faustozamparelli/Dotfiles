@@ -170,6 +170,22 @@ alias curl='curljq'
       git commit -m "$msg"
       git push
   end
+  function gc
+      # compute the default commit message up front
+      set default_msg (git status -s --porcelain)
+
+      # prompt the user (default is $default_msg)
+      read -P "Commit message (leave blank to use status summary): " msg
+
+      # if they just hit enter, use the default
+      if test -z "$msg"
+          set msg $default_msg
+      end
+
+      # stage, commit & push
+      git add .
+      git commit -m "$msg"
+  end
 
   alias lg lazygit
   alias glg "tig"
