@@ -208,6 +208,7 @@ alias curl='curljq'
   alias ts "ts-node"
   alias t "taskwarrior-tui"
   alias code "code -r"
+  alias cursor "cursor -r"
 
   function server
       set current_dir (pwd)

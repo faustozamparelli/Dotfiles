@@ -60,6 +60,9 @@
           [:##delete_or_backspace :delete_forward]
           [:##delete_or_backspace :grave_accent_and_tilde :k7pro]
       ]}
+      {:des "Command + G for ChatGPT app", :rules [
+          [:!Qg :!OSg]
+        ]}
       {:des "keyboard arrows", :rules[
           [:!Wh :left_arrow]
           [:!Wk :up_arrow]

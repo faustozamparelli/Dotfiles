@@ -360,6 +360,21 @@
           "type" : "basic"
         } ]
       }, {
+        "description" : "Command + G for ChatGPT app",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "g",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "g",
+            "modifiers" : [ "left_option", "left_shift" ]
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
         "description" : "keyboard arrows",
         "manipulators" : [ {
           "from" : {
