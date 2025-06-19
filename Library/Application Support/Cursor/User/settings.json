@@ -13,7 +13,7 @@
   "workbench.activityBar.location": "hidden",
   "workbench.editor.showTabs": "multiple",
   "cSpell.enabled": false,
-  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.colorTheme": "__default__",
   "workbench.sideBar.location": "left",
   "security.workspace.trust.untrustedFiles": "open",
   "terminal.integrated.defaultProfile.osx": "fish",
@@ -33,7 +33,6 @@
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.pdf": "latex-workshop-pdf-hook"
   },
-  "window.autoDetectColorScheme": true,
   "workbench.preferredDarkColorTheme": "Real Synth",
   "workbench.preferredLightColorTheme": "__default__",
   "editor.linkedEditing": true,
@@ -127,7 +126,7 @@
   "window.menuBarVisibility": "compact", // Hides the traditional menu bar, accessible via Alt key
 
   // --- Workbench Color Customizations (Black & Purple) ---
-  "workbench.colorCustomizations": {
+/*   "workbench.colorCustomizations": {
     "editor.background": "#000000",
     "sideBar.background": "#000000",
     "panel.background": "#000000",
@@ -255,6 +254,7 @@
     "editorGutter.deletedBackground": "#FF0000", // Red for deleted lines
 
     "walkThrough.embeddedEditorBackground": "#000000" // Background for embedded editors in welcome/walkthrough pages
-  },
-  "svg.preview.mode": "img"
+  }, */
+  "svg.preview.mode": "img",
+  "window.autoDetectColorScheme": true
 }
