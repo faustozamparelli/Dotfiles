@@ -46,7 +46,7 @@
             :to [{:apple_vendor_top_case_key_code :keyboard_fn}]
             :type :basic
           }
-          [:##escape :backslash]
+          [:##escape :backslash :air]
           [:##escape :right_control :pro :60he]
           [:##non_us_backslash :escape]
           [:!CTOa :!Tc]
