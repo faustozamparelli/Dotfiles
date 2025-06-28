@@ -1,5 +1,5 @@
 theme =  Dark Pastel
-#command = /usr/local/bin/fish --login --interactive
+command = /opt/homebrew/bin/fish --login --interactive
 confirm-close-surface = false
 
 #cursor-style = block
