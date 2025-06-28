@@ -6,7 +6,7 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "U", "<C-r>")
 vim.opt.relativenumber = true
 vim.opt.number = true
-vim.cmd('highlight CursorLineNr guifg=#FFFF00 ctermfg=yellow')
+vim.cmd("highlight CursorLineNr guifg=#FFFF00 ctermfg=yellow")
 vim.opt.mouse = ""
 vim.opt.showmode = false
 vim.opt.wrap = false
@@ -49,36 +49,34 @@ vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- Highlight trailing whitespaces in Markdown files
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    vim.opt_local.list = true
-    vim.opt_local.listchars:append("trail:·")
-  end,
+	pattern = "markdown",
+	callback = function()
+		vim.opt_local.list = true
+		vim.opt_local.listchars:append("trail:·")
+	end,
 })
 
-vim.api.nvim_create_autocmd({"FocusLost", "WinLeave"}, {
-  pattern = "*",
-  command = "silent! wall"
+vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave" }, {
+	pattern = "*",
+	command = "silent! wall",
 })
-
 
 --vim.cmd([[highlight WinSeparator guibg=None]])
-vim.wo.conceallevel = 1 
-
+vim.wo.conceallevel = 1
 
 -- remove the command line until needed
 vim.opt.cmdheight = 0
 --show the command line when recording a macro tho
 vim.api.nvim_create_autocmd("RecordingEnter", {
-  callback = function()
-    vim.opt.cmdheight = 1
-  end,
+	callback = function()
+		vim.opt.cmdheight = 1
+	end,
 })
 
 vim.api.nvim_create_autocmd("RecordingLeave", {
-  callback = function()
-    vim.opt.cmdheight = 0
-  end,
+	callback = function()
+		vim.opt.cmdheight = 0
+	end,
 })
 -- vim.cmd([[
 -- autocmd VimEnter * if argc() == 0 | call luaeval('require("nvim-possession").list()') | endif
@@ -92,10 +90,8 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
 --     end,
 -- })
 
-
 --wrap around in markdown files
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  command = "setlocal wrap linebreak nolist"
+	pattern = "markdown",
+	command = "setlocal wrap linebreak nolist",
 })
-

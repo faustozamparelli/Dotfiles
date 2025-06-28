@@ -10,6 +10,9 @@ set("n", "<C-c>", "<cmd>nohlsearch<CR>", { silent = true })
 set("n", "F", "$", { silent = true })
 set("n", "S", "^", { silent = true })
 
+-- jump between parentheses
+set("n", "[", "%", { silent = true })
+
 --save the file
 --set("n", "<leader><leader>", ":w<CR>:lua vim.lsp.buf.format()<CR>", { silent = true })
 set("n", "<leader><leader>", ":w<CR>", { silent = true })
@@ -80,20 +83,20 @@ set("n", "<Esc>g", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true }
 set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = true })
 
 vim.api.nvim_set_keymap(
-    "n",
-    "<C-e>",
-    [[:lua YankDiagnosticError()<CR>]],
-    { noremap = true, silent = true, desc = "Copy error" }
+	"n",
+	"<C-e>",
+	[[:lua YankDiagnosticError()<CR>]],
+	{ noremap = true, silent = true, desc = "Copy error" }
 )
 
 function YankDiagnosticError()
-    vim.diagnostic.open_float()
-    vim.diagnostic.open_float()
-    local win_id = vim.fn.win_getid()    -- get the window ID of the floating window
-    vim.cmd("normal! j")                 -- move down one row
-    vim.cmd("normal! VG")                -- select everything from that row down
-    vim.cmd("normal! y")                 -- yank selected text
-    vim.api.nvim_win_close(win_id, true) -- close the floating window by its ID
+	vim.diagnostic.open_float()
+	vim.diagnostic.open_float()
+	local win_id = vim.fn.win_getid() -- get the window ID of the floating window
+	vim.cmd("normal! j") -- move down one row
+	vim.cmd("normal! VG") -- select everything from that row down
+	vim.cmd("normal! y") -- yank selected text
+	vim.api.nvim_win_close(win_id, true) -- close the floating window by its ID
 end
 
 -- -- open diagnostics

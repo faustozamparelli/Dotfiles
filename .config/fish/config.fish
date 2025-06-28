@@ -295,19 +295,19 @@ alias curl='curljq'
     # end
 
   # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
-  if not set -q TMUX
-      if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
-          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
-          # renaming tmux window
-          function cd
-              builtin cd $argv; and tmux rename-window (basename $PWD)
-          end
-
-          function z_tmux
-              __zoxide_z $argv; and tmux rename-window (basename $PWD)
-          end
-      end
-  end
+  # if not set -q TMUX
+  #     if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
+  #         exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+  #         # renaming tmux window
+  #         function cd
+  #             builtin cd $argv; and tmux rename-window (basename $PWD)
+  #         end
+  #
+  #         function z_tmux
+  #             __zoxide_z $argv; and tmux rename-window (basename $PWD)
+  #         end
+  #     end
+  # end
 
   set -U fish_user_paths $fish_user_paths $HOME/.config/emacs/bin
   alias emacs "emacsclient -n"
