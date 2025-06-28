@@ -139,7 +139,7 @@ end
       /usr/bin/curl -s $curl_args | jq $jq_args
   end
 # Alias the curl command to your custom function
-alias curl='curljq'
+  alias curl='curljq'
 
   # Aliases
   alias dev 'open http://localhost:3000; npm run dev'
@@ -220,9 +220,6 @@ alias curl='curljq'
       live-server --mount=/:"$current_dir" "$start_file"
   end
 
-  #setting up the ssh
-  alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
-  alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
 
   function cpmcstudio
     scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:$argv[1] $argv[2]
@@ -265,6 +262,50 @@ alias curl='curljq'
      alias lt "tre"
   end
 
+  function fish_user_key_bindings
+    # Bind Ctrl + f to run the tmux-sessionizer.sh script
+    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
+    bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
+
+    #bind \ej '~/.config/tmux/tmux-layouts.sh'
+  end
+  # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
+  if not set -q TMUX
+      if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
+          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
+          # renaming tmux window
+          function cd
+              builtin cd $argv; and tmux rename-window (basename $PWD)
+          end
+
+          function z_tmux
+              __zoxide_z $argv; and tmux rename-window (basename $PWD)
+          end
+      end
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # #setting up the ssh
+  # alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
+  # alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
+
   # fzf.fish
   # fzf_configure_bindings --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cd 
   # set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
@@ -275,13 +316,7 @@ alias curl='curljq'
   # set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
   # set fzf_processes_opts --bind "enter:execute(kill -9 {})"
 
-  function fish_user_key_bindings
-    # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
-    bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
 
-    #bind \ej '~/.config/tmux/tmux-layouts.sh'
-  end
 
   # Set up SSH agent to authenticate to GitHub
     # eval (ssh-agent -c) &>/dev/null
@@ -294,22 +329,19 @@ alias curl='curljq'
     #         echo "Unknown machine"
     # end
 
-  # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
-  # if not set -q TMUX
-  #     if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
-  #         exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
-  #         # renaming tmux window
-  #         function cd
-  #             builtin cd $argv; and tmux rename-window (basename $PWD)
-  #         end
-  #
-  #         function z_tmux
-  #             __zoxide_z $argv; and tmux rename-window (basename $PWD)
-  #         end
-  #     end
-  # end
 
-  set -U fish_user_paths $fish_user_paths $HOME/.config/emacs/bin
-  alias emacs "emacsclient -n"
-end
-
+#   set -U fish_user_paths $fish_user_paths $HOME/.config/emacs/bin
+#   set -gx GROQ_API_KEY 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
+#
+# # Ensure PATH and user paths are set properly
+#   set -gx PATH /Users/faustozamparelli/.virtualenvs/ml/bin /opt/homebrew/bin $PATH
+#   set -gx PIP_NO_CACHE_DIR true
+#
+# # Fifc editor settings
+#   set -gx fifc_editor nvim
+#   set -g fifc_fd_opts --hidden
+#   set -g fifc_keybinding \t
+#   set -g fifc_open_keybinding ctrl-o
+#
+# # fish_user_paths array (add your paths here)
+#   set -U fish_user_paths /Users/faustozamparelli/.virtualenvs/ml/bin /opt/homebrew/bin alias emacs "emacsclient -n"
