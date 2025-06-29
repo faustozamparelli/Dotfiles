@@ -65,13 +65,17 @@ return {
 				vim.keymap.set("n", "<leader>f", function()
 					vim.lsp.buf.format({ async = true })
 				end, bufopts)
-				-- Auto-format on save
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					callback = function()
-						vim.lsp.buf.format({ async = false })
-					end,
-				})
+				vim.keymap.set("n", "M", function()
+					local word = vim.fn.expand("<cword>")
+					vim.cmd("Man " .. word)
+				end, bufopts)
+				-- -- Auto-format on save
+				-- vim.api.nvim_create_autocmd("BufWritePre", {
+				-- 	buffer = bufnr,
+				-- 	callback = function()
+				-- 		vim.lsp.buf.format({ async = false })
+				-- 	end,
+				-- })
 			end
 
 			-- Setup each server
@@ -134,9 +138,10 @@ return {
 					svelte = { "prettierd" },
 				},
 				-- Enable format on save; you can customize the timeout (in milliseconds).
-				format_on_save = {
-					timeout = 500,
-				},
+				-- format_on_save = {
+				-- 	timeout = 500,
+				-- },
+				format_on_save = false, -- Disable auto-format on save for now
 			})
 
 			-- Optionally, set up a key mapping for manual formatting:
