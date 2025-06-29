@@ -95,3 +95,10 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",
 	command = "setlocal wrap linebreak nolist",
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = "oil://*",
+	callback = function()
+		vim.opt_local.statusline = "%{substitute(expand('%'), '^oil://', '', '')}"
+	end,
+})

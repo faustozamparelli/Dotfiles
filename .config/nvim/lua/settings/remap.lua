@@ -99,6 +99,26 @@ function YankDiagnosticError()
 	vim.api.nvim_win_close(win_id, true) -- close the floating window by its ID
 end
 
+vim.api.nvim_create_user_command("Cd", function(opts)
+	local path = opts.args
+	if path == "" then
+		path = vim.fn.expand("~")
+	end
+
+	-- Change vim's working directory
+	vim.cmd("cd " .. vim.fn.fnameescape(path))
+
+	-- If oil is available, also open it there
+	local ok, oil = pcall(require, "oil")
+	if ok then
+		oil.open(path)
+	end
+end, {
+	nargs = "?",
+	complete = "dir",
+	desc = "Change directory and open in oil",
+})
+
 -- -- open diagnostics
 -- set("n", "<S-e>", vim.diagnostic.open_float, { silent = true })
 -- -- move to the next location list
