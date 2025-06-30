@@ -10,11 +10,17 @@ return {
 	},
 	{
 		"stevearc/oil.nvim",
+		dependencies = {
+			{ "echasnovski/mini.icons", opts = {} },
+		},
 		config = function()
 			require("oil").setup({
 				default_file_explorer = true,
 				columns = {
-					"size",
+          "icon",
+					--"size",
+          --"permissions",
+          --"mtime",
 				},
 				skip_confirm_for_simple_edits = true,
 				cleanup_delay_ms = 1000,

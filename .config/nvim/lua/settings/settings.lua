@@ -102,3 +102,15 @@ vim.api.nvim_create_autocmd("BufEnter", {
 		vim.opt_local.statusline = "%{substitute(expand('%'), '^oil://', '', '')}"
 	end,
 })
+
+-- Disable line numbers, sign column, and cursor line in oil filetype
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "oil",
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
+    vim.opt_local.cursorline = false
+  end,
+})
+
