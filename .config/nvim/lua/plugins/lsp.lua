@@ -2,16 +2,22 @@ return {
   -- LSP setup (optimized, full functionality)
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "BufReadPost", "BufNewFile" }, -- BufReadPost is faster than BufReadPre
     dependencies = {
       {
         "williamboman/mason.nvim",
+        cmd = "Mason",
+        build = ":MasonUpdate",
         config = true,
       },
       {
         "williamboman/mason-lspconfig.nvim",
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
-          require("mason-lspconfig").setup({ automatic_installation = true })
+          require("mason-lspconfig").setup({ 
+            automatic_installation = false, -- Disable for faster startup
+            ensure_installed = { "lua_ls", "pyright", "clangd", "ts_ls" }
+          })
         end,
       },
     },
@@ -92,7 +98,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy", -- Even lazier loading
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = { "lua", "python", "cpp", "typescript", "markdown" },

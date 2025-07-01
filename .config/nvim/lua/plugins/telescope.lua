@@ -1,21 +1,22 @@
 return {
 	"nvim-telescope/telescope.nvim",
 	branch = "0.1.x",
-	dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
+	cmd = "Telescope",
+	keys = {
+		{ "<C-f>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+		{ "<C-g>", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
+		{ "<C-G>", "<cmd>Telescope grep_string<cr>", desc = "Grep string" },
+		{ "<C-e>", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+		{ "<leader>ht", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
+		{ "H", ":bprev<CR>", desc = "Previous buffer" },
+		{ "L", ":bnext<CR>", desc = "Next buffer" },
+	},
+	dependencies = { 
+		"nvim-lua/plenary.nvim", 
+		{ "nvim-telescope/telescope-ui-select.nvim", lazy = true }
+	},
 	config = function()
-		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<C-f>", builtin.find_files, {})
-		vim.keymap.set("n", "<C-g>", builtin.live_grep, {})
-		vim.api.nvim_set_keymap(
-			"n",
-			"<C-G>",
-			"<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>",
-			{ noremap = true, silent = true }
-		)
-		vim.keymap.set("n", "<C-e>", builtin.buffers, {})
-		vim.keymap.set("n", "H", ":bprev<CR>", { silent = true })
-		vim.keymap.set("n", "L", ":bnext<CR>", { silent = true })
-		vim.keymap.set("n", "<leader>ht", builtin.help_tags, {})
+		-- No need to set keymaps here since they're defined in keys
 
 		require("telescope").setup({
 			defaults = {

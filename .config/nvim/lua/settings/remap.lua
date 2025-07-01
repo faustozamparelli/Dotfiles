@@ -124,3 +124,8 @@ end, {
 -- -- move to the next location list
 -- set("n", "K", "<cmd>lnext<CR>zz", { silent = true })
 -- set("n", "J", "<cmd>lprev<CR>zz", { silent = true })
+
+-- Startup profiling command
+vim.api.nvim_create_user_command("StartupTime", function()
+	vim.cmd("!time nvim +qall")
+end, { desc = "Measure startup time" })

@@ -2,8 +2,8 @@ return {
 -- Copilot: lazy and togglable
   {
     "github/copilot.vim",
-    lazy = true,
     cmd = "Copilot",
+    keys = { { "<leader>c", ":CopilotToggle<CR>", desc = "Toggle Copilot" } },
     config = function()
       local copilot_enabled = false
       vim.g.copilot_enabled = false
@@ -12,19 +12,16 @@ return {
         vim.g.copilot_enabled = copilot_enabled
         vim.notify("Copilot " .. (copilot_enabled and "Enabled" or "Disabled"))
       end, {})
-      vim.keymap.set("n", "<leader>c", ":CopilotToggle<CR>", { desc = "Toggle Copilot" })
     end,
   },
 
-  -- Theme
+  -- Theme (only non-lazy plugin for immediate UI)
   {
     "iagorrr/noctishc.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd([[set termguicolors]])
-      vim.cmd([[syntax enable]])
-      vim.cmd([[colorscheme noctishc]])
+      vim.cmd.colorscheme("noctishc")
     end,
   },
 
@@ -34,8 +31,14 @@ return {
     dependencies = {
       { "echasnovski/mini.icons", opts = {} },
     },
-    lazy = false, -- Load immediately to ensure it's available for VimEnter autocmd
+    cmd = "Oil",
     keys = { { "'", "<CMD>Oil<CR>", desc = "Open parent directory" } },
+    init = function()
+      -- Ensure oil is available for VimEnter autocmd without loading it
+      if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then
+        require("lazy").load({ plugins = { "oil.nvim" } })
+      end
+    end,
     config = function()
       local oil = require("oil")
       oil.setup({

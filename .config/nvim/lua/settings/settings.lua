@@ -52,25 +52,28 @@ vim.wo.foldlevel = 99
 vim.wo.foldmethod = "expr"
 vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
--- Highlight trailing whitespaces in Markdown files
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "markdown",
-	callback = function()
-		vim.opt_local.list = true
-		vim.opt_local.listchars:append("trail:·")
-	end,
-})
+-- Defer non-critical autocmds for faster startup
+vim.schedule(function()
+	-- Highlight trailing whitespaces in Markdown files
+	vim.api.nvim_create_autocmd("FileType", {
+		pattern = "markdown",
+		callback = function()
+			vim.opt_local.list = true
+			vim.opt_local.listchars:append("trail:·")
+		end,
+	})
 
--- Optimize auto-save to reduce I/O operations
-vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave" }, {
-	pattern = "*",
-	callback = function()
-		-- Only save if buffer is modified and not a special buffer
-		if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
-			vim.cmd("silent! write")
-		end
-	end,
-})
+	-- Optimize auto-save to reduce I/O operations
+	vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave" }, {
+		pattern = "*",
+		callback = function()
+			-- Only save if buffer is modified and not a special buffer
+			if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+				vim.cmd("silent! write")
+			end
+		end,
+	})
+end)
 
 --vim.cmd([[highlight WinSeparator guibg=None]])
 vim.wo.conceallevel = 1
@@ -101,36 +104,39 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
 --     end,
 -- })
 
---wrap around in markdown files
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "markdown",
-	command = "setlocal wrap linebreak nolist",
-})
+-- Defer more non-critical autocmds
+vim.schedule(function()
+	--wrap around in markdown files
+	vim.api.nvim_create_autocmd("FileType", {
+		pattern = "markdown",
+		command = "setlocal wrap linebreak nolist",
+	})
 
-vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = "oil://*",
-	callback = function()
-		vim.opt_local.statusline = "%{substitute(expand('%'), '^oil://', '', '')}"
-	end,
-})
+	vim.api.nvim_create_autocmd("BufEnter", {
+		pattern = "oil://*",
+		callback = function()
+			vim.opt_local.statusline = "%{substitute(expand('%'), '^oil://', '', '')}"
+		end,
+	})
 
--- Disable line numbers, sign column, and cursor line in oil filetype
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "oil",
-  callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn = "no"
-    vim.opt_local.cursorline = false
-  end,
-})
+	-- Disable line numbers, sign column, and cursor line in oil filetype
+	vim.api.nvim_create_autocmd("FileType", {
+	  pattern = "oil",
+	  callback = function()
+	    vim.opt_local.number = false
+	    vim.opt_local.relativenumber = false
+	    vim.opt_local.signcolumn = "no"
+	    vim.opt_local.cursorline = false
+	  end,
+	})
 
--- Periodic garbage collection to prevent memory buildup
-vim.api.nvim_create_autocmd("CursorHold", {
-  callback = function()
-    collectgarbage("collect")
-  end,
-})
+	-- Periodic garbage collection to prevent memory buildup
+	vim.api.nvim_create_autocmd("CursorHold", {
+	  callback = function()
+	    collectgarbage("collect")
+	  end,
+	})
+end)
 
 -- Auto-open Oil when nvim is started with a directory and remove the directory buffer
 vim.api.nvim_create_autocmd("VimEnter", {
