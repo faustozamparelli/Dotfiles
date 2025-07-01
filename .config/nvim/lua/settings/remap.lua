@@ -1,14 +1,14 @@
 local set = vim.keymap.set
 
 -- dismiss copilot suggestions
-set("i", "<C-c>", "<plug>(copilot-dismiss)<C-c>", { silent = true })
+-- set("i", "<C-c>", "<plug>(copilot-dismiss)<C-c>", { silent = true })
 
 -- removes the highlight
 set("n", "<C-c>", "<cmd>nohlsearch<CR>", { silent = true })
 
 -- end/start of line
-set("n", "F", "$", { silent = true })
-set("n", "S", "^", { silent = true })
+set("n", "J", "$", { silent = true, noremap = true })
+set("n", "K", "^", { silent = true, noremap = true })
 
 -- jump between parentheses
 set("n", "[", "%", { silent = true })
@@ -82,22 +82,22 @@ set("n", "_", ":vertical resize -2<CR>", { noremap = true, silent = true })
 set("n", "<Esc>g", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true })
 set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = true })
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-e>",
-	[[:lua YankDiagnosticError()<CR>]],
-	{ noremap = true, silent = true, desc = "Copy error" }
-)
+-- vim.api.nvim_set_keymap(
+-- 	"n",
+-- 	"<C-e>",
+-- 	[[:lua YankDiagnosticError()<CR>]],
+-- 	{ noremap = true, silent = true, desc = "Copy error" }
+-- )
 
-function YankDiagnosticError()
-	vim.diagnostic.open_float()
-	vim.diagnostic.open_float()
-	local win_id = vim.fn.win_getid() -- get the window ID of the floating window
-	vim.cmd("normal! j") -- move down one row
-	vim.cmd("normal! VG") -- select everything from that row down
-	vim.cmd("normal! y") -- yank selected text
-	vim.api.nvim_win_close(win_id, true) -- close the floating window by its ID
-end
+-- function YankDiagnosticError()
+-- 	vim.diagnostic.open_float()
+-- 	vim.diagnostic.open_float()
+-- 	local win_id = vim.fn.win_getid() -- get the window ID of the floating window
+-- 	vim.cmd("normal! j") -- move down one row
+-- 	vim.cmd("normal! VG") -- select everything from that row down
+-- 	vim.cmd("normal! y") -- yank selected text
+-- 	vim.api.nvim_win_close(win_id, true) -- close the floating window by its ID
+-- end
 
 vim.api.nvim_create_user_command("Cd", function(opts)
 	local path = opts.args

@@ -19,9 +19,15 @@ if venv_path ~= nil then
 	vim.g.python3_host_prog = venv_path .. "/bin/python"
 	vim.g.pip3_path = venv_path .. "/bin/pip"
 else
-	local pyenv_python = io.popen("pyenv which python"):read("*a")
+	-- Properly close file handles to prevent memory leaks
+	local pyenv_python_handle = io.popen("pyenv which python")
+	local pyenv_python = pyenv_python_handle:read("*a")
+	pyenv_python_handle:close()
 	vim.g.python3_host_prog = pyenv_python:sub(1, -2)
-	local pyenv_pip = io.popen("pyenv which pip"):read("*a")
+	
+	local pyenv_pip_handle = io.popen("pyenv which pip")
+	local pyenv_pip = pyenv_pip_handle:read("*a")
+	pyenv_pip_handle:close()
 	vim.g.pip3_path = pyenv_pip:sub(1, -2)
 end
 

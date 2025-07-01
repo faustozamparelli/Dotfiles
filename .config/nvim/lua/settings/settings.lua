@@ -23,6 +23,11 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.updatetime = 2000
 vim.opt.timeoutlen = 300
+
+-- Memory optimization settings
+vim.opt.maxmempattern = 1000  -- Limit memory for pattern matching
+vim.opt.synmaxcol = 200       -- Limit syntax highlighting for long lines
+vim.opt.lazyredraw = true     -- Don't redraw during macros
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.inccommand = "split"
@@ -56,9 +61,15 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Optimize auto-save to reduce I/O operations
 vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave" }, {
 	pattern = "*",
-	command = "silent! wall",
+	callback = function()
+		-- Only save if buffer is modified and not a special buffer
+		if vim.bo.modified and vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+			vim.cmd("silent! write")
+		end
+	end,
 })
 
 --vim.cmd([[highlight WinSeparator guibg=None]])
@@ -114,3 +125,36 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Periodic garbage collection to prevent memory buildup
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    collectgarbage("collect")
+  end,
+})
+
+-- Auto-open Oil when nvim is started with a directory and remove the directory buffer
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local arg = vim.fn.argv(0)
+    if arg and vim.fn.isdirectory(arg) == 1 then
+      -- Schedule this to run after all plugins are loaded
+      vim.schedule(function()
+        local ok, oil = pcall(require, "oil")
+        if ok then
+          -- Get the directory buffer number before opening oil
+          local dir_buf = vim.api.nvim_get_current_buf()
+          
+          -- Open oil in the directory
+          oil.open(arg)
+          
+          -- Delete the directory buffer to prevent it from showing in buffer list
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(dir_buf) then
+              vim.api.nvim_buf_delete(dir_buf, { force = true })
+            end
+          end)
+        end
+      end)
+    end
+  end,
+})

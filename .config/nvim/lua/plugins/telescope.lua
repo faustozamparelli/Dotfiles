@@ -8,7 +8,7 @@ return {
 		vim.keymap.set("n", "<C-g>", builtin.live_grep, {})
 		vim.api.nvim_set_keymap(
 			"n",
-			"<C-M-d>",
+			"<C-G>",
 			"<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>",
 			{ noremap = true, silent = true }
 		)
