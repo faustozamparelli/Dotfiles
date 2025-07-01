@@ -7,8 +7,8 @@ local set = vim.keymap.set
 set("n", "<C-c>", "<cmd>nohlsearch<CR>", { silent = true })
 
 -- end/start of line
-set("n", "J", "$", { silent = true, noremap = true })
-set("n", "K", "^", { silent = true, noremap = true })
+set("n", "gl", "$", { silent = true, noremap = true })
+set("n", "gh", "^", { silent = true, noremap = true })
 
 -- jump between parentheses
 set("n", "[", "%", { silent = true })
