@@ -3,15 +3,30 @@ return {
   {
     "github/copilot.vim",
     cmd = "Copilot",
-    keys = { { "<leader>c", ":CopilotToggle<CR>", desc = "Toggle Copilot" } },
+    keys = { 
+      { 
+        "<leader>c", 
+        function()
+          -- Load copilot if not already loaded
+          if not package.loaded["copilot"] then
+            require("lazy").load({ plugins = { "copilot.vim" } })
+          end
+          
+          -- Toggle copilot
+          vim.g.copilot_enabled = not vim.g.copilot_enabled
+          if vim.g.copilot_enabled then
+            vim.cmd("Copilot enable")
+            vim.notify("Copilot Enabled")
+          else
+            vim.cmd("Copilot disable")
+            vim.notify("Copilot Disabled")
+          end
+        end,
+        desc = "Toggle Copilot" 
+      } 
+    },
     config = function()
-      local copilot_enabled = false
       vim.g.copilot_enabled = false
-      vim.api.nvim_create_user_command("CopilotToggle", function()
-        copilot_enabled = not copilot_enabled
-        vim.g.copilot_enabled = copilot_enabled
-        vim.notify("Copilot " .. (copilot_enabled and "Enabled" or "Disabled"))
-      end, {})
     end,
   },
 
