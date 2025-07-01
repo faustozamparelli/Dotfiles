@@ -14,7 +14,7 @@ return {
         "williamboman/mason-lspconfig.nvim",
         event = { "BufReadPost", "BufNewFile" },
         config = function()
-          require("mason-lspconfig").setup({ 
+          require("mason-lspconfig").setup({
             automatic_installation = false, -- Disable for faster startup
             ensure_installed = { "lua_ls", "pyright", "clangd", "ts_ls" }
           })
@@ -24,23 +24,32 @@ return {
     config = function()
       local lspconfig = require("lspconfig")
       local on_attach = function(client, bufnr)
-        local opts = { buffer = bufnr, noremap = true, silent = true }
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "gk", vim.lsp.buf.hover, opts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+        local bufopts = { buffer = bufnr, noremap = true, silent = true }
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+        vim.keymap.set("n", "gk", vim.lsp.buf.hover, bufopts)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+
+        vim.keymap.set("n", "<leader>f", function()
+          vim.lsp.buf.format({ async = true })
+        end, bufopts)
+
+        vim.keymap.set("n", "M", function()
+          local word = vim.fn.expand("<cword>")
+          vim.cmd("Man " .. word)
+        end, bufopts)
       end
 
       -- Cache capabilities to avoid repeated calls
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      
+
       -- Optimize LSP memory usage
       capabilities.textDocument.completion.completionItem.snippetSupport = false
       capabilities.textDocument.completion.completionItem.resolveSupport = {
         properties = { "documentation", "detail", "additionalTextEdits" }
       }
-      
+
       local servers = { "lua_ls", "pyright", "clangd", "ts_ls" }
       for _, server in ipairs(servers) do
         lspconfig[server].setup({
@@ -102,7 +111,7 @@ return {
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = { "lua", "python", "cpp", "typescript", "markdown" },
-        highlight = { 
+        highlight = {
           enable = true,
           disable = function(lang, buf)
             -- Disable for large files to save memory
