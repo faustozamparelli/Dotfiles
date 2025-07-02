@@ -51,18 +51,11 @@ set("n", "<leader>e", vim.diagnostic.setloclist, { silent = true })
 set("x", "<leader>p", [["_dP]], { silent = true })
 
 -- change the word under the cursor with or without confirmation
-set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { silent = true })
-set("n", "<leader>S", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>]], { silent = true })
+set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { silent = true })
+set("n", "<leader>R", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>]], { silent = true })
 
--- Search and replace with live preview - Control+r
--- Normal mode: replace in entire file
 set("n", "<C-r>", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-set("n", "<C-R>", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>]])
-
--- Visual mode: replace only in selected lines
 set("v", "<C-r>", [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-set("v", "<C-R>", [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>]])
-
 
 -- make the current file executable
 set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
