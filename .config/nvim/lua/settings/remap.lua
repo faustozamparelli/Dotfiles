@@ -82,6 +82,9 @@ set("n", "_", ":vertical resize -2<CR>", { noremap = true, silent = true })
 set("n", "<Esc>g", "<cmd>!~/.config/tmux/tmux-dp1.sh<CR><CR>", { silent = true })
 set("n", "<Esc>f", "<cmd>!~/.config/tmux/tmux-recursive.sh<CR><CR>", { silent = true })
 
+--increment 
+set('v', '<leader>i', 'g<C-a>', { noremap = true, silent = true })
+
 -- vim.api.nvim_set_keymap(
 -- 	"n",
 -- 	"<C-e>",
