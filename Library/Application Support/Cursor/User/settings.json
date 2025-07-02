@@ -219,5 +219,6 @@
     "walkThrough.embeddedEditorBackground": "#000000"
   },
   "svg.preview.mode": "img",
-  "window.autoDetectColorScheme": true
+  "window.autoDetectColorScheme": true,
+  "makefile.configureOnOpen": true
 }
