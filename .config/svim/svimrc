@@ -1,78 +1,122 @@
-" === BASIC CONFIG ===
-let mapleader = " "
+" General settings
+set shell=/opt/homebrew/bin/fish
+set shellcmdflag=-c
+let g:mapleader = " "
+set relativenumber
+set number
+set mouse=
+set showmode!
+set wrap!
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+set smartindent
+set clipboard=unnamedplus
+set undodir=~/.config/nvim/undodir/
+set undofile
+set breakindent
+set ignorecase
+set smartcase
+set updatetime=2000
+set timeoutlen=300
+set maxmempattern=1000
+set synmaxcol=200
+set lazyredraw
+set splitright
+set splitbelow
+set inccommand=split
+set scrolloff=15
+set cursorline
+set signcolumn=yes
+set hlsearch
+set incsearch
+set nobackup
+set noswapfile
+set nowritebackup
+set laststatus=3
+set foldlevel=99
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set conceallevel=1
+set cmdheight=0
 
-" Remove highlights
+" Appearance
+highlight CursorLineNr guifg=#FFFF00 ctermfg=yellow
+
+" Key mappings
+nnoremap U <C-r>
 nnoremap <C-c> :nohlsearch<CR>
-
-" Line start/end
-nnoremap gh ^
 nnoremap gl $
-
-" Match pairs
+nnoremap gh ^
 nnoremap [ %
-
-" Save
 nnoremap <leader><leader> :w<CR>
-
-" Open terminal and enter insert mode
 nnoremap <C-t> :term<CR>i
-tnoremap <Esc> <C-\><C-n>
-
-" Kill tmux window after saving
 nnoremap <C-w> :w<CR>:silent !tmux kill-window<CR>
-
-" Close buffer
 nnoremap <S-q> :w<CR>:bd<CR>
-
-" Reload file
-nnoremap <S-w> :w<bar>so %<CR>
-
-" Join lines without moving
+nnoremap <S-w> :w<CR>:so %<CR>
 nnoremap m mzJ`z
-
-" Visual move lines
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-
-" Scroll and center
 nnoremap J <C-d>zz
 nnoremap K <C-u>zz
-
-" Centered next match
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" Replace word under cursor
+nnoremap <leader>e :lua vim.diagnostic.setloclist()<CR>
 nnoremap <leader>r :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
 nnoremap <leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>
 nnoremap <C-r> :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
-vnoremap <C-r> :s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
-
-" Paste without yanking
-xnoremap <leader>p "_dP
-
-" Make file executable
 nnoremap <leader>x :!chmod +x %<CR>
-
-" Resize panes
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap <C-b> :split<CR>
+nnoremap <C-n> :vsplit<CR>
+nnoremap <Down> :wincmd j<CR>
+nnoremap <Up> :wincmd k<CR>
+nnoremap <Right> :wincmd l<CR>
+nnoremap <Left> :wincmd h<CR>
 nnoremap - :resize +2<CR>
 nnoremap = :resize -2<CR>
 nnoremap + :vertical resize +2<CR>
 nnoremap _ :vertical resize -2<CR>
+nnoremap <Esc>g :!~/.config/tmux/tmux-dp1.sh<CR><CR>
+nnoremap <Esc>f :!~/.config/tmux/tmux-recursive.sh<CR><CR>
 
-" Create splits
-nnoremap <C-b> :split<CR>
-nnoremap <C-n> :vsplit<CR>
-
-" Move across splits
-nnoremap <Down> <C-w>j
-nnoremap <Up> <C-w>k
-nnoremap <Right> <C-w>l
-nnoremap <Left> <C-w>h
-
-" Run tmux scripts
-nnoremap <Esc>g :!~/.config/tmux/tmux-dp1.sh<CR>
-nnoremap <Esc>f :!~/.config/tmux/tmux-recursive.sh<CR>
-
-" Increment numbers in visual mode
+" Visual mode mappings
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap <leader>p "_dP
+vnoremap <C-r> :s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
 vnoremap <leader>i g<C-a>
+
+" Terminal mode mappings
+tnoremap <Esc> <C-\><C-n>
+
+" Command-line mappings
+cnoremap <Down> <C-n>
+cnoremap <Up> <C-p>
+
+" Autocommands
+autocmd BufRead,BufWrite ~/.config/nvim/notes/* set nobuflisted bufhidden=wipe
+autocmd RecordingEnter * set cmdheight=1
+autocmd RecordingLeave * set cmdheight=0
+autocmd FileType markdown setlocal wrap linebreak nolist
+autocmd CursorHold * call garbagecollect()
+
+" Filetype-specific settings
+autocmd FileType markdown set list listchars+=trail:·
+autocmd FileType oil setlocal nonumber norelativenumber signcolumn=no nocursorline
+
+" Oil buffer customization
+autocmd BufEnter oil://* let &l:statusline = substitute(expand('%'), '^oil://', '', '')
+
+" Startup optimization
+autocmd VimEnter * if argc() == 0 | set laststatus=0 | endif
+
+" Custom commands
+command! -nargs=? -complete=dir Cd call ChangeDir(<f-args>)
+function! ChangeDir(...)
+    let path = a:0 ? a:1 : expand("~")
+    execute "cd " . fnameescape(path)
+    if exists(":Oil") == 2
+        execute "Oil " . fnameescape(path)
+    endif
+endfunction
+
+command! StartupTime !time nvim +qall

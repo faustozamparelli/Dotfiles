@@ -99,7 +99,10 @@ return {
   -- Commenting
   {
     "numToStr/Comment.nvim",
-    keys = { "cm" }, -- Load only when needed
+    keys = {
+      { "cm", mode = "n" },
+      { "cm", mode = "v" },
+    },
     config = function()
       require("Comment").setup({
         toggler = { line = "cm" },
