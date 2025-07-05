@@ -137,7 +137,74 @@ return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     config = function()
-      require("nvim-autopairs").setup({})
+      local npairs = require("nvim-autopairs")
+      local Rule = require("nvim-autopairs.rule")
+      
+      npairs.setup({
+        check_ts = true,
+        ts_config = {
+          lua = {'string'},-- it will not add a pair on that treesitter node
+          javascript = {'template_string'},
+          java = false,-- don't check treesitter on java
+        }
+      })
+      
+      -- Multi-line comment rules for various languages
+      local comment_rules = {
+        -- C/C++/JavaScript/CSS/Java style comments
+        Rule("/*", "*/"),
+        -- HTML/XML style comments  
+        Rule("<!--", "-->"),
+        -- Haskell style comments
+        Rule("{-", "-}"),
+        -- OCaml style comments
+        Rule("(*", "*)"),
+        -- Lua multi-line comments
+        Rule("--[[", "]]"),
+        -- Python multi-line strings (docstrings)
+        Rule('"""', '"""'),
+        -- Markdown code blocks
+        Rule("```", "```"),
+        -- PowerShell multi-line comments
+        Rule("<#", "#>"),
+      }
+      
+      -- Add all the comment rules
+      for _, rule in ipairs(comment_rules) do
+        npairs.add_rule(rule)
+      end
+      
+      -- Add some language-specific rules with conditions
+      npairs.add_rules({
+        -- Space after opening comment
+        Rule("/* ", " */")
+          :with_pair(function() return false end)
+          :with_move(function(opts)
+            return opts.prev_char:match(".%*/") ~= nil
+          end)
+          :use_key(" "),
+        
+        Rule("<!-- ", " -->")
+          :with_pair(function() return false end)
+          :with_move(function(opts)
+            return opts.prev_char:match(".%->") ~= nil
+          end)
+          :use_key(" "),
+          
+        Rule("{- ", " -}")
+          :with_pair(function() return false end)
+          :with_move(function(opts)
+            return opts.prev_char:match(".%-}") ~= nil
+          end)
+          :use_key(" "),
+      })
+      
+      -- Integration with nvim-cmp if available
+      local cmp_status_ok, cmp = pcall(require, "cmp")
+      if cmp_status_ok then
+        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      end
     end,
   },
 
