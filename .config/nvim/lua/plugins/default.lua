@@ -139,6 +139,7 @@ return {
     config = function()
       local npairs = require("nvim-autopairs")
       local Rule = require("nvim-autopairs.rule")
+      local cond = require("nvim-autopairs.conds")
       
       npairs.setup({
         check_ts = true,
@@ -146,27 +147,60 @@ return {
           lua = {'string'},-- it will not add a pair on that treesitter node
           javascript = {'template_string'},
           java = false,-- don't check treesitter on java
-        }
+        },
+        -- Disable default * pairing to avoid pointer issues
+        disable_filetype = { "TelescopePrompt", "spectre_panel" },
+        disable_in_macro = false,
+        disable_in_visualblock = false,
+        ignored_next_char = string.gsub([[ [%w%%%'%[%"%.] ]],"%s+", ""),
+        enable_moveright = true,
+        enable_afterquote = true,
+        enable_check_bracket_line = true,
+        enable_bracket_in_quote = true,
+        enable_abbr = false,
+        break_undo = true,
+        check_comma = true,
+        map_cr = true,
+        map_bs = true,
+        map_c_h = false,
+        map_c_w = false,
       })
       
-      -- Multi-line comment rules for various languages
+      -- Language-specific multi-line comment rules
       local comment_rules = {
-        -- C/C++/JavaScript/CSS/Java style comments
-        Rule("/*", "*/"),
-        -- HTML/XML style comments  
-        Rule("<!--", "-->"),
-        -- Haskell style comments
-        Rule("{-", "-}"),
-        -- OCaml style comments
-        Rule("(*", "*)"),
-        -- Lua multi-line comments
-        Rule("--[[", "]]"),
-        -- Python multi-line strings (docstrings)
-        Rule('"""', '"""'),
-        -- Markdown code blocks
-        Rule("```", "```"),
-        -- PowerShell multi-line comments
-        Rule("<#", "#>"),
+        -- C/C++ style comments (/* */)
+        Rule("/*", "*/")
+          :with_pair(cond.not_filetypes({"vim"}))
+          :with_pair(function()
+            -- Only pair in C, C++, JavaScript, Go, Rust files
+            local ft = vim.bo.filetype
+            return ft == "c" or ft == "cpp" or ft == "javascript" or ft == "typescript" or ft == "go" or ft == "rust"
+          end),
+        
+        -- HTML style comments (<!-- -->)
+        Rule("<!--", "-->")
+          :with_pair(function()
+            local ft = vim.bo.filetype
+            return ft == "html" or ft == "xml" or ft == "vue" or ft == "svelte"
+          end),
+        
+        -- Python docstrings (""" """)
+        Rule('"""', '"""')
+          :with_pair(function()
+            return vim.bo.filetype == "python"
+          end),
+        
+        -- Lua multi-line comments (--[[ ]])
+        Rule("--[[", "]]")
+          :with_pair(function()
+            return vim.bo.filetype == "lua"
+          end),
+        
+        -- Markdown code blocks (``` ```)
+        Rule("```", "```")
+          :with_pair(function()
+            return vim.bo.filetype == "markdown"
+          end),
       }
       
       -- Add all the comment rules
@@ -174,30 +208,35 @@ return {
         npairs.add_rule(rule)
       end
       
-      -- Add some language-specific rules with conditions
+      -- Add enhanced spacing rules for better UX
       npairs.add_rules({
-        -- Space after opening comment
+        -- Space after /* in C-style languages
         Rule("/* ", " */")
           :with_pair(function() return false end)
           :with_move(function(opts)
             return opts.prev_char:match(".%*/") ~= nil
           end)
-          :use_key(" "),
+          :use_key(" ")
+          :with_pair(function()
+            local ft = vim.bo.filetype
+            return ft == "c" or ft == "cpp" or ft == "javascript" or ft == "typescript" or ft == "go" or ft == "rust"
+          end),
         
+        -- Space after <!-- in HTML
         Rule("<!-- ", " -->")
           :with_pair(function() return false end)
           :with_move(function(opts)
             return opts.prev_char:match(".%->") ~= nil
           end)
-          :use_key(" "),
-          
-        Rule("{- ", " -}")
-          :with_pair(function() return false end)
-          :with_move(function(opts)
-            return opts.prev_char:match(".%-}") ~= nil
-          end)
-          :use_key(" "),
+          :use_key(" ")
+          :with_pair(function()
+            local ft = vim.bo.filetype
+            return ft == "html" or ft == "xml" or ft == "vue" or ft == "svelte"
+          end),
       })
+      
+      -- Remove any default * pairing rules that might interfere with pointers
+      npairs.remove_rule("*")
       
       -- Integration with nvim-cmp if available
       local cmp_status_ok, cmp = pcall(require, "cmp")
