@@ -1,0 +1,78 @@
+" === BASIC CONFIG ===
+let mapleader = " "
+
+" Remove highlights
+nnoremap <C-c> :nohlsearch<CR>
+
+" Line start/end
+nnoremap gh ^
+nnoremap gl $
+
+" Match pairs
+nnoremap [ %
+
+" Save
+nnoremap <leader><leader> :w<CR>
+
+" Open terminal and enter insert mode
+nnoremap <C-t> :term<CR>i
+tnoremap <Esc> <C-\><C-n>
+
+" Kill tmux window after saving
+nnoremap <C-w> :w<CR>:silent !tmux kill-window<CR>
+
+" Close buffer
+nnoremap <S-q> :w<CR>:bd<CR>
+
+" Reload file
+nnoremap <S-w> :w<bar>so %<CR>
+
+" Join lines without moving
+nnoremap m mzJ`z
+
+" Visual move lines
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Scroll and center
+nnoremap J <C-d>zz
+nnoremap K <C-u>zz
+
+" Centered next match
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Replace word under cursor
+nnoremap <leader>r :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+nnoremap <leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gcI<Left><Left><Left><Left>
+nnoremap <C-r> :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+vnoremap <C-r> :s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+
+" Paste without yanking
+xnoremap <leader>p "_dP
+
+" Make file executable
+nnoremap <leader>x :!chmod +x %<CR>
+
+" Resize panes
+nnoremap - :resize +2<CR>
+nnoremap = :resize -2<CR>
+nnoremap + :vertical resize +2<CR>
+nnoremap _ :vertical resize -2<CR>
+
+" Create splits
+nnoremap <C-b> :split<CR>
+nnoremap <C-n> :vsplit<CR>
+
+" Move across splits
+nnoremap <Down> <C-w>j
+nnoremap <Up> <C-w>k
+nnoremap <Right> <C-w>l
+nnoremap <Left> <C-w>h
+
+" Run tmux scripts
+nnoremap <Esc>g :!~/.config/tmux/tmux-dp1.sh<CR>
+nnoremap <Esc>f :!~/.config/tmux/tmux-recursive.sh<CR>
+
+" Increment numbers in visual mode
+vnoremap <leader>i g<C-a>
