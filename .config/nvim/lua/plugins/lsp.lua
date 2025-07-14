@@ -16,7 +16,11 @@ return {
         config = function()
           require("mason-lspconfig").setup({
             automatic_installation = false, -- Disable for faster startup
-            ensure_installed = { "lua_ls", "pyright", "clangd", "ts_ls" }
+            ensure_installed = { "lua_ls", "pyright", "ts_ls" },  -- No clangd here
+            handlers = {
+              -- Skip auto-setup for clangd to prevent duplicates
+              clangd = function() end,  -- No-op: We'll set it up manually
+            },
           })
         end,
       },
@@ -50,17 +54,61 @@ return {
         properties = { "documentation", "detail", "additionalTextEdits" }
       }
 
-      local servers = { "lua_ls", "pyright", "clangd", "ts_ls" }
+      -- Setup non-clangd servers
+      local servers = { "lua_ls", "pyright", "ts_ls" }  -- Removed clangd from loop
       for _, server in ipairs(servers) do
         lspconfig[server].setup({
           on_attach = on_attach,
           capabilities = capabilities,
           flags = {
-            debounce_text_changes = 150, -- Reduce LSP calls
+            debounce_text_changes = 150,
           },
         })
       end
-    end,
+
+      -- Manual custom setup for clangd (only this one will run)
+      lspconfig.clangd.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = {
+          "clangd",
+          "--header-insertion=never",
+          "--query-driver=/opt/homebrew/bin/g++-15",
+          "--background-index",
+          "--clang-tidy",
+          "--log=info",
+          "--pch-storage=memory",  -- Optimizes header caching
+          "--enable-config",  -- Explicitly enable loading config.yaml
+        },
+        init_options = {
+          fallbackFlags = { "-std=c++17", "-I/Users/faustozamparelli/.config/cppheaders" },  -- Fallback for header resolution
+        },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        root_dir = function(fname)
+          local util = require("lspconfig").util
+          return util.root_pattern("compile_commands.json", ".clangd", ".git", "Makefile", "CSES")(fname)
+            or util.path.dirname(fname)  -- Fallback to file's directory
+        end,
+        single_file_support = true,
+        flags = {
+          debounce_text_changes = 150,
+        },
+      })
+
+      -- Autocommand to stop any default clangd instances that sneak in
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
+        callback = function(args)
+          local clients = vim.lsp.get_active_clients({ bufnr = args.buf })
+          for _, client in ipairs(clients) do
+            if client.name == "clangd" and #client.config.cmd == 1 and client.config.cmd[1] == "clangd" then  -- Detect default (no flags)
+              vim.lsp.stop_client(client.id)
+              vim.notify("Stopped default clangd instance", vim.log.levels.INFO)
+            end
+          end
+        end,
+      })
+    end
   },
 
   -- Completion setup

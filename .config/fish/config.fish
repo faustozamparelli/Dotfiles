@@ -210,6 +210,14 @@ end
   alias code "code -r"
   alias cursor "cursor -r"
 
+  set -x CXXFLAGS "-std=c++17 -I$HOME/.config/cppheaders"
+  function g++
+      /opt/homebrew/bin/g++-15 -std=c++17 -I$HOME/.config/cppheaders $argv
+  end
+  alias gcc="/opt/homebrew/bin/gcc-15"
+  alias cpp="/opt/homebrew/bin/cpp-15"
+
+
   function server
       set current_dir (pwd)
       if test (count $argv) -gt 0
@@ -315,7 +323,6 @@ end
   # set fzf_git_log_opts --bind "enter:execute(git show {})"
   # set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
   # set fzf_processes_opts --bind "enter:execute(kill -9 {})"
-
 
 
   # Set up SSH agent to authenticate to GitHub
