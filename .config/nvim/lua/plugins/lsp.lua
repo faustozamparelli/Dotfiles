@@ -80,9 +80,7 @@ return {
           "--pch-storage=memory",  -- Optimizes header caching
           "--enable-config",  -- Explicitly enable loading config.yaml
         },
-        init_options = {
-          fallbackFlags = { "-std=c++17", "-I/Users/faustozamparelli/.config/cppheaders" },  -- Fallback for header resolution
-        },
+        -- Remove init_options with fallbackFlags - let clangd handle file type detection
         filetypes = { "c", "cpp", "objc", "objcpp" },
         root_dir = function(fname)
           local util = require("lspconfig").util
