@@ -30,13 +30,26 @@ return {
     end,
   },
 
-  -- Theme (only non-lazy plugin for immediate UI)
+-- Theme
   {
     "iagorrr/noctishc.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("noctishc")
+      --vim.cmd.colorscheme("noctishc")
+    end,
+  },
+
+  {
+    "deadlightreal/crimson-nvim",
+    lazy = false,
+    config = function()
+
+      vim.cmd.colorscheme("crimson")
+
+      vim.api.nvim_set_hl(0, "StatusLine", { fg = "#FFFFFF", bg = "#000000" })
+      vim.api.nvim_set_hl(0, "StatusLineNC", { fg = "#AAAAAA", bg = "#000000" })  -- inactive windows
+
     end,
   },
 
