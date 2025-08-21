@@ -44,12 +44,10 @@ return {
     "deadlightreal/crimson-nvim",
     lazy = false,
     config = function()
-
       vim.cmd.colorscheme("crimson")
 
       vim.api.nvim_set_hl(0, "StatusLine", { fg = "#FFFFFF", bg = "#000000" })
       vim.api.nvim_set_hl(0, "StatusLineNC", { fg = "#AAAAAA", bg = "#000000" })  -- inactive windows
-
     end,
   },
 
