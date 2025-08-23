@@ -2,6 +2,7 @@
 vim.o.number = true           -- Show absolute line numbers on the left
 vim.o.relativenumber = true   -- Show relative line numbers (distance from current line)
 vim.opt.signcolumn = "yes"    -- Always show the sign column (for git signs, diagnostics, etc.)
+vim.opt.clipboard = "unnamedplus" --use the system clipboard
 
 vim.o.wrap = true             -- Enable line wrapping for long lines
 vim.o.tabstop = 2             -- Set tab width to 2 spaces
@@ -35,10 +36,6 @@ map('n', '<leader>z', ':e ~/.config/zsh/.zshrc<CR>') -- Open Zsh config file
 -- Buffer navigation
 map('n', '<leader>s', ':e #<CR>')  -- Switch to alternate buffer
 map('n', '<leader>S', ':sf #<CR>') -- Split window with alternate buffer
-
--- System clipboard operations
-map({ 'n', 'v' }, '<leader>y', '"+y') -- Yank to system clipboard
-map({ 'n', 'v' }, '<leader>d', '"+d') -- Delete to system clipboard
 
 -- Spell check
 map({ 'n', 'v' }, '<leader>c', '1z=') -- Use first spelling suggestion
