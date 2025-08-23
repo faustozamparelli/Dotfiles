@@ -20,16 +20,26 @@ vim.opt.cursorcolumn = false      -- Don't highlight the current column
 vim.opt.ignorecase = true         -- Ignore case when searching
 vim.opt.undofile = true           -- Enable persistent undo (undo history survives restarts)
 
+-- Auto-save when leaving window, leaving Neovim, or losing focus
+vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
+    pattern = "*",
+    callback = function()
+        -- Only save if the buffer is modifiable, not a special buffer, and actually modified
+        if vim.bo.modifiable and vim.bo.buftype == "" and vim.bo.modified then
+            vim.cmd("silent! write")
+        end
+    end,
+})
+
 --------------------------------------------------------------------
 --KEYBINDINGS
 local map = vim.keymap.set    -- Shorthand for creating keymaps
 vim.g.mapleader = " "         -- Set leader key again (redundant but explicit)
 map("n", "<C-c>", ":noh<CR>") --remove highlight
 
-
 -- File operations
 map('n', '<leader>o', ':update<CR> :source<CR> :noh<CR>') -- Save file and reload config
-map('n', '<leader>w', ':write<CR>')              -- Save current file
+map('n', '<leader><leader>', ':write<CR>')              -- Save current file
 map('n', '<leader>q', ':quit<CR>')               -- Quit current window
 
 -- Quick config access
@@ -51,12 +61,25 @@ map('n', '<leader>h', ":Pick help<CR>")  -- Open help picker
 map('n', ';', ":Oil<CR>") -- Open Oil file manager
 
 -- LSP formatting
-map('n', '<leader>lf', vim.lsp.buf.format) -- Format current buffer using LSP
+-- map('n', '<leader>lf', vim.lsp.buf.format) -- Format current buffer using LSP
 
 -- End and Start of Line
 map("n", "H", "^")
 map("n", "L", "$")
 
+-- Move line up or down
+map("v", "J", ":m '>+1<CR>gv=gv")
+map("v", "K", ":m '<-2<CR>gv=gv")
+
+map("n", "Y", vim.lsp.buf.hover)
+
+-- Move half a screen up/down in normal mode
+map("n", "J", "<C-d>zz")
+map("n", "K", "<C-u>zz")
+
+
+-- Join the line below with the one above
+map("n", "m", "mzJ`z")
 
 ---------------------------------------------------------------------
 --PLUGINS
