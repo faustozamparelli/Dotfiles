@@ -40,6 +40,9 @@ local map = vim.keymap.set    -- Shorthand for creating keymaps
 vim.g.mapleader = " "         -- Set leader key again (redundant but explicit)
 map("n", "<C-c>", ":noh<CR>") --remove highlight
 
+--Redo
+map("n", "U", "<C-r>")
+
 -- File operations
 map('n', '<leader>o', ':update<CR> :source<CR> :noh<CR>') -- Save file and reload config
 map('n', '<leader><leader>', ':write<CR>')                -- Save current file
