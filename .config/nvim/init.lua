@@ -1,24 +1,24 @@
 --SETTINGS
 vim.o.number = true               -- Show absolute line numbers on the left
 vim.o.relativenumber = true       -- Show relative line numbers (distance from current line)
-vim.opt.signcolumn = "yes"        -- Always show the sign column (for git signs, diagnostics, etc.)
-vim.opt.clipboard = "unnamedplus" --use the system clipboard
+vim.o.signcolumn = "yes"        -- Always show the sign column (for git signs, diagnostics, etc.)
+vim.o.clipboard = "unnamedplus" --use the system clipboard
 
 vim.o.wrap = true                 -- Enable line wrapping for long lines
 vim.o.tabstop = 2                 -- Set tab width to 2 spaces
-vim.opt.shiftwidth = 2            -- Set indentation width to 2 spaces (for << and >> commands)
-vim.opt.smartindent = true        -- Enable smart auto-indenting for new lines
+vim.o.shiftwidth = 2            -- Set indentation width to 2 spaces (for << and >> commands)
+vim.o.smartindent = true        -- Enable smart auto-indenting for new lines
 
 vim.g.mapleader = " "             -- Set space as the leader key for custom keybindings
 vim.cmd([[set mouse=]])           -- Disable mouse support completely
 
-vim.opt.winborder = "rounded"     -- Use rounded borders for floating windows
-vim.opt.termguicolors = true      -- Enable 24-bit RGB color support in terminal
-vim.opt.hlsearch = true           -- Keep search highlights after searching
-vim.opt.incsearch = true          -- Incremental search while typing
-vim.opt.cursorcolumn = false      -- Don't highlight the current column
-vim.opt.ignorecase = true         -- Ignore case when searching
-vim.opt.undofile = true           -- Enable persistent undo (undo history survives restarts)
+vim.o.winborder = "rounded"     -- Use rounded borders for floating windows
+vim.o.termguicolors = true      -- Enable 24-bit RGB color support in terminal
+vim.o.hlsearch = true           -- Keep search highlights after searching
+vim.o.incsearch = true          -- Incremental search while typing
+vim.o.cursorcolumn = false      -- Don't highlight the current column
+vim.o.ignorecase = true         -- Ignore case when searching
+vim.o.undofile = true           -- Enable persistent undo (undo history survives restarts)
 
 -- Auto-save when leaving window, leaving Neovim, or losing focus
 vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
@@ -30,6 +30,9 @@ vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
         end
     end,
 })
+
+vim.opt.shell = "/opt/homebrew/bin/fish"
+vim.opt.shellcmdflag = "-ic"
 
 --------------------------------------------------------------------
 --KEYBINDINGS
@@ -80,6 +83,11 @@ map("n", "K", "<C-u>zz")
 
 -- Join the line below with the one above
 map("n", "m", "mzJ`z")
+
+-- Show error in a floating window
+map("n", "<leader>e", function()
+  vim.diagnostic.open_float(nil, { focus = false })
+end)
 
 ---------------------------------------------------------------------
 --PLUGINS
