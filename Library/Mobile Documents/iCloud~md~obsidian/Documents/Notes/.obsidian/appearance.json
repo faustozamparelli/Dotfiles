@@ -1,0 +1,11 @@
+{
+  "enabledCssSnippets": [
+    "UnderlineBolder",
+    "CenterImages"
+  ],
+  "cssTheme": "Vanilla AMOLED",
+  "interfaceFontFamily": "Liga SFMono Nerd Font",
+  "textFontFamily": "Liga SFMono Nerd Font",
+  "monospaceFontFamily": "Liga SFMono Nerd Font",
+  "baseFontSize": 18
+}

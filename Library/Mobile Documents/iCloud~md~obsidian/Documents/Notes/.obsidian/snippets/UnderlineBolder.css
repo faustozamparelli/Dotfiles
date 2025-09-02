@@ -1,0 +1,17 @@
+.theme-dark {
+    --bold-modifier: 800; 
+}
+
+.cm-strong,
+.cm-s-obsidian span.cm-formatting-strong,
+.cm-s-obsidian span.cm-strong {
+    font-weight: 700;
+}
+
+u,
+.cm-underline,
+.cm-s-obsidian span.cm-formatting-underline,
+.cm-s-obsidian span.cm-underline {
+    font-weight: normal;
+    color: rgb(180, 160, 100);
+}
