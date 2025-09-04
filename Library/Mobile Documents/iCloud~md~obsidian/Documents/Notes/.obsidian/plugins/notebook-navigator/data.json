@@ -7,9 +7,11 @@
   "excludedFiles": [],
   "autoSelectFirstFileOnFocusChange": true,
   "autoExpandFoldersTags": false,
-  "showNoteCount": true,
-  "showIcons": true,
   "collapseButtonBehavior": "all",
+  "showIcons": true,
+  "showNoteCount": true,
+  "navItemHeight": 28,
+  "navIndent": 16,
   "showRootFolder": true,
   "inheritFolderColors": false,
   "enableFolderNotes": false,
@@ -27,7 +29,7 @@
   "defaultFolderSort": "modified-desc",
   "groupByDate": true,
   "optimizeNoteHeight": true,
-  "showNotesFromSubfolders": true,
+  "showNotesFromSubfolders": false,
   "showParentFolderNames": true,
   "showQuickActions": true,
   "quickActionRevealInFolder": true,
@@ -52,6 +54,7 @@
     "featureResized",
     "feature"
   ],
+  "useEmbeddedImageFallback": true,
   "confirmBeforeDelete": true,
   "customVaultName": "",
   "pinnedNotes": {},
@@ -71,6 +74,6 @@
   "tagAppearances": {},
   "recentIcons": {},
   "recentColors": [],
-  "lastShownVersion": "1.4.1",
+  "lastShownVersion": "1.4.4",
   "settingsVersion": 1
 }

@@ -11,10 +11,14 @@
             "id": "2371fb43b79471c3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Exams.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Exams"
             }
           }
         ]
@@ -90,6 +94,16 @@
           "icon": "notebook",
           "title": "Notebook Navigator"
         }
+      },
+      {
+        "id": "def465850e271410",
+        "type": "leaf",
+        "state": {
+          "type": "notebook-navigator-react-view",
+          "state": {},
+          "icon": "notebook",
+          "title": "Notebook Navigator"
+        }
       }
     ],
     "currentTab": 4
@@ -104,6 +118,7 @@
         "state": {
           "type": "backlink",
           "state": {
+            "file": "Fitness Made Simple.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -161,6 +176,7 @@
   },
   "active": "2371fb43b79471c3",
   "lastOpenFiles": [
+    "Fitness Made Simple.md",
     "Exams.md"
   ]
 }

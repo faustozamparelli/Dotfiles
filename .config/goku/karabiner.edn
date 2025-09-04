@@ -11,7 +11,6 @@
   }
   :applications {
       :chrome ["^com\\.google\\.Chrome$"]
-      :warp ["^dev\\.warp\\.Warp\\-Stable$"]
   }
   :main [
       {:des "Configure modifier keys on macbook keyboard", :rules [
@@ -156,10 +155,6 @@
       ;     [:!CTOS#QWERo "/opt/homebrew/bin/yabai -m space --destroy"]
       ]}
       {:des "Command + I, Command + l", :rules [
-          [:!Qh :!QWESi :warp]
-          [:!Ql :!QWESo :warp]
-          [:!QSh :!QWESu :warp]
-          [:!QSl :!QWESp :warp]
           [:!Qh :!Oi :chrome]
           [:!Ql :!Oo :chrome]
           [:!QSh :!OSi :chrome]

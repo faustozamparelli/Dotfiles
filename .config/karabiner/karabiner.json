@@ -610,70 +610,6 @@
           },
           "to" : [ {
             "key_code" : "i",
-            "modifiers" : [ "left_shift", "right_command", "right_control", "right_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^dev\\.warp\\.Warp\\-Stable$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "o",
-            "modifiers" : [ "left_shift", "right_command", "right_control", "right_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^dev\\.warp\\.Warp\\-Stable$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "u",
-            "modifiers" : [ "left_shift", "right_command", "right_control", "right_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^dev\\.warp\\.Warp\\-Stable$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "p",
-            "modifiers" : [ "left_shift", "right_command", "right_control", "right_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^dev\\.warp\\.Warp\\-Stable$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "i",
             "modifiers" : [ "left_option" ]
           } ],
           "conditions" : [ {
@@ -727,6 +663,70 @@
           "conditions" : [ {
             "type" : "frontmost_application_if",
             "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "i",
+            "modifiers" : [ "left_option" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^ai\\.perplexity\\.comet$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "o",
+            "modifiers" : [ "left_option" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^ai\\.perplexity\\.comet$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "mandatory" : [ "left_shift", "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "i",
+            "modifiers" : [ "left_option", "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^ai\\.perplexity\\.comet$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "mandatory" : [ "left_shift", "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "o",
+            "modifiers" : [ "left_option", "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^ai\\.perplexity\\.comet$" ]
           } ],
           "type" : "basic"
         } ]
