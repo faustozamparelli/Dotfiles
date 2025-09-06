@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "56df4bbd0b06709c",
+        "id": "537d885e80aec5e5",
         "type": "tabs",
         "children": [
           {
-            "id": "5d23caf079516291",
+            "id": "f072b5c5499a9950",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Time Series Analysis in Stocks.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Time Series Analysis in Stocks"
             }
           }
         ]
@@ -76,16 +80,36 @@
             "state": {
               "type": "notebook-navigator-react-view",
               "state": {},
+              "icon": "lucide-ghost",
+              "title": "notebook-navigator-react-view"
+            }
+          },
+          {
+            "id": "60d1fcff7b59d9cb",
+            "type": "leaf",
+            "state": {
+              "type": "notebook-navigator-react-view",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "notebook-navigator-react-view"
+            }
+          },
+          {
+            "id": "02faf3cb27654e47",
+            "type": "leaf",
+            "state": {
+              "type": "notebook-navigator-react-view",
+              "state": {},
               "icon": "notebook",
               "title": "Notebook Navigator"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 302.51103591918945
+    "width": 239.5
   },
   "right": {
     "id": "61c7768345059380",
@@ -119,11 +143,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Log.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from Log"
             }
           },
           {
@@ -147,15 +172,27 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Log.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of Log"
+            }
+          },
+          {
+            "id": "e7ac00b3251859ef",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {},
+              "icon": "spreadsheet",
+              "title": "Advanced Tables"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -164,20 +201,26 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian42-brat:BRAT": false,
-      "notebook-navigator:Notebook Navigator": false,
       "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "obsidian42-brat:BRAT": false,
+      "notebook-navigator:Notebook Navigator": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "5d23caf079516291",
+  "active": "f072b5c5499a9950",
   "lastOpenFiles": [
+    "Log.md",
+    "Time Series Analysis in Stocks.md",
     "Exams.md",
+    "GeoHotz \"how do GPUs work\".md",
+    "Finance Lessons.md",
+    "Fitness Made Simple.md",
     "Notes/US Copyright cases.md",
     "Notes/Tennis.md",
     "Notes/Supplements.md",
@@ -198,15 +241,10 @@
     "Notes/Computational Power Scale.md",
     "Notes/Competitive Programming.md",
     "Notes/Coding Jesus Questions.md",
-    "Notes/Chronophoto.md",
-    "Notes/C Lessons.md",
     "Notes",
     "untitled folder",
     "Test",
     "Imgs/Untitled.base",
-    "Finance Lessons.md",
-    "Tennis.md",
-    "Movies.md",
     "Pasted image 20250828125431.png",
     "Imgs/Screenshot 2025-07-11 at 02.21.27.png",
     "Untitled"
