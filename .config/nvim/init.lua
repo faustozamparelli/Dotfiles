@@ -148,7 +148,7 @@ require "showkeys".setup({ position = "top-right" })
 require "mini.pick".setup({ mappings = { choose_in_vsplit = '<CR>', } })
 
 -- Setup Oil file manager
-require "oil".setup()
+require "oil".setup({view_options = {show_hidden = true}})
 
 -- Enable LSP servers for various languages
 vim.lsp.enable({ "lua_ls", "clangd" })

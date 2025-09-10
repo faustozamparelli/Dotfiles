@@ -8,7 +8,7 @@
   "autoSelectFirstFileOnFocusChange": true,
   "autoExpandFoldersTags": false,
   "collapseBehavior": "all",
-  "showHiddenBehavior": "all",
+  "smartCollapse": true,
   "showIcons": true,
   "showNoteCount": true,
   "navItemHeight": 28,
@@ -64,10 +64,6 @@
     "Exams.md": {
       "folder": true,
       "tag": false
-    },
-    "Log.md": {
-      "folder": true,
-      "tag": false
     }
   },
   "folderIcons": {},
@@ -86,7 +82,8 @@
   "tagAppearances": {},
   "recentIcons": {},
   "recentColors": [],
-  "lastShownVersion": "1.4.8",
+  "lastShownVersion": "1.4.10",
   "settingsVersion": 1,
+  "showHiddenBehavior": "all",
   "collapseButtonBehavior": "all"
 }

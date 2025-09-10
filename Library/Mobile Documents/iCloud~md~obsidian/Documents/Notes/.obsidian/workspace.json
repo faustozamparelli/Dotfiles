@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Time Series Analysis in Stocks.md",
+                "file": "C Lessons.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Time Series Analysis in Stocks"
+              "title": "C Lessons"
             }
           }
         ]
@@ -215,9 +215,10 @@
   },
   "active": "f072b5c5499a9950",
   "lastOpenFiles": [
-    "Log.md",
+    "Untitled.md",
     "Time Series Analysis in Stocks.md",
     "Exams.md",
+    "Log.md",
     "GeoHotz \"how do GPUs work\".md",
     "Finance Lessons.md",
     "Fitness Made Simple.md",
@@ -240,7 +241,6 @@
     "Notes/DeepLearning.md",
     "Notes/Computational Power Scale.md",
     "Notes/Competitive Programming.md",
-    "Notes/Coding Jesus Questions.md",
     "Notes",
     "untitled folder",
     "Test",

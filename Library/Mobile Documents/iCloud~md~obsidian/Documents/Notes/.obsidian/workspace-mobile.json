@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "4bc5e3772e304857",
+        "id": "dcae5a4a6203f55d",
         "type": "tabs",
         "children": [
           {
-            "id": "2371fb43b79471c3",
+            "id": "de73491c94fb97ed",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Exams.md",
+                "file": "Coding Jesus Questions.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Exams"
+              "title": "Coding Jesus Questions"
             }
           }
         ]
@@ -91,8 +91,8 @@
         "state": {
           "type": "notebook-navigator-react-view",
           "state": {},
-          "icon": "notebook",
-          "title": "Notebook Navigator"
+          "icon": "lucide-ghost",
+          "title": "notebook-navigator-react-view"
         }
       },
       {
@@ -163,6 +163,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -174,9 +175,11 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "2371fb43b79471c3",
+  "active": "de73491c94fb97ed",
   "lastOpenFiles": [
-    "Fitness Made Simple.md",
-    "Exams.md"
+    "C Lessons.md",
+    "Untitled.md",
+    "Exams.md",
+    "Fitness Made Simple.md"
   ]
 }

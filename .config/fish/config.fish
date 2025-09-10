@@ -2,6 +2,9 @@ if status is-interactive
   set -U fish_user_paths $HOME/.virtualenvs/ml/bin $fish_user_paths
   set fish_greeting ""
 
+	#remove the new line from fish shell
+	functions --erase _pure_prompt_new_line
+
   #Set VIM as the default editor + alias
   set -gx EDITOR nvim
   alias nh 'NVIM_APPNAME=nvimheavy nvim'
@@ -209,6 +212,8 @@ end
   alias t "taskwarrior-tui"
   alias code "code -r"
   alias cursor "cursor -r"
+
+	alias study "py /Users/faustozamparelli/Documents/Developer/StudyTracker/study.py"
 
   set -x CXXFLAGS "-std=c++17 -I$HOME/.config/cppheaders"
   function g++
