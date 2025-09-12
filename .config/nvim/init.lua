@@ -22,13 +22,13 @@ vim.o.undofile = true           -- Enable persistent undo (undo history survives
 
 -- Auto-save when leaving window, leaving Neovim, or losing focus
 vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
-    pattern = "*",
-    callback = function()
-        -- Only save if the buffer is modifiable, not a special buffer, and actually modified
-        if vim.bo.modifiable and vim.bo.buftype == "" and vim.bo.modified then
-            vim.cmd("silent! write")
-        end
-    end,
+	pattern = "*",
+	callback = function()
+		-- Only save if the buffer is modifiable, not a special buffer, and actually modified
+		if vim.bo.modifiable and vim.bo.buftype == "" and vim.bo.modified then
+			vim.cmd("silent! write")
+		end
+	end,
 })
 
 vim.opt.shell = "/opt/homebrew/bin/fish"
@@ -42,8 +42,8 @@ map("n", "<C-c>", ":noh<CR>") --remove highlight
 
 -- File operations
 map('n', '<leader>o', ':update<CR> :source<CR> :noh<CR>') -- Save file and reload config
-map('n', '<leader><leader>', ':write<CR>')              -- Save current file
-map('n', '<leader>q', ':quit<CR>')               -- Quit current window
+map('n', '<leader><leader>', ':write<CR>')                -- Save current file
+map('n', '<leader>q', ':quit<CR>')                        -- Quit current window
 
 -- Quick config access
 map('n', '<leader>v', ':e $MYVIMRC<CR>')             -- Open Neovim config file
@@ -64,7 +64,7 @@ map('n', '<leader>h', ":Pick help<CR>")  -- Open help picker
 map('n', ';', ":Oil<CR>") -- Open Oil file manager
 
 -- LSP formatting
--- map('n', '<leader>lf', vim.lsp.buf.format) -- Format current buffer using LSP
+map('n', '<leader>lf', vim.lsp.buf.format) -- Format current buffer using LSP
 
 -- End and Start of Line
 map("n", "H", "^")
