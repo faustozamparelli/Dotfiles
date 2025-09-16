@@ -30,8 +30,6 @@
   "defaultFolderSort": "modified-desc",
   "groupByDate": true,
   "optimizeNoteHeight": true,
-  "showNotesFromSubfolders": false,
-  "showParentFolderNames": true,
   "showQuickActions": true,
   "quickActionRevealInFolder": true,
   "quickActionPinNote": true,
@@ -46,6 +44,7 @@
   "fileNameRows": 1,
   "showFileDate": true,
   "showFileTags": true,
+  "showParentFolderNames": true,
   "showFilePreview": true,
   "skipHeadingsInPreview": true,
   "previewProperties": [],
@@ -59,6 +58,7 @@
   "confirmBeforeDelete": true,
   "searchActive": false,
   "showHiddenItems": false,
+  "includeDescendantNotes": true,
   "customVaultName": "",
   "pinnedNotes": {
     "Exams.md": {
@@ -82,8 +82,9 @@
   "tagAppearances": {},
   "recentIcons": {},
   "recentColors": [],
-  "lastShownVersion": "1.4.10",
+  "lastShownVersion": "1.4.15",
   "settingsVersion": 1,
+  "showNotesFromSubfolders": false,
   "showHiddenBehavior": "all",
   "collapseButtonBehavior": "all"
 }
