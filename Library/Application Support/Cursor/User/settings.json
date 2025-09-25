@@ -33,7 +33,7 @@
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.pdf": "latex-workshop-pdf-hook"
   },
-  "workbench.preferredDarkColorTheme": "__high-contrast__",
+  "workbench.preferredDarkColorTheme": "Space Cat Black",
   "workbench.preferredLightColorTheme": "__default__",
   "editor.linkedEditing": true,
   "latex-workshop.view.pdf.color.dark.backgroundColor": "#000000",
@@ -220,5 +220,6 @@
   // },
   "svg.preview.mode": "img",
   "window.autoDetectColorScheme": true,
-  "makefile.configureOnOpen": true
+  "makefile.configureOnOpen": true,
+  "latex-workshop.view.pdf.invert": 1
 }

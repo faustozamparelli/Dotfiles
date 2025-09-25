@@ -126,12 +126,21 @@ vim.pack.add({
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 
 	-- Commenting
-	{ src = "https://github.com/numToStr/Comment.nvim" }
+	{ src = "https://github.com/numToStr/Comment.nvim" },
+
+	-- Markdown Preview
+	{ src = "https://github.com/iamcco/markdown-preview.nvim" }
 })
 
 --------------------------------------------------------------------
 --THEME
-vim.cmd("colorscheme noctishc") -- Apply the noctis high contrast color scheme
+-- vim.cmd("colorscheme noctishc") -- Apply the noctis high contrast color scheme
+vim.cmd("colorscheme torte") -- Apply the noctis high contrast color scheme
+
+vim.cmd [[
+  highlight StatusLine guibg=#000000 guifg=#FFFFFF
+  highlight StatusLineNC guibg=#000000 guifg=#888888
+]]
 
 -- Alternative theme setup (commented out)
 --require "vague".setup({ transparent = true })
@@ -165,6 +174,9 @@ require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 
 -- Comment.nvim setup
 require("Comment").setup()
+
+-- trigger markdown preview
+map("n", "<leader>p", "<cmd>MarkdownPreview<CR>")
 
 -- cm to comment
 map("n", "cm", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>")

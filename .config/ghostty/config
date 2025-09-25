@@ -42,8 +42,35 @@ keybind = cmd+l=text:\x13\x6e
 keybind = cmd+h=text:\x13\x70
 keybind = cmd+shift+h=text:\x13\x7b
 keybind = cmd+shift+l=text:\x13\x7d
+
+# horizontal split
 keybind = cmd+b=text:\x13\x62
+
+# vertical split cmd + n
+keybind = cmd+n=text:\x13\x76
+
+# kill window cmd + w
+keybind = cmd+w=text:\x13\x78
+
+# kill session
 keybind = cmd+e=text:\x13\x77
+# keybind = cmd+q=text:\x13\x77 it used to be this but then i can't quit ghostty  
+
+# see all the windows in the session
+keybind = cmd+r=text:\x13\x73
+#keybind = cmd+r=text:\x13\x2c rename the window
+
+#new tab or new tab in the same folder
+keybind = cmd+t=text:\x13\x63
+keybind = cmd+shift+t=text:\x13\x43
+
+# new session
+keybind = cmd+shift+n=text:\x13\x4e
+
+# switch session: first to fzf, second to switch to last used
+keybind = cmd+f=text:\x13\x66
+keybind = cmd+s=text:\x13\x64
+
 
 # OPT+SHIFT bindings (for uppercase letters)
 keybind = alt+shift+h=text:\x13\x1b\x5b\x44
@@ -57,16 +84,7 @@ keybind = alt+j=text:\x13\x6a
 keybind = alt+k=text:\x13\x6b
 keybind = alt+l=text:\x13\x6c
 
-# More CMD bindings sending escape sequences
-keybind = cmd+n=text:\x13\x76
-#keybind = cmd+r=text:\x13\x2c
-keybind = cmd+r=text:\x13\x73
-keybind = cmd+t=text:\x13\x63
-keybind = cmd+shift+t=text:\x13\x43
-keybind = cmd+w=text:\x13\x78
-#keybind = cmd+q=text:\x13\x77
-
-# Other CMD bindings sending escape sequences
-keybind = cmd+f=text:\x1b\x66
-keybind = cmd+d=text:\x1b\x64
-keybind = cmd+g=text:\x1b\x67
+# I DON'T KNOW 
+# keybind = cmd+f=text:\x1b\x66
+# keybind = cmd+d=text:\x1b\x64
+# keybind = cmd+g=text:\x1b\x67

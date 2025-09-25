@@ -1,359 +1,290 @@
-if status is-interactive
-  set -U fish_user_paths $HOME/.virtualenvs/ml/bin $fish_user_paths
-  set fish_greeting ""
+# ----------------------------
+# Core: Homebrew + PATH setup
+# ----------------------------
+set -gx HOME_BREW /opt/homebrew
 
-	#remove the new line from fish shell
-	functions --erase _pure_prompt_new_line
+# Clear old universal user paths to avoid duplicates/order issues
+set -e fish_user_paths
 
-  #Set VIM as the default editor + alias
-  set -gx EDITOR nvim
-  alias nh 'NVIM_APPNAME=nvimheavy nvim'
-  alias nn nvim_configuration_swticher.sh 
+# Basic envs that we need early
+set -gx JAVA_HOME $HOME_BREW/opt/openjdk
+set -x PNPM_HOME "$HOME/Library/pnpm"
 
-  # Environment Variables
-  set -gx JAVA_HOME /opt/homebrew/opt/openjdk
-  set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
-  set -Ux PIP_NO_CACHE_DIR true
+# Put Homebrew first, then sbin, then virtualenvs
+set -U fish_user_paths $HOME_BREW/bin $HOME_BREW/sbin $HOME/.virtualenvs/ml/bin
 
-  set -x PNPM_HOME "/Users/faustozamparelli/Library/pnpm"
-  set -x PATH $PNPM_HOME $PATH
+# Optional: add java/openvpn after Homebrew so they don't override core Homebrew tools
+set -Ua fish_user_paths $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin
 
-  # Add directories to PATH
-  set -Ua fish_user_paths /opt/homebrew/bin
-  # set -Ua fish_user_paths $PYENV_ROOT/bin
-  set -Ua fish_user_paths $JAVA_HOME/bin
-  set -Ua fish_user_paths /opt/homebrew/opt/openvpn/sbin
-  set -Ua fish_user_paths /usr/local/bin/
-  set -Ua fish_user_paths /usr/local/bin/
-  # ASDF configuration code
-  if test -z $ASDF_DATA_DIR
-      set _asdf_shims "$HOME/.asdf/shims"
-  else
-      set _asdf_shims "$ASDF_DATA_DIR/shims"
-  end
+# MANPATH: prefer Homebrew manpages
+set -gx MANPATH $HOME_BREW/share/man $MANPATH
 
-  # Initialize zoxide (Brew-installed) for Fish shell
-  zoxide init fish | source
+# If asdf shims exist, prepend them to PATH (so shims override system, but after Homebrew)
+if test -z "$ASDF_DATA_DIR"
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
+end
 
-  # Do not use fish_add_path (added in Fish 3.2) because it
-  # potentially changes the order of items in PATH
-  if not contains $_asdf_shims $PATH
-      set -gx --prepend PATH $_asdf_shims
-  end
-  set --erase _asdf_shims
-  #Adding texlive to path for vscode latex workshop
-  set -Ux PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
+if test -d $_asdf_shims
+    if not contains $_asdf_shims $PATH
+        set -gx PATH $_asdf_shims $PATH
+    end
+end
+set --erase _asdf_shims
 
-  # Adding the C and C++ include paths
-  set -gx C_INCLUDE_PATH /opt/homebrew/include
-  set -gx CPLUS_INCLUDE_PATH /opt/homebrew/include
+# Ensure PNPM_HOME is in PATH
+if not contains $PNPM_HOME $PATH
+    set -gx PATH $PNPM_HOME $PATH
+end
 
-  #Api keys
-  set -Ux GROQ_API_KEY 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
+# If you use TinyTeX for LaTeX workshop:
+set -U PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
 
-  #Adding the bare directory for my dotfiles
-  alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
+# C/C++ include paths
+set -gx C_INCLUDE_PATH $HOME_BREW/include
+set -gx CPLUS_INCLUDE_PATH $HOME_BREW/include
 
-  #thefuck
-  thefuck --alias | source 
+# ----------------------------
+# Shell basics & niceties
+# ----------------------------
+set fish_greeting ""
 
-  #fifc
-  set -Ux fifc_editor nvim
-  set -U fifc_fd_opts --hidden
+# Editor
+set -gx EDITOR nvim
+alias nh 'NVIM_APPNAME=nvimheavy nvim'
+alias nn nvim_configuration_swticher.sh
 
-  function cd
-      # Change to the new directory
-      builtin cd $argv
+# thefuck
+if type -q thefuck
+    thefuck --alias | source
+end
 
-      # Check if tmux is running before renaming the window
-      if set -q TMUX
-          if tmux has-session 2>/dev/null
-              tmux rename-window (basename $PWD)
-          end
-      end
-  end
-  function z_tmux
-      # Use zoxide to jump to the directory
-      __zoxide_z $argv
+# zoxide
+if type -q zoxide
+    zoxide init fish | source
+end
 
-      # Rename the tmux window if inside a tmux session
-      if set -q TMUX
-          if tmux has-session 2>/dev/null
-              tmux rename-window (basename $PWD)
-          end
-      end
-  end
+# fifc defaults
+set -Ux fifc_editor nvim
+set -U fifc_fd_opts --hidden
 
-  function zn
-      # Use zoxide to jump to the directory
-      __zoxide_z $argv
+# BAT theme
+set -gx BAT_THEME "Dracula"
 
-      # Check if the directory change was successful
-      if test $status -eq 0
-          # Rename the tmux window if inside a tmux session
-          if set -q TMUX
-              if tmux has-session 2>/dev/null
-                  tmux rename-window (basename $PWD)
-              end
-          end
+# ----------------------------
+# Useful aliases
+# ----------------------------
+alias dev 'open http://localhost:3000; npm run dev'
+alias lg lazygit
+alias glg "tig"
+alias tk "tmux kill-server"
+alias jp "jupyter notebook"
+alias o "open"
+alias python "python3"
+alias py "python"
+alias cat "bat"
+alias b "bat"
+alias cl "clear"
+alias del "trash_move.sh"
+alias delx "trash_empty.sh"
+alias c "cd"
+alias z "z_tmux"
+alias e "exit"
+alias fi "yazi"
+alias ts "ts-node"
+alias t "taskwarrior-tui"
+alias code "code -r"
+alias cursor "cursor -r"
+alias study "py $HOME/Documents/Developer/StudyTracker/study.py"
 
-          # Open Neovim in the current directory
-          n .
-      else
-          echo "Directory not found!"
-      end
-  end
+# Git bare helper
+alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
-function n
-    if test "$argv[1]" = "."
-        # Open Neovim in the current directory without renaming the tmux window
-        nvim .
-    else
-        # Rename the tmux window if inside a tmux session
-        if set -q TMUX
-            set file_or_dir (basename -- $argv[1])  # Use basename on the first argument
-            tmux rename-window $file_or_dir
+# ----------------------------
+# Functions (single definitions)
+# ----------------------------
+
+function cd
+    builtin cd $argv
+    if set -q TMUX
+        if tmux has-session >/dev/null 2>&1
+            tmux rename-window (basename $PWD)
         end
-
-        # Open Neovim with the provided argument(s)
-        nvim $argv
     end
 end
 
-  function curljq
-      set curl_args
-      set jq_args
-
-      # Split arguments into curl and jq sections, use -- ''
-      set split false
-      for arg in $argv
-          if test "$arg" = "--"
-              set split true
-              continue
-          end
-          if test "$split" = true
-              set jq_args $jq_args $arg
-          else
-              set curl_args $curl_args $arg
-          end
-      end
-
-      # Use the absolute path to curl to avoid recursion
-      /usr/bin/curl -s $curl_args | jq $jq_args
-  end
-# Alias the curl command to your custom function
-  alias curl='curljq'
-
-  # Aliases
-  alias dev 'open http://localhost:3000; npm run dev'
-
-  set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
-
-  function gsp
-      git status -s --porcelain
-  end
-
-  function gcp
-      # first, pull down any remote changes
-      git pull
-
-      # compute the default commit message up front
-      set default_msg (git status -s --porcelain)
-
-      # prompt the user (default is $default_msg)
-      read -P "Commit message (leave blank to use status summary): " msg
-
-      # if they just hit enter, use the default
-      if test -z "$msg"
-          set msg $default_msg
-      end
-
-      # stage, commit & push
-      git add .
-      git commit -m "$msg"
-      git push
-  end
-  function gc
-      # compute the default commit message up front
-      set default_msg (git status -s --porcelain)
-
-      # prompt the user (default is $default_msg)
-      read -P "Commit message (leave blank to use status summary): " msg
-
-      # if they just hit enter, use the default
-      if test -z "$msg"
-          set msg $default_msg
-      end
-
-      # stage, commit & push
-      git add .
-      git commit -m "$msg"
-  end
-
-  alias lg lazygit
-  alias glg "tig"
-  alias tk "tmux kill-server"
-  alias jp "jupyter notebook"
-  # alias man tldr
-  # alias o "code -r" 
-  alias o "open"
-  alias python "python3"
-  alias py "python"
-  alias cat "bat"
-  alias b "bat"
-  alias cl "clear"
-  alias del "trash_move.sh"
-  alias delx "trash_empty.sh"
-  alias c "cd"
-  alias z "z_tmux"
-  alias e "exit"
-  alias fi "yazi"
-  alias ts "ts-node"
-  alias t "taskwarrior-tui"
-  alias code "code -r"
-  alias cursor "cursor -r"
-
-	alias study "py /Users/faustozamparelli/Documents/Developer/StudyTracker/study.py"
-
-  set -x CXXFLAGS "-std=c++17 -I$HOME/.config/cppheaders"
-  function g++
-      /opt/homebrew/bin/g++-15 -std=c++17 -I$HOME/.config/cppheaders $argv
-  end
-  alias gcc="/opt/homebrew/bin/gcc-15"
-  alias cpp="/opt/homebrew/bin/cpp-15"
-
-
-  function server
-      set current_dir (pwd)
-      if test (count $argv) -gt 0
-          set start_file $argv[1]
-      else
-          set start_file ""
-      end
-      live-server --mount=/:"$current_dir" "$start_file"
-  end
-
-
-  function cpmcstudio
-    scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:$argv[1] $argv[2]
-  end
-
-  function cpmcpro
-    scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:$argv[1] $argv[2]
-  end
-
-  #bat theme
-  set -gx BAT_THEME "Dracula"
-
-  #set git clone
-  function gcl
-    set repo_url "https://github.com/$argv[1]"
-    set destination $argv[2]
-    if test -n "$destination"
-        git clone $repo_url $destination
-    else
-        git clone $repo_url
+function z_tmux
+    __zoxide_z $argv
+    if test $status -eq 0
+        if set -q TMUX
+            if tmux has-session >/dev/null 2>&1
+                tmux rename-window (basename $PWD)
+            end
+        end
     end
-  end
+end
 
-  # for yazi
-  function yy
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
-  end
+function zn
+    __zoxide_z $argv
+    if test $status -eq 0
+        if set -q TMUX
+            if tmux has-session >/dev/null 2>&1
+                tmux rename-window (basename $PWD)
+            end
+        end
+        n .
+    else
+        echo "Directory not found!"
+    end
+end
 
-  #eza (ll / lla)
-  if type -q eza
+function n
+    if test (count $argv) -gt 0 -a "$argv[1]" != "."
+        if set -q TMUX
+            tmux rename-window (basename -- $argv[1])
+        end
+        nvim $argv
+    else
+        nvim .
+    end
+end
+
+# curl + jq helper: split args with -- (curl args first, then --, then jq args)
+function curljq
+    set curl_args
+    set jq_args
+    set split false
+    for arg in $argv
+        if test "$arg" = "--"
+            set split true
+            continue
+        end
+        if test "$split" = true
+            set jq_args $jq_args $arg
+        else
+            set curl_args $curl_args $arg
+        end
+    end
+    /usr/bin/curl -s $curl_args | jq $jq_args
+end
+alias curl='curljq'
+
+function gsp
+    git status -s --porcelain
+end
+
+function gcp
+    git pull --ff-only
+    set default_msg (git status -s --porcelain)
+    read -P "Commit message (leave blank to use status summary): " msg
+    if test -z "$msg"
+        set msg $default_msg
+    end
+    git add .
+    git commit -m "$msg"
+    git push
+end
+
+function gc
+    set default_msg (git status -s --porcelain)
+    read -P "Commit message (leave blank to use status summary): " msg
+    if test -z "$msg"
+        set msg $default_msg
+    end
+    git add .
+    git commit -m "$msg"
+end
+
+function gcl
+    if test (count $argv) -ge 1
+        set repo_url "https://github.com/$argv[1]"
+        if test (count $argv) -gt 1
+            git clone $repo_url $argv[2]
+        else
+            git clone $repo_url
+        end
+    else
+        echo "Usage: gcl user/repo [dest]"
+    end
+end
+
+function yy
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if set cwd (cat -- "$tmp"); and test -n "$cwd" ; and test "$cwd" != "$PWD"
+        cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
+end
+
+function server
+    set current_dir (pwd)
+    if test (count $argv) -gt 0
+        set start_file $argv[1]
+    else
+        set start_file ""
+    end
+    live-server --mount=/:"$current_dir" "$start_file"
+end
+
+function cpmcstudio
+    scp -i ~/.ssh/mcpro faustozamparelli@192.168.1.123:$argv[1] $argv[2]
+end
+
+function cpmcpro
+    scp -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216:$argv[1] $argv[2]
+end
+
+# g++ wrapper using Homebrew 15
+function g++
+    /opt/homebrew/bin/g++-15 -std=c++17 -I$HOME/.config/cppheaders $argv
+end
+alias gcc="/opt/homebrew/bin/gcc-15"
+alias cpp="/opt/homebrew/bin/cpp-15"
+
+# ----------------------------
+# Misc env / tool settings
+# ----------------------------
+set -Ux PIP_NO_CACHE_DIR true
+set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
+
+# API keys (you provided earlier)
+set -Ux GROQ_API_KEY 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
+
+# Add LLVM bin (if needed) but ensure it doesn't override core Homebrew bin
+if test -d /opt/homebrew/opt/llvm/bin
+    if not contains /opt/homebrew/opt/llvm/bin $PATH
+        set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
+    end
+end
+
+# eza aliases (if installed)
+if type -q eza
     alias l "eza --color=always --long -a --git --no-filesize --icons=always --no-time --no-user --no-permissions --grid"
     alias ls "l"
     alias la "eza --long --total-size -a --no-time --no-user --no-permissions"
-    # alias lt "eza --color=always --long -a --git --header --tree --icons=always --no-time --no-user --no-permissions"
-     alias lt "tre"
-  end
-
-  function fish_user_key_bindings
-    # Bind Ctrl + f to run the tmux-sessionizer.sh script
-    bind \ed '/opt/homebrew/bin/bash ~/.config/tmux/tmux-dp1.sh'
-    bind \ef '/opt/homebrew/bin/bash ~/.config/tmux/tmux-recursive.sh'
-
-    #bind \ej '~/.config/tmux/tmux-layouts.sh'
-  end
-  # open tmux at login, but not in VS Code  # open tmux at login, but not in VS Code or vterm
-  if not set -q TMUX
-      if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
-          exec tmux -f ~/.config/tmux/tmux.conf new-session -A -s fish
-          # renaming tmux window
-          function cd
-              builtin cd $argv; and tmux rename-window (basename $PWD)
-          end
-
-          function z_tmux
-              __zoxide_z $argv; and tmux rename-window (basename $PWD)
-          end
-      end
-  end
+    alias lt "tre"
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # #setting up the ssh
-  # alias mcstudio 'ssh -i ~/.ssh/mcpro faustozamparelli@192.168.1.123 -t "/opt/homebrew/bin/fish"'
-  # alias mcpro 'ssh -i ~/.ssh/mcstudio faustozamparelli@192.168.1.216 -t "/opt/homebrew/bin/fish"'
-
-  # fzf.fish
-  # fzf_configure_bindings --git_status=\cgs --git_log=\cgl --variables=\cv --processes=\cp --directory=\cd 
-  # set fzf_directory_opts --bind "enter:execute($EDITOR {} &> /dev/tty)"
-  # set fzf_history_opts --bind "enter:accept"
-  # set fzf_fd_opts --hidden --type=f
-  # set fzf_git_status_opts --bind "enter:execute(git diff {})"
-  # set fzf_git_log_opts --bind "enter:execute(git show {})"
-  # set fzf_variables_opts --bind "enter:execute(set -gx {} (cat {}))"
-  # set fzf_processes_opts --bind "enter:execute(kill -9 {})"
-
-
-  # Set up SSH agent to authenticate to GitHub
-    # eval (ssh-agent -c) &>/dev/null
-    # switch (hostname)
-    #     case "faustozamparelli"
-    #         ssh-add ~/.ssh/mcstudio &>/dev/null
-    #     case "Federer.local"
-    #         ssh-add ~/.ssh/mcpro &>/dev/null
-    #     case '*'
-    #         echo "Unknown machine"
-    # end
-
-
-#   set -U fish_user_paths $fish_user_paths $HOME/.config/emacs/bin
-#   set -gx GROQ_API_KEY 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
-#
-# # Ensure PATH and user paths are set properly
-#   set -gx PATH /Users/faustozamparelli/.virtualenvs/ml/bin /opt/homebrew/bin $PATH
-#   set -gx PIP_NO_CACHE_DIR true
-#
-# # Fifc editor settings
-#   set -gx fifc_editor nvim
-#   set -g fifc_fd_opts --hidden
-#   set -g fifc_keybinding \t
-#   set -g fifc_open_keybinding ctrl-o
-#
-# # fish_user_paths array (add your paths here)
-#   set -U fish_user_paths /Users/faustozamparelli/.virtualenvs/ml/bin /opt/homebrew/bin alias emacs "emacsclient -n"
+# ----------------------------
+# Auto-attach tmux at login (preserve your logic)
+# ----------------------------
+if not set -q TMUX
+    if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
+        if tmux list-sessions >/dev/null 2>&1
+            set recent_session (tmux list-sessions -F "#{session_created} #{session_name}" | sort -n | tail -n1 | awk '{print $2}')
+            if test -n "$recent_session"
+                exec tmux -f ~/.config/tmux/tmux.conf attach-session -t $recent_session
+            else
+                exec tmux -f ~/.config/tmux/tmux.conf attach
+            end
+        else
+            read -P "No tmux sessions found. Name for new session (leave blank for 'fish'): " name
+            if test -z "$name"
+                set name fish
+            end
+            exec tmux -f ~/.config/tmux/tmux.conf new-session -s $name
+        end
+    end
+end
