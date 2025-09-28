@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "0e77493d620b3842",
+        "id": "2ff9b5cf951c376b",
         "type": "tabs",
         "children": [
           {
-            "id": "3880e5c3c6d6d24a",
+            "id": "fe9aafb855575604",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -55,10 +55,10 @@
               "state": {
                 "query": "",
                 "matchingCase": false,
-                "explainSearch": false,
-                "collapseAll": false,
+                "explainSearch": true,
+                "collapseAll": true,
                 "extraContext": false,
-                "sortOrder": "alphabetical"
+                "sortOrder": "byModifiedTime"
               },
               "icon": "lucide-search",
               "title": "Search"
@@ -192,10 +192,12 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "3880e5c3c6d6d24a",
+  "active": "fe9aafb855575604",
   "lastOpenFiles": [
-    "Exams.md",
+    "C headers.md",
+    "Untitled.md",
     "Wasa Notes.md",
+    "Exams.md",
     "Pasted image 20250923175003.png",
     "Pasted image 20250923175005.png",
     "FriendTexts.md",
@@ -220,7 +222,6 @@
     "Notes/Markov chains.md",
     "Notes/LeetCode.md",
     "Notes/Hash Tables.md",
-    "Notes/FriendTexts.md",
     "Notes",
     "untitled folder",
     "Test",

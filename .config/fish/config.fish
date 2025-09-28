@@ -76,8 +76,11 @@ set -gx BAT_THEME "Dracula"
 # Useful aliases
 # ----------------------------
 alias dev 'open http://localhost:3000; npm run dev'
+
 alias lg lazygit
+alias glog "git lg"
 alias glg "tig"
+
 alias tk "tmux kill-server"
 alias jp "jupyter notebook"
 alias o "open"

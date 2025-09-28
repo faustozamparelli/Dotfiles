@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "c0d9c29eda513271",
+        "id": "ace56f3ee15d29b0",
         "type": "tabs",
         "children": [
           {
-            "id": "2f8b69080a87256e",
+            "id": "06e185c609c87252",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -184,15 +184,15 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "2f8b69080a87256e",
+  "active": "a5c46f476a03f432",
   "lastOpenFiles": [
-    "C Lessons.md",
+    "C headers.md",
     "Wasa Notes.md",
+    "C Lessons.md",
     "Fitness Made Simple.md",
     "Pasted image 20250923175005.png",
     "Pasted image 20250923175003.png",
     "Coding Jesus Questions.md",
-    "Untitled.md",
     "Exams.md"
   ]
 }
