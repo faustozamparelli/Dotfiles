@@ -1,17 +1,20 @@
-.theme-dark {
-    --bold-modifier: 800; 
-}
-
-.cm-strong,
-.cm-s-obsidian span.cm-formatting-strong,
-.cm-s-obsidian span.cm-strong {
-    font-weight: 700;
-}
-
+/* Keep underline style gold */
 u,
 .cm-underline,
 .cm-s-obsidian span.cm-formatting-underline,
 .cm-s-obsidian span.cm-underline {
     font-weight: normal;
-    color: rgb(180, 160, 100);
+    color: rgb(180, 160, 100) !important;
+    text-decoration: underline;
+}
+
+/* Internal + external links (both purple now) */
+.cm-s-obsidian span.cm-hmd-internal-link,
+.cm-s-obsidian span.cm-link,
+.cm-s-obsidian span.cm-url,
+.markdown-preview-view .internal-link,
+.markdown-preview-view .external-link {
+    color: #a64dff !important; /* bright purple */
+    font-weight: 600;
+    text-decoration: none; /* remove underline if you don’t want confusion */
 }
