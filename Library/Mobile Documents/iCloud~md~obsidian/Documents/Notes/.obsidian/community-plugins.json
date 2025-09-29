@@ -1,8 +1,9 @@
 [
   "obsidian-vimrc-support",
   "obsidian42-brat",
-  "notebook-navigator",
   "highlightr-plugin",
   "obsidian-underline",
-  "table-editor-obsidian"
+  "table-editor-obsidian",
+  "file-explorer-plus",
+  "omnisearch"
 ]

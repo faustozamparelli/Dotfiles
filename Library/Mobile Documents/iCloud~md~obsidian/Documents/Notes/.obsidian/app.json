@@ -1,4 +1,7 @@
 {
   "vimMode": true,
-  "readableLineLength": false
+  "readableLineLength": false,
+  "attachmentFolderPath": "IMGS",
+  "promptDelete": false,
+  "alwaysUpdateLinks": true
 }
