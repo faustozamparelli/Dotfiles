@@ -7,6 +7,8 @@
   "interfaceFontFamily": "Liga SFMono Nerd Font",
   "textFontFamily": "Liga SFMono Nerd Font",
   "monospaceFontFamily": "Liga SFMono Nerd Font",
-  "baseFontSize": 18,
-  "theme": "obsidian"
+  "baseFontSize": 15,
+  "theme": "obsidian",
+  "translucency": true,
+  "showRibbon": false
 }
