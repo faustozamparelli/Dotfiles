@@ -100,5 +100,13 @@
     }
   ],
   "editor:open-search": [],
-  "global-search:open": []
+  "global-search:open": [],
+  "markdown:toggle-preview": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "R"
+    }
+  ]
 }

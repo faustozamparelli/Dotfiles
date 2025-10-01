@@ -154,24 +154,24 @@ function n
 end
 
 # curl + jq helper: split args with -- (curl args first, then --, then jq args)
-function curljq
-    set curl_args
-    set jq_args
-    set split false
-    for arg in $argv
-        if test "$arg" = "--"
-            set split true
-            continue
-        end
-        if test "$split" = true
-            set jq_args $jq_args $arg
-        else
-            set curl_args $curl_args $arg
-        end
-    end
-    /usr/bin/curl -s $curl_args | jq $jq_args
-end
-alias curl='curljq'
+# function curljq
+#     set curl_args
+#     set jq_args
+#     set split false
+#     for arg in $argv
+#         if test "$arg" = "--"
+#             set split true
+#             continue
+#         end
+#         if test "$split" = true
+#             set jq_args $jq_args $arg
+#         else
+#             set curl_args $curl_args $arg
+#         end
+#     end
+#     /usr/bin/curl -s $curl_args | jq $jq_args
+# end
+# alias curl='curljq'
 
 function gsp
     git status -s --porcelain
