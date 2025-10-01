@@ -38,3 +38,16 @@ for key, apps in pairs(appKeys) do
         end
     end)
 end
+
+
+-- Define a hotkey: Ctrl+Alt+C will open Clipboard History
+hs.hotkey.bind({"cmd", "shift"}, "c", function()
+    -- Trigger Spotlight (Cmd+Space)
+    hs.eventtap.keyStroke(hyper, "space", 0)
+
+    -- Small delay so Spotlight opens before sending Cmd+4
+    hs.timer.doAfter(0.1, function()
+        hs.eventtap.keyStroke({"cmd"}, "4", 0)
+    end)
+end)
+
