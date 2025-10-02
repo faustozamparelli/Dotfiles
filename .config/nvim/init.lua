@@ -94,6 +94,8 @@ end)
 
 ---------------------------------------------------------------------
 --PLUGINS
+-- to unistall them go to: ~/.local/share/nvim/site/pack/core/opt
+
 vim.pack.add({
 	-- Color scheme - high contrast dark theme
 	{ src = "https://github.com/iagorrr/noctis-high-contrast.nvim" },
@@ -119,9 +121,6 @@ vim.pack.add({
 	-- LSP server installer and manager
 	{ src = "https://github.com/mason-org/mason.nvim" },
 
-	-- Show pressed keys on screen (loaded optionally)
-	{ src = 'https://github.com/NvChad/showkeys',                  opt = true },
-
 	-- Snippet engine for code completion
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 
@@ -129,7 +128,8 @@ vim.pack.add({
 	{ src = "https://github.com/numToStr/Comment.nvim" },
 
 	-- Markdown Preview
-	{ src = "https://github.com/iamcco/markdown-preview.nvim" }
+	{ src = "https://github.com/iamcco/markdown-preview.nvim" },
+
 })
 
 --------------------------------------------------------------------
@@ -152,9 +152,6 @@ vim.cmd [[
 
 -- Setup Mason for LSP server management
 require "mason".setup()
-
--- Setup showkeys to display pressed keys in top-right corner
-require "showkeys".setup({ position = "top-right" })
 
 -- Setup mini.pick fuzzy finder
 require "mini.pick".setup({ mappings = { choose_in_vsplit = '<CR>', } })

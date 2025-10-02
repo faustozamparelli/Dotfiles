@@ -171,7 +171,6 @@ end
 #     end
 #     /usr/bin/curl -s $curl_args | jq $jq_args
 # end
-# alias curl='curljq'
 
 function gsp
     git status -s --porcelain
