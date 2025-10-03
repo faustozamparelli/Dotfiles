@@ -27,10 +27,12 @@
   //   "editor.selectionHighlightBackground": "#572592",
   //   "editor.findMatchBackground": "#572592",
   //   "editor.findMatchHighlightBackground": "#572592",
-  //   "editorGutter.background": "#000000",
+  // "editorGutter.background": "#000000",
   //   "editorCursor.background": "#000000"
   // },
   "security.workspace.trust.untrustedFiles": "open",
+  "window.openFoldersInNewWindow": "off",
+  "terminal.integrated.cwd": "/Users/faustozamparelli",
   "editor.minimap.enabled": false,
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.shellIntegration.enabled": false,
@@ -88,12 +90,12 @@
   },
   "editor.quickSuggestionsDelay": 0,
   "git.autofetch": false,
-  "workbench.colorTheme": "Monokai",
+  "workbench.colorTheme": "Dark+ Black",
   "workbench.tree.renderIndentGuides": "onHover",
   "workbench.tree.indent": 10,
   "workbench.sideBar.location": "right",
-  "workbench.activityBar.location": "hidden",
-  "workbench.iconTheme": null,
+  "workbench.activityBar.location": "hidden", //put to top when having UI problems
+  "workbench.iconTheme": "material-icon-theme",
   "editor.hover.delay": 500,
   "workbench.hover.delay": 0,
   "python.analysis.inlayHints.functionReturnTypes": true,
@@ -112,8 +114,7 @@
   "python.analysis.nodeExecutable": "/opt/homebrew/bin/node",
   "workbench.statusBar.visible": false,
   "window.titleBarStyle": "native",
-  "window.customTitleBarVisibility": "never",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset"
-  },
+  }
 }

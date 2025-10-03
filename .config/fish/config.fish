@@ -94,7 +94,6 @@ alias e "exit"
 alias fi "yazi"
 alias ts "ts-node"
 alias t "taskwarrior-tui"
-alias code "code -r"
 alias cursor "cursor -r"
 alias study "py $HOME/Documents/Developer/StudyTracker/study.py"
 
