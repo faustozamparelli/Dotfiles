@@ -88,9 +88,9 @@ map("n", "K", "<C-u>zz")
 map("n", "m", "mzJ`z")
 
 -- Show error in a floating window
-map("n", "<leader>e", function()
-  vim.diagnostic.open_float(nil, { focus = false })
-end)
+-- map("n", "<leader>e", function()
+--   vim.diagnostic.open_float(nil, { focus = false })
+-- end)
 
 ---------------------------------------------------------------------
 --PLUGINS
