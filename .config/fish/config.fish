@@ -3,18 +3,15 @@
 # ----------------------------
 set -gx HOME_BREW /opt/homebrew
 
-# Clear old universal user paths to avoid duplicates/order issues
-set -e fish_user_paths
-
 # Basic envs that we need early
 set -gx JAVA_HOME $HOME_BREW/opt/openjdk
 set -x PNPM_HOME "$HOME/Library/pnpm"
 
 # Put Homebrew first, then sbin, then virtualenvs
-set -U fish_user_paths $HOME_BREW/bin $HOME_BREW/sbin $HOME/.virtualenvs/ml/bin
+set -gx PATH $HOME_BREW/bin $HOME_BREW/sbin $HOME/.virtualenvs/ml/bin $PATH
 
-# Optional: add java/openvpn after Homebrew so they don't override core Homebrew tools
-set -Ua fish_user_paths $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin
+# Add java/openvpn after Homebrew so they don't override
+set -gx PATH $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin $PATH
 
 # MANPATH: prefer Homebrew manpages
 set -gx MANPATH $HOME_BREW/share/man $MANPATH
@@ -39,7 +36,7 @@ if not contains $PNPM_HOME $PATH
 end
 
 # If you use TinyTeX for LaTeX workshop:
-set -U PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
+set -gx PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
 
 # C/C++ include paths
 set -gx C_INCLUDE_PATH $HOME_BREW/include
