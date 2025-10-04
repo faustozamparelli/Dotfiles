@@ -44,10 +44,9 @@
   "editor.overviewRulerBorder": false,
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.fontSize": 17,
-  "terminal.integrated.fontSize": 19,
-  "chat.editor.fontSize": 17,
-  "chat.editror.fontFamily": "Liga SFMono Nerd Font",
+  "editor.fontSize": 14,
+  "terminal.integrated.fontSize": 16,
+  "chat.editor.fontSize": 14,
   "editor.fontLigatures": true,
   "editor.fontFamily": "Liga SFMono Nerd Font",
   "terminal.integrated.fontFamily": "Liga SFMono Nerd Font",
@@ -58,7 +57,7 @@
   "extensions.ignoreRecommendations": true,
   "terminal.integrated.defaultProfile.osx": "fish",
   "zenMode.fullScreen": false,
-  "window.zoomLevel": 0.8,
+  "window.zoomLevel": 1.2,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
@@ -99,14 +98,12 @@
   "editor.hover.hidingDelay": 10000,
   "editor.multiCursorModifier": "ctrlCmd",
   "workbench.editor.enablePreview": false,
-  "breadcrumbs.enabled": false,
   "update.mode": "manual",
   "git.confirmSync": false,
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.autoImportCompletions": true,
   "terminal.integrated.defaultLocation": "editor",
   "python.analysis.nodeExecutable": "/opt/homebrew/bin/node",
-  "workbench.statusBar.visible": false,
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset"
@@ -122,10 +119,28 @@
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "openapi.securityAuditToken": "CiAo4DQZ9X0H3H3eExKNJQp0xErZWzvYGXaiX0TaVKfAURIY7Q4Hqr016FCFu0o+bzvuu8fk9BW+Fp8OGnpM4jJKxtIlD55xXt7J6bigbMe3SYUdUyXJzapZ4BVP64airCWY4L1qxloA2cEI4xjLUChjDyAdkqw5kIWXLP0CsPR9xaJR4X4E4OJRlxKMZ6Vs3+grpoLDSVvbmFkg09FdH+Rtl7T1kj5mPQnLMs4l3bH0AMfvLuPdTA==",
-  "openapi.platformAuthType": "anond-token",
   "workbench.preferredDarkColorTheme": "Aura Dracula Spirit",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
   "workbench.colorTheme": "Copilot Theme",
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.statusBar.visible": false,
+  "latex-workshop.view.pdf.invertMode.enabled": "auto",
+  "latex-workshop.view.pdf.invert": 1,
+  "markdown-preview-enhanced.previewTheme": "github-dark.css",
+  "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
+  "git.enableSmartCommit": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+  "cSpell.enabled": true,
+  "cSpell.language": "en",
+   "cSpell.enabledFileTypes": {
+        "markdown": true,
+        "quarto": true,
+        "text": true,
+        "*": false
+    },
 }

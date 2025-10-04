@@ -45,8 +45,8 @@ local set = vim.keymap.set
 -- set("i", "<C-c>", "<plug>(copilot-dismiss)<C-c>", { silent = true })
 
 -- -- end/start of line
-set("n", "H", "$", { silent = true })
-set("n", "L", "^", { silent = true })
+set("n", "L", "$", { silent = true })
+set("n", "H", "^", { silent = true })
 
 -- -- previous/next diagnostic
 -- set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
