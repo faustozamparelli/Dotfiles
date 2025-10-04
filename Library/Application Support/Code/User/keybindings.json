@@ -488,8 +488,9 @@
     "command": "workbench.panel.chat.view.copilot.focus"
   },
   {
-    "key": "cmd+f",
-    "command": "workbench.action.focusActiveEditorGroup"
+    "key": "ctrl+c",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "!editorTextFocus"
   },
   {
     "key": "cmd+k cmd+down",
@@ -706,5 +707,51 @@
     "key": "ctrl+shift+g",
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active"
+  },
+  {
+    "key": "u",
+    "command": "undo",
+    "when": "neovim.mode != 'insert' && editorTextFocus"
+  },
+  {
+    "key": "cmd+z",
+    "command": "-undo"
+  },
+  {
+    "key": "shift+u",
+    "command": "redo",
+    "when": "neovim.mode != 'insert' && editorTextFocus"
+  },
+  {
+    "key": "shift+cmd+z",
+    "command": "-redo"
+  },
+  {
+    "key": "g d",
+    "command": "editor.action.revealDefinition",
+    "when": "editorHasDefinitionProvider && editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "f12",
+    "command": "-editor.action.revealDefinition",
+    "when": "editorHasDefinitionProvider && editorTextFocus"
+  },
+  {
+    "key": "u",
+    "command": "-vscode-neovim.send",
+    "when": "editorTextFocus && neovim.init && focusedView == 'workbench.panel.output' && neovim.mode != 'insert'"
+  },
+  {
+    "key": "shift+cmd+t",
+    "command": "workbench.action.toggleLightDarkThemes"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "workbench.action.focusActiveEditorGroup"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus"
   }
 ]

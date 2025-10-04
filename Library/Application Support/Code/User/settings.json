@@ -44,8 +44,10 @@
   "editor.overviewRulerBorder": false,
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.fontSize": 14,
-  "terminal.integrated.fontSize": 14,
+  "editor.fontSize": 17,
+  "terminal.integrated.fontSize": 19,
+  "chat.editor.fontSize": 17,
+  "chat.editror.fontFamily": "Liga SFMono Nerd Font",
   "editor.fontLigatures": true,
   "editor.fontFamily": "Liga SFMono Nerd Font",
   "terminal.integrated.fontFamily": "Liga SFMono Nerd Font",
@@ -56,7 +58,7 @@
   "extensions.ignoreRecommendations": true,
   "terminal.integrated.defaultProfile.osx": "fish",
   "zenMode.fullScreen": false,
-  "window.zoomLevel": 1.5,
+  "window.zoomLevel": 0.8,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
@@ -66,8 +68,6 @@
   },
   "[python]": {
     "editor.formatOnSaveMode": "file",
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnType": false,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
@@ -79,10 +79,7 @@
   "[latex]": {
     "editor.defaultFormatter": "James-Yu.latex-workshop"
   },
-  "[cpp]": {
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
-  },
-  "terminal.integrated.enableMultiLinePasteWarning": "always",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
   "python.terminal.activateEnvironment": false,
   "editor.quickSuggestions": {
     "comments": "on",
@@ -90,12 +87,9 @@
   },
   "editor.quickSuggestionsDelay": 0,
   "git.autofetch": false,
-  "workbench.colorTheme": "Dark+ Black",
   "workbench.tree.renderIndentGuides": "onHover",
   "workbench.tree.indent": 10,
   "workbench.sideBar.location": "right",
-  "workbench.activityBar.location": "hidden", //put to top when having UI problems
-  "workbench.iconTheme": "material-icon-theme",
   "editor.hover.delay": 500,
   "workbench.hover.delay": 0,
   "python.analysis.inlayHints.functionReturnTypes": true,
@@ -116,5 +110,22 @@
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset"
-  }
+  },
+  "window.customTitleBarVisibility": "never",
+  "workbench.activityBar.location": "hidden",
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "openapi.securityAuditToken": "CiAo4DQZ9X0H3H3eExKNJQp0xErZWzvYGXaiX0TaVKfAURIY7Q4Hqr016FCFu0o+bzvuu8fk9BW+Fp8OGnpM4jJKxtIlD55xXt7J6bigbMe3SYUdUyXJzapZ4BVP64airCWY4L1qxloA2cEI4xjLUChjDyAdkqw5kIWXLP0CsPR9xaJR4X4E4OJRlxKMZ6Vs3+grpoLDSVvbmFkg09FdH+Rtl7T1kj5mPQnLMs4l3bH0AMfvLuPdTA==",
+  "openapi.platformAuthType": "anond-token",
+  "workbench.preferredDarkColorTheme": "Aura Dracula Spirit",
+  "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
+  "workbench.colorTheme": "Copilot Theme",
+  "workbench.iconTheme": "material-icon-theme"
 }

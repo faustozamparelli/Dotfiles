@@ -72,7 +72,9 @@ set -gx BAT_THEME "Dracula"
 # ----------------------------
 # Useful aliases
 # ----------------------------
-alias dev 'open http://localhost:3000; npm run dev'
+alias dev 'open http://localhost:3000; pnpm run dev'
+alias npm="echo '❌ Use pnpm instead.'"
+alias npx="pnpm dlx"
 
 alias lg lazygit
 alias glog "git lg"
