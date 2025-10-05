@@ -120,7 +120,7 @@
   },
   "workbench.preferredDarkColorTheme": "Aura Dracula Spirit",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
-  "workbench.colorTheme": "Copilot Theme",
+  "workbench.colorTheme": "Aura Dracula Spirit",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.statusBar.visible": false,
   "latex-workshop.view.pdf.invertMode.enabled": "auto",
