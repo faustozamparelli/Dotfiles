@@ -15,6 +15,7 @@ set -gx PATH $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin $PATH
 
 # MANPATH: prefer Homebrew manpages
 set -gx MANPATH $HOME_BREW/share/man $MANPATH
+set -gx MANPATH ~/man-pages $MANPATH #git clone http://git.kernel.org/pub/scm/docs/man-pages/man-pages
 
 # If asdf shims exist, prepend them to PATH (so shims override system, but after Homebrew)
 if test -z "$ASDF_DATA_DIR"
