@@ -7,7 +7,7 @@ local appKeys = {
     d = "Obsidian",
     s = "Spotify",
     j = "Ghostty", 
-		k = "Cursor"
+		k = "Code"
 }
 
 -- Function to toggle a single app

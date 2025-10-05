@@ -757,5 +757,5 @@
   {
     "key": "alt+c",
     "command": "problems-copy.copyAll"
-  }
+  },
 ]

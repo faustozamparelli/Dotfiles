@@ -4,6 +4,7 @@ vim.g.mapleader = " "
 vim.opt.clipboard = "unnamedplus"
 -- vim.opt.relativenumber = true
 vim.opt.mouse = ""
+vim.o.cmdheight=4
 -- vim.opt.showmode = false
 -- vim.opt.wrap = false
 -- vim.opt.tabstop = 4
