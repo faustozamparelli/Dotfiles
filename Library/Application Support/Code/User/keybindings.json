@@ -1,11 +1,5 @@
 [
   {
-    "command": "vscode-neovim.compositeEscape1",
-    "key": "j",
-    "when": "neovim.mode == insert && editorTextFocus",
-    "args": "j"
-  },
-  {
     "key": "cmd+shift+i",
     "command": "workbench.action.quickchat.toggle"
   },
@@ -711,7 +705,7 @@
   {
     "key": "u",
     "command": "undo",
-    "when": "neovim.mode != 'insert' && editorTextFocus"
+    "when": "editorTextFocus && neovim.mode != 'insert'"
   },
   {
     "key": "cmd+z",
@@ -757,5 +751,38 @@
   {
     "key": "alt+c",
     "command": "problems-copy.copyAll"
+  },
+  {
+    "key": "shift+cmd+f",
+    "command": "github.copilot.chat.fix"
+  },
+  {
+    "key": "shift+cmd+d",
+    "command": "github.copilot.chat.explain.palette"
+  },
+  {
+    "key": "d",
+    "command": "-vscode-neovim.send",
+    "when": "editorTextFocus && neovim.init && focusedView == 'workbench.panel.output' && neovim.mode != 'insert'"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.clipboardCutAction",
+    "when": "editorTextFocus && neovim.mode != 'insert'"
+  },
+  {
+    "key": "g r",
+    "command": "editor.action.goToReferences",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor && neovim.mode != 'insert'"
+  },
+  {
+    "key": "shift+f12",
+    "command": "-editor.action.goToReferences",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+  },
+  {
+    "key": "d",
+    "command": "editor.action.clipboardCutAction",
+    "when": "neovim.mode == 'visual'"
   }
 ]
