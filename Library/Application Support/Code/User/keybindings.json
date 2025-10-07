@@ -779,10 +779,5 @@
     "key": "shift+f12",
     "command": "-editor.action.goToReferences",
     "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
-  },
-  {
-    "key": "d",
-    "command": "editor.action.clipboardCutAction",
-    "when": "neovim.mode == 'visual'"
   }
 ]
