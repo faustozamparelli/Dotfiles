@@ -56,7 +56,7 @@
   "extensions.ignoreRecommendations": true,
   "terminal.integrated.defaultProfile.osx": "fish",
   "zenMode.fullScreen": false,
-  "window.zoomLevel": 1.2,
+  "window.zoomLevel": 1.7,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
