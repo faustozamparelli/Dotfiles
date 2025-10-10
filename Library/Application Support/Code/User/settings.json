@@ -38,7 +38,7 @@
   "editor.renderLineHighlight": "none",
   "editor.lightbulb.enabled": "off",
   "editor.showFoldingControls": "never",
-  "editor.scrollbar.horizontal": "hidden",
+  "editor.scrollbar.horizontal": "visible",
   "editor.scrollbar.vertical": "hidden",
   "editor.overviewRulerBorder": false,
   "editor.cursorBlinking": "solid",
@@ -107,7 +107,7 @@
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset"
   },
-  "workbench.activityBar.location": "hidden",
+  "workbench.activityBar.location": "top",
   "[dockercompose]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -141,5 +141,6 @@
     "text": true,
     "*": false
   },
-  "window.customTitleBarVisibility": "never"
+  "editor.minimap.size": "fit",
+  "editor.minimap.renderCharacters": false
 }
