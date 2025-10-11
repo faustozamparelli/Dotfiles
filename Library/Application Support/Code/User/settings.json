@@ -142,5 +142,6 @@
     "*": false
   },
   "editor.minimap.size": "fit",
-  "editor.minimap.renderCharacters": false
+  "editor.minimap.renderCharacters": false,
+  "window.customTitleBarVisibility": "never"
 }
