@@ -779,5 +779,9 @@
     "key": "shift+f12",
     "command": "-editor.action.goToReferences",
     "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+  },
+  {
+    "key": "cmd+f",
+    "command": "editor.action.formatDocument"
   }
 ]

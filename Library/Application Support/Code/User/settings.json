@@ -128,7 +128,7 @@
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
   "git.enableSmartCommit": true,
   "github.copilot.enable": {
-    "*": true,
+    "*": false,
     "plaintext": false,
     "markdown": true,
     "scminput": false
