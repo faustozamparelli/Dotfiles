@@ -143,5 +143,6 @@
   },
   "editor.minimap.size": "fit",
   "editor.minimap.renderCharacters": false,
-  "window.customTitleBarVisibility": "never"
+  "window.customTitleBarVisibility": "never",
+  "editor.wordWrap": "on"
 }
