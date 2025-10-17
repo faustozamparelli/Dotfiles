@@ -117,6 +117,12 @@
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
   "workbench.preferredDarkColorTheme": "Aura Dracula Spirit",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
   "workbench.colorTheme": "Copilot Theme",
@@ -127,12 +133,6 @@
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
   "git.enableSmartCommit": true,
-  "github.copilot.enable": {
-    "*": false,
-    "plaintext": false,
-    "markdown": true,
-    "scminput": false
-  },
   "cSpell.enabled": true,
   "cSpell.language": "en",
   "cSpell.enabledFileTypes": {
