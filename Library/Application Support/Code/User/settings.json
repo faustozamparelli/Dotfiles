@@ -84,7 +84,7 @@
     "strings": "on"
   },
   "editor.quickSuggestionsDelay": 0,
-  "git.autofetch": false,
+  "git.autofetch": true,
   "workbench.tree.renderIndentGuides": "onHover",
   "workbench.tree.indent": 10,
   "workbench.sideBar.location": "right",
@@ -182,5 +182,13 @@
   "typescript.inlayHints.parameterTypes.enabled": true,
   "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
   "typescript.inlayHints.variableTypes.enabled": true,
-  "typescript.preferences.includePackageJsonAutoImports": "on"
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "chat.editing.confirmEditRequestRemoval": false,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": false,
+    "**/.svn": false,
+    "**/Thumbs.db": false
+  }
 }
