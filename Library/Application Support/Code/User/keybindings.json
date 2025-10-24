@@ -235,11 +235,6 @@
     "when": "editorHoverFocused"
   },
   {
-    "key": "home",
-    "command": "-editor.action.goToTopHover",
-    "when": "editorHoverFocused"
-  },
-  {
     "key": "shift+cmd+v",
     "command": "-markdown-preview-enhanced.openPreview",
     "when": "editorLangId == 'markdown'"
@@ -830,11 +825,12 @@
     "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
   },
   {
-    "key": "cmd+f",
-    "command": "extension.fuzzySearch"
-  },
-  {
     "key": "cmd+k cmd+f",
     "command": "-extension.fuzzySearch"
+  },
+  {
+    "key": "g g",
+    "command": "cursorTop",
+    "when": "textInputFocus && neovim.mode == 'normal'"
   }
 ]

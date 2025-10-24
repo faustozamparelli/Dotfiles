@@ -70,12 +70,22 @@ set -U fifc_fd_opts --hidden
 # BAT theme
 set -gx BAT_THEME "Dracula"
 
+#fzf search and cd into dir
+function f
+    if test (count $argv) -eq 0
+        cd (fd --type directory --no-ignore | fzf)
+    else
+        cd $argv
+    end
+end
+
 # ----------------------------
 # Useful aliases
 # ----------------------------
-alias dev 'open http://localhost:3000; pnpm run dev'
-alias npm="echo '❌ Use pnpm instead.'"
-alias npx="pnpm dlx"
+
+# alias dev 'open http://localhost:3000; pnpm run dev'
+# alias npm="echo '❌ Use pnpm instead.'"
+# alias npx="pnpm dlx"
 
 alias lg lazygit
 alias glog "git lg"

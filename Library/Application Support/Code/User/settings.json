@@ -59,18 +59,9 @@
   "window.zoomLevel": -0.4,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
+  "editor.formatOnSaveMode": "file",
   "editor.lineNumbers": "relative",
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[python]": {
-    "editor.formatOnSaveMode": "file",
-    "editor.formatOnType": false,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "workbench.editorAssociations": {
     "*.pdf": "latex-workshop-pdf-hook"
   },
@@ -201,5 +192,7 @@
   },
   "markdown.suggest.paths.enabled": true,
   "go.toolsManagement.autoUpdate": true,
-  "search.useIgnoreFiles": false
+  "search.useIgnoreFiles": false,
+  "swaggerViewer.previewInBrowser": true,
+  "chat.agent.maxRequests": 100
 }
