@@ -99,6 +99,8 @@ map("n", "m", "mzJ`z")
 vim.pack.add({
 	-- Color scheme - high contrast dark theme
 	{ src = "https://github.com/iagorrr/noctis-high-contrast.nvim" },
+	-- Light theme
+	{ src = "https://github.com/yasukotelin/notelight.git"},
 
 	-- Alternative theme (commented out)
 	--{src = "https://github.com/vague2k/vague.nvim"}, --theme2
@@ -135,12 +137,30 @@ vim.pack.add({
 --------------------------------------------------------------------
 --THEME
 -- vim.cmd("colorscheme noctishc") -- Apply the noctis high contrast color scheme
-vim.cmd("colorscheme torte") -- Apply the noctis high contrast color scheme
+local theme = os.getenv("THEME")
 
-vim.cmd [[
-  highlight StatusLine guibg=#000000 guifg=#FFFFFF
-  highlight StatusLineNC guibg=#000000 guifg=#888888
-]]
+if theme == "dark" then
+  vim.o.background = "dark"
+  pcall(vim.cmd, "colorscheme torte")  -- noctishc 
+  vim.cmd [[
+    highlight StatusLine guibg=#000000 guifg=#FFFFFF
+    highlight StatusLineNC guibg=#000000 guifg=#888888
+  ]]
+else
+  vim.o.background = "light"
+  pcall(vim.cmd, "colorscheme notelight")
+  vim.cmd [[
+    highlight StatusLine guibg=#FFFFFF guifg=#000000
+    highlight StatusLineNC guibg=#FFFFFF guifg=#777777
+
+		" Gutter (line numbers area)
+		highlight LineNr guibg=#FFFFFF guifg=#000000
+		highlight SignColumn guibg=#FFFFFF
+		highlight FoldColumn guibg=#FFFFFF
+		highlight CursorLineNr guibg=#FFFFFF guifg=#000000
+
+  ]]
+end
 
 -- Alternative theme setup (commented out)
 --require "vague".setup({ transparent = true })

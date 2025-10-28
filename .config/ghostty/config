@@ -1,4 +1,4 @@
-theme =  Dark Pastel
+theme =  dark:Dark Pastel, light:Builtin Light
 command = /opt/homebrew/bin/fish --login --interactive
 confirm-close-surface = false
 

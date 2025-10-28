@@ -8,7 +8,7 @@
   "textFontFamily": "Liga SFMono Nerd Font",
   "monospaceFontFamily": "Liga SFMono Nerd Font",
   "baseFontSize": 15,
-  "theme": "obsidian",
+  "theme": "system",
   "translucency": true,
   "showRibbon": false
 }

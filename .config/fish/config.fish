@@ -67,8 +67,15 @@ end
 set -Ux fifc_editor nvim
 set -U fifc_fd_opts --hidden
 
-# BAT theme
-set -gx BAT_THEME "Dracula"
+#Themes
+if test (osascript -e 'tell app "System Events" to tell appearance preferences to get dark mode') = "true"
+	set -gx THEME "dark"
+	set -gx BAT_THEME "Dracula"
+else
+	set -gx THEME "light"
+	set -gx THEME "light"
+end
+
 
 #fzf search and cd into dir
 function f
