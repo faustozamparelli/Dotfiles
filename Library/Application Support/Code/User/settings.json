@@ -163,10 +163,8 @@
   "python.analysis.inlayHints.callArgumentNames": "all",
   "python.analysis.inlayHints.variableTypes": true,
   "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "javascript.inlayHints.parameterNames.enabled": "all",
   "javascript.inlayHints.parameterTypes.enabled": true,
   "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-  "javascript.inlayHints.variableTypes.enabled": true,
   "typescript.inlayHints.enumMemberValues.enabled": true,
   "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
   "typescript.inlayHints.parameterNames.enabled": "all",
@@ -195,5 +193,7 @@
   "search.useIgnoreFiles": false,
   "swaggerViewer.previewInBrowser": true,
   "chat.agent.maxRequests": 100,
-  "window.autoDetectColorScheme": true
+  "window.autoDetectColorScheme": true,
+  "javascript.inlayHints.parameterNames.enabled": "literals",
+  "eslint.enable": true,
 }
