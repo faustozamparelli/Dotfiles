@@ -202,5 +202,39 @@
     "npm run build-prod": true,
     "gofmt": true,
     "git checkout": true
-  }
+  },
+  "latex-workshop.docker.enabled": false,
+  "latex-workshop.latexmk.path": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/latexmk",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "tinytex-pdflatex",
+      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/pdflatex",
+      "args": [
+        "-synctex=0",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "TinyTeX pdflatex twice (no synctex)",
+      "tools": ["tinytex-pdflatex", "tinytex-pdflatex"]
+    }
+  ],
+  "latex-workshop.latex.outDir": "%DIR%",
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.log",
+    "*.out",
+    "*.toc",
+    "*.lof",
+    "*.lot",
+    "*.fls",
+    "*.fdb_latexmk",
+    "*.synctex.gz"
+  ]
 }
