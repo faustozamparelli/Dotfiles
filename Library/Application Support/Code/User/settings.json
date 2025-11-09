@@ -114,7 +114,7 @@
     "markdown": false,
     "scminput": false
   },
-  "workbench.preferredDarkColorTheme": "Aura Dracula Spirit",
+  "workbench.preferredDarkColorTheme": "Dark+ Pure Black (OLED)",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
   "workbench.colorTheme": "Dark+ Pure Black (OLED)",
   "workbench.iconTheme": "material-icon-theme",
@@ -196,4 +196,11 @@
   "window.autoDetectColorScheme": true,
   "javascript.inlayHints.parameterNames.enabled": "literals",
   "eslint.enable": true,
+  "chat.tools.terminal.autoApprove": {
+    "go": true,
+    "npm install": true,
+    "npm run build-prod": true,
+    "gofmt": true,
+    "git checkout": true
+  }
 }

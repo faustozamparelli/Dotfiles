@@ -748,10 +748,6 @@
     "command": "problems-copy.copyAll"
   },
   {
-    "key": "shift+cmd+f",
-    "command": "github.copilot.chat.fix"
-  },
-  {
     "key": "shift+cmd+d",
     "command": "github.copilot.chat.explain.palette"
   },
