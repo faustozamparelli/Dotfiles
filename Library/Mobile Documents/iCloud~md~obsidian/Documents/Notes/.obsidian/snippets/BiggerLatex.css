@@ -1,0 +1,26 @@
+/* ---- Bigger LaTeX in Obsidian (MathJax v3) ---- */
+:root {
+  --latex-inline-scale: 1.35; /* inline $...$ */
+  --latex-block-scale: 1.45;  /* block $$...$$ */
+}
+
+/* Reading view */
+.markdown-preview-view mjx-container[jax="CHTML"][display="true"] {
+  font-size: calc(1em * var(--latex-block-scale)) !important;
+}
+.markdown-preview-view mjx-container[jax="CHTML"]:not([display="true"]) {
+  font-size: calc(1em * var(--latex-inline-scale)) !important;
+}
+
+/* Live Preview (source mode) */
+.markdown-source-view.is-live-preview mjx-container[jax="CHTML"][display="true"] {
+  font-size: calc(1em * var(--latex-block-scale)) !important;
+}
+.markdown-source-view.is-live-preview mjx-container[jax="CHTML"]:not([display="true"]) {
+  font-size: calc(1em * var(--latex-inline-scale)) !important;
+}
+
+/* Optional: keep inline math nicely aligned with text baseline */
+mjx-container:not([display="true"]) {
+  vertical-align: middle;
+}
