@@ -1,7 +1,6 @@
 {
   "enabledCssSnippets": [
     "UnderlineBolder",
-    "CenterImages",
     "BiggerLatex"
   ],
   "cssTheme": "Vanilla AMOLED",

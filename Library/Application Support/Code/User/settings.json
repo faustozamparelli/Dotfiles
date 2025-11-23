@@ -9,27 +9,6 @@
   "workbench.layoutControl.enabled": false,
   "workbench.startupEditor": "none",
   "workbench.tips.enabled": false,
-  // "workbench.colorCustomizations": {
-  //   "editor.background": "#000000",
-  //   "editorSuggestWidget.selectedBackground": "#231739",
-  //   "sideBar.background": "#000000",
-  //   "list.activeSelectionBackground": "#231739",
-  //   "list.inactiveSelectionBackground": "#231739",
-  //   "list.focusBackground": "#231739",
-  //   "list.hoverBackground": "#231739",
-  //   "editorGroupHeader.tabsBackground": "#000000",
-  //   "tab.activeBackground": "#231729",
-  //   "tab.inactiveBackground": "#000000",
-  //   "statusBar.background": "#000000",
-  //   "terminal.background": "#000000",
-  //   "panel.background": "#000000",
-  //   "editor.selectionBackground": "#572592",
-  //   "editor.selectionHighlightBackground": "#572592",
-  //   "editor.findMatchBackground": "#572592",
-  //   "editor.findMatchHighlightBackground": "#572592",
-  // "editorGutter.background": "#000000",
-  //   "editorCursor.background": "#000000"
-  // },
   "security.workspace.trust.untrustedFiles": "open",
   "window.openFoldersInNewWindow": "off",
   "editor.minimap.enabled": false,
@@ -43,12 +22,12 @@
   "editor.overviewRulerBorder": false,
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.fontSize": 14,
+  "editor.fontSize": 16,
   "terminal.integrated.fontSize": 16,
   "chat.editor.fontSize": 14,
   "editor.fontLigatures": true,
-  "editor.fontFamily": "Liga SFMono Nerd Font",
-  "terminal.integrated.fontFamily": "Liga SFMono Nerd Font",
+  // "editor.fontFamily": "Liga SFMono Nerd Font",
+  // "terminal.integrated.fontFamily": "Liga SFMono Nerd Font",
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   "explorer.compactFolders": false,
@@ -56,7 +35,7 @@
   "extensions.ignoreRecommendations": true,
   "terminal.integrated.defaultProfile.osx": "fish",
   "zenMode.fullScreen": false,
-  "window.zoomLevel": -0.4,
+  "window.zoomLevel": 0.8,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "editor.formatOnSaveMode": "file",
@@ -114,12 +93,12 @@
     "markdown": false,
     "scminput": false
   },
-  "workbench.preferredDarkColorTheme": "Dark+ Pure Black (OLED)",
+  "workbench.preferredDarkColorTheme": "Default Dark+",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
-  "workbench.colorTheme": "Dark+ Pure Black (OLED)",
+  "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.statusBar.visible": false,
-  "latex-workshop.view.pdf.invertMode.enabled": "auto",
+  "latex-workshop.view.pdf.invertMode.enabled": "never",
   "latex-workshop.view.pdf.invert": 1,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
@@ -196,13 +175,6 @@
   "window.autoDetectColorScheme": true,
   "javascript.inlayHints.parameterNames.enabled": "literals",
   "eslint.enable": true,
-  "chat.tools.terminal.autoApprove": {
-    "go": true,
-    "npm install": true,
-    "npm run build-prod": true,
-    "gofmt": true,
-    "git checkout": true
-  },
   "latex-workshop.docker.enabled": false,
   "latex-workshop.latexmk.path": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/latexmk",
   "latex-workshop.latex.tools": [
@@ -215,26 +187,40 @@
         "-file-line-error",
         "%DOC%"
       ]
+    },
+    {
+      "name": "tinytex-bibtex",
+      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/bibtex",
+      "args": ["%DOCFILE%"]
+    },
+    {
+      "name": "tinytex-latexmk",
+      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/latexmk",
+      "args": ["-pdf", "-interaction=nonstopmode", "-synctex=0", "%DOC%"]
     }
   ],
   "latex-workshop.latex.recipes": [
+    {
+      "name": "TinyTeX latexmk (auto BibTeX)",
+      "tools": ["tinytex-latexmk"]
+    },
+    {
+      "name": "TinyTeX pdflatex → bibtex → pdflatex × 2",
+      "tools": [
+        "tinytex-pdflatex",
+        "tinytex-bibtex",
+        "tinytex-pdflatex",
+        "tinytex-pdflatex"
+      ]
+    },
     {
       "name": "TinyTeX pdflatex twice (no synctex)",
       "tools": ["tinytex-pdflatex", "tinytex-pdflatex"]
     }
   ],
+  "latex-workshop.latex.autoBuild.run": "onFileChange",
+  "latex-workshop.latex.recipe.default": "TinyTeX latexmk (auto BibTeX)",
+  "latex-workshop.latex.build.forceRecipeUsage": true,
+  "latex-workshop.latex.autoClean.run": "never",
   "latex-workshop.latex.outDir": "%DIR%",
-  "latex-workshop.latex.recipe.default": "first",
-  "latex-workshop.latex.autoClean.run": "onBuilt",
-  "latex-workshop.latex.clean.fileTypes": [
-    "*.aux",
-    "*.log",
-    "*.out",
-    "*.toc",
-    "*.lof",
-    "*.lot",
-    "*.fls",
-    "*.fdb_latexmk",
-    "*.synctex.gz"
-  ]
 }

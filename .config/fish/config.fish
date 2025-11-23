@@ -9,6 +9,7 @@ set -x PNPM_HOME "$HOME/Library/pnpm"
 
 # Put Homebrew first, then sbin, then virtualenvs
 set -gx PATH $HOME_BREW/bin $HOME_BREW/sbin $HOME/.virtualenvs/ml/bin $PATH
+source (brew --prefix asdf)/libexec/asdf.fish
 
 # Add java/openvpn after Homebrew so they don't override
 set -gx PATH $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin $PATH
@@ -101,7 +102,6 @@ alias glg "tig"
 alias tk "tmux kill-server"
 alias jp "jupyter notebook"
 alias o "open"
-alias python "python3"
 alias py "python"
 alias cat "bat"
 alias b "bat"
