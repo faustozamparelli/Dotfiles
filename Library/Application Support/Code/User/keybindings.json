@@ -828,5 +828,9 @@
     "key": "g g",
     "command": "cursorTop",
     "when": "editorFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+cmd+e",
+    "command": "workbench.action.closePanel"
   }
 ]

@@ -47,6 +47,9 @@
   "[latex]": {
     "editor.defaultFormatter": "James-Yu.latex-workshop"
   },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
   "terminal.integrated.enableMultiLinePasteWarning": "never",
   "python.terminal.activateEnvironment": false,
   "editor.quickSuggestions": {
@@ -60,8 +63,6 @@
   "workbench.sideBar.location": "right",
   "editor.hover.delay": 500,
   "workbench.hover.delay": 0,
-  "python.analysis.inlayHints.functionReturnTypes": true,
-  "python.analysis.inlayHints.pytestParameters": true,
   "jupyter.enableExtendedPythonKernelCompletions": true,
   "jupyter.exportWithOutputEnabled": true,
   "editor.hover.hidingDelay": 10000,
@@ -73,6 +74,7 @@
   "python.analysis.autoImportCompletions": true,
   "terminal.integrated.defaultLocation": "editor",
   "python.analysis.nodeExecutable": "/opt/homebrew/bin/node",
+  "python-envs.defaultEnvManager": "ms-python.python:system",
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
     "titleBarStyle": "hiddenInset"
@@ -93,13 +95,12 @@
     "markdown": false,
     "scminput": false
   },
-  "workbench.preferredDarkColorTheme": "Default Dark+",
+  "workbench.preferredDarkColorTheme": "Dark+ Pure Black (OLED)",
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.statusBar.visible": false,
-  "latex-workshop.view.pdf.invertMode.enabled": "never",
-  "latex-workshop.view.pdf.invert": 1,
+  "latex-workshop.view.pdf.invert": 0,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
   "git.enableSmartCommit": true,
@@ -139,8 +140,10 @@
   "C_Cpp.inlayHints.parameterNames.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.showSpace": true,
-  "python.analysis.inlayHints.callArgumentNames": "all",
-  "python.analysis.inlayHints.variableTypes": true,
+  // "python.analysis.inlayHints.callArgumentNames": "all",
+  // "python.analysis.inlayHints.variableTypes": true,
+  // "python.analysis.inlayHints.functionReturnTypes": true,
+  // "python.analysis.inlayHints.pytestParameters": true,
   "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
   "javascript.inlayHints.parameterTypes.enabled": true,
   "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
@@ -175,52 +178,30 @@
   "window.autoDetectColorScheme": true,
   "javascript.inlayHints.parameterNames.enabled": "literals",
   "eslint.enable": true,
-  "latex-workshop.docker.enabled": false,
-  "latex-workshop.latexmk.path": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/latexmk",
+  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.latex.autoClean.run": "onSucceeded",
   "latex-workshop.latex.tools": [
     {
-      "name": "tinytex-pdflatex",
-      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/pdflatex",
-      "args": [
-        "-synctex=0",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-        "%DOC%"
-      ]
+      "name": "xelatex-nonstop",
+      "command": "xelatex",
+      "args": ["-interaction=nonstopmode", "-halt-on-error", "%DOCFILE%"]
     },
     {
-      "name": "tinytex-bibtex",
-      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/bibtex",
+      "name": "biber",
+      "command": "biber",
       "args": ["%DOCFILE%"]
-    },
-    {
-      "name": "tinytex-latexmk",
-      "command": "/Users/faustozamparelli/Library/TinyTeX/bin/universal-darwin/latexmk",
-      "args": ["-pdf", "-interaction=nonstopmode", "-synctex=0", "%DOC%"]
     }
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "TinyTeX latexmk (auto BibTeX)",
-      "tools": ["tinytex-latexmk"]
-    },
-    {
-      "name": "TinyTeX pdflatex → bibtex → pdflatex × 2",
+      "name": "XeLaTeX+Biber",
       "tools": [
-        "tinytex-pdflatex",
-        "tinytex-bibtex",
-        "tinytex-pdflatex",
-        "tinytex-pdflatex"
+        "xelatex-nonstop",
+        "biber",
+        "xelatex-nonstop",
+        "xelatex-nonstop"
       ]
-    },
-    {
-      "name": "TinyTeX pdflatex twice (no synctex)",
-      "tools": ["tinytex-pdflatex", "tinytex-pdflatex"]
     }
   ],
-  "latex-workshop.latex.autoBuild.run": "onFileChange",
-  "latex-workshop.latex.recipe.default": "TinyTeX latexmk (auto BibTeX)",
-  "latex-workshop.latex.build.forceRecipeUsage": true,
-  "latex-workshop.latex.autoClean.run": "never",
-  "latex-workshop.latex.outDir": "%DIR%",
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/chess/bin/python"
 }
