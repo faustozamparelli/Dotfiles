@@ -1,469 +1,196 @@
-;;; init.el --- Init file -*- lexical-binding: t -*-
+;;; init.el --- minimal, fast, macOS-friendly config -*- lexical-binding: t; -*-
 
-;; ----------------------------------------------------------------------------
-;; Application Options
-;; ###################
+;; -----------------------------------------------------------------------------
+;; macOS window chrome + basic UI
+;; -----------------------------------------------------------------------------
 
-;; hide Window Title
 (when (eq system-type 'darwin)
   ;; Make the macOS titlebar blend into Emacs.
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; use 'light if you use a light theme
-
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   ;; Remove title text + proxy icon (document icon).
   (setq-default frame-title-format nil)
   (when (boundp 'ns-use-proxy-icon)
     (setq ns-use-proxy-icon nil)))
 
-;; Disable GUI elements.
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (set-fringe-mode 0)
 
-;; Disable startup message.
-(defun display-startup-echo-area-message ()
-  (message ""))
+(defun display-startup-echo-area-message () (message ""))
 
-;; Disable bell.
 (setq visible-bell nil)
-(setq ring-bell-function 'ignore)
+(setq ring-bell-function #'ignore)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-buffer-menu t)
 
-;; Window Title, include the buffer name & modified status.
-;;(setq-default frame-title-format "%b %& emacs")
+;; -----------------------------------------------------------------------------
+;; Defaults (encoding, prompts, files, scrolling)
+;; -----------------------------------------------------------------------------
 
-;; ----------------------------------------------------------------------------
-;; Defaults
-;; ########
-
-;; Use UTF-8 everywhere. Why?
-;; .. this is the most common encoding, saves hassles guessing and getting it wrong.
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
-;; Show text instead prompts instead of dialog popups. Why?
-;; .. because they're not as nice for quick keyboard access.
 (setq use-dialog-box nil)
+(defalias 'yes-or-no-p #'y-or-n-p)
 
-;; For text-mode prompts. Why?
-;; .. answering just 'y' or 'n' is sufficient.
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Store registers on exit. Why?
-;; .. nice to keep macros available on restart.
 (savehist-mode 1)
 (setq savehist-additional-variables '(register-alist))
 
-;; Don't use file backups. Why?
-;; .. it adds cruft on the file-system which gets annoying.
 (setq backup-inhibited t)
 (setq auto-save-default nil)
 
-;; Show empty lines. Why?
-;; .. without this you can't tell if there are blank lines at the end of the file.
 (setq-default indicate-empty-lines t)
-
-;; Keep cursors and highlights in current window only. Why?
-;; .. it's not especially useful to show these in inactive windows.
 (setq cursor-in-non-selected-windows 'hollow)
-;; Highlight inactive windows. Why?
-;; .. to keep the selection region when changing windows (when evil-mode is disabled).
 (setq highlight-nonselected-windows t)
-;; Disable bidirectional text support. Why?
-;; .. slight performance improvement.
 (setq bidi-display-reordering nil)
 
-;; No startup screen. Why?
-;; .. no need to distract us with unnecessary info.
-(setq inhibit-startup-screen t)
-
-;; Don't show buffer list on startup. Why?
-;; .. buffer switching gets in the way, you can manually switch between them.
-(setq inhibit-startup-buffer-menu t)
-
-;; Hide mouse cursor while typing. Why?
-;; .. it can overlap characters we want to see.
 (setq make-pointer-invisible t)
-
-;; Don't put two spaces after full-stop. Why?
-;; .. one space after a full-stop is sufficient in most documentation & comments.
 (setq sentence-end-double-space nil)
 
-;; ---------
-;; Scrolling
-;; =========
-
-;; Scroll N lines to screen edge. Why?
-;; .. having some margin is useful to see some lines above/below the lines you edit.
+;; Scrolling: keep motion stable, avoid recentering jumps
 (setq scroll-margin 2)
-
-;; Scroll back this many lines to being the cursor back on screen. Why?
-;; .. default behavior is to re-center which is jarring. Clamp to the scroll margin instead.
 (setq scroll-conservatively scroll-margin)
-
-;; Keyboard scroll one line at a time. Why?
-;; .. having scrolling jump is jarring & unnecessary (use page up down in this case).
 (setq scroll-step 1)
-;; Mouse scroll N lines. Why?
-;; .. speed is fast but slower than page up/down (a little personal preference).
 (setq mouse-wheel-scroll-amount '(6 ((shift) . 1)))
-;; Don't accelerate scrolling. Why?
-;; .. it makes scrolling distance unpredictable.
 (setq mouse-wheel-progressive-speed nil)
-;; Don't use timer when scrolling. Why?
-;; .. it's not especially useful, one less timer for a little less overhead.
 (setq mouse-wheel-inhibit-click-time nil)
-
-;; Preserve line/column (nicer page up/down). Why?
-;; .. avoids having the cursor at the top/bottom edges.
 (setq scroll-preserve-screen-position t)
-;; Move the cursor to top/bottom even if the screen is viewing top/bottom (for page up/down). Why?
-;; .. so pressing page/up down can move the cursor & the view to start/end of the buffer.
 (setq scroll-error-top-bottom t)
-
-;; Center after going to the next compiler error. Why?
-;; .. don't get stuck at screen edges.
-(setq next-error-recenter (quote (4)))
-
-;; Always redraw immediately when scrolling. Why?
-;; .. more responsive, it wont hang while handling keyboard input.
+(setq next-error-recenter '(4))
 (setq fast-but-imprecise-scrolling nil)
 (setq jit-lock-defer-time 0)
 
-;; -----------------
-;; Clipboard Support
-;; =================
-
-;; Cutting & pasting use the system clipboard. Why?
-;; .. integrates with the system clipboard for convenience.
+;; Clipboard integration
 (setq select-enable-clipboard t)
-
-;; Treat clipboard input as UTF-8 string first; compound text next, etc. Why?
-;; .. match default encoding which is UTF-8 as well.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-;; Paste at text-cursor instead of mouse-cursor location. Why?
-;; .. allow to quickly select & paste while in insert-mode, instead of moving the text cursor.
 (setq mouse-yank-at-point t)
 
-;; ----------------------------------------------------------------------------
-;; Editing Options
-;; ###############
+;; -----------------------------------------------------------------------------
+;; Editing (undo, case, indentation, wrapping policy)
+;; -----------------------------------------------------------------------------
 
-;; Undo
-;; ====
-
-;; Don't group undo steps. Why?
-;; .. without this is groups actions into a fixed number of steps which feels unpredictable.
-(fset 'undo-auto-amalgamate 'ignore)
-
-;; Increase undo limits. Why?
-;; .. ability to go far back in history can be useful, modern systems have sufficient memory.
-;; Limit of 64mb.
+;; Undo: keep steps fine-grained + larger limits
+(fset 'undo-auto-amalgamate #'ignore)
 (setq undo-limit 67108864)
-;; Strong limit of 1.5x (96mb)
 (setq undo-strong-limit 100663296)
-;; Outer limit of 10x (960mb).
-;; Note that the default is x100), but this seems too high.
 (setq undo-outer-limit 1006632960)
 
-
-;; Case Sensitivity
-;; ================
-
-;; Be case sensitive. Why?
-;; .. less ambiguous results, most programming languages are case sensitive.
-
-;; Case sensitive search.
+;; Case sensitivity
 (setq-default case-fold-search nil)
-;; Case sensitive abbreviations.
 (setq dabbrev-case-fold-search nil)
-;; Case sensitive (impacts counsel case-sensitive file search).
 (setq-default search-upper-case nil)
 
-
-;; -----------
-;; Indentation
-;; ===========
-
-;; yes, both are needed!
+;; Indentation defaults
+(setq-default indent-tabs-mode nil)
 (setq default-tab-width 4)
 (setq tab-width 4)
 (setq default-fill-column 80)
 (setq fill-column 80)
-(setq-default evil-indent-convert-tabs nil)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default evil-shift-round nil)
 
-;; ----------------------------------------------------------------------------
-;; Packages
-;; ########
+;; Wrapping policy:
+;; - code: truncated lines (no wrap)
+;; - text/org: visual line wrapping
+(setq-default truncate-lines t)
+(add-hook 'text-mode-hook #'visual-line-mode)
+(add-hook 'prog-mode-hook (lambda () (setq-local truncate-lines t)))
 
-(with-eval-after-load 'package
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+;; -----------------------------------------------------------------------------
+;; Packages (package.el + use-package)
+;; -----------------------------------------------------------------------------
 
+(setq package-enable-at-startup nil)
+(require 'package)
+(setq package-archives
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
-;; Auto-install use-package. Why?
-;; .. this is a defacto-standard package manager, useful to isolate each package's configuration.
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; This is only needed once, near the top of the file
-(eval-when-compile
-  (require 'use-package))
-
-;; Download automatically. Why?
-;; .. convenience, so on first start all packages are installed.
+(eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
-;; Defer loading packages by default. Why?
-;; .. faster startup for packages which are only activated on certain modes or key bindings.
 (setq use-package-always-defer t)
 
-;; Add the ability to upgrade all packages. Why?
-;; .. adds a quick way to upgrade everything at once.
 (use-package package-utils
   :commands (package-utils-upgrade-all-and-recompile))
 
-;; Nice theme from VIM
-(use-package inkpot-theme
-  :demand t)
+;; -----------------------------------------------------------------------------
+;; Theme + fonts
+;; -----------------------------------------------------------------------------
 
-(load-theme 'modus-vivendi' t)
+(load-theme 'modus-vivendi t)
 
-;; Highlight terms in code-comments such as TODO, FIXME, URL's & email. Why?
-;; .. these are common conventions in software that it's useful to highlight them.
+(set-face-attribute 'default nil :font "Iosevka" :height 180)
+(set-face-attribute 'fixed-pitch nil :font "Iosevka" :height 160)
+(set-face-attribute 'variable-pitch nil :font "Iosevka" :height 160 :weight 'regular)
+
+(use-package default-font-presets
+  :demand t
+  :commands (default-font-presets-scale-increase
+             default-font-presets-scale-decrease
+             default-font-presets-scale-reset))
+
 (use-package hl-prog-extra
   :commands (hl-prog-extra-mode)
   :init (add-hook 'prog-mode-hook #'hl-prog-extra-mode))
 
+;; -----------------------------------------------------------------------------
+;; Display options
+;; -----------------------------------------------------------------------------
 
-;; Main VIM emulation package. Why?
-;; .. without this, you won't have VIM key bindings or modes.
-(use-package evil
-  :demand t
-  :init
-
-  ;; See `undo-fu' package.
-  (setq evil-undo-system 'undo-fu)
-  ;; For some reasons evils own search isn't default.
-  (setq evil-search-module 'evil-search)
-
-  :config
-  ;; Initialize.
-  (evil-mode)
-
-  (setq evil-ex-search-case 'sensitive))
-
-;; Use a thin wrapper for undo. Why?
-;; .. By default undo doesn't support redo as most users would expect from other software.
-(use-package undo-fu)
-
-;; Use evil numbers to increment & decrement. Why?
-;; .. evil-mode doesn't include this VIM functionality.
-(use-package evil-numbers)
-
-;; Perform actions on surrounding characters. Why?
-;; .. while not part of VIM, it's a useful & common package for developers.
-(use-package evil-surround
-  :demand t
-  :config
-  ;; Initialize.
-  (global-evil-surround-mode 1))
-
-;; Prompt for available keys after some delay. Why?
-;; .. useful to see available keys after some delay, especially for evil-leader key.
-(use-package which-key
-  :demand t
-  :config
-  ;; Initialize.
-  (which-key-mode))
-
-;; Ivy completion. Why?
-;; .. makes completing various prompts for input much more friendly & interactive.
-(use-package ivy
-  :demand t
-  :config (ivy-mode)
-
-  ;; Always show half the window height. Why?
-  ;; .. useful when searching through large lists of content.
-  (setq ivy-height-alist `((t . ,(lambda (_caller) (/ (frame-height) 2)))))
-
-  ;; VIM style keys in ivy (holding Control).
-  (define-key ivy-minibuffer-map (kbd "C-j") 'next-line)
-  (define-key ivy-minibuffer-map (kbd "C-k") 'previous-line)
-
-  (define-key ivy-minibuffer-map (kbd "C-h") 'minibuffer-keyboard-quit)
-  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-done)
-
-  ;; open and next
-  (define-key ivy-minibuffer-map (kbd "C-M-j") 'ivy-next-line-and-call)
-  (define-key ivy-minibuffer-map (kbd "C-M-k") 'ivy-previous-line-and-call)
-
-  (define-key ivy-minibuffer-map (kbd "<C-return>") 'ivy-done)
-
-  ;; so we can switch away
-  (define-key ivy-minibuffer-map (kbd "C-w") 'evil-window-map))
-
-;; Use for auto-complete. Why?
-;; .. saves typing, allows multiple back-ends based on the current language/mode.
-(use-package company
-  :commands (company-complete-common company-dabbrev)
-  :config (global-company-mode)
-
-  ;; Increase maximum number of items to show in auto-completion. Why?
-  ;; .. seeing more at once gives you a better overview of your options.
-  (setq company-tooltip-limit 40)
-
-  ;; Don't make abbreviations lowercase or ignore case. Why?
-  ;; .. many languages are case sensitive, so changing case isn't helpful.
-  (setq company-dabbrev-downcase nil)
-  (setq company-dabbrev-ignore-case nil)
-
-  ;; Key-map: hold Control for VIM motion. Why?
-  ;; .. we're already holding Control, allow navigation at the same time.
-  (define-key company-active-map (kbd "C-j") 'company-select-next-or-abort)
-  (define-key company-active-map (kbd "C-k") 'company-select-previous-or-abort)
-  (define-key company-active-map (kbd "C-l") 'company-complete-selection)
-  (define-key company-active-map (kbd "C-h") 'company-abort)
-  (define-key company-active-map (kbd "<C-return>") 'company-complete-selection)
-
-  (define-key company-search-map (kbd "C-j") 'company-select-next)
-  (define-key company-search-map (kbd "C-k") 'company-select-previous))
-
-;; Use `swiper' for interactive buffer search. Why?
-;; .. interactively searching the current buffer can be handy.
-(use-package swiper
-  :commands (swiper)
-  :config
-
-  ;; Go to the start of the match instead of the end. Why?
-  ;; .. allows us to operate on the term just jumped to (look up reference for e.g.)
-  (setq swiper-goto-start-of-match t))
-
-;; Use counsel for project wide searches. Why?
-;; .. interactive project wide search is incredibly useful.
-(use-package counsel
-  :commands (counsel-git-grep counsel-switch-buffer))
-
-;; Find file in project. Why?
-;; .. interactively narrowing down other files in the project is very useful.
-(use-package find-file-in-project
-  :commands (find-file-in-project))
-
-;; Use `diff-hl'. Why?
-;; .. shows lines you have modified from the last commit.
-(use-package diff-hl
-  :demand t
-  :config (global-diff-hl-mode))
-
-;; Highlights numbers. Why?
-;; .. Emacs doesn't do this by default, use a package.
-(use-package highlight-numbers
-  :hook ((prog-mode) . highlight-numbers-mode))
-
-;; Scale all text. Why?
-;; .. it's useful sometimes to globally zoom in all text.
-(use-package default-font-presets
-  :commands
-  (default-font-presets-scale-increase
-   default-font-presets-scale-decrease default-font-presets-scale-reset)
-  :demand t)
-
-;; ---------------
-;; Display Options
-;; ===============
-
-;; Show the column limit (fill-column).
 (global-display-fill-column-indicator-mode -1)
-
-;; Show line numbers. Why?
-;; Helpful to give context when reading errors & the current line is made more prominent.
 (global-display-line-numbers-mode 1)
-
-;; Even when narrowing, show global line numbers. Why?
-;; .. because these are often referenced in external messages.
 (setq-default display-line-numbers-widen t)
 
-;; Make line-number column background pure black
-(set-face-attribute 'line-number nil
-                    :background "#000000")
+(set-face-attribute 'line-number nil :background "#000000")
+(set-face-attribute 'line-number-current-line nil :background "#000000")
 
-(set-face-attribute 'line-number-current-line nil
-                    :background "#000000")
-
-;; Show the column as well as the line. Why?
-;; .. some compiler errors show the column which is useful to compare.
 (setq column-number-mode t)
 
-;; Show matching parentheses. Why?
-;; .. handy for developers to match nested brackets.
 (show-paren-mode 1)
-;; Don't blink, it's too distracting.
 (setq blink-matching-paren nil)
 (setq show-paren-delay 0.2)
 (setq show-paren-highlight-openparen t)
 (setq show-paren-when-point-inside-paren t)
 
-;; Disable word-wrap. Why?
-;; .. confusing for reading structured text, where white-space can be significant.
-(setq-default truncate-lines t)
+;; -----------------------------------------------------------------------------
+;; Spell checking (prog comments + text)
+;; -----------------------------------------------------------------------------
 
-;; Enable visual world-wrap
-(global-visual-line-mode 1)
-
-;; ------------
-;; File Formats
-;; ============
-
-;; Options for generic modes. Why?
-;; .. this avoids duplicating checks for all programming and text modes.
 (add-hook
  'after-change-major-mode-hook
  (lambda ()
    (cond
-    ((derived-mode-p 'prog-mode)
-     (flyspell-prog-mode))
-    ((derived-mode-p 'text-mode)
-     (flyspell-mode)))))
+    ((derived-mode-p 'prog-mode) (flyspell-prog-mode))
+    ((derived-mode-p 'text-mode) (flyspell-mode)))))
 
-
-;; ------
-;; Markup
-;; ------
+;; -----------------------------------------------------------------------------
+;; Mode-specific formatting
+;; -----------------------------------------------------------------------------
 
 (add-hook
  'org-mode-hook
  (lambda ()
    (setq-local fill-column 120)
    (setq-local tab-width 2)
-   (setq-local evil-shift-width 2)
    (setq-local indent-tabs-mode nil)
-
    (setq-local ffip-patterns '("*.org"))))
-
-;; ---------
-;; Scripting
-;; ---------
 
 (add-hook
  'emacs-lisp-mode-hook
  (lambda ()
    (setq-local fill-column 120)
    (setq-local tab-width 2)
-   (setq-local evil-shift-width 2)
    (setq-local indent-tabs-mode nil)
-
    (setq-local ffip-patterns '("*.el"))
-
-   ;; Don't delimit on dashes or underscores. Why?
-   ;; .. makes searching for variable names inconvenient.
+   ;; Treat '-' and '_' as word chars for symbol navigation/search
    (modify-syntax-entry ?- "w")
    (modify-syntax-entry ?_ "w")))
 
@@ -472,28 +199,16 @@
  (lambda ()
    (setq-local fill-column 80)
    (setq-local tab-width 4)
-   (setq-local evil-shift-width 4)
    (setq-local indent-tabs-mode nil)
-
    (setq-local ffip-patterns '("*.py"))))
-
-;; -----
-;; Shell
-;; -----
 
 (add-hook
  'sh-mode-hook
  (lambda ()
    (setq-local fill-column 120)
    (setq-local tab-width 4)
-   (setq-local evil-shift-width 4)
    (setq-local indent-tabs-mode nil)
-
    (setq-local ffip-patterns '("*.sh"))))
-
-;; ---------------
-;; Other Languages
-;; ---------------
 
 (add-hook
  'c-mode-hook
@@ -501,146 +216,234 @@
    (setq-local fill-column 120)
    (setq-local c-basic-offset 4)
    (setq-local tab-width 4)
-   (setq-local evil-shift-width 4)
    (setq-local indent-tabs-mode nil)
-
    (setq-local ffip-patterns
-               '("*.c"
-                 "*.cc"
-                 "*.cpp"
-                 "*.cxx"
-                 "*.h"
-                 "*.hh"
-                 "*.hpp"
-                 "*.hxx"
-                 "*.inl"))
-
-   ;; Don't delimit on '_'. Why?
-   ;; .. makes searching for variable names inconvenient.
+               '("*.c" "*.cc" "*.cpp" "*.cxx"
+                 "*.h" "*.hh" "*.hpp" "*.hxx" "*.inl"))
+   ;; Treat '_' as word char
    (modify-syntax-entry ?_ "w")))
 
-;; ----------------------------------------------------------------------------
-;; Key-map
-;; #######
+;; -----------------------------------------------------------------------------
+;; Completion/UI (ivy/counsel/swiper, company, which-key)
+;; -----------------------------------------------------------------------------
 
-;; -----------
-;; Global Keys
-;; ===========
+(use-package which-key
+  :demand t
+  :config (which-key-mode 1))
 
-;; Control +/- or mouse-wheel to zoom. Why?
-;; .. this is a common shortcut for web-browsers that doesn't conflict with anything else.
-(global-set-key (kbd "C-=") 'default-font-presets-scale-increase)
-(global-set-key (kbd "C--") 'default-font-presets-scale-decrease)
-(global-set-key (kbd "C-0") 'default-font-presets-scale-reset)
+(use-package ivy
+  :demand t
+  :config
+  (ivy-mode 1)
+  (setq ivy-height-alist `((t . ,(lambda (_caller) (/ (frame-height) 2)))))
 
-(global-set-key (kbd "<C-mouse-4>") 'default-font-presets-scale-increase)
-(global-set-key (kbd "<C-mouse-5>") 'default-font-presets-scale-decrease)
+  ;; Vim-ish minibuffer navigation (hold Ctrl)
+  (define-key ivy-minibuffer-map (kbd "C-j") #'next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") #'previous-line)
+  (define-key ivy-minibuffer-map (kbd "C-h") #'minibuffer-keyboard-quit)
+  (define-key ivy-minibuffer-map (kbd "C-l") #'ivy-done)
+  (define-key ivy-minibuffer-map (kbd "C-M-j") #'ivy-next-line-and-call)
+  (define-key ivy-minibuffer-map (kbd "C-M-k") #'ivy-previous-line-and-call)
+  (define-key ivy-minibuffer-map (kbd "<C-return>") #'ivy-done))
 
-;; For PGTK (for some reason different names are used).
-(global-set-key (kbd "<C-wheel-up>") 'default-font-presets-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'default-font-presets-scale-decrease)
+(use-package swiper
+  :commands (swiper)
+  :config (setq swiper-goto-start-of-match t))
 
+(use-package counsel
+  :commands (counsel-git-grep counsel-switch-buffer))
 
-;; --------------
-;; Evil Mode Keys
-;; ==============
+(use-package find-file-in-project
+  :commands (find-file-in-project))
 
-;; Use secondary selection in insert mode, Why?
-;; .. this is handy for quick middle mouse copy/paste while in insert mode.
-(define-key evil-insert-state-map (kbd "<down-mouse-1>") 'mouse-drag-secondary)
-(define-key evil-insert-state-map (kbd "<drag-mouse-1>") 'mouse-drag-secondary)
-(define-key evil-insert-state-map (kbd "<mouse-1>") 'mouse-start-secondary)
-;; De-select after copy, Why?
-;; .. allows quick select-copy-paste.
-(define-key
- evil-insert-state-map (kbd "<mouse-2>")
- (lambda (click)
-   (interactive "*p")
-   (when (overlay-start mouse-secondary-overlay)
-     (mouse-yank-secondary click)
-     (delete-overlay mouse-secondary-overlay))))
+(use-package company
+  :commands (company-complete-common company-dabbrev)
+  :config
+  (global-company-mode 1)
+  (setq company-tooltip-limit 40)
+  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-ignore-case nil)
 
-;; VIM increment/decrement keys.
-(define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+  ;; Completion UI navigation
+  (define-key company-active-map (kbd "C-j") #'company-select-next-or-abort)
+  (define-key company-active-map (kbd "C-k") #'company-select-previous-or-abort)
+  (define-key company-active-map (kbd "C-l") #'company-complete-selection)
+  (define-key company-active-map (kbd "C-h") #'company-abort)
+  (define-key company-active-map (kbd "<C-return>") #'company-complete-selection)
+  (define-key company-search-map (kbd "C-j") #'company-select-next)
+  (define-key company-search-map (kbd "C-k") #'company-select-previous))
 
-(define-key
- evil-visual-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
-(define-key
- evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental)
+(use-package diff-hl
+  :demand t
+  :config (global-diff-hl-mode 1))
 
-;; Auto complete using words from the buffer.
-(define-key evil-insert-state-map (kbd "C-n") 'company-dabbrev)
-;; Comprehensive auto-complete.
-(define-key evil-insert-state-map (kbd "C-SPC") 'company-complete-common)
+(use-package highlight-numbers
+  :hook (prog-mode . highlight-numbers-mode))
 
+;; -----------------------------------------------------------------------------
+;; Evil (vim layer) + related packages
+;; -----------------------------------------------------------------------------
 
-;; ----------------
-;; Evil Leader Keys
-;; ================
+(use-package undo-fu)
 
-;; Example leader keys for useful functionality exposed by packages.
+(use-package evil
+  :demand t
+  :init
+  (setq evil-undo-system 'undo-fu)
+  (setq evil-search-module 'evil-search)
+  :config
+  (evil-mode 1)
+  (setq evil-ex-search-case 'sensitive))
+
+(use-package evil-numbers)
+(use-package evil-surround
+  :demand t
+  :config (global-evil-surround-mode 1))
+
+;; -----------------------------------------------------------------------------
+;; Keybindings
+;; - frequent: Command (⌘)  => s-...
+;; - less frequent: Space leader
+;; -----------------------------------------------------------------------------
+
+(when (eq system-type 'darwin)
+  ;; Make ⌘ act as Super (s-...) inside Emacs.
+  (cond
+   ((boundp 'mac-command-modifier) (setq mac-command-modifier 'super))
+   ((boundp 'ns-command-modifier)  (setq ns-command-modifier  'super)))
+  ;; Optional: ⌥ as Meta (M-...)
+  (cond
+   ((boundp 'mac-option-modifier) (setq mac-option-modifier 'meta))
+   ((boundp 'ns-option-modifier)  (setq ns-option-modifier  'meta))))
+
+;; Zoom (browser-style)
+(global-set-key (kbd "C-=") #'default-font-presets-scale-increase)
+(global-set-key (kbd "C--") #'default-font-presets-scale-decrease)
+(global-set-key (kbd "C-0") #'default-font-presets-scale-reset)
+(global-set-key (kbd "<C-mouse-4>") #'default-font-presets-scale-increase)
+(global-set-key (kbd "<C-mouse-5>") #'default-font-presets-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") #'default-font-presets-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") #'default-font-presets-scale-decrease)
+
+;; Split helpers that also focus the new window
+(defun my/split-right-and-focus ()
+  "Vertical split (left/right) and focus the new window."
+  (interactive)
+  (split-window-right)
+  (windmove-right))
+
+(defun my/split-below-and-focus ()
+  "Horizontal split (top/bottom) and focus the new window."
+  (interactive)
+  (split-window-below)
+  (windmove-down))
+
+;; Your “hot” Cmd bindings
+(global-set-key (kbd "s-n") #'my/split-right-and-focus)    ;; ⌘n vertical split
+(global-set-key (kbd "s-b") #'my/split-below-and-focus)    ;; ⌘b horizontal split
+(global-set-key (kbd "s-h") #'windmove-left)               ;; ⌘h move left window
+(global-set-key (kbd "s-j") #'windmove-down)
+(global-set-key (kbd "s-k") #'windmove-up)
+(global-set-key (kbd "s-l") #'windmove-right)
+(global-set-key (kbd "s-w") #'kill-current-buffer)         ;; ⌘w kill buffer
+(global-set-key (kbd "s-q") #'save-buffers-kill-terminal)  ;; ⌘q quit Emacs
+
+;; ⌘Space: buffer switcher (replace with #'ibuffer if you want a literal list buffer)
+(global-set-key (kbd "s-SPC")
+                (lambda ()
+                  (interactive)
+                  (if (fboundp 'counsel-switch-buffer)
+                      (counsel-switch-buffer)
+                    (switch-to-buffer))))
+
+;; ⌘⇧H / ⌘⇧L: previous/next buffer
+(global-set-key (kbd "s-H") #'previous-buffer)
+(global-set-key (kbd "s-L") #'next-buffer)
+
+;; Evil-state specific bindings (only after evil loads)
 (with-eval-after-load 'evil
-  (evil-set-leader '(normal) (kbd "<SPC>"))
+  ;; Mouse secondary selection in insert state
+  (define-key evil-insert-state-map (kbd "<down-mouse-1>") #'mouse-drag-secondary)
+  (define-key evil-insert-state-map (kbd "<drag-mouse-1>") #'mouse-drag-secondary)
+  (define-key evil-insert-state-map (kbd "<mouse-1>") #'mouse-start-secondary)
+  (define-key evil-insert-state-map (kbd "<mouse-2>")
+    (lambda (click)
+      (interactive "*p")
+      (when (overlay-start mouse-secondary-overlay)
+        (mouse-yank-secondary click)
+        (delete-overlay mouse-secondary-overlay))))
 
-  ;; Interactive file name search.
-  (evil-define-key 'normal 'global (kbd "<leader>k") 'find-file-in-project)
-  ;; Interactive file content search (git).
-  (evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-git-grep)
-  ;; Interactive current-file search.
-  (evil-define-key 'normal 'global (kbd "<leader>s") 'swiper)
-  ;; Interactive open-buffer switch.
-  (evil-define-key 'normal 'global (kbd "<leader>b") 'counsel-switch-buffer))
+  ;; Vim increment/decrement
+  (define-key evil-normal-state-map (kbd "C-a") #'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-x") #'evil-numbers/dec-at-pt)
+  (define-key evil-visual-state-map (kbd "g C-a") #'evil-numbers/inc-at-pt-incremental)
+  (define-key evil-visual-state-map (kbd "g C-x") #'evil-numbers/dec-at-pt-incremental)
 
-;; ----------------------------------------------------------------------------
-;; Custom Variables
-;; ################
+  ;; Insert-state completion triggers
+  (define-key evil-insert-state-map (kbd "C-n") #'company-dabbrev)
+  (define-key evil-insert-state-map (kbd "C-SPC") #'company-complete-common)
 
-;; Store custom variables in an external file. Why?
-;; .. it means this file can be kept in version control without noise from custom variables.
+  ;; Allow window keymap access from ivy minibuffer (optional)
+  (when (boundp 'evil-window-map)
+    (define-key ivy-minibuffer-map (kbd "C-w") evil-window-map)))
+
+;; Space leader for less-frequent commands (deterministic leader implementation)
+(use-package evil-leader
+  :demand t
+  :after evil
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "k" #'find-file-in-project
+    "f" #'counsel-git-grep
+    "s" #'swiper
+    "b" #'counsel-switch-buffer
+    "c" #'compile
+    "r" #'recompile))
+
+;; -----------------------------------------------------------------------------
+;; Shell & PATH integration (Fish / Homebrew)
+;; -----------------------------------------------------------------------------
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :config
+  (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish")
+  (setq exec-path-from-shell-arguments '("-l"))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-envs
+   '("PATH" "MANPATH" "JAVA_HOME" "PNPM_HOME" "GOKU_EDN_CONFIG_FILE")))
+
+(setq shell-file-name "/opt/homebrew/bin/fish")
+(setq explicit-shell-file-name "/opt/homebrew/bin/fish")
+(setq shell-command-switch "-c")
+
+;; -----------------------------------------------------------------------------
+;; Compilation (ansi colors, scroll-to-error, quit window)
+;; -----------------------------------------------------------------------------
+
+(require 'ansi-color)
+
+(defun my/colorize-compilation-buffer ()
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region compilation-filter-start (point))))
+
+(add-hook 'compilation-filter-hook #'my/colorize-compilation-buffer)
+(setq compilation-scroll-output 'first-error)
+
+(add-hook 'compilation-mode-hook
+          (lambda ()
+            (local-set-key (kbd "q") #'quit-window)))
+
+;; -----------------------------------------------------------------------------
+;; Custom file (keep Custom noise out of init.el)
+;; -----------------------------------------------------------------------------
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 
 ;; Local Variables:
 ;; indent-tabs-mode: nil
-;; elisp-autofmt-load-packages-local: ("use-package" "use-package-core")
 ;; End:
 ;;; init.el ends here
-
-;; --------------------------------------------------------------------------------
-;; Shell & PATH Integration
-;; ----------------------
-
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  ;; force it to use your specific fish executable
-  (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish")
-  
-  ;; "-l" forces a login shell so it reads your config.fish
-  (setq exec-path-from-shell-arguments '("-l"))
-  
-  ;; Sync these variables to Emacs
-  (exec-path-from-shell-copy-envs '("PATH" "MANPATH" "JAVA_HOME" "PNPM_HOME" "GOKU_EDN_CONFIG_FILE"))
-  
-  ;; Only run this on macOS/Linux GUIs
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-
-;; VTERM
-(use-package vterm
-  :ensure t
-  :commands vterm
-  :config
-  (setq vterm-shell "/opt/homebrew/bin/fish")
-  (setq vterm-max-scrollback 10000)
-  
-  ;; Fix Evil mode in vterm (so you don't have to press 'i' constantly)
-  (setq vterm-always-compile-module t)
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'vterm-mode 'insert)))
-
-;; Toggle vterm quickly with <leader> t
-(with-eval-after-load 'evil
-  (evil-define-key 'normal 'global (kbd "<leader>t") 'vterm))

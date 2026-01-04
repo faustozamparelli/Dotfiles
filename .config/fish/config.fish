@@ -289,7 +289,7 @@ end
 # Auto-attach tmux at login (preserve your logic)
 # ----------------------------
 if not set -q TMUX
-    if test "$TERM_PROGRAM" != "vscode" -a "$INSIDE_EMACS" != "vterm" -a "$EMACS" != "t"
+    if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
         if tmux list-sessions >/dev/null 2>&1
             set recent_session (tmux list-sessions -F "#{session_created} #{session_name}" | sort -n | tail -n1 | awk '{print $2}')
             if test -n "$recent_session"
