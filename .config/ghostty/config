@@ -6,8 +6,8 @@ confirm-close-surface = false
 #cursor-style-blink = false
 shell-integration-features = no-cursor
 
-font-size = 16
-font-family = "Liga SFMono Nerd Font"
+font-size = 18
+font-family = "Iosevka"
 font-feature = "-calt"
 title = " "
 
@@ -53,7 +53,7 @@ keybind = cmd+n=text:\x13\x76
 keybind = cmd+w=text:\x13\x78
 
 # kill session
-keybind = cmd+e=text:\x13\x77
+# keybind = cmd+e=text:\x13\x77
 # keybind = cmd+q=text:\x13\x77 it used to be this but then i can't quit ghostty  
 
 # see all the windows in the session

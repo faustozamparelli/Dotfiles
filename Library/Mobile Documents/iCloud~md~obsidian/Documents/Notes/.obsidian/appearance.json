@@ -4,10 +4,10 @@
     "BiggerLatex"
   ],
   "cssTheme": "Vanilla AMOLED",
-  "interfaceFontFamily": "Liga SFMono Nerd Font",
-  "textFontFamily": "Liga SFMono Nerd Font",
-  "monospaceFontFamily": "Liga SFMono Nerd Font",
-  "baseFontSize": 15,
+  "interfaceFontFamily": "Liga SFMono Nerd Font,Iosevka",
+  "textFontFamily": "Liga SFMono Nerd Font,Iosevka",
+  "monospaceFontFamily": "Liga SFMono Nerd Font,Iosevka",
+  "baseFontSize": 16,
   "theme": "system",
   "translucency": true,
   "showRibbon": false
