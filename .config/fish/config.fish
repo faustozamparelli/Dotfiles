@@ -229,14 +229,12 @@ alias cpp "/opt/homebrew/bin/cpp-15"
 set -Ux PIP_NO_CACHE_DIR true
 set -gx GOKU_EDN_CONFIG_FILE ~/.config/goku/karabiner.edn
 
-set -Ux GROQ_API_KEY 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
-
 if test -d /opt/homebrew/opt/llvm/bin
     contains /opt/homebrew/opt/llvm/bin $PATH; or set -gx PATH /opt/homebrew/opt/llvm/bin $PATH
 end
 
 if type -q eza
-    alias l "eza --long -a --git --icons --grid"
+    alias l "eza -a --git --icons --grid"
     alias ls l
     alias la "eza --long -a"
     alias lt tre
