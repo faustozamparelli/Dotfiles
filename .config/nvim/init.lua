@@ -132,6 +132,9 @@ vim.pack.add({
 	-- Markdown Preview
 	{ src = "https://github.com/iamcco/markdown-preview.nvim" },
 
+	-- Toggle Term
+	{ src = "https://github.com/akinsho/toggleterm.nvim.git" },
+
 })
 
 --------------------------------------------------------------------
@@ -191,6 +194,14 @@ require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 
 -- Comment.nvim setup
 require("Comment").setup()
+
+-- Toggle term
+require("toggleterm").setup({
+  shell = "fish",
+  open_mapping = [[<C-j>]],
+  start_in_insert = true,
+  direction = "float", -- or "horizontal"
+})
 
 -- trigger markdown preview
 map("n", "<leader>p", "<cmd>MarkdownPreview<CR>")

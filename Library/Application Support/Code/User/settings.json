@@ -99,7 +99,6 @@
   "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "material-icon-theme",
-  "workbench.statusBar.visible": false,
   "latex-workshop.view.pdf.invert": 0,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
@@ -203,5 +202,13 @@
       ]
     }
   ],
-  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/chess/bin/python"
+  "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/chess/bin/python",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "[go.asm]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "workbench.statusBar.visible": false,
+  "files.associations": {
+    "*.s": "arm"
+  }
 }

@@ -32,7 +32,7 @@ set --erase _asdf_shims
 
 contains $PNPM_HOME $PATH; or set -gx PATH $PNPM_HOME $PATH
 
-set -gx PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
+#set -gx PATH $PATH $HOME/Library/TinyTeX/bin/universal-darwin
 
 set -gx C_INCLUDE_PATH $HOME_BREW/include
 set -gx CPLUS_INCLUDE_PATH $HOME_BREW/include
@@ -41,7 +41,9 @@ set -gx CPLUS_INCLUDE_PATH $HOME_BREW/include
 # Shell basics
 # ============================
 set fish_greeting ""
+fish_vi_key_bindings
 set -gx EDITOR nvim
+set pure_enable_single_line_prompt true
 
 alias nh 'NVIM_APPNAME=nvimheavy nvim'
 alias nn nvim_configuration_swticher.sh
@@ -220,8 +222,6 @@ end
 function g++
     /opt/homebrew/bin/g++-15 -std=c++23 -I$HOME/.config/cppheaders $argv
 end
-alias gcc "/opt/homebrew/bin/gcc-15"
-alias cpp "/opt/homebrew/bin/cpp-15"
 
 # ============================
 # Misc
