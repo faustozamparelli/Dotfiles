@@ -17,7 +17,8 @@ source (brew --prefix asdf)/libexec/asdf.fish
 set -gx PATH $JAVA_HOME/bin /opt/homebrew/opt/openvpn/sbin $PATH
 
 set -gx MANPATH $HOME_BREW/share/man $MANPATH
-set -gx MANPATH ~/man-pages $MANPATH
+set -gx MANPATH ~/man-pages $MANPATH 
+set -gx PATH /Applications/MATLAB_R2025b.app/bin $PATH
 
 if test -z "$ASDF_DATA_DIR"
     set _asdf_shims "$HOME/.asdf/shims"

@@ -207,8 +207,5 @@
   "[go.asm]": {
     "editor.defaultFormatter": "golang.go"
   },
-  "workbench.statusBar.visible": false,
-  "files.associations": {
-    "*.s": "arm"
-  }
+  "workbench.statusBar.visible": false
 }
