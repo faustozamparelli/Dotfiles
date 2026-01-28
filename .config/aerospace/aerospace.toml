@@ -35,7 +35,7 @@ outer.right =      0
 cmd-ctrl-alt-shift-r = 'reload-config'
 
 # COMMAND: Layouts
-cmd-ctrl-alt-s = 'layout tiles accordion' 
+cmd-ctrl-alt-s = 'layout tiles accordion'
 cmd-ctrl-alt-v = 'layout tiles horizontal vertical'
 cmd-ctrl-alt-f = 'fullscreen'
 cmd-ctrl-alt-t = 'layout floating tiling'
@@ -108,6 +108,101 @@ if.app-id = 'com.spotify.client'
 run = "move-node-to-workspace 9"
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.finder'
-    run = 'layout floating'
-
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.calculator'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.Dictionary'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.AppStore'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.fontbook'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.stickies'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.installer'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.archiveutility'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.keychainaccess'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.DigitalColorMeter'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.PhotoBooth'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apphousekitchen.aldente-pro'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.macpaw.CleanMyMac5'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.surfshark.vpnclient.macos'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.amazon.SendToKindleMac'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.wacom.Wacom-Desktop-Center'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-EventViewer'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.raycast.macos'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'cc.ffitch.shottr'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.superultra.Homerow'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'company.thebrowser.Browser'
+if.window-title-regex-substring = 'Little Arc'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+if.window-title-regex-substring = 'Settings'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+if.window-title-regex-substring = 'Configuration'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.obsproject.obs-studio'
+run = 'layout floating'
+# MATLAB: Tile the editor, float the graphs/figures
+[[on-window-detected]]
+if.app-id = 'com.mathworks.matlab'
+if.window-title-regex-substring = 'Figure'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'org.godotengine.godot'
+if.window-title-regex-substring = '^(Debug|Project Manager)'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.utmapp.UTM'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.apple.forcequit'
+run = 'layout floating'
