@@ -97,12 +97,16 @@ run = "move-node-to-workspace 2"
 if.app-id = 'md.obsidian'
 run = "move-node-to-workspace 3"
 
-# WS 4: MESSAGING
+# WS 8: CALENDAR
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = "move-node-to-workspace 8"
+
+# WS 9: MESSAGGING + MUSIC
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
 run = "move-node-to-workspace 9"
 
-# WS 9: MUSIC
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = "move-node-to-workspace 9"
