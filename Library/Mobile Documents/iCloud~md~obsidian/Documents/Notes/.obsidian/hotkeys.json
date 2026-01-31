@@ -124,5 +124,14 @@
       ],
       "key": "Backspace"
     }
+  ],
+  "graph:open": [
+    {
+      "modifiers": [
+        "Alt",
+        "Shift"
+      ],
+      "key": "G"
+    }
   ]
 }

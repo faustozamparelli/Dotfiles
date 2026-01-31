@@ -8,5 +8,7 @@
   "automatic-table-of-contents",
   "image-converter",
   "various-complements",
-  "templater-obsidian"
+  "templater-obsidian",
+  "notebook-navigator",
+  "nuke-orphans"
 ]
