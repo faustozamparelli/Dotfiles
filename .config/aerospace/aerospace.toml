@@ -36,7 +36,7 @@ cmd-ctrl-alt-shift-r = 'reload-config'
 
 # COMMAND: Layouts
 cmd-ctrl-alt-s = 'layout tiles accordion'
-cmd-ctrl-alt-v = 'layout tiles horizontal vertical'
+cmd-ctrl-alt-b = 'layout tiles horizontal vertical'
 cmd-ctrl-alt-f = 'fullscreen'
 cmd-ctrl-alt-t = 'layout floating tiling'
 
@@ -97,16 +97,23 @@ run = "move-node-to-workspace 2"
 if.app-id = 'md.obsidian'
 run = "move-node-to-workspace 3"
 
-# WS 8: CALENDAR
+# WS 4: MAIL
+[[on-window-detected]]
+if.app-id = 'com.freron.MailMate'
+run = "move-node-to-workspace 4"
+
+# WS 8: CALENDAR + MESSAGING
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
 run = "move-node-to-workspace 8"
-
-# WS 9: MESSAGGING + MUSIC
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
-run = "move-node-to-workspace 9"
+run = "move-node-to-workspace 8"
+[[on-window-detected]]
+if.app-id = 'app.legcord.Legcord'
+run = "move-node-to-workspace 8"
 
+# WS 9: MUSIC
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = "move-node-to-workspace 9"
@@ -163,6 +170,9 @@ run = 'layout floating'
 if.app-id = 'com.amazon.SendToKindleMac'
 run = 'layout floating'
 [[on-window-detected]]
+if.app-id = 'com.apple.Passwords'
+run = 'layout floating'
+[[on-window-detected]]
 if.app-id = 'com.wacom.Wacom-Desktop-Center'
 run = 'layout floating'
 [[on-window-detected]]
@@ -210,3 +220,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.forcequit'
 run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.sielte.MySielteID'
+run = 'layout floating'
+

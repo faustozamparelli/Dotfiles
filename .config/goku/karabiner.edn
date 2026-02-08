@@ -129,6 +129,7 @@
            [:!QWE#CTOn :rewind]
       ;     ;;super + m 
            [:!QWE#CTOm :play_or_pause]
+           [:f8 "osascript -e 'if application \"Spotify\" is running then' -e 'tell application \"Spotify\" to playpause' -e 'else' -e 'activate application \"Spotify\"' -e 'end if'"]
       ;     ;;super + , 
            [:!QWE#CTOcomma :fast_forward]
       ;     ;;super + numbers

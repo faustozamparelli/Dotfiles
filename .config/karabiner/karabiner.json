@@ -588,6 +588,14 @@
           "type" : "basic"
         }, {
           "from" : {
+            "key_code" : "f8"
+          },
+          "to" : [ {
+            "shell_command" : "osascript -e 'if application \"Spotify\" is running then' -e 'tell application \"Spotify\" to playpause' -e 'else' -e 'activate application \"Spotify\"' -e 'end if'"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
             "key_code" : "comma",
             "modifiers" : {
               "mandatory" : [ "right_command", "right_control", "right_option" ],

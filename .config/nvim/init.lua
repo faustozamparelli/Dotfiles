@@ -10,7 +10,7 @@ vim.o.shiftwidth = 2            -- Set indentation width to 2 spaces (for << and
 vim.o.smartindent = true        -- Enable smart auto-indenting for new lines
 
 vim.g.mapleader = " "             -- Set space as the leader key for custom keybindings
-vim.cmd([[set mouse=]])           -- Disable mouse support completely
+--vim.cmd([[set mouse=]])           -- Disable mouse support completely
 
 vim.o.winborder = "rounded"     -- Use rounded borders for floating windows
 vim.o.termguicolors = true      -- Enable 24-bit RGB color support in terminal
@@ -88,9 +88,9 @@ map("n", "K", "<C-u>zz")
 map("n", "m", "mzJ`z")
 
 -- Show error in a floating window
--- map("n", "<leader>e", function()
---   vim.diagnostic.open_float(nil, { focus = false })
--- end)
+map("n", "<leader>e", function()
+  vim.diagnostic.open_float(nil, { focus = false })
+end)
 
 ---------------------------------------------------------------------
 --PLUGINS
