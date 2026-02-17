@@ -79,28 +79,23 @@ cmd-ctrl-alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 # but usually kept at the end or top.
 
 # WS 1: CODING
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = "move-node-to-workspace 1"
+# [[on-window-detected]]
+# if.app-id = 'com.mitchellh.ghostty'
+# run = "move-node-to-workspace 1"
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.VSCode'
-run = "move-node-to-workspace 1"
+# [[on-window-detected]]
+# if.app-id = 'com.microsoft.VSCode'
+# run = "move-node-to-workspace 1"
 
 # WS 2: BROWSER
-[[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = "move-node-to-workspace 2"
+# [[on-window-detected]]
+# if.app-id = 'company.thebrowser.Browser'
+# run = "move-node-to-workspace 2"
 
 # WS 3: NOTES
-[[on-window-detected]]
-if.app-id = 'md.obsidian'
-run = "move-node-to-workspace 3"
-
-# WS 4: MAIL
-[[on-window-detected]]
-if.app-id = 'com.freron.MailMate'
-run = "move-node-to-workspace 4"
+# [[on-window-detected]]
+# if.app-id = 'md.obsidian'
+# run = "move-node-to-workspace 3"
 
 # WS 8: CALENDAR + MESSAGING
 [[on-window-detected]]
@@ -189,10 +184,6 @@ if.app-id = 'cc.ffitch.shottr'
 run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.superultra.Homerow'
-run = 'layout floating'
-[[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-if.window-title-regex-substring = 'Little Arc'
 run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
