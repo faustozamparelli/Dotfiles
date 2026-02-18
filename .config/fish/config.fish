@@ -245,7 +245,8 @@ end
 # tmux auto-attach (LAST)
 # ============================
 if not set -q TMUX
-    if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t"
+    # Skip auto-tmux in: VSCode terminal, Emacs vterm, Zed integrated terminal
+    if test "$TERM_PROGRAM" != "vscode" -a "$EMACS" != "t" -a "$ZED_TERM" != "true"
         if tmux list-sessions >/dev/null 2>&1
             set recent_session (tmux list-sessions -F "#{session_created} #{session_name}" | sort -n | tail -n1 | awk '{print $2}')
             exec tmux -f ~/.config/tmux/tmux.conf attach-session -t $recent_session
