@@ -1,0 +1,31 @@
+{
+  "agent_buffer_font_size": 18.0,
+  "agent_ui_font_size": 18.0,
+  "buffer_font_family": "Iosevka Nerd Font",
+  "format_on_save": "off",
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "icon_theme": "Colored Zed Icons Theme Light",
+  "terminal": {
+    "working_directory": "current_file_directory",
+    "font_family": "Iosevka Nerd Font",
+    "shell": {
+      "program": "fish"
+    },
+    "dock": "right"
+  },
+  "scrollbar": {
+    "show": "never"
+  },
+  "vim_mode": true,
+  "ui_font_size": 18.0,
+  "buffer_font_size": 20.0,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "The Dark Side"
+  }
+}

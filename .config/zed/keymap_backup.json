@@ -1,0 +1,62 @@
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Window Splitting
+      "cmd-n": "pane::SplitDown",
+      "cmd-b": "pane::SplitRight",
+
+      // Pane Navigation (Vim-like movement between windows)
+      "cmd-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "cmd-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "cmd-k": ["workspace::ActivatePaneInDirection", "Up"],
+      "cmd-j": ["workspace::ActivatePaneInDirection", "Down"],
+
+      // Docks (Sidebar)
+      "cmd-shift-u": "workspace::ToggleRightDock",
+      "cmd-x": "workspace::ToggleLeftDock",
+
+      // Terminal
+      "cmd-t": "terminal_panel::ToggleFocus",
+      "ctrl-n": "workspace::NewTerminal",
+
+      // Symbols
+      "cmd-r": "outline::Toggle",
+      "cmd-shift-r": "project_symbols::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // Vim Normal Mode Overrides
+      "shift-r": "editor::Rename",
+      "shift-f": "editor::ToggleCodeActions"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "shift-k": "terminal::Clear"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      // Tab Switching (Cmd+1 to Cmd+9)
+      "cmd-1": ["pane::ActivateItem", 0],
+      "cmd-2": ["pane::ActivateItem", 1],
+      "cmd-3": ["pane::ActivateItem", 2],
+      "cmd-4": ["pane::ActivateItem", 3],
+      "cmd-5": ["pane::ActivateItem", 4],
+      "cmd-6": ["pane::ActivateItem", 5],
+      "cmd-7": ["pane::ActivateItem", 6],
+      "cmd-8": ["pane::ActivateItem", 7],
+      "cmd-9": ["pane::ActivateItem", 8]
+    }
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-;": "zed::OpenKeymap",
+    },
+  },
+  {
+    "bindings": {
+      "cmd-,": "zed::OpenSettings",
+    },
+  },
+  {
+    "bindings": {
+      "cmd-enter": "workspace::ToggleAllDocks",
+    },
+  },
+  {
+    "bindings": {
+      "cmd-h": "vim::GoToPreviousTab",
+      "cmd-l": "vim::GoToTab",
+    },
+  },
+]
