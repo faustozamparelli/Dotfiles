@@ -17,13 +17,6 @@ vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
 local set = vim.keymap.set
 
--- Visual-line movement when wrapping (keeps counts working: 5j still means 5 real lines)
-set({ "n", "x", "o" }, "j", 'v:count == 0 ? "gj" : "j"', { expr = true, silent = true })
-set({ "n", "x", "o" }, "k", 'v:count == 0 ? "gk" : "k"', { expr = true, silent = true })
--- Optional: make 0/$ also operate on visual lines
-set({ "n", "x", "o" }, "0", "g0", { silent = true })
-set({ "n", "x", "o" }, "$", "g$", { silent = true })
-
 set("n", "L", "$", { silent = true })
 set("n", "H", "^", { silent = true })
 set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
