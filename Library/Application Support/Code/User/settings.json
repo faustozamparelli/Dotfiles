@@ -1,6 +1,6 @@
 {
   "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
+    "asvetliakov.vscode-neovim": 1,
   },
   "vscode-neovim.neovimInitVimPaths.darwin": "/Users/faustozamparelli/.vscodeNvim/init.lua",
   "editor.accessibilitySupport": "off",
@@ -22,12 +22,12 @@
   "editor.overviewRulerBorder": false,
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.fontSize": 16,
-  "terminal.integrated.fontSize": 16,
+  "editor.fontSize": 15,
+  "terminal.integrated.fontSize": 14,
   "chat.editor.fontSize": 14,
   "editor.fontLigatures": true,
-  // "editor.fontFamily": "Liga SFMono Nerd Font",
-  // "terminal.integrated.fontFamily": "Liga SFMono Nerd Font",
+  "editor.fontFamily": "Iosevka Nerd Font Mono",
+  "terminal.integrated.fontFamily": "Iosevka Nerd Font Mono",
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmDelete": false,
   "explorer.compactFolders": false,
@@ -35,26 +35,26 @@
   "extensions.ignoreRecommendations": true,
   "terminal.integrated.defaultProfile.osx": "fish",
   "zenMode.fullScreen": false,
-  "window.zoomLevel": 0.8,
+  "window.zoomLevel": 0,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "editor.formatOnSaveMode": "file",
   "editor.lineNumbers": "relative",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "workbench.editorAssociations": {
-    "*.pdf": "latex-workshop-pdf-hook"
+    "*.pdf": "latex-workshop-pdf-hook",
   },
   "[latex]": {
-    "editor.defaultFormatter": "James-Yu.latex-workshop"
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
   },
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.black-formatter",
   },
   "terminal.integrated.enableMultiLinePasteWarning": "never",
   "python.terminal.activateEnvironment": false,
   "editor.quickSuggestions": {
     "comments": "on",
-    "strings": "on"
+    "strings": "on",
   },
   "editor.quickSuggestionsDelay": 0,
   "git.autofetch": true,
@@ -77,27 +77,27 @@
   "python-envs.defaultEnvManager": "ms-python.python:system",
   "window.titleBarStyle": "native",
   "custom-ui-style.electron": {
-    "titleBarStyle": "hiddenInset"
+    "titleBarStyle": "hiddenInset",
   },
   "workbench.activityBar.location": "top",
   "[dockercompose]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
     "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
   "github.copilot.enable": {
     "*": false,
     "plaintext": false,
     "markdown": false,
-    "scminput": false
+    "scminput": false,
   },
   "workbench.preferredDarkColorTheme": "Dark+ Pure Black (OLED)",
-  "workbench.preferredLightColorTheme": "Xcode Classic (Light)",
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.preferredLightColorTheme": "Copilot Theme",
+  "workbench.colorTheme": "Copilot Theme",
   "workbench.iconTheme": "material-icon-theme",
   "latex-workshop.view.pdf.invert": 0,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
@@ -109,7 +109,7 @@
     "markdown": true,
     "quarto": true,
     "text": true,
-    "*": false
+    "*": false,
   },
   "editor.minimap.size": "fit",
   "editor.minimap.renderCharacters": false,
@@ -159,22 +159,21 @@
     "**/.git": false,
     "**/.hg": false,
     "**/.svn": false,
-    "**/Thumbs.db": false
+    "**/Thumbs.db": false,
   },
   "explorer.confirmPasteNative": false,
   "[markdown]": {
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
-    }
+      "strings": true,
+    },
   },
   "markdown.suggest.paths.enabled": true,
   "go.toolsManagement.autoUpdate": true,
   "search.useIgnoreFiles": false,
   "swaggerViewer.previewInBrowser": true,
   "chat.agent.maxRequests": 100,
-  "window.autoDetectColorScheme": true,
   "javascript.inlayHints.parameterNames.enabled": "literals",
   "eslint.enable": true,
   "latex-workshop.latex.autoBuild.run": "never",
@@ -183,13 +182,13 @@
     {
       "name": "xelatex-nonstop",
       "command": "xelatex",
-      "args": ["-interaction=nonstopmode", "-halt-on-error", "%DOCFILE%"]
+      "args": ["-interaction=nonstopmode", "-halt-on-error", "%DOCFILE%"],
     },
     {
       "name": "biber",
       "command": "biber",
-      "args": ["%DOCFILE%"]
-    }
+      "args": ["%DOCFILE%"],
+    },
   ],
   "latex-workshop.latex.recipes": [
     {
@@ -198,14 +197,17 @@
         "xelatex-nonstop",
         "biber",
         "xelatex-nonstop",
-        "xelatex-nonstop"
-      ]
-    }
+        "xelatex-nonstop",
+      ],
+    },
   ],
   "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/chess/bin/python",
   "github.copilot.nextEditSuggestions.enabled": true,
   "[go.asm]": {
-    "editor.defaultFormatter": "golang.go"
+    "editor.defaultFormatter": "golang.go",
   },
-  "workbench.statusBar.visible": false
+  "workbench.statusBar.visible": false,
+  "[typst]": {
+    "editor.lineNumbers": "off"
+  }
 }

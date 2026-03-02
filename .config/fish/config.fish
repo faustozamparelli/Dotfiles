@@ -257,3 +257,12 @@ if not set -q TMUX
         end
     end
 end
+
+# Auto-activate VirtualFish env "all" for every new interactive shell inside tmux
+if status is-interactive; and set -q TMUX
+    if functions -q vf
+        if not set -q VIRTUAL_ENV
+            vf activate all >/dev/null 2>&1
+        end
+    end
+end
