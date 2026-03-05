@@ -209,6 +209,6 @@
   },
   "workbench.statusBar.visible": false,
   "[typst]": {
-    "editor.lineNumbers": "off"
-  }
+    "editor.lineNumbers": "off",
+  },
 }
