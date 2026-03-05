@@ -107,6 +107,7 @@
   "cSpell.language": "en",
   "cSpell.enabledFileTypes": {
     "markdown": true,
+    "typst": true,
     "quarto": true,
     "text": true,
     "*": false,
