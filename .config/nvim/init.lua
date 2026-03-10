@@ -1,17 +1,13 @@
 --SETTINGS
-vim.o.number = true               -- Show absolute line numbers on the left
-vim.o.relativenumber = true       -- Show relative line numbers (distance from current line)
+vim.o.number = true             -- Show absolute line numbers on the left
+vim.o.relativenumber = true     -- Show relative line numbers (distance from current line)
 vim.o.signcolumn = "yes"        -- Always show the sign column (for git signs, diagnostics, etc.)
 vim.o.clipboard = "unnamedplus" --use the system clipboard
-
-vim.o.wrap = true                 -- Enable line wrapping for long lines
-vim.o.tabstop = 2                 -- Set tab width to 2 spaces
+vim.o.wrap = true               -- Enable line wrapping for long lines
+vim.o.tabstop = 2               -- Set tab width to 2 spaces
 vim.o.shiftwidth = 2            -- Set indentation width to 2 spaces (for << and >> commands)
 vim.o.smartindent = true        -- Enable smart auto-indenting for new lines
-
-vim.g.mapleader = " "             -- Set space as the leader key for custom keybindings
---vim.cmd([[set mouse=]])           -- Disable mouse support completely
-
+--vim.cmd([[set mouse=]])       -- Disable mouse support completely
 vim.o.winborder = "rounded"     -- Use rounded borders for floating windows
 vim.o.termguicolors = true      -- Enable 24-bit RGB color support in terminal
 vim.o.hlsearch = true           -- Keep search highlights after searching
@@ -19,7 +15,6 @@ vim.o.incsearch = true          -- Incremental search while typing
 vim.o.cursorcolumn = false      -- Don't highlight the current column
 vim.o.ignorecase = true         -- Ignore case when searching
 vim.o.undofile = true           -- Enable persistent undo (undo history survives restarts)
-
 -- Auto-save when leaving window, leaving Neovim, or losing focus
 vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
 	pattern = "*",
@@ -30,14 +25,13 @@ vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
 		end
 	end,
 })
-
 vim.opt.shell = "/opt/homebrew/bin/fish"
 vim.opt.shellcmdflag = "-ic"
 
 --------------------------------------------------------------------
 --KEYBINDINGS
 local map = vim.keymap.set    -- Shorthand for creating keymaps
-vim.g.mapleader = " "         -- Set leader key again (redundant but explicit)
+vim.g.mapleader = " "         -- Set leader key again
 map("n", "<C-c>", ":noh<CR>") --remove highlight
 
 --Redo
@@ -50,8 +44,8 @@ map('n', '<leader>q', ':quit<CR>')                        -- Quit current window
 
 -- Quick config access
 map('n', '<leader>v', ':e $MYVIMRC<CR>')             -- Open Neovim config file
-map('n', '<leader>z', ':e ~/.config/zsh/.zshrc<CR>') -- Open Zsh config file
-
+map('n', '<leader>f', ':e ~/.config/fish/config.fish<CR>') -- Open Zsh config file
+map('n', '<leader>t', ':e ~/.config/tmux/tmux.conf<CR>') -- Open Zsh config file
 -- Buffer navigation
 map('n', '<leader>s', ':e #<CR>')  -- Switch to alternate buffer
 map('n', '<leader>S', ':sf #<CR>') -- Split window with alternate buffer
@@ -59,15 +53,13 @@ map('n', '<leader>S', ':sf #<CR>') -- Split window with alternate buffer
 -- Spell check
 map({ 'n', 'v' }, '<leader>c', '1z=') -- Use first spelling suggestion
 
--- File picker and help
-map('n', '<leader>f', ":Pick files<CR>") -- Open file picker
-map('n', '<leader>h', ":Pick help<CR>")  -- Open help picker
-
 -- File manager
 map('n', ';', ":Oil<CR>") -- Open Oil file manager
 
 -- LSP formatting
 map('n', '<leader>lf', vim.lsp.buf.format) -- Format current buffer using LSP
+-- Hover
+map("n", "Y", vim.lsp.buf.hover)
 
 -- End and Start of Line
 map("n", "H", "^")
@@ -76,16 +68,12 @@ map("n", "L", "$")
 -- Move line up or down
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
-
-map("n", "Y", vim.lsp.buf.hover)
+-- Join the line below with the one above
+map("n", "m", "mzJ`z")
 
 -- Move half a screen up/down in normal mode
 map("n", "J", "<C-d>zz")
 map("n", "K", "<C-u>zz")
-
-
--- Join the line below with the one above
-map("n", "m", "mzJ`z")
 
 -- Show error in a floating window
 map("n", "<leader>e", function()
@@ -99,6 +87,7 @@ end)
 vim.pack.add({
 	-- Color scheme - high contrast dark theme
 	{ src = "https://github.com/iagorrr/noctis-high-contrast.nvim" },
+
 	-- Light theme
 	{ src = "https://github.com/yasukotelin/notelight.git"},
 
@@ -107,9 +96,6 @@ vim.pack.add({
 
 	-- File manager plugin - browse and edit directories
 	{ src = "https://github.com/stevearc/oil.nvim" },
-
-	-- Fuzzy finder for files, buffers, help, etc.
-	{ src = "https://github.com/echasnovski/mini.pick" },
 
 	-- Syntax highlighting and text objects
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",  version = "main" },
@@ -132,9 +118,8 @@ vim.pack.add({
 	-- Markdown Preview
 	{ src = "https://github.com/iamcco/markdown-preview.nvim" },
 
-	-- Toggle Term
-	{ src = "https://github.com/akinsho/toggleterm.nvim.git" },
-
+	-- Oil Icons
+	{ src = "https://github.com/DaikyXendo/nvim-material-icon" },
 })
 
 --------------------------------------------------------------------
@@ -176,9 +161,6 @@ end
 -- Setup Mason for LSP server management
 require "mason".setup()
 
--- Setup mini.pick fuzzy finder
-require "mini.pick".setup({ mappings = { choose_in_vsplit = '<CR>', } })
-
 -- Setup Oil file manager
 require "oil".setup({view_options = {show_hidden = true}})
 
@@ -195,13 +177,8 @@ require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 -- Comment.nvim setup
 require("Comment").setup()
 
--- Toggle term
-require("toggleterm").setup({
-  shell = "fish",
-  open_mapping = [[<C-j>]],
-  start_in_insert = true,
-  direction = "float", -- or "horizontal"
-})
+-- Typst
+require("typst-preview").setup({open_cmd = 'open -a Safari "%s"', invert_colors = 'auto',})
 
 -- trigger markdown preview
 map("n", "<leader>p", "<cmd>MarkdownPreview<CR>")
