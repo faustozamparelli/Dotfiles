@@ -97,7 +97,7 @@
   },
   "workbench.preferredDarkColorTheme": "Dark+ Pure Black (OLED)",
   "workbench.preferredLightColorTheme": "Copilot Theme",
-  "workbench.colorTheme": "Copilot Theme",
+  "workbench.colorTheme": "Dark+ Pure Black (OLED)",
   "workbench.iconTheme": "material-icon-theme",
   "latex-workshop.view.pdf.invert": 0,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
