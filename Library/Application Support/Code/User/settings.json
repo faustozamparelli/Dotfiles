@@ -80,15 +80,6 @@
     "titleBarStyle": "hiddenInset",
   },
   "workbench.activityBar.location": "top",
-  "[dockercompose]": {
-    "editor.insertSpaces": true,
-    "editor.tabSize": 2,
-    "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "redhat.vscode-yaml",
-  },
-  "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml",
-  },
   "github.copilot.enable": {
     "*": false,
     "plaintext": false,
@@ -99,7 +90,6 @@
   "workbench.preferredLightColorTheme": "Copilot Theme",
   "workbench.colorTheme": "Dark+ Pure Black (OLED)",
   "workbench.iconTheme": "material-icon-theme",
-  "latex-workshop.view.pdf.invert": 0,
   "markdown-preview-enhanced.previewTheme": "github-dark.css",
   "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
   "git.enableSmartCommit": true,
@@ -177,38 +167,11 @@
   "chat.agent.maxRequests": 100,
   "javascript.inlayHints.parameterNames.enabled": "literals",
   "eslint.enable": true,
-  "latex-workshop.latex.autoBuild.run": "never",
-  "latex-workshop.latex.autoClean.run": "onSucceeded",
-  "latex-workshop.latex.tools": [
-    {
-      "name": "xelatex-nonstop",
-      "command": "xelatex",
-      "args": ["-interaction=nonstopmode", "-halt-on-error", "%DOCFILE%"],
-    },
-    {
-      "name": "biber",
-      "command": "biber",
-      "args": ["%DOCFILE%"],
-    },
-  ],
-  "latex-workshop.latex.recipes": [
-    {
-      "name": "XeLaTeX+Biber",
-      "tools": [
-        "xelatex-nonstop",
-        "biber",
-        "xelatex-nonstop",
-        "xelatex-nonstop",
-      ],
-    },
-  ],
   "python.defaultInterpreterPath": "/Users/faustozamparelli/.virtualenvs/chess/bin/python",
   "github.copilot.nextEditSuggestions.enabled": true,
-  "[go.asm]": {
-    "editor.defaultFormatter": "golang.go",
-  },
   "workbench.statusBar.visible": false,
   "[typst]": {
     "editor.lineNumbers": "off",
   },
+  "latex-workshop.latex.autoClean.run": "onBuilt",
 }
