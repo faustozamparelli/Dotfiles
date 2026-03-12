@@ -180,7 +180,8 @@ require("Comment").setup()
 -- Typst
 require("typst-preview").setup({open_cmd = 'open -a Safari "%s"', invert_colors = 'auto',})
 
--- trigger markdown preview
+-- Markdown Preview
+vim.g.mkdp_browser = "Safari"
 map("n", "<leader>p", "<cmd>MarkdownPreview<CR>")
 
 -- cm to comment
