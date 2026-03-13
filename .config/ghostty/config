@@ -1,4 +1,4 @@
-theme =  dark:Dark Pastel, light:Builtin Light
+theme =  dark:/Users/faustozamparelli/.config/ghostty/themes/DarkPastel.conf, light:/Users/faustozamparelli/.config/ghostty/themes/BuiltinLight.conf
 command = /opt/homebrew/bin/fish --login --interactive
 confirm-close-surface = false
 
@@ -29,19 +29,19 @@ window-colorspace = display-p3
 quick-terminal-screen = macos-menu-bar
 
 #bindings
-keybind = cmd+h=previous_tab
-keybind = cmd+l=next_tab
-keybind = cmd+shift+h=move_tab:-1
-keybind = cmd+shift+l=move_tab:1
+#keybind = cmd+h=previous_tab
+#keybind = cmd+l=next_tab
+#keybind = cmd+shift+h=move_tab:-1
+#keybind = cmd+shift+l=move_tab:1
 
-keybind = cmd+b=new_split:right
-keybind = cmd+n=new_split:down
-keybind = alt+h=goto_split:left
-keybind = alt+l=goto_split:right
-keybind = alt+j=goto_split:down
-keybind = alt+k=goto_split:up
+#keybind = cmd+b=new_split:right
+#keybind = cmd+n=new_split:down
+#keybind = alt+h=goto_split:left
+#keybind = alt+l=goto_split:right
+#keybind = alt+j=goto_split:down
+#keybind = alt+k=goto_split:up
 
-keybind = alt+shift+h=resize_split:left,30
-keybind = alt+shift+j=resize_split:down,30
-keybind = alt+shift+k=resize_split:up,30
-keybind = alt+shift+l=resize_split:right,30
+#keybind = alt+shift+h=resize_split:left,30
+#keybind = alt+shift+j=resize_split:down,30
+#keybind = alt+shift+k=resize_split:up,30
+#keybind = alt+shift+l=resize_split:right,30

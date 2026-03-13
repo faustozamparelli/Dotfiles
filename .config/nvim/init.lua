@@ -188,7 +188,7 @@ require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 require("Comment").setup()
 
 -- Typst
-require("typst-preview").setup({open_cmd = 'open -a Safari "%s"', invert_colors = 'auto',})
+require("typst-preview").setup({open_cmd = "cmux browser open '%s'", invert_colors = 'auto',})
 
 -- Fzf Lua
 local fzf = require("fzf-lua")
