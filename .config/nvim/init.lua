@@ -27,6 +27,7 @@ vim.api.nvim_create_autocmd({ "FocusLost", "WinLeave", "BufLeave" }, {
 })
 vim.opt.shell = "/opt/homebrew/bin/fish"
 vim.opt.shellcmdflag = "-ic"
+vim.o.path = vim.o.path .. ",**"
 
 --------------------------------------------------------------------
 --KEYBINDINGS
@@ -120,6 +121,15 @@ vim.pack.add({
 
 	-- Oil Icons
 	{ src = "https://github.com/DaikyXendo/nvim-material-icon" },
+
+  -- Fzf
+	{ src = "https://github.com/ibhagwan/fzf-lua" },
+
+  -- Project
+	{ src =  "https://github.com/ahmedkhalf/project.nvim" },
+
+	--  Terminal
+  { src = "https://github.com/akinsho/toggleterm.nvim" },
 })
 
 --------------------------------------------------------------------
@@ -179,6 +189,39 @@ require("Comment").setup()
 
 -- Typst
 require("typst-preview").setup({open_cmd = 'open -a Safari "%s"', invert_colors = 'auto',})
+
+-- Fzf Lua
+local fzf = require("fzf-lua")
+
+fzf.setup({
+  winopts = {
+    height = 0.90,
+    width = 0.90,
+    preview = {
+      layout = "vertical",
+    },
+  },
+  files = {
+    cwd_prompt = false,
+  },
+  oldfiles = {
+    cwd_only = false,
+  },
+  grep = {
+    rg_opts = "--column --line-number --no-heading --color=always --smart-case --hidden --glob '!.git'",
+  },
+})
+
+map("n", "<leader><space>", function() fzf.global() end, { desc = "Global picker" })
+map("n", "<leader>ff", function() fzf.files() end, { desc = "Find files" })
+map("n", "<leader>,", function() fzf.buffers() end, { desc = "Buffers" })
+map("n", "<leader>fr", function() fzf.oldfiles() end, { desc = "Recent files" })
+map("n", "<leader>/", function() fzf.live_grep() end, { desc = "Live grep project" })
+map("n", "<leader>*", function() fzf.grep_cword() end, { desc = "Search word under cursor" })
+map("n", "<leader>fc", function() fzf.commands() end, { desc = "Commands" })
+map("n", "<leader>fk", function() fzf.keymaps() end, { desc = "Keymaps" })
+map("n", "<leader>fh", function() fzf.helptags() end, { desc = "Help tags" })
+map("n", "<leader>fp", function() fzf.resume() end, { desc = "Resume last picker" })
 
 -- Markdown Preview
 vim.g.mkdp_browser = "Safari"

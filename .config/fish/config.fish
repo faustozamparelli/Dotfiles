@@ -34,7 +34,8 @@ end
 
 alias n nvim
 alias jp "jupyter notebook"
-alias l "eza --git "
+alias l "eza -a --git"
+alias lg "lazygit"
 alias o open
 alias py python
 alias b bat
