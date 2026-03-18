@@ -12,10 +12,10 @@
         "basic.to_if_held_down_threshold_milliseconds" : 500
       },
       "rules" : [ {
-        "description" : "Configure modifier keys on macbook keyboard",
+        "description" : "MacOs modifiers",
         "manipulators" : [ {
           "from" : {
-            "key_code" : "left_command",
+            "key_code" : "right_option",
             "modifiers" : {
               "optional" : [ "any" ]
             }
@@ -27,141 +27,14 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "right_option",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_option",
-            "modifiers" : [ "right_command", "right_control" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
             "key_code" : "left_control",
             "modifiers" : {
               "optional" : [ "any" ]
             }
           },
           "to" : [ {
-            "key_code" : "left_option"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "left_control",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_option"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 16868,
-              "product_id" : 8451
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "left_control",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_control"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 13364,
-              "product_id" : 624
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
             "key_code" : "left_option",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_command"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "left_option",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_command"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 16868,
-              "product_id" : 8451
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "delete_forward",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_option",
-            "modifiers" : [ "right_command", "right_control" ]
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 13364,
-              "product_id" : 624
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "right_control",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_option"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
+            "modifiers" : [ "left_command", "left_control" ]
           } ],
           "type" : "basic"
         }, {
@@ -174,158 +47,13 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "left_arrow",
-            "modifiers" : {
-              "mandatory" : [ "right_control" ]
-            }
-          },
-          "to" : [ {
-            "shell_command" : "pmset displaysleepnow"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "down_arrow",
-            "modifiers" : {
-              "mandatory" : [ "right_control" ]
-            }
-          },
-          "to" : [ {
-            "shell_command" : "open -a Launchpad"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "up_arrow",
-            "modifiers" : {
-              "mandatory" : [ "right_control" ]
-            }
-          },
-          "to" : [ {
-            "shell_command" : "open -a 'Mission Control'"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "right_arrow",
-            "modifiers" : {
-              "mandatory" : [ "right_control" ]
-            }
+            "key_code" : "right_shift"
           },
           "to" : [ {
             "apple_vendor_top_case_key_code" : "keyboard_fn"
           } ],
           "type" : "basic"
         }, {
-          "from" : {
-            "key_code" : "escape",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "backslash"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 591
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "escape",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_control"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "non_us_backslash",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "escape"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "a",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "c",
-            "modifiers" : [ "left_control" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "j",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_shift" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "end"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "k",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_shift" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "home"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 835
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "caps_lock",
-            "modifiers" : {
-              "mandatory" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "shell_command" : "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "Swap caps lock to backspace on macbook keyboard",
-        "manipulators" : [ {
           "from" : {
             "key_code" : "caps_lock",
             "modifiers" : {
@@ -348,42 +76,6 @@
           } ],
           "type" : "basic"
         }, {
-          "from" : {
-            "key_code" : "delete_or_backspace",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "grave_accent_and_tilde"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 13364,
-              "product_id" : 624
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "Command + G for ChatGPT app",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "g",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "g",
-            "modifiers" : [ "left_option", "left_shift" ]
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "keyboard arrows",
-        "manipulators" : [ {
           "from" : {
             "key_code" : "h",
             "modifiers" : {
@@ -475,202 +167,12 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "type" : "basic"
-        } ]
-      }, {
-        "description" : "super keys",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "j",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "mute"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "k",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "volume_decrement"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "volume_increment"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "a",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "display_brightness_decrement"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "d",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "illumination_decrement"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "s",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "display_brightness_increment"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "f",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "illumination_increment"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "n",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "rewind"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "m",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "play_or_pause"
-          } ],
-          "type" : "basic"
         }, {
           "from" : {
             "key_code" : "f8"
           },
           "to" : [ {
             "shell_command" : "osascript -e 'if application \"Spotify\" is running then' -e 'tell application \"Spotify\" to playpause' -e 'else' -e 'activate application \"Spotify\"' -e 'end if'"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "comma",
-            "modifiers" : {
-              "mandatory" : [ "right_command", "right_control", "right_option" ],
-              "optional" : [ "left_command", "left_control", "left_option" ]
-            }
-          },
-          "to" : [ {
-            "consumer_key_code" : "fast_forward"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "Command + I, Command + l",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "i",
-            "modifiers" : [ "left_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "o",
-            "modifiers" : [ "left_option" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "i",
-            "modifiers" : [ "left_option", "left_shift" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "mandatory" : [ "left_shift", "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "o",
-            "modifiers" : [ "left_option", "left_shift" ]
-          } ],
-          "conditions" : [ {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
           } ],
           "type" : "basic"
         } ]

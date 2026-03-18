@@ -1,0 +1,34 @@
+; cmd = C or Q
+; ctrl = T or W
+; opt  = O or E
+{
+    :main [
+        {:des "MacOs modifiers", :rules [
+          [:##right_option :!CTleft_option]
+          [:##left_control :!CTleft_option]
+          {
+              :from {:apple_vendor_top_case_key_code :keyboard_fn}
+              :to [{:key_code :right_control}]
+              :type :basic
+          }
+          {
+              :from {:key_code :right_shift}
+              :to [{:apple_vendor_top_case_key_code :keyboard_fn}]
+              :type :basic
+          }
+          ;[:!CTOa :!Tc]
+          [:##caps_lock :delete_or_backspace]
+          [:##delete_or_backspace :delete_forward]
+          ;control -> arrows
+          [:!Wh :left_arrow]
+          [:!Wk :up_arrow]
+          [:!Wj :down_arrow]
+          [:!Wl :right_arrow]
+          [:!WSk :!Sup_arrow]
+          [:!WSj :!Sdown_arrow]
+          [:!WSl :!Sright_arrow]
+          [:!WSh :!Sleft_arrow]
+           [:f8 "osascript -e 'if application \"Spotify\" is running then' -e 'tell application \"Spotify\" to playpause' -e 'else' -e 'activate application \"Spotify\"' -e 'end if'"]
+        ]}
+    ]
+}

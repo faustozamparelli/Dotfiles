@@ -12,23 +12,8 @@ set fish_greeting ""
 set -g pure_enable_git true
 
 #zoxide setup
-if status is-interactive
-    if type -q zoxide
+if type -q zoxide
         zoxide init fish | source
-
-        # capture the real zoxide `z` ONCE
-        if functions -q z
-            functions -c z __zoxide_public
-        end
-    end
-end
-function zn
-    z $argv
-    if test $status -eq 0
-        nvim .
-    else
-        echo "Directory not found!"
-    end
 end
 
 
@@ -41,4 +26,5 @@ alias py python
 alias b bat
 alias cl clear
 alias fi yazi
+alias c code
 
