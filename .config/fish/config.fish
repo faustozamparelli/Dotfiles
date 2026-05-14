@@ -19,7 +19,6 @@ end
 alias nb "jupyter notebook"
 alias l "eza -a --git"
 alias ls l
-alias lg "lazygit"
 alias o open
 alias python "uv run python"
 alias py python
@@ -27,4 +26,23 @@ alias b bat
 alias cl clear
 alias fi yazi
 alias c code
+
+function gcp --description "Commit all changes and push (default message: 'changes')"
+    set -l message "changes"
+    if test (count $argv) -gt 0
+        set message (string join " " $argv)
+    end
+    git add -A
+    git commit -m "$message"
+    git push
+end
+function bcp --description "Bare add -u, commit, and push (default message: 'changes')"
+    set -l message "changes"
+    if test (count $argv) -gt 0
+        set message (string join " " $argv)
+    end
+    bare add -u
+    bare commit -m "$message"
+    bare push
+end
 
