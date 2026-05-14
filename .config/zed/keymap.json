@@ -21,4 +21,16 @@
       "cmd-l": "vim::GoToTab",
     },
   },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-t": "terminal_panel::Toggle"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-`": "terminal_panel::Toggle"
+    }
+  }
 ]

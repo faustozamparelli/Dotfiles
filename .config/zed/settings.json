@@ -18,6 +18,11 @@
     }
   },
   "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5-mini",
+      "enable_thinking": false
+    },
     "dock": "left",
     "tool_permissions": {
       "default": "allow",
@@ -73,7 +78,11 @@
       "milliseconds": 1000
     }
   },
-  "icon_theme": "Light Charmed Icons",
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Light Charmed Icons",
+    "dark": "Light Charmed Icons"
+  },
   "terminal": {
     "font_weight": 400.0,
     "cursor_shape": "bar",
@@ -93,7 +102,7 @@
   "buffer_font_size": 16.0,
   "theme": {
     "mode": "system",
-    "light": "macOS Classic Light",
-    "dark": "macOS Classic Dark"
+    "light": "Fleet Light",
+    "dark": "Fleet Dark"
   }
 }
