@@ -27,19 +27,20 @@ alias cl clear
 alias fi yazi
 alias c code
 
-function gcp --description "Commit all changes and push (default message: 'changes')"
-    set -l message "changes"
-    if test (count $argv) -gt 0
-        set message (string join " " $argv)
+function gcp --description "Commit all changes and push (prompted message, default: 'changes')"
+    read -P "Commit message (default: 'changes'): " message
+    if test -z "$message"
+        set message "changes"
     end
     git add -A
     git commit -m "$message"
     git push
 end
-function bcp --description "Bare add -u, commit, and push (default message: 'changes')"
-    set -l message "changes"
-    if test (count $argv) -gt 0
-        set message (string join " " $argv)
+
+function bcp --description "Bare add -u, commit, and push (prompted message, default: 'changes')"
+    read -P "Commit message (default: 'changes'): " message
+    if test -z "$message"
+        set message "changes"
     end
     bare add -u
     bare commit -m "$message"
