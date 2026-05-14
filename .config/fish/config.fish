@@ -27,23 +27,36 @@ alias cl clear
 alias fi yazi
 alias c code
 
-function gcp --description "Commit all changes and push (prompted message, default: 'changes')"
-    read -P "Commit message (default: 'changes'): " message
-    if test -z "$message"
-        set message "changes"
+#if pressed just enter the message will be 'changes'
+function gcp --description "Commit all changes and push (subject + optional description)"
+    read -P "Subject (default: 'changes'): " subject
+    if test -z "$subject"
+        set subject "changes"
     end
+    read -P "Description (optional, press enter to skip): " description
+    
     git add -A
-    git commit -m "$message"
+    if test -z "$description"
+        git commit -m "$subject"
+    else
+        git commit -m "$subject" -m "$description"
+    end
     git push
 end
 
-function bcp --description "Bare add -u, commit, and push (prompted message, default: 'changes')"
-    read -P "Commit message (default: 'changes'): " message
-    if test -z "$message"
-        set message "changes"
+function bcp --description "Bare add -u, commit, and push (subject + optional description)"
+    read -P "Subject (default: 'changes'): " subject
+    if test -z "$subject"
+        set subject "changes"
     end
+    read -P "Description (optional, press enter to skip): " description
+    
     bare add -u
-    bare commit -m "$message"
+    if test -z "$description"
+        bare commit -m "$subject"
+    else
+        bare commit -m "$subject" -m "$description"
+    end
     bare push
 end
 
