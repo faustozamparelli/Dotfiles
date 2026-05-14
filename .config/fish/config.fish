@@ -4,6 +4,7 @@ set -gx PATH \
 	$HOME_BREW/sbin \
 	$PATH
 set -gx PATH /Users/faustozamparelli/.local/bin $PATH
+test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
 set -gx THEME dark
