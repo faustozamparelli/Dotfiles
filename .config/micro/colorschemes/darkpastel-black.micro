@@ -1,0 +1,33 @@
+# DarkPastel Black - based on Ghostty DarkPastel
+# Ghostty palette: black background with bright RGB/CMY pastel ANSI colors.
+
+color-link default "#ffffff,#000000"
+color-link comment "#555555,#000000"
+color-link identifier "#55ffff,#000000"
+color-link constant "#ff55ff,#000000"
+color-link constant.string "#55ff55,#000000"
+color-link constant.string.char "#55ff55,#000000"
+color-link constant.number "#ffff55,#000000"
+color-link statement "#5555ff,#000000"
+color-link symbol "#bbbbbb,#000000"
+color-link preproc "#ff55ff,#000000"
+color-link type "#55ffff,#000000"
+color-link special "#ff5555,#000000"
+color-link underlined "#55ffff,#000000"
+color-link error "#ff5555,#000000"
+color-link todo "#000000,#ffff55"
+
+# UI
+color-link statusline "#ffffff,#555555"
+color-link tabbar "#bbbbbb,#000000"
+color-link indent-char "#555555,#000000"
+color-link line-number "#555555,#000000"
+color-link current-line-number "#ffff55,#000000"
+color-link diff-added "#55ff55,#000000"
+color-link diff-modified "#ffff55,#000000"
+color-link diff-deleted "#ff5555,#000000"
+color-link gutter-error "#ff5555,#000000"
+color-link gutter-warning "#ffff55,#000000"
+color-link cursor-line "#000000"
+color-link color-column "#000000"
+color-link selection "#000000,#b5d5ff"

@@ -1,3 +1,5 @@
+theme =  dark:/Users/faustozamparelli/.config/ghostty/themes/DarkPastel.conf, light:/Users/faustozamparelli/.config/ghostty/themes/BuiltinLight.conf
+
 command = /opt/homebrew/bin/fish --login --interactive
 confirm-close-surface = false
 working-directory = home
@@ -17,7 +19,6 @@ clipboard-paste-protection = false
 mouse-hide-while-typing = true
 #keybind = global:cmd+a=toggle_quick_terminal
 
-#theme =  dark:/Users/faustozamparelli/.config/ghostty/themes/DarkPastel.conf, light:/Users/faustozamparelli/.config/ghostty/themes/BuiltinLight.conf
 # macOS specific features
 macos-titlebar-style = tabs
 macos-window-buttons = hidden

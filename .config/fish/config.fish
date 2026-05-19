@@ -26,4 +26,4 @@ alias b bat
 alias cl clear
 alias fi yazi
 alias c code
-
+alias m micro
