@@ -19,6 +19,13 @@ clipboard-paste-protection = false
 mouse-hide-while-typing = true
 #keybind = global:cmd+a=toggle_quick_terminal
 
+# Make Cmd+C / Cmd+V reach terminal apps like micro, so micro can copy/paste
+# its own selected text instead of Ghostty only copying terminal selection.
+keybind = super+c=text:\x03
+keybind = super+v=text:\x16
+keybind = super+x=text:\x18
+keybind = super+z=text:\x1a
+
 # macOS specific features
 macos-titlebar-style = tabs
 macos-window-buttons = hidden
