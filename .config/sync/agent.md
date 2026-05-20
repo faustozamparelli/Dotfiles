@@ -25,7 +25,7 @@ Install on every Mac:
 
 ```sh
 brew install bat bun eza fish fisher fzf gh git git-delta micro mole pnpm uv wget zoxide
-brew install --cask chatgpt claude cleanmymac codex codexbar font-sf-mono ghostty google-gemini helium-browser karabiner-elements maccy microsoft-outlook notion perplexity rectangle-pro shottr spotify t3-code visual-studio-code
+brew install --cask antinote chatgpt claude cleanmymac codex codexbar font-sf-mono ghostty google-gemini helium-browser karabiner-elements maccy microsoft-outlook notion rectangle-pro shottr spotify t3-code visual-studio-code
 ```
 
 Setup-only `duti`:
@@ -111,6 +111,8 @@ Extension sync is maintained by `~/.config/sync/maintain.sh`. The shared desired
 Remind Fausto to install or configure manually:
 
 ```text
+Amphetamine app: no reliable Homebrew cask found; remind Fausto to install manually/App Store on other Macs.
+Perplexity app: no reliable Homebrew cask found; remind Fausto to install manually on other Macs.
 Solves app: installed through the App Store; remind Fausto to install manually on other Macs.
 CleanMyMac config
 Microsoft Outlook sign-in

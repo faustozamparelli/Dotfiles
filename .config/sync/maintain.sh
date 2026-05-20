@@ -44,12 +44,12 @@ fi
   printf 'brew_version=%s\n' "$(brew --version | head -n 1)"
 } > "$inventory_dir/system.txt"
 
-brew leaves | sort > "$inventory_dir/brew-leaves.txt"
-brew list --cask | sort > "$inventory_dir/brew-casks.txt"
+brew leaves | LC_ALL=C sort > "$inventory_dir/brew-leaves.txt"
+brew list --cask | LC_ALL=C sort > "$inventory_dir/brew-casks.txt"
 find /Applications -maxdepth 1 -name "*.app" -print 2>/dev/null \
   | sed 's#^.*/##; s#\.app$##' \
   | grep -v '^\.' \
-  | sort > "$inventory_dir/applications.txt"
+  | LC_ALL=C sort > "$inventory_dir/applications.txt"
 
 if command -v mas >/dev/null 2>&1; then
   mas list > "$inventory_dir/app-store.txt"
@@ -59,7 +59,7 @@ fi
 
 if command -v code >/dev/null 2>&1; then
   current_extensions="$tmp_dir/vscode-current.txt"
-  code --list-extensions | sort > "$current_extensions"
+  code --list-extensions | LC_ALL=C sort > "$current_extensions"
 
   if [[ ! -f "$desired_extensions" ]]; then
     cp "$current_extensions" "$desired_extensions"
@@ -102,7 +102,7 @@ if command -v code >/dev/null 2>&1; then
       code --uninstall-extension "$extension"
     done < "$extra_extensions"
 
-    code --list-extensions | sort > "$current_extensions"
+    code --list-extensions | LC_ALL=C sort > "$current_extensions"
   fi
 
   cp "$desired_extensions" "$last_seen_desired_extensions"

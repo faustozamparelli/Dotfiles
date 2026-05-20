@@ -1,6 +1,5 @@
 bat
 cmake
-duti
 eza
 fisher
 fzf

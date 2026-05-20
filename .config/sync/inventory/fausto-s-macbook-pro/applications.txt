@@ -13,9 +13,8 @@ Ghostty
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
-legcord
-Maccy
 MATLAB_R2025b
+Maccy
 Microsoft Excel
 Microsoft Outlook
 MySielteID
@@ -33,8 +32,9 @@ Spotify
 T3 Code (Alpha)
 Telegram
 TypeWhisper
-uBlock Origin Lite
 UTM
 Visual Studio Code
 WhatsApp
 Xcode
+legcord
+uBlock Origin Lite
