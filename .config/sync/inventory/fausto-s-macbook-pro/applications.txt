@@ -1,0 +1,40 @@
+Affinity
+Amphetamine
+Antinote
+Audacity
+ChatGPT
+Claude
+CleanMyMac
+CodexBar
+DaVinci Resolve
+Figma
+Gemini
+Ghostty
+Helium
+Karabiner-Elements
+Karabiner-EventViewer
+legcord
+Maccy
+MATLAB_R2025b
+Microsoft Excel
+Microsoft Outlook
+MySielteID
+Notion
+OBS
+Perplexity
+QuickRecorder
+Qwen
+Rectangle Pro
+Safari
+Safe Exam Browser
+Shottr
+Solves
+Spotify
+T3 Code (Alpha)
+Telegram
+TypeWhisper
+uBlock Origin Lite
+UTM
+Visual Studio Code
+WhatsApp
+Xcode

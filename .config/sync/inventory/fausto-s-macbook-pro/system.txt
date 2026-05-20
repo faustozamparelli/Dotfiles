@@ -1,0 +1,9 @@
+computer_name=Fausto’s MacBook Pro
+inventory_name=fausto-s-macbook-pro
+hostname=Faustos-MacBook-Pro.local
+arch=arm64
+ProductName:		macOS
+ProductVersion:		26.5
+BuildVersion:		25F71
+brew_prefix=/opt/homebrew
+brew_version=Homebrew 5.1.12
