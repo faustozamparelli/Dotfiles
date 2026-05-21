@@ -4,7 +4,6 @@ bradlc.vscode-tailwindcss
 charliermarsh.ruff
 davidanson.vscode-markdownlint
 esbenp.prettier-vscode
-github.copilot-chat
 github.github-vscode-theme
 github.vscode-pull-request-github
 kisstkondoros.vscode-gutter-preview
