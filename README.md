@@ -75,6 +75,7 @@ bcp
 
 ```text
 ~/.config/sync/agent.md          Agent handoff after dotfiles are already checked out.
+~/.config/sync/README.md         Manual sync notes before agent handoff.
 ~/.config/sync/install-agent.sh  Installs agent dependencies and starts post-checkout setup.
 ~/.config/sync/maintain.sh       Periodic sync/inventory maintenance.
 ~/.config/sync/clarifications.md Open questions and findings.

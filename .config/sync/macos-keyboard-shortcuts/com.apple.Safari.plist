@@ -1,0 +1,7 @@
+{
+    Back = "@j";
+    Forward = "@k";
+    "Show Next Tab" = "@l";
+    "Show Previous Tab" = "@h";
+    "Translate In English" = "@y";
+}
