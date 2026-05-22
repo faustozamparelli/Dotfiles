@@ -34,11 +34,29 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Fn + H → Left Arrow",
+                                "description": "Left Control → Fn",
+                                "from": {
+                                    "key_code": "left_control",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "fn" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Fn → Left Control",
+                                "from": {
+                                    "key_code": "fn",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_control" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Control + H → Left Arrow",
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": ["fn"],
+                                        "mandatory": ["control"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -46,11 +64,11 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Fn + J → Down Arrow",
+                                "description": "Control + J → Down Arrow",
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
-                                        "mandatory": ["fn"],
+                                        "mandatory": ["control"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -58,11 +76,11 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Fn + K → Up Arrow",
+                                "description": "Control + K → Up Arrow",
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
-                                        "mandatory": ["fn"],
+                                        "mandatory": ["control"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -70,11 +88,11 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Fn + L → Right Arrow",
+                                "description": "Control + L → Right Arrow",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
-                                        "mandatory": ["fn"],
+                                        "mandatory": ["control"],
                                         "optional": ["any"]
                                     }
                                 },

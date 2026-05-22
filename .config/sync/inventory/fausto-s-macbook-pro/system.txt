@@ -6,4 +6,4 @@ ProductName:		macOS
 ProductVersion:		26.5
 BuildVersion:		25F71
 brew_prefix=/opt/homebrew
-brew_version=Homebrew 5.1.12
+brew_version=Homebrew 5.1.13

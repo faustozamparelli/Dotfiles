@@ -10,7 +10,6 @@ karabiner-elements
 legcord
 microsoft-excel
 microsoft-outlook
-notion
 obs
 quickrecorder
 rectangle-pro
