@@ -25,7 +25,7 @@ Install on every Mac:
 
 ```sh
 brew install bat bun eza fish fisher fzf gh git git-delta micro mole pnpm uv wget zoxide
-brew install --cask antinote chatgpt claude cleanmymac codex codexbar font-sf-mono ghostty google-gemini helium-browser karabiner-elements maccy microsoft-outlook notion rectangle-pro shottr spotify t3-code visual-studio-code
+brew install --cask antinote cleanmymac codex codexbar font-sf-mono ghostty helium-browser karabiner-elements maccy microsoft-outlook rectangle-pro shottr spotify t3-code visual-studio-code wispr-flow
 ```
 
 Setup-only `duti`:
@@ -116,7 +116,6 @@ Perplexity app: no reliable Homebrew cask found; remind Fausto to install manual
 Solves app: installed through the App Store; remind Fausto to install manually on other Macs.
 CleanMyMac config
 Microsoft Outlook sign-in
-Notion sign-in
 Spotify sign-in
 Karabiner permissions
 Rectangle Pro license/settings
@@ -132,18 +131,15 @@ These were present or relevant on the source Mac but are not shared installs:
 Affinity
 Audacity
 DaVinci Resolve
-Figma
 Legcord
 MATLAB
 Microsoft Excel
 MySielteID
 OBS
 QuickRecorder
-Qwen
 Safe Exam Browser
 Send to Kindle
 Telegram
-TypeWhisper
 UTM
 WhatsApp
 Xcode
