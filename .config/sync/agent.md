@@ -141,7 +141,6 @@ Safe Exam Browser
 Send to Kindle
 Telegram
 UTM
-WhatsApp
 Xcode
 uBlock Origin Lite
 cmake
