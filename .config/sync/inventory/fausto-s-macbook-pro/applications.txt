@@ -27,7 +27,6 @@ T3 Code (Alpha)
 Telegram
 UTM
 Visual Studio Code
-WhatsApp
 Wispr Flow
 Xcode
 legcord

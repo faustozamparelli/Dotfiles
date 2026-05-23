@@ -75,4 +75,12 @@
     "gitlens.ai.model": "vscode",
     "gitlens.ai.vscode.model": "copilot:gpt-4.1",
     "workbench.colorCustomizations": {},
+    "workbench.editorAssociations": {
+        "*.md": "vscode.markdown.preview.editor",
+        "*.markdown": "vscode.markdown.preview.editor"
+    },
+    "workbench.diffEditorAssociations": {
+        "*.md": "vscode.markdown.preview.editor",
+        "*.markdown": "vscode.markdown.preview.editor"
+    }
 }
