@@ -1,5 +1,4 @@
 {
-    "editor.minimap.enabled": false,
     "files.autoSave": "afterDelay",
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
@@ -49,8 +48,6 @@
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.stubPath": "",
-    "workbench.editor.enablePreview": false,
-    "workbench.editor.enablePreviewFromQuickOpen": false,
     "github.copilot.enable": {
         "*": false,
         "plaintext": false,
@@ -67,6 +64,7 @@
     "C_Cpp.clang_format_fallbackStyle": "LLVM",
     "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never }",
     "notebook.output.scrolling": true,
+    "editor.scrollbar.vertical": "hidden",
     "workbench.preferredDarkColorTheme": "GitHub Dark Default",
     "chat.viewSessions.orientation": "stacked",
     "markdown.preview.fontSize": 15,
@@ -77,10 +75,16 @@
     "workbench.colorCustomizations": {},
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor",
-        "*.markdown": "vscode.markdown.preview.editor"
+        "*.markdown": "vscode.markdown.preview.editor",
     },
     "workbench.diffEditorAssociations": {
         "*.md": "vscode.markdown.preview.editor",
-        "*.markdown": "vscode.markdown.preview.editor"
-    }
+        "*.markdown": "vscode.markdown.preview.editor",
+    },
+    "diffEditor.renderSideBySide": false,
+    "workbench.editor.enablePreview": false,
+    "editor.minimap.enabled": false,
+    "scm.diffDecorations": "gutter",
+  "workbench.editor.enablePreviewFromQuickOpen": true, 
+  "workbench.editor.showTabs": "single"
 }

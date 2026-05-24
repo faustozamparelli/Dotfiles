@@ -1,6 +1,6 @@
 aaron-bond.better-comments
 alefragnani.project-manager
-bradlc.vscode-tailwindcss
+cha0ran.deletecurrentfile
 charliermarsh.ruff
 davidanson.vscode-markdownlint
 esbenp.prettier-vscode
@@ -17,10 +17,7 @@ ms-toolsai.jupyter-keymap
 ms-toolsai.jupyter-renderers
 ms-vscode.cpptools
 openai.chatgpt
-quicktype.quicktype
 streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 tomoki1207.pdf
 usernamehw.errorlens
-wix.vscode-import-cost
-yoavbls.pretty-ts-errors
