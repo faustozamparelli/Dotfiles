@@ -4,7 +4,6 @@ cha0ran.deletecurrentfile
 charliermarsh.ruff
 davidanson.vscode-markdownlint
 esbenp.prettier-vscode
-github.github-vscode-theme
 github.vscode-pull-request-github
 kisstkondoros.vscode-gutter-preview
 mechatroner.rainbow-csv
@@ -21,3 +20,4 @@ streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 tomoki1207.pdf
 usernamehw.errorlens
+viktorqvarfordt.vscode-pitch-black-theme
