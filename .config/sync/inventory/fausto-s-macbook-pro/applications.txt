@@ -15,7 +15,6 @@ Microsoft Excel
 Microsoft Outlook
 MySielteID
 OBS
-Perplexity
 QuickRecorder
 Rectangle Pro
 Safari
