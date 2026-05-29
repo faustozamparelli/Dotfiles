@@ -8,6 +8,7 @@ Karabiner-Elements
 Karabiner-EventViewer
 Keynote Creator Studio
 Maccy
+Microsoft Outlook
 Numbers Creator Studio
 Pages Creator Studio
 Rectangle Pro
