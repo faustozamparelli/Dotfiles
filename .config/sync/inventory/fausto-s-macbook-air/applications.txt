@@ -4,6 +4,8 @@ CodexBar
 GarageBand
 Ghostty
 Helium
+Karabiner-Elements
+Karabiner-EventViewer
 Keynote Creator Studio
 Maccy
 Numbers Creator Studio

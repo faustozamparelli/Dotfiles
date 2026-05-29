@@ -2,8 +2,10 @@ antinote
 cleanmymac
 codex
 codexbar
+font-sf-mono
 ghostty
 helium-browser
+karabiner-elements
 maccy
 rectangle-pro
 shottr
