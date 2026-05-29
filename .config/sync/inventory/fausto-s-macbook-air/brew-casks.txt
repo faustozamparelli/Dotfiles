@@ -1,0 +1,13 @@
+antinote
+cleanmymac
+codex
+codexbar
+ghostty
+helium-browser
+maccy
+rectangle-pro
+shottr
+spotify
+t3-code
+visual-studio-code
+wispr-flow

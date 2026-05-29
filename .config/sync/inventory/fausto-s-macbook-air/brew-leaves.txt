@@ -1,0 +1,14 @@
+bat
+eza
+fisher
+fzf
+gh
+git
+git-delta
+micro
+mole
+oven-sh/bun/bun
+pnpm
+uv
+wget
+zoxide

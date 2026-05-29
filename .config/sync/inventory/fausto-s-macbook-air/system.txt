@@ -1,0 +1,9 @@
+computer_name=Fausto’s MacBook Air
+inventory_name=fausto-s-macbook-air
+hostname=Faustos-MacBook-Air.local
+arch=arm64
+ProductName:		macOS
+ProductVersion:		26.5
+BuildVersion:		25F71
+brew_prefix=/opt/homebrew
+brew_version=Homebrew 5.1.14
