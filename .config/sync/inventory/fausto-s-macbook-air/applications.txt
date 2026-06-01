@@ -6,6 +6,7 @@ Ghostty
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
+KeepingYouAwake
 Keynote Creator Studio
 Maccy
 Microsoft Outlook
@@ -14,7 +15,9 @@ Pages Creator Studio
 Rectangle Pro
 Safari
 Shottr
+Solves
 Spotify
+Stats
 T3 Code (Alpha)
 Visual Studio Code
 Wispr Flow
