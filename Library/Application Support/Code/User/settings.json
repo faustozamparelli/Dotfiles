@@ -48,13 +48,6 @@
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.stubPath": "",
-    "github.copilot.enable": {
-        "*": false,
-        "plaintext": false,
-        "markdown": true,
-        "scminput": false,
-    },
-    "workbench.preferredLightColorTheme": "GitHub Light Default",
     "window.autoDetectColorScheme": true,
     "chat.editing.confirmEditRequestRemoval": false,
     "explorer.autoReveal": false,
@@ -69,8 +62,6 @@
     "markdown.preview.fontSize": 15,
     "chat.editor.fontSize": 15,
     "workbench.browser.openLocalhostLinks": false,
-    "gitlens.ai.model": "vscode",
-    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
     "workbench.colorCustomizations": {},
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor",
@@ -95,4 +86,71 @@
     "notebook.output.textLineLimit": 500,
     "notebook.output.wordWrap": true,
     "makefile.configureOnOpen": true,
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/opt/homebrew/include",
+        "/opt/homebrew/include/SDL2",
+        "/opt/homebrew/opt/sdl2/include",
+        "/opt/homebrew/opt/sdl2/include/SDL2",
+    ],
+    "vim.useSystemClipboard": true,
+
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["H"],
+            "after": ["^"],
+        },
+        {
+            "before": ["L"],
+            "after": ["$"],
+        },
+        {
+            "before": ["U"],
+            "after": ["<C-r>"],
+        },
+        {
+            "before": ["<space>", "<space>"],
+            "commands": ["workbench.action.files.save"],
+        },
+        {
+            "before": [":", "w"],
+            "commands": [
+                "workbench.action.files.save",
+                "editor.action.formatDocument",
+            ],
+        },
+    ],
+
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["J"],
+            "commands": ["editor.action.moveLinesDownAction"],
+        },
+        {
+            "before": ["K"],
+            "commands": ["editor.action.moveLinesUpAction"],
+        },
+    ],
+    "editor.suggest.preview": true,
+    "editor.parameterHints.enabled": true,
+    "editor.parameterHints.cycle": true,
+    "cSpell.enabled": false,
+    "[plaintext]": {
+        "cSpell.enabled": true,
+    },
+    "[markdown]": {
+        "cSpell.enabled": true,
+    },
+    "[latex]": {
+        "cSpell.enabled": true,
+    },
+    "[tex]": {
+        "cSpell.enabled": true,
+    },
+    "[restructuredtext]": {
+        "cSpell.enabled": true,
+    },
+    "[asciidoc]": {
+        "cSpell.enabled": true,
+    },
 }

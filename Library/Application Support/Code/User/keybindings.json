@@ -84,4 +84,39 @@
         "command": "-editor.action.inlineSuggest.commitAlternativeAction",
         "when": "inInlineEditsPreviewEditor",
     },
+    {
+        "key": "ctrl+c",
+        "command": "problems-copy.copyAll",
+        "args": {
+            "errors": true,
+            "simpleTemplate": true,
+        },
+    },
+    {
+        "key": "cmd+a",
+        "command": "type",
+        "args": {
+            "text": "",
+        },
+    },
+    {
+        "key": "cmd+a",
+        "command": "extension.vim_escape",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Insert'",
+    },
+    {
+        "key": "cmd+a",
+        "command": "extension.vim_escape",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Visual'",
+    },
+    {
+        "key": "cmd+a",
+        "command": "extension.vim_escape",
+        "when": "editorTextFocus && vim.active && vim.mode == 'VisualLine'",
+    },
+    {
+        "key": "cmd+a",
+        "command": "extension.vim_escape",
+        "when": "editorTextFocus && vim.active && vim.mode == 'VisualBlock'",
+    },
 ]

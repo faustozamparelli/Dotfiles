@@ -10,6 +10,7 @@ mole
 node
 oven-sh/bun/bun
 pnpm
+tree
 uv
 wget
 zoxide

@@ -1,5 +1,6 @@
 aaron-bond.better-comments
 alefragnani.project-manager
+arturodent.problems-copy
 cha0ran.deletecurrentfile
 charliermarsh.ruff
 davidanson.vscode-markdownlint
@@ -16,10 +17,10 @@ ms-toolsai.jupyter-keymap
 ms-toolsai.jupyter-renderers
 ms-vscode.cpp-devtools
 ms-vscode.cpptools
-ms-vscode.makefile-tools
 openai.chatgpt
 streetsidesoftware.code-spell-checker
 tamasfe.even-better-toml
 tomoki1207.pdf
 usernamehw.errorlens
 viktorqvarfordt.vscode-pitch-black-theme
+vscodevim.vim

@@ -11,6 +11,24 @@
                         "description": "Minimal setup",
                         "manipulators": [
                             {
+                                "description": "F5 / Dictation key → Keyboard brightness down",
+                                "from": {
+                                    "key_code": "f5",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "illumination_decrement" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "F6 / Focus key → Keyboard brightness up",
+                                "from": {
+                                    "key_code": "f6",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "illumination_increment" }],
+                                "type": "basic"
+                            },
+                            {
                                 "description": "Right Shift → Hyper",
                                 "from": {
                                     "key_code": "right_shift",
