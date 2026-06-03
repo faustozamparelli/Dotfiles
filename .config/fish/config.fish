@@ -25,7 +25,21 @@ alias py python
 alias b bat
 alias cl clear
 alias fi yazi
-alias c code
+function c
+    set -l target
+
+    if test (count $argv) -eq 0
+        set target .
+    else
+        set target $argv[1]
+    end
+
+    if test -d "$target"
+        env -u VIRTUAL_ENV -u VIRTUAL_ENV_PROMPT code -r "$target"
+    else
+        env -u VIRTUAL_ENV -u VIRTUAL_ENV_PROMPT code "$argv"
+    end
+end
 alias m micro
 
 

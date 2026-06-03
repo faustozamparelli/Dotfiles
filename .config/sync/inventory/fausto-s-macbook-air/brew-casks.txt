@@ -9,7 +9,6 @@ karabiner-elements
 keepingyouawake
 maccy
 microsoft-outlook
-rectangle-pro
 shottr
 spotify
 stats

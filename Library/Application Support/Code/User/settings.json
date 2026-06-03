@@ -92,4 +92,7 @@
     "workbench.editor.limit.perEditorGroup": true,
     "workbench.editor.labelFormat": "long",
     "workbench.preferredDarkColorTheme": "Pitch Black",
+    "notebook.output.textLineLimit": 500,
+    "notebook.output.wordWrap": true,
+    "makefile.configureOnOpen": true,
 }
