@@ -12,7 +12,7 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
-brew install gh ripgrep wget
+brew install gh mas ripgrep wget
 brew install --cask codex codexbar visual-studio-code
 
 bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")

@@ -5,6 +5,7 @@ cha0ran.deletecurrentfile
 charliermarsh.ruff
 davidanson.vscode-markdownlint
 esbenp.prettier-vscode
+github.vscode-github-actions
 github.vscode-pull-request-github
 kisstkondoros.vscode-gutter-preview
 mechatroner.rainbow-csv

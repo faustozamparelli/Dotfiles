@@ -1,5 +1,7 @@
 bat
+bun
 eza
+fish
 fisher
 fzf
 gh
@@ -8,10 +10,7 @@ git-delta
 mas
 micro
 mole
-node
-oven-sh/bun/bun
 pnpm
-tree
 uv
 wget
 zoxide
