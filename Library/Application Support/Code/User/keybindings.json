@@ -9,11 +9,6 @@
         "command": "-workbench.action.zoomReset",
     },
     {
-        "key": "ctrl+shift+`",
-        "command": "-workbench.action.terminal.new",
-        "when": "terminalProcessSupported || terminalWebExtensionContributedProfile",
-    },
-    {
         "key": "cmd+h",
         "command": "workbench.action.previousEditor",
     },
@@ -45,10 +40,6 @@
         "key": "cmd+k cmd+m",
         "command": "workbench.action.maximizeEditorHideSidebar",
         "when": "auxiliaryBarVisible || sideBarVisible || editorPartMultipleEditorGroups && !editorPartMaximizedEditorGroup",
-    },
-    {
-        "key": "cmd+t",
-        "command": "workbench.action.createTerminalEditor",
     },
     {
         "key": "cmd+s",
@@ -118,5 +109,25 @@
         "key": "cmd+a",
         "command": "extension.vim_escape",
         "when": "editorTextFocus && vim.active && vim.mode == 'VisualBlock'",
+    },
+    {
+        "key": "cmd+t",
+        "command": "workbench.action.createTerminalEditorSide",
+    },
+    {
+        "key": "cmd+l",
+        "command": "workbench.action.focusRightGroup",
+    },
+    {
+        "key": "cmd+k cmd+right",
+        "command": "-workbench.action.focusRightGroup",
+    },
+    {
+        "key": "cmd+h",
+        "command": "workbench.action.focusLeftGroup",
+    },
+    {
+        "key": "cmd+k cmd+left",
+        "command": "-workbench.action.focusLeftGroup",
     },
 ]
