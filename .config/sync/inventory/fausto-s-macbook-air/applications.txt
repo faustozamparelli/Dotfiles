@@ -1,18 +1,12 @@
 CleanMyMac
-CodexBar
-GarageBand
 Ghostty
 Helium
 InstantSpaceSwitcher
 Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
-Keynote Creator Studio
-MATLAB_R2026a
 Maccy
 Marta
-Numbers Creator Studio
-Pages Creator Studio
 Safari
 Shottr
 Spotify
@@ -20,4 +14,3 @@ Stats
 T3 Code (Alpha)
 Visual Studio Code
 Wispr Flow
-iMovie

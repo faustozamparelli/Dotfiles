@@ -1,8 +1,5 @@
-antinote
 cleanmymac
-cloudflare-warp
 codex
-codexbar
 font-sf-mono
 ghostty
 helium-browser
@@ -10,7 +7,6 @@ instant-space-switcher
 karabiner-elements
 keepingyouawake
 maccy
-microsoft-outlook
 shottr
 spotify
 stats
