@@ -111,7 +111,7 @@
         "when": "editorTextFocus && vim.active && vim.mode == 'VisualBlock'",
     },
     {
-        "key": "cmd+t",
+        "key": "shift+cmd+t",
         "command": "workbench.action.createTerminalEditorSide",
     },
     {
@@ -129,5 +129,20 @@
     {
         "key": "cmd+k cmd+left",
         "command": "-workbench.action.focusLeftGroup",
+    },
+    {
+        "key": "ctrl+shift+`",
+        "command": "-workbench.action.terminal.new",
+        "when": "terminalProcessSupported || terminalWebExtensionContributedProfile",
+    },
+    {
+        "key": "cmd+t",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active",
+    },
+    {
+        "key": "ctrl+`",
+        "command": "-workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active",
     },
 ]

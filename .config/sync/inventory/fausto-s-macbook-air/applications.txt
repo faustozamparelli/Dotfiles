@@ -1,20 +1,20 @@
-Antinote
 CleanMyMac
 CodexBar
 GarageBand
 Ghostty
 Helium
+InstantSpaceSwitcher
 Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
 Keynote Creator Studio
+MATLAB_R2026a
 Maccy
-Microsoft Outlook
+Marta
 Numbers Creator Studio
 Pages Creator Studio
 Safari
 Shottr
-Solves
 Spotify
 Stats
 T3 Code (Alpha)

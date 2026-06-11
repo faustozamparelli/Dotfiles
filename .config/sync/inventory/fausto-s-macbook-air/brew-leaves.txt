@@ -5,12 +5,14 @@ fzf
 gh
 git
 git-delta
+libqalculate
 mas
 micro
 mole
 node
-oven-sh/bun/bun
+octave
 pnpm
+step
 tree
 uv
 wget
