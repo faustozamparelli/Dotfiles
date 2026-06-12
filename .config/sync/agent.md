@@ -17,7 +17,7 @@ then run `sync-maintain` again.
 
 ## Source Of Truth
 
-`review/<mac-name>.txt` is the editable source of truth for Brew packages,
+`software-<mac-name>.txt` is the editable source of truth for Brew packages,
 casks, and App Store apps. Move `[.]` between the `shared` and `local`
 brackets; do not edit the generated Brew/cask/App Store files under `shared/`.
 
@@ -34,7 +34,7 @@ Shortcuts, and Marta's portable configuration files remain automatically shared.
 
 2. Ask Fausto which local items should be shared.
 3. Move the approved items' `[.]` markers to `shared` in
-   `review/<mac-name>.txt`.
+   `software-<mac-name>.txt`.
 4. Run:
 
    ```sh

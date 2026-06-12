@@ -8,8 +8,9 @@ safe_name="$(printf '%s' "$computer_name" | tr '[:upper:]' '[:lower:]' | tr -cs 
 safe_name="${safe_name%-}"
 inventory_dir="$sync_dir/inventory/$safe_name"
 state_dir="$sync_dir/state/$safe_name"
-review_dir="$sync_dir/review"
-review_file="$review_dir/$safe_name.txt"
+review_dir="$sync_dir"
+review_file="$sync_dir/software-$safe_name.txt"
+legacy_review_dir="$sync_dir/review"
 review_last_seen="$state_dir/software-review.last-seen.txt"
 shared_dir="$sync_dir/shared"
 shared_brew_leaves="$shared_dir/brew-leaves.txt"
@@ -134,7 +135,7 @@ set_item_local_in_all_reviews() {
   local type="$1"
   local item="$2"
   local file updated
-  for file in "$review_dir"/*.txt; do
+  for file in "$review_dir"/software-*.txt; do
     [[ -e "$file" ]] || continue
     updated="$tmp_dir/$(basename "$file").declassified"
     awk -F '\t' -v OFS='\t' -v type="$type" -v item="$item" '
@@ -151,7 +152,7 @@ set_item_shared_in_all_reviews() {
   local type="$1"
   local item="$2"
   local file updated
-  for file in "$review_dir"/*.txt; do
+  for file in "$review_dir"/software-*.txt; do
     [[ -e "$file" ]] || continue
     updated="$tmp_dir/$(basename "$file").shared"
     awk -F '\t' -v OFS='\t' -v type="$type" -v item="$item" '
@@ -183,7 +184,7 @@ is_legacy_shared() {
 }
 
 global_shared_keys() {
-  awk -F '\t' '!/^#/ && NF >= 3 && ($3 == "." || $3 == "[.]") { print $1 "\t" $2 }' "$review_dir"/*.txt 2>/dev/null |
+  awk -F '\t' '!/^#/ && NF >= 3 && ($3 == "." || $3 == "[.]") { print $1 "\t" $2 }' "$review_dir"/software-*.txt 2>/dev/null |
     LC_ALL=C sort -u
 }
 
@@ -261,7 +262,7 @@ reconcile_review_file() {
 
 generate_shared_files() {
   local file type item
-  for file in "$review_dir"/*.txt; do
+  for file in "$review_dir"/software-*.txt; do
     [[ -e "$file" ]] || continue
     validate_review_file "$file"
   done
@@ -270,11 +271,11 @@ generate_shared_files() {
     [[ -n "$type" ]] || continue
     set_item_shared_in_all_reviews "$type" "$item"
   done < "$tmp_dir/shared-keys-to-propagate.txt"
-  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "brew" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/*.txt 2>/dev/null |
+  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "brew" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/software-*.txt 2>/dev/null |
     LC_ALL=C sort -u > "$shared_brew_leaves"
-  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "cask" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/*.txt 2>/dev/null |
+  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "cask" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/software-*.txt 2>/dev/null |
     LC_ALL=C sort -u > "$shared_brew_casks"
-  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "mas" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/*.txt 2>/dev/null |
+  awk -F '\t' '!/^#/ && NF >= 3 && $1 == "mas" && ($3 == "." || $3 == "[.]") { print $2 }' "$review_dir"/software-*.txt 2>/dev/null |
     LC_ALL=C sort -u > "$shared_mas_apps"
 }
 
@@ -282,6 +283,15 @@ mkdir -p "$sync_dir" "$inventory_dir" "$state_dir" "$review_dir" "$shared_dir" "
 cd "$HOME"
 
 "${bare[@]}" pull --ff-only
+
+if [[ -d "$legacy_review_dir" ]]; then
+  for file in "$legacy_review_dir"/*.txt; do
+    [[ -e "$file" ]] || continue
+    target="$sync_dir/software-$(basename "$file")"
+    [[ -f "$target" ]] || mv "$file" "$target"
+  done
+  rmdir "$legacy_review_dir" 2>/dev/null || true
+fi
 
 # Legacy migration from earlier flat sync files.
 if [[ ! -f "$desired_extensions" ]]; then
@@ -533,8 +543,3 @@ done
   "Library/Application Support/Code/User/keybindings.json"
 
 "${bare[@]}" status --short
-
-if [[ "${#newly_local_software[@]}" -gt 0 ]]; then
-  printf '\nReview required: edit %s, then run sync-maintain again.\n' "$review_file"
-  exit 3
-fi
