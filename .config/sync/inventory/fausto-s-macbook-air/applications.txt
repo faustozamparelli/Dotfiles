@@ -1,6 +1,5 @@
 Ghostty
 Helium
-InstantSpaceSwitcher
 Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake

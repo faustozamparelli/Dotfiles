@@ -2,7 +2,6 @@ codex
 font-sf-mono
 ghostty
 helium-browser
-instant-space-switcher
 karabiner-elements
 keepingyouawake
 maccy
