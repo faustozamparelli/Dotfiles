@@ -99,8 +99,8 @@ validate_review_file() {
       }
       shared = ($3 == "[.]" || $3 == ".")
       local = ($4 == "[.]" || $4 == ".")
-      shared_empty = ($3 == "[ ]" || $3 == "")
-      local_empty = (NF == 3 || $4 == "[ ]" || $4 == "")
+      shared_empty = ($3 == "[]" || $3 == "[ ]" || $3 == "")
+      local_empty = (NF == 3 || $4 == "[]" || $4 == "[ ]" || $4 == "")
       if ($2 == "" || !((shared && local_empty) || (shared_empty && local))) {
         printf "Select exactly one bucket in %s: %s\n", FILENAME, $0 > "/dev/stderr"
         valid = 0
@@ -119,8 +119,8 @@ normalize_review_file() {
   local file="$1"
   local body="$tmp_dir/$(basename "$file").review-body"
   awk -F '\t' 'BEGIN { OFS = "\t" } !/^#/ && NF {
-    if ($3 == "." || $3 == "[.]") print $1, $2, "[.]", "[ ]"
-    else print $1, $2, "[ ]", "[.]"
+    if ($3 == "." || $3 == "[.]") print $1, $2, "[.]", "[]"
+    else print $1, $2, "[]", "[.]"
   }' "$file" |
     LC_ALL=C sort -t $'\t' -k1,1 -k2,2 > "$body"
   {
@@ -139,7 +139,7 @@ set_item_local_in_all_reviews() {
     updated="$tmp_dir/$(basename "$file").declassified"
     awk -F '\t' -v OFS='\t' -v type="$type" -v item="$item" '
       /^#/ || NF == 0 { print; next }
-      $1 == type && $2 == item { $3 = "[ ]"; $4 = "[.]" }
+      $1 == type && $2 == item { $3 = "[]"; $4 = "[.]" }
       { print }
     ' "$file" > "$updated"
     mv "$updated" "$file"
@@ -156,7 +156,7 @@ set_item_shared_in_all_reviews() {
     updated="$tmp_dir/$(basename "$file").shared"
     awk -F '\t' -v OFS='\t' -v type="$type" -v item="$item" '
       /^#/ || NF == 0 { print; next }
-      $1 == type && $2 == item { $3 = "[.]"; $4 = "[ ]" }
+      $1 == type && $2 == item { $3 = "[.]"; $4 = "[]" }
       { print }
     ' "$file" > "$updated"
     mv "$updated" "$file"
@@ -201,9 +201,9 @@ reconcile_review_file() {
     while IFS=$'\t' read -r type item; do
       [[ -n "$type" ]] || continue
       if is_legacy_shared "$type" "$item"; then
-        printf '%s\t%s\t[.]\t[ ]\n' "$type" "$item" >> "$next"
+        printf '%s\t%s\t[.]\t[]\n' "$type" "$item" >> "$next"
       else
-        printf '%s\t%s\t[ ]\t[.]\n' "$type" "$item" >> "$next"
+        printf '%s\t%s\t[]\t[.]\n' "$type" "$item" >> "$next"
         newly_local_software+=("$type $item")
       fi
     done < "$installed"
@@ -247,11 +247,11 @@ reconcile_review_file() {
     [[ -n "$type" ]] || continue
     key="$type"$'\t'"$item"
     if grep -Fxq "$key" "$shared_keys"; then
-      printf '%s\t%s\t[.]\t[ ]\n' "$type" "$item" >> "$next"
+      printf '%s\t%s\t[.]\t[]\n' "$type" "$item" >> "$next"
     elif awk -F '\t' -v type="$type" -v item="$item" '$1 == type && $2 == item { found = 1; exit } END { exit !found }' "$old"; then
       awk -F '\t' -v type="$type" -v item="$item" '$1 == type && $2 == item { print; exit }' "$old" >> "$next"
     else
-      printf '%s\t%s\t[ ]\t[.]\n' "$type" "$item" >> "$next"
+      printf '%s\t%s\t[]\t[.]\n' "$type" "$item" >> "$next"
       newly_local_software+=("$type $item")
     fi
   done < "$installed"

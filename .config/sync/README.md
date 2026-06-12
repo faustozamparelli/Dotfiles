@@ -35,7 +35,7 @@ Move `[.]` between the `shared` and `local` brackets, then run
 
 ```text
 # type  item       shared  local
-cask    marta      [ ]     [.]
+cask    marta      []      [.]
 ```
 
 Newly installed Brew packages, casks, and App Store apps default to local. A
@@ -48,8 +48,8 @@ VS Code extensions, App Shortcuts, and Marta's portable settings remain
 automatically shared.
 
 `bcp` runs `sync-maintain` first. When new software is discovered, `bcp` opens
-the review file in Micro and stops before committing. Move the bracket dots,
-save, and run `bcp` again.
+the review file in VS Code through the Fish `c` function and stops before
+committing. Move the bracket dots, save, and run `bcp` again.
 
 ## Periodic Cleanup
 

@@ -5,8 +5,8 @@ fzf
 gh
 git
 git-delta
+libqalculate
 mas
-micro
 mole
 pnpm
 uv

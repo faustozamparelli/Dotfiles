@@ -7,7 +7,6 @@ git
 git-delta
 libqalculate
 mas
-micro
 mole
 node
 octave

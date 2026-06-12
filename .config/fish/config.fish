@@ -76,7 +76,7 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
 
         echo "New software needs review. Move bracket dots, save, then run bcp again:"
         echo "$review_file"
-        micro "$review_file"
+        c "$review_file"
         return 3
     else if test $sync_status -ne 0
         echo "sync-maintain failed; bcp stopped." >&2

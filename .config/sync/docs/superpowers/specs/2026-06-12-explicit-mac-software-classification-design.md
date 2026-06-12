@@ -46,10 +46,10 @@ The file uses aligned columns and a dot inside brackets to select a bucket:
 
 ```text
 # type  item                      shared  local
-brew    bat                       [.]     [ ]
-brew    octave                    [ ]     [.]
-cask    marta                     [ ]     [.]
-mas     123456789 Example App     [.]     [ ]
+brew    bat                       [.]     []
+brew    octave                    []      [.]
+cask    marta                     []      [.]
+mas     123456789 Example App     [.]     []
 ```
 
 Exactly one of `shared` or `local` must contain `[.]` for every row. New
@@ -112,7 +112,8 @@ with no prior local classification row is installed normally.
 The frequently used Fish `bcp` function runs `sync-maintain` before committing.
 If the run discovers new supported software and classifies it as local, the
 script returns a dedicated review-required exit status. `bcp` opens the current
-Mac's review file and stops before committing or pushing.
+Mac's review file through the Fish `c` function and stops before committing or
+pushing.
 
 After Fausto moves bracket dots as desired, running `bcp` again applies the
 choices, commits, and pushes. Any other sync failure also stops `bcp`, but does
