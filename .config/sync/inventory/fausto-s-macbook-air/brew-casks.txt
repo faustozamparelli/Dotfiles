@@ -1,4 +1,3 @@
-cleanmymac
 codex
 font-sf-mono
 ghostty
@@ -7,6 +6,7 @@ instant-space-switcher
 karabiner-elements
 keepingyouawake
 maccy
+marta
 shottr
 spotify
 stats

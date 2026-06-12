@@ -1,7 +1,7 @@
 # Agent Handoff: Mac Sync
 
-Use this file when finishing a new Mac setup or doing periodic cleanup. Keep the
-workflow simple: run `sync-maintain`, edit shared lists only after asking Fausto,
+Use this file when finishing a new Mac setup or doing periodic cleanup. Run
+`sync-maintain`, edit the current Mac's review file only after asking Fausto,
 then run `sync-maintain` again.
 
 ## Rules
@@ -10,21 +10,19 @@ then run `sync-maintain` again.
 - Use the bare dotfiles repo; do not recreate tracked config manually.
 - Do not sync secrets, tokens, browser profiles, histories, caches, app databases,
   keychains, or machine-local state.
-- If an installed item is not in `shared/`, ask Fausto before promoting it.
+- Newly installed Brew packages, casks, and App Store apps default to local.
+- Ask Fausto before moving `[.]` from `local` to `shared`.
+- Never add a remove bucket or uninstall software from the sync script.
 - Leave commit/push manual unless Fausto asks you to use `bcp`.
 
 ## Source Of Truth
 
-```text
-~/.config/sync/shared/brew-leaves.txt
-~/.config/sync/shared/brew-casks.txt
-~/.config/sync/shared/mas-apps.txt
-~/.config/sync/shared/vscode-extensions.txt
-~/.config/sync/shared/macos-keyboard-shortcuts/
-```
+`review/<mac-name>.txt` is the editable source of truth for Brew packages,
+casks, and App Store apps. Move `[.]` between the `shared` and `local`
+brackets; do not edit the generated Brew/cask/App Store files under `shared/`.
 
-`inventory/<mac-name>/` is observed state only. Use it to compare Macs and decide
-what to ask Fausto.
+`inventory/<mac-name>/` is observed state only. VS Code extensions, App
+Shortcuts, and Marta's portable configuration files remain automatically shared.
 
 ## Periodic Cleanup
 
@@ -34,9 +32,9 @@ what to ask Fausto.
    sync-maintain
    ```
 
-2. Copy the checklist candidates from the output and ask Fausto which should be
-   shared.
-3. Add approved items to the matching file in `shared/`.
+2. Ask Fausto which local items should be shared.
+3. Move the approved items' `[.]` markers to `shared` in
+   `review/<mac-name>.txt`.
 4. Run:
 
    ```sh
@@ -45,7 +43,7 @@ what to ask Fausto.
    ```
 
 5. Summarize what was installed, what was promoted to shared, and what remains
-   machine-specific by inference.
+   local.
 6. Ask Fausto whether to commit/push with `bcp`.
 
 ## New Mac Setup

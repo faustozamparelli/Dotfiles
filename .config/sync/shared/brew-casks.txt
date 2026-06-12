@@ -1,13 +1,9 @@
-antinote
-cleanmymac
 codex
-codexbar
 font-sf-mono
 ghostty
 helium-browser
 karabiner-elements
 maccy
-microsoft-outlook
 shottr
 spotify
 t3-code

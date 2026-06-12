@@ -42,18 +42,18 @@ Each Mac has one tracked editable file:
 review/<inventory-name>.txt
 ```
 
-The file uses aligned columns and a dot to select a bucket:
+The file uses aligned columns and a dot inside brackets to select a bucket:
 
 ```text
 # type  item                      shared  local
-brew    bat                       .       
-brew    octave                            .
-cask    marta                             .
-mas     123456789 Example App     .       
+brew    bat                       [.]     [ ]
+brew    octave                    [ ]     [.]
+cask    marta                     [ ]     [.]
+mas     123456789 Example App     [.]     [ ]
 ```
 
-Exactly one of `shared` or `local` must contain `.` for every row. New software
-discovered on a Mac defaults to `local`.
+Exactly one of `shared` or `local` must contain `[.]` for every row. New
+software discovered on a Mac defaults to `local`.
 
 The script validates the file before changing shared state or installing
 software. Invalid rows, unknown types, duplicate items, or rows with zero or two
@@ -107,6 +107,17 @@ The existing classification row distinguishes an intentional external uninstall
 from software that has never been installed on a new Mac. A missing shared item
 with no prior local classification row is installed normally.
 
+## Fish `bcp` Behavior
+
+The frequently used Fish `bcp` function runs `sync-maintain` before committing.
+If the run discovers new supported software and classifies it as local, the
+script returns a dedicated review-required exit status. `bcp` opens the current
+Mac's review file and stops before committing or pushing.
+
+After Fausto moves bracket dots as desired, running `bcp` again applies the
+choices, commits, and pushes. Any other sync failure also stops `bcp`, but does
+not open the review file.
+
 ## App Store Behavior
 
 Mac App Store apps are identified by their numeric App Store ID and display
@@ -154,7 +165,8 @@ Automated tests cover:
 - A shared item never previously installed on a Mac installs on that Mac.
 - Marta and other newly installed casks are tracked.
 - App Store classification and installation by numeric ID.
-- Invalid dot selections stop before state changes.
+- Invalid bracket selections stop before state changes.
+- `bcp` stops and opens the review file when new local software needs review.
 - VS Code extensions and shortcuts retain their existing automatic shared
   behavior.
 - Marta's portable configuration files are tracked while its machine-local

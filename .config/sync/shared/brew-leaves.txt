@@ -1,7 +1,5 @@
 bat
-bun
 eza
-fish
 fisher
 fzf
 gh

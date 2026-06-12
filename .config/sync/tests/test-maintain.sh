@@ -11,7 +11,12 @@ trap cleanup EXIT
 
 home="$tmp_dir/home"
 bin="$tmp_dir/bin"
-mkdir -p "$home/.config/git/dotfiles" "$home/.config/sync/shared" "$home/.config/sync/state/fausto-s-macbook-air" "$bin"
+mkdir -p \
+  "$home/.config/git/dotfiles" \
+  "$home/.config/sync/review" \
+  "$home/.config/sync/shared" \
+  "$home/.config/sync/state/fausto-s-macbook-air" \
+  "$bin"
 
 cat > "$bin/git" <<'EOF'
 #!/usr/bin/env bash
@@ -58,13 +63,13 @@ case "$1" in
     printf 'Homebrew 5.1.15\n'
     ;;
   leaves)
-    printf 'local-pkg\n'
+    printf 'explicit-local\nlocal-pkg\npromoted-current\nremote-present\nshared-installed\n'
     ;;
   list)
     if [[ "${2:-}" == "--cask" ]]; then
-      printf 'local-cask\n'
+      printf 'local-cask\nmarta\nshared-cask\n'
     elif [[ "${2:-}" == "--formula" ]]; then
-      printf 'local-pkg\n'
+      printf 'explicit-local\nlocal-pkg\npromoted-current\nremote-present\nshared-installed\n'
     fi
     ;;
   install)
@@ -103,7 +108,7 @@ cat > "$bin/mas" <<'EOF'
 #!/usr/bin/env bash
 case "$1" in
   list)
-    printf '111111111 Local App\n'
+    printf '111111111 Local App\n222222222 Shared App\n'
     ;;
   install)
     printf '%s\n' "$2" >> "$HOME/mas-installs.log"
@@ -138,16 +143,25 @@ EOF
 chmod +x "$bin/"*
 
 cat > "$home/.config/sync/shared/brew-leaves.txt" <<'EOF'
-shared-pkg
+legacy-absent
 EOF
 
 cat > "$home/.config/sync/shared/brew-casks.txt" <<'EOF'
-shared-cask
+legacy-cask
 EOF
 
 cat > "$home/.config/sync/shared/mas-apps.txt" <<'EOF'
-222222222 Shared App
+333333333 Legacy App
 EOF
+
+printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t\t.\nbrew\tpromoted-current\t.\t\nbrew\tremote-present\t\t.\nbrew\tshared-installed\t.\t\nbrew\tremoved-shared\t.\t\nbrew\tremoved-local\t\t.\ncask\tshared-cask\t.\t\nmas\t222222222 Shared App\t.\t\n' \
+  > "$home/.config/sync/review/fausto-s-macbook-air.txt"
+
+printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\nbrew\tpromoted-current\t\t.\nbrew\tremote-present\t.\t\nbrew\tremoved-shared\t.\t\nbrew\tremote-shared\t.\t\n' \
+  > "$home/.config/sync/review/fausto-s-macbook-pro.txt"
+
+printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\n' \
+  > "$home/.config/sync/state/fausto-s-macbook-air/software-review.last-seen.txt"
 
 cat > "$home/.config/sync/shared/vscode-extensions.txt" <<'EOF'
 shared.extension
@@ -161,23 +175,61 @@ cat > "$home/code-extensions.current" <<'EOF'
 local.extension
 EOF
 
+set +e
 output="$(
   HOME="$home" \
   PATH="$bin:/usr/bin:/bin" \
   "$script_under_test"
 )"
+first_status=$?
+set -e
 
-grep -q '^shared-pkg$' "$home/brew-installs.log"
-grep -q '^--cask shared-cask$' "$home/brew-installs.log"
-grep -q '^222222222$' "$home/mas-installs.log"
+[[ "$first_status" -eq 3 ]]
+
+grep -q '^remote-shared$' "$home/brew-installs.log"
+! grep -q 'legacy-absent' "$home/brew-installs.log"
+! grep -q 'legacy-cask' "$home/brew-installs.log"
+[[ ! -f "$home/mas-installs.log" ]]
 grep -q '^install shared.extension$' "$home/code-actions.log"
 grep -q '^uninstall local.extension$' "$home/code-actions.log"
-grep -q 'Brew packages installed here but not shared:' <<<"$output"
-grep -q '\[ \] local-pkg' <<<"$output"
-grep -q 'Casks installed here but not shared:' <<<"$output"
-grep -q '\[ \] local-cask' <<<"$output"
-grep -q 'App Store apps installed here but not shared:' <<<"$output"
-grep -q '\[ \] 111111111 Local App' <<<"$output"
+grep -q $'^brew\tlocal-pkg\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+grep -q $'^cask\tmarta\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+grep -q $'^mas\t111111111 Local App\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+! grep -q 'removed-local' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+! grep -q 'removed-shared' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+grep -q $'^brew\tremoved-shared\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-pro.txt"
+grep -q $'^brew\texplicit-local\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-pro.txt"
+grep -q $'^brew\tremote-present\t\\[\\.\\]\t\\[ \\]$' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+grep -q $'^brew\tpromoted-current\t\\[\\.\\]\t\\[ \\]$' "$home/.config/sync/review/fausto-s-macbook-pro.txt"
+! grep -q 'removed-shared' "$home/.config/sync/shared/brew-leaves.txt"
+! grep -q 'explicit-local' "$home/.config/sync/shared/brew-leaves.txt"
+grep -q '^remote-shared$' "$home/.config/sync/shared/brew-leaves.txt"
+grep -q '^shared-installed$' "$home/.config/sync/shared/brew-leaves.txt"
+grep -q '^shared-cask$' "$home/.config/sync/shared/brew-casks.txt"
+grep -q '^222222222 Shared App$' "$home/.config/sync/shared/mas-apps.txt"
+grep -q 'Software newly classified as local:' <<<"$output"
 grep -q 'Installed Brew packages:' <<<"$output"
 grep -q 'Installed Brew casks:' <<<"$output"
 grep -q 'Installed App Store apps:' <<<"$output"
+
+cp "$home/.config/sync/review/fausto-s-macbook-air.txt" "$home/review-valid.txt"
+printf 'brew\tinvalid-selection\t[.]\t[.]\n' >> "$home/.config/sync/review/fausto-s-macbook-air.txt"
+if HOME="$home" PATH="$bin:/usr/bin:/bin" "$script_under_test" >"$home/invalid.out" 2>"$home/invalid.err"; then
+  echo "invalid review unexpectedly succeeded" >&2
+  exit 1
+fi
+grep -q 'Select exactly one bucket' "$home/invalid.err"
+mv "$home/review-valid.txt" "$home/.config/sync/review/fausto-s-macbook-air.txt"
+
+rm -f \
+  "$home/.config/sync/review/fausto-s-macbook-air.txt" \
+  "$home/.config/sync/state/fausto-s-macbook-air/software-review.last-seen.txt"
+printf 'legacy-absent\nshared-installed\n' > "$home/.config/sync/shared/brew-leaves.txt"
+set +e
+HOME="$home" PATH="$bin:/usr/bin:/bin" "$script_under_test" >/dev/null
+migration_status=$?
+set -e
+[[ "$migration_status" -eq 3 ]]
+! grep -q 'legacy-absent' "$home/.config/sync/review/fausto-s-macbook-air.txt"
+! grep -q 'legacy-absent' "$home/brew-installs.log"
+grep -q $'^cask\tmarta\t\\[ \\]\t\\[\\.\\]$' "$home/.config/sync/review/fausto-s-macbook-air.txt"

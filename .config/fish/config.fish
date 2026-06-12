@@ -25,6 +25,7 @@ alias py python
 alias b bat
 alias cl clear
 alias fi yazi
+alias sv "source .venv/bin/activate.fish"
 function c
     set -l target
 
@@ -65,6 +66,21 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
         sync-maintain
     else
         ~/.config/sync/maintain.sh
+    end
+
+    set -l sync_status $status
+    if test $sync_status -eq 3
+        set -l computer_name (scutil --get ComputerName 2>/dev/null; or hostname -s)
+        set -l review_name (string lower -- $computer_name | string replace -ra '[^[:alnum:]]+' '-' | string trim -c '-')
+        set -l review_file "$HOME/.config/sync/review/$review_name.txt"
+
+        echo "New software needs review. Move bracket dots, save, then run bcp again:"
+        echo "$review_file"
+        micro "$review_file"
+        return 3
+    else if test $sync_status -ne 0
+        echo "sync-maintain failed; bcp stopped." >&2
+        return $sync_status
     end
 
     bare add -u
