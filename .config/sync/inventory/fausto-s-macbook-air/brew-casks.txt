@@ -6,6 +6,7 @@ karabiner-elements
 keepingyouawake
 maccy
 marta
+quickrecorder
 shottr
 spotify
 stats

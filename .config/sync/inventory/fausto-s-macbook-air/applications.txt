@@ -5,6 +5,7 @@ Karabiner-EventViewer
 KeepingYouAwake
 Maccy
 Marta
+QuickRecorder
 Safari
 Shottr
 Spotify
