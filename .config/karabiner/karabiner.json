@@ -29,20 +29,6 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Right Shift → Hyper",
-                                "from": {
-                                    "key_code": "right_shift",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "left_shift",
-                                        "modifiers": ["left_command", "left_control", "left_option"]
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
                                 "description": "Caps Lock → Delete",
                                 "from": {
                                     "key_code": "caps_lock",
@@ -115,78 +101,6 @@
                                     }
                                 },
                                 "to": [{ "key_code": "right_arrow" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 1 → Helium",
-                                "from": {
-                                    "key_code": "1",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'Helium'" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 2 → T3 Code",
-                                "from": {
-                                    "key_code": "2",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'T3 Code (Alpha)'" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 3 → VSCode",
-                                "from": {
-                                    "key_code": "3",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'Visual Studio Code'" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 4 → Ghostty",
-                                "from": {
-                                    "key_code": "4",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'Ghostty'" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 5 → Spotify",
-                                "from": {
-                                    "key_code": "5",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'Spotify'" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Hyper + 6 → Antinote",
-                                "from": {
-                                    "key_code": "6",
-                                    "modifiers": {
-                                        "mandatory": ["command", "control", "option", "shift"],
-                                        "optional": ["any"]
-                                    }
-                                },
-                                "to": [{ "shell_command": "open -a 'Antinote'" }],
                                 "type": "basic"
                             }
                         ]
