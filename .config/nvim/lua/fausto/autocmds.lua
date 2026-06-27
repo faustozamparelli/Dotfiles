@@ -15,3 +15,42 @@ vim.api.nvim_create_autocmd('BufWritePre', {
         end
     end,
 })
+
+local function tmux_window_name()
+    if not vim.env.TMUX or not vim.env.TMUX_PANE then
+        return
+    end
+
+    local path = vim.api.nvim_buf_get_name(0)
+    local context
+    if path ~= '' then
+        context = vim.fn.fnamemodify(path, ':t')
+    else
+        context = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+    end
+
+    if context == '' then
+        context = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+    end
+    context = context:gsub('[:.]', '-')
+
+    vim.system({ 'tmux', 'rename-window', '-t', vim.env.TMUX_PANE, context }):wait()
+end
+
+vim.api.nvim_create_autocmd({ 'BufEnter', 'DirChanged', 'VimEnter' }, {
+    group = group,
+    desc = 'Keep the tmux window name aligned with the Neovim context',
+    callback = function()
+        vim.schedule(tmux_window_name)
+    end,
+})
+
+vim.api.nvim_create_autocmd('VimLeavePre', {
+    group = group,
+    desc = 'Return tmux window naming to the current directory',
+    callback = function()
+        if vim.env.TMUX and vim.env.TMUX_PANE then
+            vim.system({ 'tmux', 'set-window-option', '-t', vim.env.TMUX_PANE, 'automatic-rename', 'on' }):wait()
+        end
+    end,
+})

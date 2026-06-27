@@ -94,6 +94,18 @@ local function open_external(path)
     end
 end
 
+local function rename_tmux_window(path)
+    if not vim.env.TMUX or not vim.env.TMUX_PANE then
+        return
+    end
+
+    local name = vim.fn.fnamemodify(path, ':t')
+    if name ~= '' then
+        name = name:gsub('[:.]', '-')
+        vim.system({ 'tmux', 'rename-window', '-t', vim.env.TMUX_PANE, name }):wait()
+    end
+end
+
 function M.open_path(path)
     path = vim.trim(path or '')
     local stat = vim.uv.fs_stat(path)
@@ -101,6 +113,10 @@ function M.open_path(path)
         vim.notify('Path no longer exists: ' .. path, vim.log.levels.WARN)
         return
     end
+
+    -- Rename immediately from the fzf selection. BufEnter and DirChanged can
+    -- occur after fzf has restored its temporary terminal buffer.
+    rename_tmux_window(path)
 
     if stat.type == 'directory' then
         vim.cmd.cd(vim.fn.fnameescape(path))

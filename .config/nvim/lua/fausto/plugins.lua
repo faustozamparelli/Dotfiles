@@ -9,6 +9,7 @@ vim.pack.add({
     { src = gh('neovim-treesitter/nvim-treesitter'), version = 'main' },
     { src = gh('lewis6991/gitsigns.nvim') },
     { src = gh('folke/which-key.nvim') },
+    { src = gh('MeanderingProgrammer/render-markdown.nvim') },
 }, { confirm = false, load = true })
 
 require('oil').setup({
@@ -72,11 +73,54 @@ vim.api.nvim_create_autocmd('FileType', {
 
 require('gitsigns').setup({ current_line_blame = false })
 
+require('render-markdown').setup({
+    enabled = true,
+    heading = {
+        sign = false,
+        icons = { '━━ ', '━ ', '◆ ', '◇ ', '▸ ', '· ' },
+        position = 'inline',
+        width = 'block',
+        backgrounds = { 'Normal' },
+        foregrounds = {
+            'RenderMarkdownH1',
+            'RenderMarkdownH2',
+            'RenderMarkdownH3',
+            'RenderMarkdownH4',
+            'RenderMarkdownH5',
+            'RenderMarkdownH6',
+        },
+    },
+    code = {
+        style = 'normal',
+        width = 'block',
+        border = 'thin',
+        highlight = 'RenderMarkdownCode',
+        highlight_border = 'RenderMarkdownCodeBorder',
+        highlight_inline = 'RenderMarkdownCodeInline',
+    },
+    bullet = {
+        icons = { '•' },
+        highlight = 'RenderMarkdownMuted',
+    },
+    checkbox = {
+        unchecked = {
+            icon = '[ ] ',
+            highlight = 'RenderMarkdownMuted',
+        },
+        checked = {
+            icon = '[x] ',
+            highlight = 'RenderMarkdownChecked',
+        },
+    },
+})
+
 require('which-key').setup({ preset = 'helix', delay = 250 })
 require('which-key').add({
     { '<leader>b', group = 'buffer' },
     { '<leader>f', group = 'find' },
     { '<leader>g', group = 'git' },
     { '<leader>l', group = 'language' },
+    { '<leader>m', group = 'markdown' },
     { '<leader>q', group = 'quit/session' },
+    { '<leader>r', group = 'reload' },
 })
