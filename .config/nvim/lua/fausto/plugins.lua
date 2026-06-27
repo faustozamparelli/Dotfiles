@@ -75,6 +75,31 @@ require('gitsigns').setup({ current_line_blame = false })
 
 require('render-markdown').setup({
     enabled = true,
+    render_modes = true,
+    win_options = {
+        concealcursor = {
+            default = vim.o.concealcursor,
+            rendered = 'nv',
+        },
+    },
+    anti_conceal = {
+        enabled = true,
+        disabled_modes = {
+            'n',
+            'no',
+            'nov',
+            'noV',
+            'no\22',
+            'v',
+            'V',
+            '\22',
+            's',
+            'S',
+            '\19',
+        },
+        above = 0,
+        below = 0,
+    },
     heading = {
         sign = false,
         icons = { '━━ ', '━ ', '◆ ', '◇ ', '▸ ', '· ' },
@@ -104,11 +129,11 @@ require('render-markdown').setup({
     },
     checkbox = {
         unchecked = {
-            icon = '[ ] ',
+            icon = '🔲 ',
             highlight = 'RenderMarkdownMuted',
         },
         checked = {
-            icon = '[x] ',
+            icon = '✅ ',
             highlight = 'RenderMarkdownChecked',
         },
     },
