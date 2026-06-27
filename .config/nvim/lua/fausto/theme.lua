@@ -28,6 +28,10 @@ local function set_highlights(dark)
     vim.api.nvim_set_hl(0, 'StatusLine', { bg = background, fg = dark and '#a3a3a3' or '#525252' })
     vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = background, fg = dark and '#525252' or '#a3a3a3' })
     vim.api.nvim_set_hl(0, 'Visual', { bg = dark and '#164e63' or '#bae6fd' })
+    vim.api.nvim_set_hl(0, 'MarkdownPersistentHighlight', {
+        bg = dark and '#854d0e' or '#fde047',
+        fg = dark and '#fef9c3' or '#422006',
+    })
 
     -- Keep rendered Markdown in the same restrained palette as the editor.
     vim.api.nvim_set_hl(0, 'RenderMarkdownH1', { fg = dark and '#a5f3fc' or '#075985', bold = true })
