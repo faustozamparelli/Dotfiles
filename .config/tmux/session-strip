@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+current="${1:-}"
+mapfile_compat=()
+while IFS= read -r name; do
+    mapfile_compat+=("$name")
+done < <(tmux list-sessions -F '#{session_name}' 2>/dev/null | LC_ALL=C sort)
+
+count=${#mapfile_compat[@]}
+((count > 0)) || exit 0
+
+index=0
+for i in "${!mapfile_compat[@]}"; do
+    if [[ "${mapfile_compat[$i]}" == "$current" ]]; then
+        index=$i
+        break
+    fi
+done
+
+active="#[fg=#6d28d9,bold]● ${mapfile_compat[$index]}#[default]"
+
+if ((count == 1)); then
+    printf ' %s ' "$active"
+elif ((count == 2)); then
+    other=$((1 - index))
+    printf ' #[fg=colour242]‹ %s#[default]  %s #[fg=colour242]›#[default] ' \
+        "${mapfile_compat[$other]}" "$active"
+else
+    previous=$(((index - 1 + count) % count))
+    next=$(((index + 1) % count))
+    printf ' #[fg=colour242]‹ %s#[default]  %s  #[fg=colour242]%s ›#[default] ' \
+        "${mapfile_compat[$previous]}" "$active" "${mapfile_compat[$next]}"
+fi

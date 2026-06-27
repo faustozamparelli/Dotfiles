@@ -1,0 +1,59 @@
+# id	layer	category	key	action	description
+ghostty.escape	Ghostty	Command	Cmd-a	escape	Leave the current editing mode
+tmux.window.previous	tmux	Command	Cmd-h	previous-window	Select the previous window
+tmux.window.next	tmux	Command	Cmd-l	next-window	Select the next window
+tmux.window.move-left	tmux	Command	Cmd-Shift-h	swap-window-left	Move the current window left
+tmux.window.move-right	tmux	Command	Cmd-Shift-l	swap-window-right	Move the current window right
+tmux.pane.split-right	tmux	Command	Cmd-b	split-right	Create a pane on the right
+tmux.pane.split-down	tmux	Command	Cmd-n	split-down	Create a pane below
+tmux.agent.toggle	tmux	Command	Cmd-g	agent-pane	Create or focus the Codex pane
+tmux.pane.close	tmux	Command	Cmd-w	close-pane	Close the current pane
+tmux.session.previous	tmux	Control	Ctrl-h	previous-session	Switch to the previous session
+tmux.session.next	tmux	Control	Ctrl-l	next-session	Switch to the next session
+tmux.pane.left	tmux	Alt	Alt-h	select-left	Focus the pane to the left
+tmux.pane.down	tmux	Alt	Alt-j	select-down	Focus the pane below
+tmux.pane.up	tmux	Alt	Alt-k	select-up	Focus the pane above
+tmux.pane.right	tmux	Alt	Alt-l	select-right	Focus the pane to the right
+tmux.pane.resize-left	tmux	Alt	Alt-Shift-h	resize-left	Resize the pane left
+tmux.pane.resize-down	tmux	Alt	Alt-Shift-j	resize-down	Resize the pane down
+tmux.pane.resize-up	tmux	Alt	Alt-Shift-k	resize-up	Resize the pane up
+tmux.pane.resize-right	tmux	Alt	Alt-Shift-l	resize-right	Resize the pane right
+tmux.admin.new-window	tmux	Ctrl-Space	c	new-window	Create a tmux window
+tmux.admin.new-session	tmux	Ctrl-Space	n	new-session	Create and switch to a named session
+tmux.admin.sessions	tmux	Ctrl-Space	s	choose-session	Choose a tmux session
+tmux.admin.windows	tmux	Ctrl-Space	W	choose-window	Choose a tmux window
+tmux.admin.kill-session	tmux	Ctrl-Space	w	kill-session	Kill the current session after confirmation
+tmux.admin.detach	tmux	Ctrl-Space	d	detach	Detach the tmux client
+tmux.admin.reload	tmux	Ctrl-Space	r	reload	Reload tmux configuration
+tmux.admin.save	tmux	Ctrl-Space	S	snapshot-save	Save a session snapshot
+tmux.admin.restore	tmux	Ctrl-Space	R	snapshot-restore	Restore a session snapshot
+tmux.admin.help	tmux	Ctrl-Space	?	keymap-help	Open searchable keymap help
+nvim.file.save	Neovim	Space	Space Space	save	Save the current file
+nvim.file.oil	Neovim	Space	Space e	oil	Open Oil file browser
+nvim.file.parent	Neovim	Direct	-	oil-parent	Open the parent directory in Oil
+nvim.find.files	Neovim	Space	Space f f	find-files	Find files
+nvim.find.anywhere	Neovim	Space	Space f a	find-anywhere	Find files or projects across working roots
+nvim.find.grep	Neovim	Space	Space f g	live-grep	Search project text
+nvim.find.buffers	Neovim	Space	Space f b	find-buffers	Find open buffers
+nvim.find.recent	Neovim	Space	Space f r	recent-files	Find recent files
+nvim.find.help	Neovim	Space	Space f h	help-tags	Search Neovim help
+nvim.git.status	Neovim	Space	Space g s	git-status	Open Git status picker
+nvim.git.blame	Neovim	Space	Space g b	git-blame	Show line blame
+nvim.git.diff	Neovim	Space	Space g d	git-diff	Diff the current file
+nvim.git.next-hunk	Neovim	Space	Space g n	next-hunk	Go to next Git hunk
+nvim.git.prev-hunk	Neovim	Space	Space g p	previous-hunk	Go to previous Git hunk
+nvim.language.rename	Neovim	Space	Space l r	rename	Rename symbol
+nvim.language.action	Neovim	Space	Space l a	code-action	Open code actions
+nvim.language.diagnostics	Neovim	Space	Space l d	diagnostics	Search workspace diagnostics
+nvim.language.format	Neovim	Space	Space l f	format	Format the current buffer
+nvim.buffer.next	Neovim	Space	Space b l	next-buffer	Select next buffer
+nvim.buffer.previous	Neovim	Space	Space b h	previous-buffer	Select previous buffer
+nvim.buffer.delete	Neovim	Space	Space b d	delete-buffer	Delete current buffer
+nvim.quit.buffer	Neovim	Space	Space q q	quit	Close the current window
+nvim.quit.all	Neovim	Space	Space q a	quit-all	Quit Neovim
+nvim.help.keys	Neovim	Space	Space ?	keymap-help	Open keymap help
+nvim.motion.line-start	Neovim	Direct	H	line-start	Move to first nonblank character
+nvim.motion.line-end	Neovim	Direct	L	line-end	Move to end of line
+nvim.edit.redo	Neovim	Direct	U	redo	Redo the last change
+nvim.visual.move-down	Neovim	Direct	J	move-selection-down	Move selected lines down
+nvim.visual.move-up	Neovim	Direct	K	move-selection-up	Move selected lines up

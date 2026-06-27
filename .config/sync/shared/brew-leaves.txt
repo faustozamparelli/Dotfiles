@@ -8,7 +8,11 @@ git-delta
 libqalculate
 mas
 mole
+neovim
 pnpm
+pyright
+ruff
+tmux
 uv
 wget
 zoxide

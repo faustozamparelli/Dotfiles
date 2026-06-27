@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+reference="$HOME/.config/sync/README.md"
+if command -v fzf >/dev/null 2>&1; then
+  awk -F '|' '/^\|/ && $2 !~ /^( Layer|---)/ { gsub(/^ +| +$/, "", $2); gsub(/^ +| +$/, "", $3); gsub(/^ +| +$/, "", $4); gsub(/^ +| +$/, "", $5); printf "%-9s %-12s %-20s %s\n", $2, $3, $4, $5 }' "$reference" |
+    fzf --no-sort --layout=reverse --border --prompt='Keymaps > ' --header='Type to filter; Esc closes'
+elif command -v bat >/dev/null 2>&1; then
+  bat --style=plain "$reference"
+else
+  less "$reference"
+fi

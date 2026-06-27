@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+plugin_dir="$HOME/.local/share/tmux/plugins/tmux-resurrect"
+if [[ -d "$plugin_dir/.git" ]]; then
+  git -C "$plugin_dir" pull --ff-only
+else
+  mkdir -p "$(dirname "$plugin_dir")"
+  git clone --depth 1 https://github.com/tmux-plugins/tmux-resurrect "$plugin_dir"
+fi

@@ -1,0 +1,30 @@
+{
+  "plugins": {
+    "fzf-lua": {
+      "rev": "b6f0392fe1645973c795b5bbbd8d6db466a5a25a",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "2038c666bd9d8a0b7349a0b6ee00dc83104b9ecf",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "nvim-treesitter": {
+      "rev": "df7489eeea351bece7fd0f9c825be5cb6a1438f0",
+      "src": "https://github.com/neovim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "oil.nvim": {
+      "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "treesitter-parser-registry": {
+      "rev": "6eb15358bb9fc88f0d3401d8538d56652e9bdf3c",
+      "src": "https://github.com/neovim-treesitter/treesitter-parser-registry",
+      "version": "'main'"
+    },
+    "which-key.nvim": {
+      "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
+      "src": "https://github.com/folke/which-key.nvim"
+    }
+  }
+}

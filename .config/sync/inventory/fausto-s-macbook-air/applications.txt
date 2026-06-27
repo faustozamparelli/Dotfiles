@@ -17,5 +17,4 @@ Spotify
 Stats
 T3 Code (Alpha)
 Tuna
-Visual Studio Code
 Wispr Flow

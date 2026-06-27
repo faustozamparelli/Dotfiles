@@ -58,9 +58,7 @@ After setup, use Fish and run:
 sync-maintain
 ```
 
-This syncs VS Code extensions, writes this Mac's inventory under `~/.config/sync/inventory/<mac-name>/`, stages stable config, and shows `bare status`.
-
-VS Code extension sync uses `~/.config/sync/vscode-extensions.txt` as the shared desired list. If this Mac changed extensions since its last maintenance, maintenance adopts this Mac's list and the last pushed Mac wins. If this Mac did not change extensions but the shared list changed, maintenance installs/uninstalls locally to match it.
+This writes this Mac's inventory under `~/.config/sync/inventory/<mac-name>/`, stages stable config, and shows `bare status`. Retired VS Code settings and extension names remain tracked for reference, but maintenance and bootstrap never install them.
 
 `bcp` runs `sync-maintain` before committing and pushing, so normal bare pushes refresh inventory and reduce extension conflicts.
 
@@ -70,6 +68,25 @@ Review and commit intentionally:
 bare status
 bcp
 ```
+
+## Terminal Workflow
+
+Ghostty launches Fish, which attaches or creates the tmux session named
+`default`. Neovim is the primary editor (`c`, `v`, and `m` all open `nvim`).
+Set `FAUSTO_NO_TMUX=1` before starting Fish when an unwrapped shell is needed.
+
+The canonical custom-key inventory is `~/.config/keymaps/registry.tsv`; the
+readable reference is `~/.config/keymaps/REFERENCE.md`. Use `Ctrl-Space ?` in
+tmux or `Space ?` in Neovim for runtime help. Agents changing a binding must
+follow `~/.config/keymaps/AGENTS.md` and run:
+
+```sh
+keymap-docs
+keymap-docs --check
+```
+
+tmux snapshots are explicit: `Ctrl-Space S` saves and `Ctrl-Space R` restores.
+They are never written periodically in the background.
 
 ## Sync Files
 

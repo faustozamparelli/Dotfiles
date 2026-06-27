@@ -16,21 +16,14 @@ shared_dir="$sync_dir/shared"
 shared_brew_leaves="$shared_dir/brew-leaves.txt"
 shared_brew_casks="$shared_dir/brew-casks.txt"
 shared_mas_apps="$shared_dir/mas-apps.txt"
-desired_extensions="$shared_dir/vscode-extensions.txt"
 keyboard_dir="$shared_dir/macos-keyboard-shortcuts"
 keyboard_state_dir="$state_dir/macos-keyboard-shortcuts"
-legacy_extensions="$sync_dir/vscode-extensions.txt"
-legacy_snapshot_extensions="$sync_dir/vscode-extensions.current.txt"
-legacy_last_seen_desired_extensions="$sync_dir/vscode-extensions.last-desired.$safe_name.txt"
-last_seen_desired_extensions="$state_dir/vscode-extensions.last-seen.txt"
 legacy_keyboard_dir="$sync_dir/macos-keyboard-shortcuts"
 tmp_dir="$(mktemp -d)"
 
 installed_brew_packages=()
 installed_brew_casks=()
 installed_mas_apps=()
-installed_vscode_extensions=()
-removed_vscode_extensions=()
 applied_keyboard_domains=()
 newly_local_software=()
 declassified_software=()
@@ -293,20 +286,6 @@ if [[ -d "$legacy_review_dir" ]]; then
   rmdir "$legacy_review_dir" 2>/dev/null || true
 fi
 
-# Legacy migration from earlier flat sync files.
-if [[ ! -f "$desired_extensions" ]]; then
-  if [[ -f "$legacy_extensions" ]]; then
-    cp "$legacy_extensions" "$desired_extensions"
-  elif [[ -f "$legacy_snapshot_extensions" ]]; then
-    cp "$legacy_snapshot_extensions" "$desired_extensions"
-  fi
-fi
-
-if [[ ! -f "$last_seen_desired_extensions" && -f "$legacy_last_seen_desired_extensions" ]]; then
-  cp "$legacy_last_seen_desired_extensions" "$last_seen_desired_extensions"
-  rm -f "$legacy_last_seen_desired_extensions"
-fi
-
 if [[ -d "$legacy_keyboard_dir" ]]; then
   find "$legacy_keyboard_dir" -maxdepth 1 -name '*.plist' -type f -print0 |
     while IFS= read -r -d '' file; do
@@ -318,9 +297,6 @@ fi
 ensure_file "$shared_brew_leaves"
 ensure_file "$shared_brew_casks"
 ensure_file "$shared_mas_apps"
-ensure_file "$desired_extensions"
-sort_unique_file "$desired_extensions"
-
 {
   printf 'computer_name=%s\n' "$computer_name"
   printf 'inventory_name=%s\n' "$safe_name"
@@ -361,6 +337,10 @@ while IFS= read -r package; do
   installed_brew_packages+=("$package")
 done < "$missing_brew_packages"
 
+if command -v tmux >/dev/null 2>&1 && [[ ! -x "$HOME/.local/share/tmux/plugins/tmux-resurrect/scripts/save.sh" ]]; then
+  "$HOME/.config/tmux/install-plugins"
+fi
+
 while IFS= read -r cask; do
   [[ -z "$cask" ]] && continue
   brew install --cask "$cask"
@@ -381,51 +361,6 @@ if command -v mas >/dev/null 2>&1; then
     app_name="$(awk -v id="$app_id" '$1 == id { $1=""; sub(/^ /, ""); print; exit }' "$shared_mas_apps")"
     installed_mas_apps+=("$app_id${app_name:+ $app_name}")
   done < "$missing_mas_ids"
-fi
-
-if command -v code >/dev/null 2>&1; then
-  current_extensions="$tmp_dir/vscode-current.txt"
-  code --list-extensions | LC_ALL=C sort > "$current_extensions"
-
-  if [[ ! -s "$desired_extensions" ]]; then
-    cp "$current_extensions" "$desired_extensions"
-    echo "Initialized shared VS Code extension list from this Mac."
-  fi
-
-  local_changed=false
-  if [[ -f "$last_seen_desired_extensions" ]] && ! cmp -s "$current_extensions" "$last_seen_desired_extensions"; then
-    local_changed=true
-  fi
-
-  if cmp -s "$current_extensions" "$desired_extensions"; then
-    :
-  elif [[ "$local_changed" == true ]]; then
-    cp "$current_extensions" "$desired_extensions"
-    echo "Adopted this Mac's VS Code extensions as the shared list."
-  else
-    missing_extensions="$tmp_dir/vscode-missing.txt"
-    extra_extensions="$tmp_dir/vscode-extra.txt"
-    comm -13 "$current_extensions" "$desired_extensions" > "$missing_extensions"
-    comm -23 "$current_extensions" "$desired_extensions" > "$extra_extensions"
-
-    while IFS= read -r extension; do
-      [[ -z "$extension" ]] && continue
-      code --install-extension "$extension"
-      installed_vscode_extensions+=("$extension")
-    done < "$missing_extensions"
-
-    while IFS= read -r extension; do
-      [[ -z "$extension" ]] && continue
-      code --uninstall-extension "$extension"
-      removed_vscode_extensions+=("$extension")
-    done < "$extra_extensions"
-
-    code --list-extensions | LC_ALL=C sort > "$current_extensions"
-  fi
-
-  cp "$desired_extensions" "$last_seen_desired_extensions"
-else
-  echo "VS Code CLI not found; skipped extension sync."
 fi
 
 keyboard_domains=()
@@ -502,16 +437,6 @@ if [[ "${#installed_mas_apps[@]}" -gt 0 ]]; then
 else
   print_array "Installed App Store apps:"
 fi
-if [[ "${#installed_vscode_extensions[@]}" -gt 0 ]]; then
-  print_array "Installed VS Code extensions:" "${installed_vscode_extensions[@]}"
-else
-  print_array "Installed VS Code extensions:"
-fi
-if [[ "${#removed_vscode_extensions[@]}" -gt 0 ]]; then
-  print_array "Removed VS Code extensions:" "${removed_vscode_extensions[@]}"
-else
-  print_array "Removed VS Code extensions:"
-fi
 if [[ "${#applied_keyboard_domains[@]}" -gt 0 ]]; then
   print_array "Applied keyboard shortcut domains:" "${applied_keyboard_domains[@]}"
 else
@@ -526,6 +451,9 @@ done
 
 "${bare[@]}" add \
   .config/sync \
+  .config/keymaps \
+  .config/nvim \
+  .config/tmux \
   .config/karabiner/karabiner.json \
   ".config/fish/config.fish" \
   ".config/fish/functions/sync-maintain.fish" \

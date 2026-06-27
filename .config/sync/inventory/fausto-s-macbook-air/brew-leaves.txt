@@ -8,10 +8,14 @@ git-delta
 libqalculate
 mas
 mole
-node
+neovim
 octave
 pnpm
+pyright
+ruff
+tmux
 tree
+tree-sitter-cli
 uv
 wget
 zoxide

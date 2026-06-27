@@ -8,6 +8,8 @@ test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
 set -gx THEME dark
+set -gx EDITOR nvim
+set -gx VISUAL nvim
 set fish_greeting ""
 set -g pure_enable_git true
 
@@ -26,22 +28,8 @@ alias b bat
 alias cl clear
 alias fi yazi
 alias sv "source .venv/bin/activate.fish"
-function c
-    set -l target
-
-    if test (count $argv) -eq 0
-        set target .
-    else
-        set target $argv[1]
-    end
-
-    if test -d "$target"
-        env -u VIRTUAL_ENV -u VIRTUAL_ENV_PROMPT code -r "$target"
-    else
-        env -u VIRTUAL_ENV -u VIRTUAL_ENV_PROMPT code "$argv"
-    end
-end
-alias m micro
+alias n nvim
+alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 
 
 #if pressed just enter the message will be 'changes'
@@ -59,6 +47,12 @@ function gcp --description "Commit all changes and push (subject + optional desc
         git commit -m "$subject" -m "$description"
     end
     git push
+end
+
+# Ghostty starts in one predictable tmux workspace. Nested shells and other
+# terminals remain untouched.
+if status is-interactive; and test "$TERM_PROGRAM" = ghostty; and not set -q TMUX; and not set -q FAUSTO_NO_TMUX
+    exec tmux new-session -A -s default
 end
 
 function bcp --description "Bare add -u, commit, and push (subject + optional description)"

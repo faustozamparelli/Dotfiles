@@ -82,27 +82,6 @@ case "$1" in
 esac
 EOF
 
-cat > "$bin/code" <<'EOF'
-#!/usr/bin/env bash
-case "$1" in
-  --list-extensions)
-    if [[ -f "$HOME/code-extensions.current" ]]; then
-      cat "$HOME/code-extensions.current"
-    fi
-    ;;
-  --install-extension)
-    printf 'install %s\n' "$2" >> "$HOME/code-actions.log"
-    ;;
-  --uninstall-extension)
-    printf 'uninstall %s\n' "$2" >> "$HOME/code-actions.log"
-    ;;
-  *)
-    echo "unexpected code args: $*" >&2
-    exit 1
-    ;;
-esac
-EOF
-
 cat > "$bin/mas" <<'EOF'
 #!/usr/bin/env bash
 case "$1" in
@@ -162,18 +141,6 @@ printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\nbrew\tpromoted-c
 printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\n' \
   > "$home/.config/sync/state/fausto-s-macbook-air/software-review.last-seen.txt"
 
-cat > "$home/.config/sync/shared/vscode-extensions.txt" <<'EOF'
-shared.extension
-EOF
-
-cat > "$home/.config/sync/state/fausto-s-macbook-air/vscode-extensions.last-seen.txt" <<'EOF'
-local.extension
-EOF
-
-cat > "$home/code-extensions.current" <<'EOF'
-local.extension
-EOF
-
 output="$(
   HOME="$home" \
   PATH="$bin:/usr/bin:/bin" \
@@ -184,8 +151,6 @@ grep -q '^remote-shared$' "$home/brew-installs.log"
 ! grep -q 'legacy-absent' "$home/brew-installs.log"
 ! grep -q 'legacy-cask' "$home/brew-installs.log"
 [[ ! -f "$home/mas-installs.log" ]]
-grep -q '^install shared.extension$' "$home/code-actions.log"
-grep -q '^uninstall local.extension$' "$home/code-actions.log"
 grep -q $'^brew\tlocal-pkg\t\\[\\]\t\\[\\.\\]$' "$home/.config/sync/software-fausto-s-macbook-air.txt"
 grep -q $'^cask\tmarta\t\\[\\]\t\\[\\.\\]$' "$home/.config/sync/software-fausto-s-macbook-air.txt"
 
@@ -213,6 +178,9 @@ grep -q 'Software newly classified as local:' <<<"$output"
 grep -q 'Installed Brew packages:' <<<"$output"
 grep -q 'Installed Brew casks:' <<<"$output"
 grep -q 'Installed App Store apps:' <<<"$output"
+grep -q '^git add .config/keymaps$' "$home/git.log"
+grep -q '^git add .config/nvim$' "$home/git.log"
+grep -q '^git add .config/tmux$' "$home/git.log"
 
 cp "$home/.config/sync/software-fausto-s-macbook-air.txt" "$home/review-valid.txt"
 printf 'brew\tinvalid-selection\t[.]\t[.]\n' >> "$home/.config/sync/software-fausto-s-macbook-air.txt"
