@@ -74,6 +74,13 @@ map('n', '<leader>gp', gitsigns.prev_hunk, opts('nvim.git.prev-hunk', 'Previous 
 map('n', '<leader>lr', vim.lsp.buf.rename, opts('nvim.language.rename', 'Rename symbol'))
 map({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts('nvim.language.action', 'Code action'))
 map('n', '<leader>ld', fzf.diagnostics_workspace, opts('nvim.language.diagnostics', 'Workspace diagnostics'))
+map('n', 'gd', vim.lsp.buf.definition, opts('nvim.language.definition', 'Go to definition'))
+map('n', 'gr', fzf.lsp_references, vim.tbl_extend('force', opts('nvim.language.references', 'Find references'), {
+    nowait = true,
+}))
+map('n', 'gi', vim.lsp.buf.implementation, opts('nvim.language.implementation', 'Go to implementation'))
+map('n', 'gy', vim.lsp.buf.type_definition, opts('nvim.language.type-definition', 'Go to type definition'))
+map('n', 'gs', vim.lsp.buf.document_symbol, opts('nvim.language.document-symbols', 'Document symbols'))
 map('n', '<leader>le', function()
     vim.cmd('redir @+')
     vim.cmd('silent messages')

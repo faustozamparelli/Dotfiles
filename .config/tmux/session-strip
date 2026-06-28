@@ -24,8 +24,8 @@ if ((count == 1)); then
     printf ' %s ' "$active"
 elif ((count == 2)); then
     other=$((1 - index))
-    printf ' #[fg=colour242]‹ %s#[default]  %s #[fg=colour242]›#[default] ' \
-        "${mapfile_compat[$other]}" "$active"
+    printf ' #[fg=colour242]‹ %s#[default]  %s  #[fg=colour242]%s ›#[default] ' \
+        "${mapfile_compat[$other]}" "$active" "${mapfile_compat[$other]}"
 else
     previous=$(((index - 1 + count) % count))
     next=$(((index + 1) % count))
