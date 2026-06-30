@@ -5,16 +5,13 @@ Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
 Maccy
-Marta
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 QuickRecorder
 Safari
-Safe Exam Browser
 Shottr
 Spotify
-Stats
 T3 Code (Alpha)
 Tuna
 Wispr Flow

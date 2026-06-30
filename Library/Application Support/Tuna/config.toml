@@ -1,0 +1,62 @@
+schemaVersion = 1
+
+[catalogs]
+sortOrders = []
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'Tuna.EffectsCatalog'
+    mode = 'none'
+    selectedItemKeys = []
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'TunaEmoji.EmojiCatalog'
+    mode = 'none'
+    selectedItemKeys = []
+
+[[comboMode.bindings]]
+key = 'm'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Marta/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+key = 's'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Spotify/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+key = 'h'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Helium/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+key = 'v'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Visual%20Studio%20Code/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+key = 'e'
+url = 'tuna://run/TunaEmoji.EmojiSearchCatalog.Emoji/TunaCore.CommonActionsCatalog.Browse'
+
+[[comboMode.bindings]]
+key = 'g'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Ghostty/TunaCore.CommonActionsCatalog.Open'
+
+[hotkeys]
+custom = []
+
+    [hotkeys.app.activate]
+    carbonKeyCode = 49
+    carbonModifiers = 256
+
+    [hotkeys.app.textMode]
+    carbonKeyCode = 49
+    carbonModifiers = 768
+
+[settings]
+appPresentationMode = 'never'
+comboModeModifierTrigger = 'rightOption'
+comboModeTriggerType = 'modifier'
+mainWindowAnimationsEnabled = false
+themeIdentifier = 'com.brnbw.tuna.themes.default'
+
+[[catalogSettings]]
+catalogIdentifier = 'com.brnbw.tuna.themes.default'
+
+    [catalogSettings.values]
+    ThemeTint = 'custom:FF453A'

@@ -5,12 +5,10 @@ helium-browser
 karabiner-elements
 keepingyouawake
 maccy
-marta
 microsoft-excel
 quickrecorder
 shottr
 spotify
-stats
 t3-code
 tuna
 wispr-flow
