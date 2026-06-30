@@ -76,6 +76,10 @@ mas_ids() {
   awk 'NF { print $1 }' "$1" | LC_ALL=C sort -u
 }
 
+plist_dict_is_empty() {
+  [[ "$(tr -d '[:space:]' < "$1")" == "{}" ]]
+}
+
 validate_review_file() {
   local file="$1"
   awk -F '\t' '
@@ -386,6 +390,9 @@ while IFS= read -r domain; do
 
   if [[ ! -f "$shared_shortcuts" ]]; then
     cp "$current_shortcuts" "$shared_shortcuts"
+  elif plist_dict_is_empty "$current_shortcuts" && ! plist_dict_is_empty "$shared_shortcuts"; then
+    defaults write "$domain" NSUserKeyEquivalents "$(cat "$shared_shortcuts")"
+    applied_keyboard_domains+=("$domain")
   elif [[ -f "$last_seen_shortcuts" ]] && ! cmp -s "$current_shortcuts" "$last_seen_shortcuts"; then
     cp "$current_shortcuts" "$shared_shortcuts"
   elif ! cmp -s "$current_shortcuts" "$shared_shortcuts"; then

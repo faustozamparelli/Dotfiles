@@ -102,7 +102,11 @@ cat > "$bin/defaults" <<'EOF'
 #!/usr/bin/env bash
 case "$1 $3" in
   "read NSUserKeyEquivalents")
-    printf '{"Example" = "@e";}\n'
+    if [[ -f "$HOME/defaults-empty" ]]; then
+      printf '{}\n'
+    else
+      printf '{"Example" = "@e";}\n'
+    fi
     ;;
   "write NSUserKeyEquivalents")
     printf 'defaults write %s\n' "$2" >> "$HOME/defaults-actions.log"
@@ -153,6 +157,15 @@ grep -q '^remote-shared$' "$home/brew-installs.log"
 [[ ! -f "$home/mas-installs.log" ]]
 grep -q $'^brew\tlocal-pkg\t\\[\\]\t\\[\\.\\]$' "$home/.config/sync/software-fausto-s-macbook-air.txt"
 grep -q $'^cask\tmarta\t\\[\\]\t\\[\\.\\]$' "$home/.config/sync/software-fausto-s-macbook-air.txt"
+
+: > "$home/defaults-empty"
+: > "$home/defaults-actions.log"
+HOME="$home" PATH="$bin:/usr/bin:/bin" "$script_under_test" >/dev/null
+grep -q '^defaults write com.apple.Safari$' "$home/defaults-actions.log"
+grep -q 'Example' "$home/.config/sync/shared/macos-keyboard-shortcuts/com.apple.Safari.plist"
+cmp -s \
+  "$home/.config/sync/shared/macos-keyboard-shortcuts/com.apple.Safari.plist" \
+  "$home/.config/sync/state/fausto-s-macbook-air/macos-keyboard-shortcuts/com.apple.Safari.plist"
 
 mkdir -p "$home/.config/sync/review"
 mv \

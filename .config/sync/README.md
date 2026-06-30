@@ -735,6 +735,10 @@ The script:
 - tracks Marta's portable settings; and
 - stages tracked sync and dotfile paths without committing or pushing.
 
+An empty live App Shortcuts dictionary does not replace a nonempty shared
+mapping; maintenance restores the shared mapping instead. To intentionally
+clear every shortcut for a domain, edit its shared plist explicitly.
+
 `software-<mac-name>.txt` is the editable source of truth. Files under
 `shared/`, `inventory/`, and `state/` are generated or observed state. New
 software defaults to local. Move `[.]` between the `shared` and `local`
