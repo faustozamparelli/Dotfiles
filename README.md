@@ -69,6 +69,26 @@ bare status
 bcp
 ```
 
+### macOS default applications
+
+The MacBook Air's explicit file-type "Open With" choices are tracked in
+`~/.config/duti/defaults.duti`. Browser and mail defaults are excluded because
+macOS protects them from this mechanism. This is an occasional manual sync;
+`duti` is intentionally not kept installed.
+
+On the Air after changing defaults in macOS, ask an agent to recapture the
+explicit Launch Services choices into that file, then commit and push. On the
+Pro after pulling, run:
+
+```sh
+brew install duti
+duti ~/.config/duti/defaults.duti
+brew uninstall duti
+```
+
+The target applications must already be installed. After applying, `duti` may
+also be uninstalled on the Air.
+
 ## Terminal Workflow
 
 Ghostty launches Fish, which attaches or creates the tmux session named

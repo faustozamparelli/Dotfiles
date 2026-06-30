@@ -1,0 +1,8 @@
+# macOS default-app choices captured from the MacBook Air.
+# Apply manually with: duti ~/.config/duti/defaults.duti
+
+net.imput.helium        public.html                         all
+com.microsoft.VSCode    public.plain-text                    all
+com.apple.Preview       com.adobe.pdf                        all
+net.imput.helium        net.daringfireball.markdown          all
+com.apple.iCal          com.apple.ical.backup-package        all
