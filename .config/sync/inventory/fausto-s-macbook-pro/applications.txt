@@ -1,32 +1,25 @@
 Affinity
-Amphetamine
-Antinote
-Audacity
-CleanMyMac
 CodexBar
 DaVinci Resolve
 Ghostty
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
+KeepingYouAwake
 MATLAB_R2025b
 Maccy
 Microsoft Excel
-Microsoft Outlook
+Microsoft PowerPoint
 MySielteID
-OBS
 QuickRecorder
-Rectangle Pro
 Safari
 Safe Exam Browser
 Shottr
 Solves
 Spotify
 T3 Code (Alpha)
-Telegram
+Tuna
 UTM
 Visual Studio Code
 Wispr Flow
 Xcode
-legcord
-uBlock Origin Lite
