@@ -1,12 +1,2 @@
 {
-    "Add Tab to New Split View" = "@b";
-    Back = "@j";
-    "Bookmark This Tab..." = "@$d";
-    "Copy URL" = "^c";
-    "Duplicate Tab" = "@d";
-    Forward = "@k";
-    "Open Location..." = "@;";
-    Print = "@$p";
-    "Select Next Tab" = "@l";
-    "Select Previous Tab" = "@h";
 }
