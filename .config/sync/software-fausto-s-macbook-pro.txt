@@ -1,6 +1,8 @@
 # Move [.] between shared and local, then run sync-maintain.
 # type	item	shared	local
+brew	acsandmann/tap/rift	[]	[.]
 brew	bat	[.]	[]
+brew	btop	[.]	[]
 brew	eza	[.]	[]
 brew	fisher	[.]	[]
 brew	fzf	[.]	[]

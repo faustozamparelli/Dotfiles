@@ -1,4 +1,5 @@
 bat
+btop
 eza
 fisher
 fzf

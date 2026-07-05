@@ -1,4 +1,6 @@
+acsandmann/tap/rift
 bat
+btop
 eza
 fisher
 fzf
