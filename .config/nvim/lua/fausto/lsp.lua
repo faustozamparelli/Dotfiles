@@ -1,7 +1,13 @@
 vim.diagnostic.config({
     severity_sort = true,
-    underline = true,
-    virtual_text = { spacing = 2, source = 'if_many' },
+    signs = { severity = vim.diagnostic.severity.ERROR },
+    underline = { severity = vim.diagnostic.severity.ERROR },
+    virtual_text = {
+        severity = vim.diagnostic.severity.ERROR,
+        spacing = 2,
+        source = 'if_many',
+    },
+    float = { severity = vim.diagnostic.severity.ERROR },
 })
 
 vim.lsp.config('pyright', {

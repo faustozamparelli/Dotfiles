@@ -82,10 +82,49 @@ map('n', 'gi', vim.lsp.buf.implementation, opts('nvim.language.implementation', 
 map('n', 'gy', vim.lsp.buf.type_definition, opts('nvim.language.type-definition', 'Go to type definition'))
 map('n', 'gs', vim.lsp.buf.document_symbol, opts('nvim.language.document-symbols', 'Document symbols'))
 map('n', '<leader>le', function()
-    vim.cmd('redir @+')
-    vim.cmd('silent messages')
-    vim.cmd('redir END')
-    vim.notify('Copied Neovim messages to clipboard')
+    local diagnostics = vim.diagnostic.get(nil, {
+        severity = vim.diagnostic.severity.ERROR,
+    })
+    table.sort(diagnostics, function(a, b)
+        if a.bufnr ~= b.bufnr then
+            return a.bufnr < b.bufnr
+        end
+        if a.lnum ~= b.lnum then
+            return a.lnum < b.lnum
+        end
+        return a.col < b.col
+    end)
+
+    local lines = {}
+    for _, diagnostic in ipairs(diagnostics) do
+        local path = vim.api.nvim_buf_get_name(diagnostic.bufnr)
+        if path == '' then
+            path = '[No Name]'
+        else
+            path = vim.fn.fnamemodify(path, ':.')
+        end
+
+        local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
+        local source = diagnostic.source and (' [' .. diagnostic.source .. ']') or ''
+        local message = diagnostic.message:gsub('\r?\n', ' ')
+        lines[#lines + 1] = string.format(
+            '%s:%d:%d: %s%s: %s',
+            path,
+            diagnostic.lnum + 1,
+            diagnostic.col + 1,
+            severity,
+            source,
+            message
+        )
+    end
+
+    if #lines == 0 then
+        vim.notify('No diagnostics to copy')
+        return
+    end
+
+    vim.fn.setreg('+', table.concat(lines, '\n'))
+    vim.notify(string.format('Copied %d diagnostic(s) to clipboard', #lines))
 end, opts('nvim.language.copy-errors', 'Copy error messages'))
 map({ 'n', 'x' }, '<leader>lf', function()
     vim.lsp.buf.format({ async = false, timeout_ms = 3000 })
