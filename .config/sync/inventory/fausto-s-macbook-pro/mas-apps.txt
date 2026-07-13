@@ -1,5 +1,0 @@
- 462062816  Microsoft PowerPoint  (16.110.1)
- 497799835  Xcode                 (26.5)
- 571213070  DaVinci Resolve       (20.3.2)
-1394359548  Solves                (2026.3.22)
-1538878817  UTM                   (4.7.5)

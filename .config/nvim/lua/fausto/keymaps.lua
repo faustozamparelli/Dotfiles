@@ -2,8 +2,14 @@ local map = vim.keymap.set
 local fzf = require('fzf-lua')
 local gitsigns = require('gitsigns')
 
-local function opts(id, description)
-    return { silent = true, desc = description .. ' [km:' .. id .. ']' }
+local function opts(_, description)
+    return { silent = true, desc = description }
+end
+
+local function open_lsp_results_in_side_pane(what)
+    vim.fn.setqflist({}, ' ', what)
+    vim.cmd.vsplit()
+    vim.cmd.cfirst()
 end
 
 map({ 'n', 'i', 'v', 's' }, '<Esc>', function()
@@ -15,6 +21,15 @@ map({ 'n', 'i', 'v', 's' }, '<Esc>', function()
 
     return '<Esc>'
 end, { expr = true, silent = true, desc = 'Escape and clear search highlight' })
+
+map('i', '<Tab>', function()
+    if vim.fn.pumvisible() == 1 then
+        local selected = vim.fn.complete_info({ 'selected' }).selected
+        return selected == -1 and '<C-n><C-y>' or '<C-y>'
+    end
+
+    return '<Tab>'
+end, { expr = true, silent = true, desc = 'Accept top completion suggestion' })
 
 map('n', '<leader><leader>', '<cmd>write<cr>', opts('nvim.file.save', 'Save file'))
 map('n', '<leader>e', '<cmd>Oil<cr>', opts('nvim.file.oil', 'Open Oil'))
@@ -74,12 +89,26 @@ map('n', '<leader>gp', gitsigns.prev_hunk, opts('nvim.git.prev-hunk', 'Previous 
 map('n', '<leader>lr', vim.lsp.buf.rename, opts('nvim.language.rename', 'Rename symbol'))
 map({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts('nvim.language.action', 'Code action'))
 map('n', '<leader>ld', fzf.diagnostics_workspace, opts('nvim.language.diagnostics', 'Workspace diagnostics'))
-map('n', 'gd', vim.lsp.buf.definition, opts('nvim.language.definition', 'Go to definition'))
+map('n', 'K', vim.lsp.buf.hover, opts('nvim.language.hover', 'Open or focus symbol information'))
+map('n', '<leader>lh', function()
+    vim.lsp.buf.hover({
+        focusable = true,
+        max_height = math.max(1, vim.o.lines - 4),
+        max_width = math.max(1, vim.o.columns - 4),
+    })
+end, opts('nvim.language.hover-large', 'Open large symbol information'))
+map('n', 'gd', function()
+    vim.lsp.buf.definition({ on_list = open_lsp_results_in_side_pane })
+end, opts('nvim.language.definition', 'Open definition in side pane'))
 map('n', 'gr', fzf.lsp_references, vim.tbl_extend('force', opts('nvim.language.references', 'Find references'), {
     nowait = true,
 }))
-map('n', 'gi', vim.lsp.buf.implementation, opts('nvim.language.implementation', 'Go to implementation'))
-map('n', 'gy', vim.lsp.buf.type_definition, opts('nvim.language.type-definition', 'Go to type definition'))
+map('n', 'gi', function()
+    vim.lsp.buf.implementation({ on_list = open_lsp_results_in_side_pane })
+end, opts('nvim.language.implementation', 'Open implementation in side pane'))
+map('n', 'gy', function()
+    vim.lsp.buf.type_definition({ on_list = open_lsp_results_in_side_pane })
+end, opts('nvim.language.type-definition', 'Open type definition in side pane'))
 map('n', 'gs', vim.lsp.buf.document_symbol, opts('nvim.language.document-symbols', 'Document symbols'))
 map('n', '<leader>le', function()
     local diagnostics = vim.diagnostic.get(nil, {
@@ -137,8 +166,13 @@ map('n', '<leader>rr', '<cmd>restart<cr>', opts('nvim.reload.config', 'Reload Ne
 map('n', '<leader>qq', '<cmd>quit<cr>', opts('nvim.quit.buffer', 'Quit window'))
 map('n', '<leader>qa', '<cmd>quitall<cr>', opts('nvim.quit.all', 'Quit Neovim'))
 map('n', '<leader>?', function()
-    require('which-key').show({ global = true })
-end, opts('nvim.help.keys', 'Show keymaps'))
+    require('which-key').show({ keys = '<leader>', mode = 'n', delay = 0 })
+end, opts('nvim.help.keys', 'Show leader keymaps'))
+
+for key, direction in pairs({ h = 'h', j = 'j', k = 'k', l = 'l' }) do
+    map('n', '<A-' .. key .. '>', '<C-w>' .. direction, opts('nvim.window.' .. key, 'Move to adjacent pane'))
+    map('t', '<A-' .. key .. '>', '<C-\\><C-n><C-w>' .. direction, opts('nvim.terminal-window.' .. key, 'Move to adjacent pane'))
+end
 
 map({ 'n', 'x', 'o' }, 'H', '^', opts('nvim.motion.line-start', 'Line start'))
 map({ 'n', 'x', 'o' }, 'L', '$', opts('nvim.motion.line-end', 'Line end'))

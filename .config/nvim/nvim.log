@@ -1,0 +1,4 @@
+WRN 2026-07-06T18:26:19.103 ?.6157     server_start:197: Failed to start server: operation not permitted: /var/folders/g5/1ld_syf17w341rc17ld6dgm00000gn/T/nvim.faustozamparelli/mlwDnl/nvim.6157.0
+WRN 2026-07-06T18:54:26.012 ?.34704    server_start:197: Failed to start server: operation not permitted: /var/folders/g5/1ld_syf17w341rc17ld6dgm00000gn/T/nvim.faustozamparelli/eRwIAD/nvim.34704.0
+WRN 2026-07-06T19:21:06.507 ?.63572    server_start:197: Failed to start server: operation not permitted: /var/folders/g5/1ld_syf17w341rc17ld6dgm00000gn/T/nvim.faustozamparelli/JhXyp1/nvim.63572.0
+WRN 2026-07-06T19:21:06.532 ?.63572    server_start:197: Failed to start server: operation not permitted: /var/folders/g5/1ld_syf17w341rc17ld6dgm00000gn/T/nvim.faustozamparelli/JhXyp1/fzf-lua.1783358466.63572.1

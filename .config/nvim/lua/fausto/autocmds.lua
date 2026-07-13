@@ -6,6 +6,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function() vim.hl.on_yank() end,
 })
 
+vim.api.nvim_create_autocmd('FocusLost', {
+    group = group,
+    desc = 'Save the current file when leaving the Neovim or tmux pane',
+    callback = function(args)
+        if vim.bo[args.buf].modified and vim.bo[args.buf].buftype == '' and vim.api.nvim_buf_get_name(args.buf) ~= '' then
+            vim.cmd('silent update')
+        end
+    end,
+})
+
 vim.api.nvim_create_autocmd('BufWritePre', {
     group = group,
     desc = 'Format supported buffers before save',

@@ -1,22 +1,25 @@
 Affinity
-CodexBar
+ChatGPT
 DaVinci Resolve
 Ghostty
+GitButler
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
+KeyboardCleanTool
 MATLAB_R2025b
 Maccy
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
+Notion
 QuickRecorder
+Rectangle
 Safari
 Shottr
 Solves
 Spotify
-T3 Code (Alpha)
 Tuna
 UTM
 Visual Studio Code

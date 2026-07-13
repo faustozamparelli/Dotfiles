@@ -27,6 +27,7 @@ local function set_highlights(dark)
     vim.api.nvim_set_hl(0, 'LineNr', { bg = background, fg = dark and '#525252' or '#a3a3a3' })
     vim.api.nvim_set_hl(0, 'StatusLine', { bg = background, fg = dark and '#a3a3a3' or '#525252' })
     vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = background, fg = dark and '#525252' or '#a3a3a3' })
+    vim.api.nvim_set_hl(0, 'WinSeparator', { bg = background, fg = background })
     vim.api.nvim_set_hl(0, 'Visual', { bg = dark and '#164e63' or '#bae6fd' })
     vim.api.nvim_set_hl(0, 'MarkdownPersistentHighlight', {
         bg = dark and '#854d0e' or '#fde047',

@@ -6,4 +6,4 @@ ProductName:		macOS
 ProductVersion:		26.5.2
 BuildVersion:		25F84
 brew_prefix=/opt/homebrew
-brew_version=Homebrew 6.0.6
+brew_version=Homebrew 6.0.9

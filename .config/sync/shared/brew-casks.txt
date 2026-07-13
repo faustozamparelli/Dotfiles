@@ -6,5 +6,4 @@ karabiner-elements
 maccy
 shottr
 spotify
-t3-code
 wispr-flow

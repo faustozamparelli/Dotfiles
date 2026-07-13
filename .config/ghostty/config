@@ -28,6 +28,12 @@ quick-terminal-screen = macos-menu-bar
 # Codex uses Ctrl+J (LF) for a newline in the prompt.
 keybind = shift+enter=text:\x0a
 
+# Give Option pane navigation private sequences so tmux can route them reliably.
+keybind = alt+h=text:\x1b[5;30020~
+keybind = alt+j=text:\x1b[5;30021~
+keybind = alt+k=text:\x1b[5;30022~
+keybind = alt+l=text:\x1b[5;30023~
+
 # tmux owns windows and panes. Ghostty only translates Command shortcuts.
 # km:ghostty.escape
 keybind = cmd+a=text:\x1b

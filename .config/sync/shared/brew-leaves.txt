@@ -7,7 +7,6 @@ gh
 git
 git-delta
 libqalculate
-mas
 mole
 neovim
 pnpm
