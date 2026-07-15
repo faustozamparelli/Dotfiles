@@ -1,5 +1,6 @@
 affinity
 chatgpt
+claude
 codex
 font-sf-mono
 ghostty

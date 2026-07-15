@@ -1,5 +1,6 @@
 Affinity
 ChatGPT
+Claude
 DaVinci Resolve
 Ghostty
 GitButler

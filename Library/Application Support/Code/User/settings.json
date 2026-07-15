@@ -52,7 +52,7 @@
     "notebook.output.scrolling": true,
     "editor.scrollbar.vertical": "hidden",
     "chat.viewSessions.orientation": "stacked",
-    "markdown.preview.fontSize": 20,
+    "markdown.preview.fontSize": 16,
     "workbench.browser.openLocalhostLinks": false,
     "workbench.colorCustomizations": {},
     "workbench.editorAssociations": {
@@ -139,9 +139,11 @@
     "terminal.integrated.commandsToSkipShell": ["matlab.interrupt"],
     "explorer.confirmDragAndDrop": false,
     "octave-formatter.pythonPath": "Users/faustozamparelli/.local/share/uv/python/cpython-3.14-macos-aarch64-none/bin/python3.14",
-    "editor.fontSize": 17,
+    "editor.fontSize": 16,
     "editor.minimap.size": "fill",
     "editor.minimap.showSlider": "always",
     "editor.minimap.side": "left",
     "security.promptForLocalFileProtocolHandling": false,
+    "chat.editor.fontSize": 16,
+    "chat.fontSize": 16,
 }
