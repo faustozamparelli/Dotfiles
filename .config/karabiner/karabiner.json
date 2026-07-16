@@ -11,6 +11,21 @@
                         "description": "Minimal setup",
                         "manipulators": [
                             {
+                                "description": "Left Command acts as Super: Command + Control + Option",
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_command",
+                                        "lazy": true,
+                                        "modifiers": ["left_control", "left_option"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
                                 "description": "F5 / Dictation key → Keyboard brightness down",
                                 "from": {
                                     "key_code": "f5",
@@ -56,13 +71,19 @@
                                 "type": "basic"
                             },
                             {
+                                "description": "Control + H → Left Arrow (without other modifiers)",
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": { "mandatory": ["control"] }
+                                },
+                                "to": [{ "key_code": "left_arrow" }],
+                                "type": "basic"
+                            },
+                            {
                                 "description": "Control + J → Down Arrow",
                                 "from": {
                                     "key_code": "j",
-                                    "modifiers": {
-                                        "mandatory": ["control"],
-                                        "optional": ["any"]
-                                    }
+                                    "modifiers": { "mandatory": ["control"] }
                                 },
                                 "to": [{ "key_code": "down_arrow" }],
                                 "type": "basic"
@@ -71,12 +92,18 @@
                                 "description": "Control + K → Up Arrow",
                                 "from": {
                                     "key_code": "k",
-                                    "modifiers": {
-                                        "mandatory": ["control"],
-                                        "optional": ["any"]
-                                    }
+                                    "modifiers": { "mandatory": ["control"] }
                                 },
                                 "to": [{ "key_code": "up_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Control + L → Right Arrow (without other modifiers)",
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": { "mandatory": ["control"] }
+                                },
+                                "to": [{ "key_code": "right_arrow" }],
                                 "type": "basic"
                             }
                         ]

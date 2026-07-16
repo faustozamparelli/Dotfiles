@@ -9,13 +9,12 @@ helium-browser
 karabiner-elements
 keepingyouawake
 keyboardcleantool
-maccy
+linearmouse
 microsoft-excel
 notion
 quickrecorder
-rectangle
+raycast
 shottr
 spotify
-tuna
 visual-studio-code
 wispr-flow

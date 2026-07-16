@@ -9,19 +9,18 @@ Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
 KeyboardCleanTool
+LinearMouse
 MATLAB_R2025b
-Maccy
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 Notion
 QuickRecorder
-Rectangle
+Raycast
 Safari
 Shottr
 Solves
 Spotify
-Tuna
 UTM
 Visual Studio Code
 Wispr Flow

@@ -3,7 +3,6 @@ font-sf-mono
 ghostty
 helium-browser
 karabiner-elements
-maccy
 shottr
 spotify
 wispr-flow
