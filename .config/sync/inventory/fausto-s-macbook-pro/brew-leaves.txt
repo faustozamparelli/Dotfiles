@@ -2,7 +2,9 @@ asmvik/formulae/skhd
 asmvik/formulae/yabai
 bat
 btop
+cairo
 eza
+fish
 fisher
 fzf
 gh
@@ -11,8 +13,10 @@ git-delta
 libqalculate
 mole
 neovim
+node
 octave
-pnpm
+oven-sh/bun/bun
+pkgconf
 pyright
 ruff
 tmux

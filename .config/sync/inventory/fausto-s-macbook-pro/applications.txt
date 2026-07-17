@@ -7,7 +7,6 @@ GitButler
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
-KeepingYouAwake
 KeyboardCleanTool
 LinearMouse
 MATLAB_R2025b

@@ -7,7 +7,6 @@ ghostty
 gitbutler
 helium-browser
 karabiner-elements
-keepingyouawake
 keyboardcleantool
 linearmouse
 microsoft-excel

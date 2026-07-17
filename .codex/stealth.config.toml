@@ -1,0 +1,14 @@
+model_instructions_file = "/Users/faustozamparelli/.codex/modes/stealth.md"
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
+
+[tui]
+theme = "stealth"
+animations = false
+show_tooltips = false
+raw_output_mode = true
+alternate_screen = "never"
+status_line = []
+status_line_use_colors = false
+terminal_title = []
+notifications = false

@@ -76,6 +76,26 @@ mas_ids() {
   awk 'NF { print $1 }' "$1" | LC_ALL=C sort -u
 }
 
+refresh_brew_formula_inventory() {
+  local cellar
+  cellar="$(brew --cellar)"
+  ruby -rjson -e '
+    cellar, all_file, requested_file = ARGV
+    installed = {}
+    Dir.glob(File.join(cellar, "*", "*", "INSTALL_RECEIPT.json")).sort.each do |receipt|
+      name = File.basename(File.dirname(File.dirname(receipt)))
+      data = JSON.parse(File.read(receipt))
+      tap = data.dig("source", "tap")
+      full_name = tap && tap != "homebrew/core" ? "#{tap}/#{name}" : name
+      installed[full_name] ||= false
+      installed[full_name] ||= data["installed_on_request"] == true
+    end
+    File.write(all_file, installed.keys.sort.join("\n") + "\n")
+    requested = installed.select { |_, on_request| on_request }.keys.sort
+    File.write(requested_file, requested.join("\n") + "\n")
+  ' "$cellar" "$tmp_dir/brew-formulae.txt" "$inventory_dir/brew-leaves.txt"
+}
+
 plist_dict_is_empty() {
   [[ "$(tr -d '[:space:]' < "$1")" == "{}" ]]
 }
@@ -311,9 +331,8 @@ ensure_file "$shared_mas_apps"
   printf 'brew_version=%s\n' "$(brew --version | head -n 1)"
 } > "$inventory_dir/system.txt"
 
-brew leaves | LC_ALL=C sort > "$inventory_dir/brew-leaves.txt"
 brew list --cask | LC_ALL=C sort > "$inventory_dir/brew-casks.txt"
-brew list --formula | LC_ALL=C sort > "$tmp_dir/brew-formulae.txt"
+refresh_brew_formula_inventory
 find /Applications -maxdepth 1 -name "*.app" -print 2>/dev/null \
   | sed 's#^.*/##; s#\.app$##' \
   | grep -v '^\.' \
@@ -407,9 +426,8 @@ if [[ "${#applied_keyboard_domains[@]}" -gt 0 ]]; then
   killall cfprefsd 2>/dev/null || true
 fi
 
-brew leaves | LC_ALL=C sort > "$inventory_dir/brew-leaves.txt"
 brew list --cask | LC_ALL=C sort > "$inventory_dir/brew-casks.txt"
-brew list --formula | LC_ALL=C sort > "$tmp_dir/brew-formulae.txt"
+refresh_brew_formula_inventory
 if command -v mas >/dev/null 2>&1; then
   mas list | LC_ALL=C sort > "$inventory_dir/mas-apps.txt"
 fi
@@ -454,6 +472,25 @@ for marta_file in \
   "Library/Application Support/org.yanex.marta/conf.marco" \
   "Library/Application Support/org.yanex.marta/favorites.marco"; do
   [[ -f "$HOME/$marta_file" ]] && "${bare[@]}" add "$marta_file"
+done
+
+# Track only user-authored Codex extensions. Codex's global config, bundled
+# system skills, plugin caches, credentials, sessions, and databases remain
+# machine-local state.
+"${bare[@]}" add -u -- .codex/skills 2>/dev/null || true
+for codex_skill_dir in "$HOME/.codex/skills"/*; do
+  [[ -d "$codex_skill_dir" ]] || continue
+  codex_skill_name="$(basename "$codex_skill_dir")"
+  [[ "$codex_skill_name" == .* ]] && continue
+  "${bare[@]}" add ".codex/skills/$codex_skill_name"
+done
+
+for codex_file in \
+  ".codex/bin/codex-stealth" \
+  ".codex/modes/stealth.md" \
+  ".codex/stealth.config.toml" \
+  ".codex/themes/stealth.tmTheme"; do
+  [[ -f "$HOME/$codex_file" ]] && "${bare[@]}" add "$codex_file"
 done
 
 "${bare[@]}" add \

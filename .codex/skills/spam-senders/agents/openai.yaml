@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spam Senders"
+  short_description: "Recommend or spam unwanted Gmail senders"
+  default_prompt: "Use $spam-senders with no names to recommend unwanted Gmail senders, or pass names to move their mail to Spam."

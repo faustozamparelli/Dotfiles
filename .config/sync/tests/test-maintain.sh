@@ -15,7 +15,27 @@ mkdir -p \
   "$home/.config/git/dotfiles" \
   "$home/.config/sync/shared" \
   "$home/.config/sync/state/fausto-s-macbook-air" \
+  "$home/.codex/bin" \
+  "$home/.codex/modes" \
+  "$home/.codex/skills/personal-skill" \
+  "$home/.codex/skills/.system/system-skill" \
+  "$home/.codex/themes" \
+  "$home/cellar" \
   "$bin"
+
+touch \
+  "$home/.codex/bin/codex-stealth" \
+  "$home/.codex/modes/stealth.md" \
+  "$home/.codex/skills/personal-skill/SKILL.md" \
+  "$home/.codex/skills/.system/system-skill/SKILL.md" \
+  "$home/.codex/stealth.config.toml" \
+  "$home/.codex/themes/stealth.tmTheme"
+
+for formula in explicit-local local-pkg promoted-current remote-present shared-installed; do
+  mkdir -p "$home/cellar/$formula/1.0"
+  printf '%s\n' '{"installed_on_request":true,"source":{"tap":"homebrew/core"}}' \
+    > "$home/cellar/$formula/1.0/INSTALL_RECEIPT.json"
+done
 
 cat > "$bin/git" <<'EOF'
 #!/usr/bin/env bash
@@ -55,6 +75,9 @@ EOF
 cat > "$bin/brew" <<'EOF'
 #!/usr/bin/env bash
 case "$1" in
+  --cellar)
+    printf '%s/cellar\n' "$HOME"
+    ;;
   --prefix)
     printf '/opt/homebrew\n'
     ;;
@@ -194,6 +217,12 @@ grep -q 'Installed App Store apps:' <<<"$output"
 grep -q '^git add .config/keymaps$' "$home/git.log"
 grep -q '^git add .config/nvim$' "$home/git.log"
 grep -q '^git add .config/tmux$' "$home/git.log"
+grep -q '^git add .codex/skills/personal-skill$' "$home/git.log"
+! grep -q '\.codex/skills/\.system' "$home/git.log"
+grep -q '^git add .codex/bin/codex-stealth$' "$home/git.log"
+grep -q '^git add .codex/modes/stealth.md$' "$home/git.log"
+grep -q '^git add .codex/stealth.config.toml$' "$home/git.log"
+grep -q '^git add .codex/themes/stealth.tmTheme$' "$home/git.log"
 
 cp "$home/.config/sync/software-fausto-s-macbook-air.txt" "$home/review-valid.txt"
 printf 'brew\tinvalid-selection\t[.]\t[.]\n' >> "$home/.config/sync/software-fausto-s-macbook-air.txt"

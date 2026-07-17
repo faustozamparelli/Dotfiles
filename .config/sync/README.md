@@ -752,6 +752,13 @@ cask    marta      []      [.]
 `bcp` runs maintenance, stages tracked dotfiles, asks for a commit message, and
 pushes. Inspect `bare status` and relevant diffs first.
 
+Maintenance also stages user-authored Codex skill directories and the custom
+stealth launcher, mode, profile, and theme. It deliberately does not track
+`~/.codex/config.toml`, authentication, bundled system skills, plugin caches,
+sessions, histories, databases, or generated application state. Codex and the
+ChatGPT application may manage some of that state themselves; it is not part
+of this dotfiles contract.
+
 ### New Mac
 
 1. Follow the root dotfiles bootstrap instructions until the bare repository

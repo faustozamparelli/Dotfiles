@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Run Codex in a PTY while removing terminal SGR styling sequences."""
+
+import errno
+import os
+import pty
+import re
+import select
+import shutil
+import signal
+import sys
+import termios
+import time
+import tty
+
+
+SGR = re.compile(rb"\x1b\[[0-?]*[ -/]*m")
+RESET = b"\x1b[0m"
+SYNC_START = b"\x1b[?2026h"
+SCROLL_REGION_RESET = b"\x1b[r"
+HOME_AND_CLEAR = b"\x1b[2J\x1b[H"
+CODEX = "/opt/homebrew/bin/codex"
+
+
+def resize(fd):
+    size = shutil.get_terminal_size()
+    import fcntl
+    import struct
+
+    fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", size.lines, size.columns, 0, 0))
+
+
+def main():
+    pid, master = pty.fork()
+    if pid == 0:
+        env = os.environ.copy()
+        env["NO_COLOR"] = "1"
+        env["FORCE_COLOR"] = "0"
+        os.execve(CODEX, [CODEX, *sys.argv[1:]], env)
+
+    original = termios.tcgetattr(sys.stdin.fileno())
+    tty.setraw(sys.stdin.fileno())
+    resize(master)
+    signal.signal(signal.SIGWINCH, lambda *_: resize(master))
+    startup = bytearray()
+    hiding_startup = True
+    startup_started = time.monotonic()
+    init_forwarded = False
+
+    def monochrome(data):
+        return SGR.sub(RESET, data)
+
+    def emit(data):
+        if data:
+            os.write(sys.stdout.fileno(), monochrome(data))
+
+    try:
+        while True:
+            readable, _, _ = select.select([sys.stdin, master], [], [])
+            if sys.stdin in readable:
+                data = os.read(sys.stdin.fileno(), 65536)
+                if data:
+                    os.write(master, data)
+            if master in readable:
+                try:
+                    data = os.read(master, 65536)
+                except OSError as exc:
+                    if exc.errno == errno.EIO:
+                        break
+                    raise
+                if not data:
+                    break
+                if not hiding_startup:
+                    emit(data)
+                    continue
+
+                startup.extend(data)
+
+                # Forward terminal capability/palette probes so Codex can
+                # receive their replies, then hide the first painted frame.
+                if not init_forwarded:
+                    marker = startup.find(SYNC_START)
+                    if marker >= 0:
+                        emit(bytes(startup[:marker]))
+                        del startup[:marker]
+                        init_forwarded = True
+
+                # In raw-output mode the welcome card is eventually committed
+                # as a three-line header. Drop everything through that commit,
+                # then begin with a clean screen and the normal composer.
+                directory = startup.find(b"directory:")
+                if directory >= 0:
+                    header_end = startup.find(SCROLL_REGION_RESET, directory)
+                    while header_end >= 0:
+                        nearest_directory = startup.rfind(b"directory:", 0, header_end)
+                        if nearest_directory >= 0 and header_end - nearest_directory < 256:
+                            break
+                        header_end = startup.find(
+                            SCROLL_REGION_RESET,
+                            header_end + len(SCROLL_REGION_RESET),
+                        )
+                    if header_end >= 0:
+                        del startup[: header_end + len(SCROLL_REGION_RESET)]
+                        emit(HOME_AND_CLEAR)
+                        emit(bytes(startup))
+                        startup.clear()
+                        hiding_startup = False
+                        continue
+
+                # Fail open rather than leaving a changed future Codex build
+                # invisible if its startup rendering format changes.
+                if time.monotonic() - startup_started > 5:
+                    emit(bytes(startup))
+                    startup.clear()
+                    hiding_startup = False
+    finally:
+        if startup:
+            emit(bytes(startup))
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, original)
+        os.close(master)
+        _, status = os.waitpid(pid, 0)
+    raise SystemExit(os.waitstatus_to_exitcode(status))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,9 @@
+asmvik/formulae/skhd
+asmvik/formulae/yabai
 bat
 btop
 eza
+fish
 fisher
 fzf
 gh
@@ -9,10 +12,12 @@ git-delta
 libqalculate
 mole
 neovim
-pnpm
+octave
+oven-sh/bun/bun
 pyright
 ruff
 tmux
+tree
 uv
 wget
 zoxide

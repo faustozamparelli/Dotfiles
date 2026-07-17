@@ -3,6 +3,8 @@ font-sf-mono
 ghostty
 helium-browser
 karabiner-elements
+keyboardcleantool
+raycast
 shottr
 spotify
 wispr-flow

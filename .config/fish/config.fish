@@ -31,6 +31,20 @@ alias sv "source .venv/bin/activate.fish"
 alias n nvim
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 
+# Route only the stealth profile through the monochrome presentation wrapper.
+# Every other Codex invocation keeps the normal full-color TUI.
+function codex
+    set -l previous ""
+    for arg in $argv
+        if test "$arg" = "--profile=stealth"; or test "$previous:$arg" = "--profile:stealth"
+            "$HOME/.codex/bin/codex-stealth" $argv
+            return $status
+        end
+        set previous "$arg"
+    end
+    /opt/homebrew/bin/codex $argv
+end
+
 
 #if pressed just enter the message will be 'changes'
 function gcp --description "Commit all changes and push (subject + optional description)"
