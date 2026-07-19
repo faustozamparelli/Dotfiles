@@ -1,6 +1,7 @@
 asmvik/formulae/skhd
 asmvik/formulae/yabai
 bat
+btop
 eza
 fish
 fisher

@@ -3,9 +3,8 @@ Ghostty
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
-KeepingYouAwake
 KeyboardCleanTool
-Maccy
+LinearMouse
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
@@ -15,5 +14,4 @@ Safari
 Shottr
 Spotify
 T3 Code (Alpha)
-Tuna
 Wispr Flow

@@ -5,6 +5,7 @@ helium-browser
 karabiner-elements
 keepingyouawake
 keyboardcleantool
+linearmouse
 maccy
 microsoft-excel
 quickrecorder
@@ -12,5 +13,4 @@ raycast
 shottr
 spotify
 t3-code
-tuna
 wispr-flow
