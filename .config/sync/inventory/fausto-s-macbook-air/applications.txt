@@ -4,11 +4,13 @@ Helium
 Karabiner-Elements
 Karabiner-EventViewer
 KeepingYouAwake
+KeyboardCleanTool
 Maccy
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 QuickRecorder
+Raycast
 Safari
 Shottr
 Spotify

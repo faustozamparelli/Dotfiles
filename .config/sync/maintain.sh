@@ -16,6 +16,7 @@ shared_dir="$sync_dir/shared"
 shared_brew_leaves="$shared_dir/brew-leaves.txt"
 shared_brew_casks="$shared_dir/brew-casks.txt"
 shared_mas_apps="$shared_dir/mas-apps.txt"
+shared_applications="$shared_dir/applications.txt"
 keyboard_dir="$shared_dir/macos-keyboard-shortcuts"
 keyboard_state_dir="$state_dir/macos-keyboard-shortcuts"
 legacy_keyboard_dir="$sync_dir/macos-keyboard-shortcuts"
@@ -25,6 +26,7 @@ installed_brew_packages=()
 installed_brew_casks=()
 installed_mas_apps=()
 applied_keyboard_domains=()
+missing_shared_applications=()
 newly_local_software=()
 declassified_software=()
 
@@ -321,6 +323,7 @@ fi
 ensure_file "$shared_brew_leaves"
 ensure_file "$shared_brew_casks"
 ensure_file "$shared_mas_apps"
+ensure_file "$shared_applications"
 {
   printf 'computer_name=%s\n' "$computer_name"
   printf 'inventory_name=%s\n' "$safe_name"
@@ -344,6 +347,13 @@ if command -v mas >/dev/null 2>&1; then
 else
   rm -f "$inventory_dir/mas-apps.txt" "$inventory_dir/app-store.txt"
 fi
+
+while IFS= read -r app_name; do
+  [[ -z "$app_name" ]] && continue
+  if ! grep -Fxq "$app_name" "$inventory_dir/applications.txt"; then
+    missing_shared_applications+=("$app_name")
+  fi
+done < "$shared_applications"
 
 reconcile_review_file
 generate_shared_files
@@ -466,6 +476,11 @@ if [[ "${#applied_keyboard_domains[@]}" -gt 0 ]]; then
   print_array "Applied keyboard shortcut domains:" "${applied_keyboard_domains[@]}"
 else
   print_array "Applied keyboard shortcut domains:"
+fi
+if [[ "${#missing_shared_applications[@]}" -gt 0 ]]; then
+  print_array "Shared applications missing from /Applications:" "${missing_shared_applications[@]}"
+else
+  print_array "Shared applications missing from /Applications:"
 fi
 
 for marta_file in \

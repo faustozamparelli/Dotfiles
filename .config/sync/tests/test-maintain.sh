@@ -46,7 +46,16 @@ case "$*" in
     exit 0
     ;;
   *" add "*)
-    echo "git add ${*: -1}" >> "$log"
+    args=("$@")
+    for ((i = 0; i < ${#args[@]}; i++)); do
+      if [[ "${args[$i]}" == "add" ]]; then
+        for ((j = i + 1; j < ${#args[@]}; j++)); do
+          [[ "${args[$j]}" == -* ]] && continue
+          echo "git add ${args[$j]}" >> "$log"
+        done
+        break
+      fi
+    done
     exit 0
     ;;
   *" status --short")
@@ -214,6 +223,7 @@ grep -q 'Software newly classified as local:' <<<"$output"
 grep -q 'Installed Brew packages:' <<<"$output"
 grep -q 'Installed Brew casks:' <<<"$output"
 grep -q 'Installed App Store apps:' <<<"$output"
+grep -q 'Shared applications missing from /Applications:' <<<"$output"
 grep -q '^git add .config/keymaps$' "$home/git.log"
 grep -q '^git add .config/nvim$' "$home/git.log"
 grep -q '^git add .config/tmux$' "$home/git.log"

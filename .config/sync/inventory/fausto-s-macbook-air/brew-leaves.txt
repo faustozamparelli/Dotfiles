@@ -1,5 +1,8 @@
+asmvik/formulae/skhd
+asmvik/formulae/yabai
 bat
 eza
+fish
 fisher
 fzf
 gh
@@ -9,9 +12,12 @@ libqalculate
 mas
 mole
 neovim
+node
 octave
+oven-sh/bun/bun
 pnpm
 pyright
+ripgrep
 ruff
 tmux
 tree

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Context7 Docs"
+  short_description: "Fetch current library docs with Context7."
+  default_prompt: "Use $context7-docs to answer this library question with current documentation."
+
+policy:
+  allow_implicit_invocation: true

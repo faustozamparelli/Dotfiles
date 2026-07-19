@@ -4,9 +4,11 @@ ghostty
 helium-browser
 karabiner-elements
 keepingyouawake
+keyboardcleantool
 maccy
 microsoft-excel
 quickrecorder
+raycast
 shottr
 spotify
 t3-code
