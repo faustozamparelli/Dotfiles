@@ -25,3 +25,20 @@ yabai -m config window_gap 0
 # Predictable keyboard-driven focus
 yabai -m config focus_follows_mouse off
 yabai -m config mouse_follows_focus off
+
+# Keep transient dialogs, sheets, and floating utility panels out of the BSP tree.
+yabai -m rule --add label="float_transient_windows" \
+    subrole="^(AXDialog|AXSystemDialog|AXFloatingWindow)$" manage=off
+
+# Compact system utilities and settings windows are more useful at their natural size.
+yabai -m rule --add label="float_system_utilities" \
+    app="^(Activity Monitor|AirPort Utility|Audio MIDI Setup|Bluetooth File Exchange|Calculator|Clock|ColorSync Utility|Digital Colou?r Meter|Disk Utility|Font Book|Image Capture|Print Center|Screenshot|System Information|System Settings|VoiceOver Utility)$" manage=off
+
+# Installed third-party utilities whose primary windows are controls, launchers, or recorders.
+yabai -m rule --add label="float_third_party_utilities" \
+    app="^(Karabiner-Elements|Karabiner-EventViewer|KeyboardCleanTool|LinearMouse|MySielteID|QuickRecorder|Raycast|Shottr|Wispr Flow)$" manage=off
+
+# Helium's video overlay should float instead of taking a tile. Match the known PiP
+# title variants while leaving normal Helium browser windows managed.
+yabai -m rule --add label="float_helium_pip" app="^Helium$" \
+    title="^([Pp]icture[- ][Ii]n[- ][Pp]icture|PiP)$" manage=off

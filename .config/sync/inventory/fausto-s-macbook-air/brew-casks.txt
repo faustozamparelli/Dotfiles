@@ -13,4 +13,5 @@ raycast
 shottr
 spotify
 t3-code
+visual-studio-code
 wispr-flow

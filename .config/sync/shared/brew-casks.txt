@@ -7,4 +7,5 @@ keyboardcleantool
 raycast
 shottr
 spotify
+visual-studio-code
 wispr-flow

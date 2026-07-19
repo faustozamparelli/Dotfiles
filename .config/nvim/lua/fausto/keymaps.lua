@@ -34,6 +34,55 @@ end, { expr = true, silent = true, desc = 'Accept top completion suggestion' })
 map('n', '<leader><leader>', '<cmd>write<cr>', opts('nvim.file.save', 'Save file'))
 map('n', '<leader>e', '<cmd>Oil<cr>', opts('nvim.file.oil', 'Open Oil'))
 map('n', '-', '<cmd>Oil ..<cr>', opts('nvim.file.parent', 'Open parent directory'))
+map('n', '<leader>d', function()
+    local pattern = vim.fn.getreg('/')
+    if pattern == '' then
+        vim.notify('Search for a word first with /', vim.log.levels.WARN)
+        return
+    end
+
+    vim.ui.input({ prompt = 'Replace matches with (Enter deletes): ' }, function(replacement)
+        if replacement == nil then
+            return
+        end
+
+        local bufnr = vim.api.nvim_get_current_buf()
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        local matches = {}
+
+        for _, found in ipairs(vim.fn.matchbufline(bufnr, pattern, 1, '$')) do
+            local line = lines[found.lnum]
+            local start_col = found.byteidx
+            local end_col = found.byteidx + #found.text
+
+            while start_col > 0 and not line:sub(start_col, start_col):match('%s') do
+                start_col = start_col - 1
+            end
+            while end_col < #line and not line:sub(end_col + 1, end_col + 1):match('%s') do
+                end_col = end_col + 1
+            end
+
+            local previous = matches[#matches]
+            if not previous or previous.row ~= found.lnum - 1 or previous.start_col ~= start_col then
+                matches[#matches + 1] = {
+                    row = found.lnum - 1,
+                    start_col = start_col,
+                    end_col = end_col,
+                }
+            end
+        end
+
+        for index = #matches, 1, -1 do
+            local match = matches[index]
+            if index < #matches then
+                vim.cmd.undojoin()
+            end
+            vim.api.nvim_buf_set_text(0, match.row, match.start_col, match.row, match.end_col, { replacement })
+        end
+
+        vim.notify(string.format('%s %d occurrence(s)', replacement == '' and 'Deleted' or 'Replaced', #matches))
+    end)
+end, opts('nvim.search.delete', 'Replace or delete WORD'))
 
 map('n', '<leader>ff', fzf.files, opts('nvim.find.files', 'Find files'))
 map('n', '<leader>fa', require('fausto.workspace').pick, opts('nvim.find.anywhere', 'Find anywhere'))

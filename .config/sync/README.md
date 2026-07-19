@@ -730,7 +730,7 @@ The script:
 - refreshes this Mac's inventory under `inventory/<mac-name>/`;
 - reconciles editable software choices in `software-<mac-name>.txt`;
 - installs missing shared Homebrew packages, casks, and App Store apps;
-- keeps retired VS Code configuration and extension names as reference-only dotfiles;
+- tracks VS Code settings and keybindings, with extension IDs kept as a portable restore list;
 - exports/applies manually added macOS App Shortcuts;
 - tracks Marta's portable settings; and
 - stages tracked sync and dotfile paths without committing or pushing.
