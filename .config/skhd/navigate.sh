@@ -124,11 +124,24 @@ move_window() {
     $YABAI -m space --balance 2>/dev/null || true
 }
 
+focus_display() {
+    destination=$1
+    $YABAI -m display --focus "$destination" 2>/dev/null || return 0
+}
+
+move_window_to_display() {
+    destination=$1
+    $YABAI -m window --display "$destination" --focus 2>/dev/null || return 0
+    $YABAI -m space --balance 2>/dev/null || true
+}
+
 case ${1:-} in
     focus-window) focus_window "${2:?missing direction}" ;;
     horizontal) focus_horizontal_or_space "${2:?missing window direction}" "${3:?missing space direction}" ;;
     space) focus_space "${2:?missing destination}" ;;
+    display) focus_display "${2:?missing destination}" ;;
     swap) swap_window "${2:?missing direction}" ;;
     move) move_window "${2:?missing destination}" ;;
+    move-display) move_window_to_display "${2:?missing destination}" ;;
     *) exit 2 ;;
 esac

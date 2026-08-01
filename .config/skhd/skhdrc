@@ -61,6 +61,19 @@ shift + cmd + ctrl + alt - l : /Users/faustozamparelli/.config/skhd/navigate.sh 
 
 
 # ------------------------------------------------------------
+# FOCUS DISPLAYS / MOVE WINDOW BETWEEN DISPLAYS
+# D cycles to the next display. Shift + D moves the focused window there
+# and follows it, matching the focus/move convention used above.
+# ------------------------------------------------------------
+
+# Focus the next display
+cmd + ctrl + alt - d : /Users/faustozamparelli/.config/skhd/navigate.sh display next
+
+# Move window to the next display and follow it
+shift + cmd + ctrl + alt - d : /Users/faustozamparelli/.config/skhd/navigate.sh move-display next
+
+
+# ------------------------------------------------------------
 # DEFAULT TILING
 #
 # B restores the normal side-by-side layout.  Horizontal tiling is deliberately
