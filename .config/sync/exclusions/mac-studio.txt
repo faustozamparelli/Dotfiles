@@ -1,0 +1,3 @@
+# Shared software intentionally not needed on Mac Studio.
+brew	asmvik/formulae/skhd
+brew	asmvik/formulae/yabai

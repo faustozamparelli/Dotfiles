@@ -8,6 +8,7 @@ safe_name="$(printf '%s' "$computer_name" | tr '[:upper:]' '[:lower:]' | tr -cs 
 safe_name="${safe_name%-}"
 inventory_dir="$sync_dir/inventory/$safe_name"
 state_dir="$sync_dir/state/$safe_name"
+exclusions_file="$sync_dir/exclusions/$safe_name.txt"
 review_dir="$sync_dir"
 review_file="$sync_dir/software-$safe_name.txt"
 legacy_review_dir="$sync_dir/review"
@@ -29,6 +30,7 @@ applied_keyboard_domains=()
 missing_shared_applications=()
 newly_local_software=()
 declassified_software=()
+excluded_shared_software=()
 
 cleanup() {
   rm -rf "$tmp_dir"
@@ -202,6 +204,26 @@ is_legacy_shared() {
   esac
 }
 
+is_excluded_here() {
+  local type="$1"
+  local item="$2"
+  [[ -f "$exclusions_file" ]] && grep -Fxq "$type"$'\t'"$item" "$exclusions_file"
+}
+
+validate_exclusions_file() {
+  [[ -f "$exclusions_file" ]] || return 0
+  awk -F '\t' '
+    BEGIN { valid = 1 }
+    NF == 0 || /^#/ { next }
+    NF != 2 || ($1 != "brew" && $1 != "cask" && $1 != "mas") || $2 == "" {
+      printf "Invalid machine exclusion in %s: %s\n", FILENAME, $0 > "/dev/stderr"
+      valid = 0
+    }
+    { key = $1 SUBSEP $2; if (seen[key]++) { printf "Duplicate machine exclusion in %s: %s\n", FILENAME, $0 > "/dev/stderr"; valid = 0 } }
+    END { exit !valid }
+  ' "$exclusions_file"
+}
+
 global_shared_keys() {
   awk -F '\t' '!/^#/ && NF >= 3 && ($3 == "." || $3 == "[.]") { print $1 "\t" $2 }' "$review_dir"/software-*.txt 2>/dev/null |
     LC_ALL=C sort -u
@@ -254,7 +276,7 @@ reconcile_review_file() {
   while IFS=$'\t' read -r type item bucket; do
     [[ -n "$type" ]] || continue
     if ! grep -Fxq "$type"$'\t'"$item" "$installed"; then
-      if [[ "$bucket" == "shared" ]]; then
+      if [[ "$bucket" == "shared" ]] && ! is_excluded_here "$type" "$item"; then
         set_item_local_in_all_reviews "$type" "$item"
         declassified_software+=("$type $item")
       fi
@@ -324,6 +346,7 @@ ensure_file "$shared_brew_leaves"
 ensure_file "$shared_brew_casks"
 ensure_file "$shared_mas_apps"
 ensure_file "$shared_applications"
+validate_exclusions_file
 {
   printf 'computer_name=%s\n' "$computer_name"
   printf 'inventory_name=%s\n' "$safe_name"
@@ -366,6 +389,10 @@ comm -13 "$inventory_dir/brew-casks.txt" "$shared_brew_casks" > "$missing_brew_c
 
 while IFS= read -r package; do
   [[ -z "$package" ]] && continue
+  if is_excluded_here brew "$package"; then
+    excluded_shared_software+=("brew $package")
+    continue
+  fi
   brew install "$package"
   installed_brew_packages+=("$package")
 done < "$missing_brew_packages"
@@ -376,6 +403,10 @@ fi
 
 while IFS= read -r cask; do
   [[ -z "$cask" ]] && continue
+  if is_excluded_here cask "$cask"; then
+    excluded_shared_software+=("cask $cask")
+    continue
+  fi
   brew install --cask "$cask"
   installed_brew_casks+=("$cask")
 done < "$missing_brew_casks"
@@ -390,6 +421,11 @@ if command -v mas >/dev/null 2>&1; then
 
   while IFS= read -r app_id; do
     [[ -z "$app_id" ]] && continue
+    app_entry="$(awk -v id="$app_id" '$1 == id { print; exit }' "$shared_mas_apps")"
+    if is_excluded_here mas "$app_entry"; then
+      excluded_shared_software+=("mas $app_entry")
+      continue
+    fi
     mas install "$app_id"
     app_name="$(awk -v id="$app_id" '$1 == id { $1=""; sub(/^ /, ""); print; exit }' "$shared_mas_apps")"
     installed_mas_apps+=("$app_id${app_name:+ $app_name}")
@@ -456,6 +492,11 @@ if [[ "${#declassified_software[@]}" -gt 0 ]]; then
   print_array "Software declassified from shared:" "${declassified_software[@]}"
 else
   print_array "Software declassified from shared:"
+fi
+if [[ "${#excluded_shared_software[@]}" -gt 0 ]]; then
+  print_array "Shared software excluded on this Mac:" "${excluded_shared_software[@]}"
+else
+  print_array "Shared software excluded on this Mac:"
 fi
 if [[ "${#installed_brew_packages[@]}" -gt 0 ]]; then
   print_array "Installed Brew packages:" "${installed_brew_packages[@]}"

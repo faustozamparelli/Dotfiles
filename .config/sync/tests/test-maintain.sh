@@ -14,6 +14,7 @@ bin="$tmp_dir/bin"
 mkdir -p \
   "$home/.config/git/dotfiles" \
   "$home/.config/sync/shared" \
+  "$home/.config/sync/exclusions" \
   "$home/.config/sync/state/fausto-s-macbook-air" \
   "$home/.codex/bin" \
   "$home/.codex/modes" \
@@ -171,8 +172,11 @@ EOF
 printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t\t.\nbrew\tpromoted-current\t.\t\nbrew\tremote-present\t\t.\nbrew\tshared-installed\t.\t\nbrew\tremoved-shared\t.\t\nbrew\tremoved-local\t\t.\ncask\tshared-cask\t.\t\nmas\t222222222 Shared App\t.\t\n' \
   > "$home/.config/sync/software-fausto-s-macbook-air.txt"
 
-printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\nbrew\tpromoted-current\t\t.\nbrew\tremote-present\t.\t\nbrew\tremoved-shared\t.\t\nbrew\tremote-shared\t.\t\n' \
+printf '# type\titem\tshared\tlocal\nbrew\texcluded-shared\t.\t\nbrew\texplicit-local\t.\t\nbrew\tpromoted-current\t\t.\nbrew\tremote-present\t.\t\nbrew\tremoved-shared\t.\t\nbrew\tremote-shared\t.\t\n' \
   > "$home/.config/sync/software-fausto-s-macbook-pro.txt"
+
+printf 'brew\texcluded-shared\n' \
+  > "$home/.config/sync/exclusions/fausto-s-macbook-air.txt"
 
 printf '# type\titem\tshared\tlocal\nbrew\texplicit-local\t.\t\n' \
   > "$home/.config/sync/state/fausto-s-macbook-air/software-review.last-seen.txt"
@@ -184,6 +188,7 @@ output="$(
 )"
 
 grep -q '^remote-shared$' "$home/brew-installs.log"
+! grep -q '^excluded-shared$' "$home/brew-installs.log"
 ! grep -q 'legacy-absent' "$home/brew-installs.log"
 ! grep -q 'legacy-cask' "$home/brew-installs.log"
 [[ ! -f "$home/mas-installs.log" ]]
@@ -216,12 +221,14 @@ grep -q $'^brew\tpromoted-current\t\\[\\.\\]\t\\[\\]$' "$home/.config/sync/softw
 ! grep -q 'removed-shared' "$home/.config/sync/shared/brew-leaves.txt"
 ! grep -q 'explicit-local' "$home/.config/sync/shared/brew-leaves.txt"
 grep -q '^remote-shared$' "$home/.config/sync/shared/brew-leaves.txt"
+grep -q '^excluded-shared$' "$home/.config/sync/shared/brew-leaves.txt"
 grep -q '^shared-installed$' "$home/.config/sync/shared/brew-leaves.txt"
 grep -q '^shared-cask$' "$home/.config/sync/shared/brew-casks.txt"
 grep -q '^222222222 Shared App$' "$home/.config/sync/shared/mas-apps.txt"
 grep -q 'Software newly classified as local:' <<<"$output"
 grep -q 'Installed Brew packages:' <<<"$output"
 grep -q 'Installed Brew casks:' <<<"$output"
+grep -q 'Shared software excluded on this Mac:' <<<"$output"
 grep -q 'Installed App Store apps:' <<<"$output"
 grep -q 'Shared applications missing from /Applications:' <<<"$output"
 grep -q '^git add .config/keymaps$' "$home/git.log"

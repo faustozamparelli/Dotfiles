@@ -717,8 +717,8 @@ is the reliable option.
 
 ## Mac Synchronization
 
-This folder keeps the MacBook Air and MacBook Pro aligned through the bare
-dotfiles repository. Run:
+This folder keeps the MacBook Air, MacBook Pro, and Mac Studio aligned through
+the bare dotfiles repository. Run:
 
 ```fish
 sync-maintain
@@ -747,6 +747,16 @@ brackets, then run `sync-maintain` again:
 ```text
 # type  item       shared  local
 cask    marta      []      [.]
+```
+
+Shared software can be intentionally omitted from one Mac without removing it
+from the other Macs. Add a tab-separated `type` and `item` row to
+`exclusions/<mac-name>.txt`; maintenance will preserve the globally shared
+classification but will neither install nor globally declassify that item on
+the named Mac:
+
+```text
+brew\tasmvik/formulae/yabai
 ```
 
 `bcp` runs maintenance, stages tracked dotfiles, asks for a commit message, and
