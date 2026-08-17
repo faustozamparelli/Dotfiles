@@ -1,18 +1,20 @@
 CountUp
 Ghostty
 Helium
+Itsycal
 Karabiner-Elements
 Karabiner-EventViewer
-KeyboardCleanTool
-LinearMouse
 Microsoft Excel
 Microsoft PowerPoint
+Microsoft Word
 MySielteID
+Notion
+ProtonVPN
 QuickRecorder
 Raycast
 Safari
-Shottr
 Spotify
 T3 Code (Alpha)
 Visual Studio Code
+Vorssaint
 Wispr Flow
