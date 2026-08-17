@@ -114,18 +114,18 @@
         "key": "shift+cmd+t",
         "command": "workbench.action.createTerminalEditorSide",
     },
-    {
-        "key": "cmd+l",
-        "command": "workbench.action.focusRightGroup",
-    },
+    // {
+    //     "key": "cmd+l",
+    //     "command": "workbench.action.focusRightGroup",
+    // },
     {
         "key": "cmd+k cmd+right",
         "command": "-workbench.action.focusRightGroup",
     },
-    {
-        "key": "cmd+h",
-        "command": "workbench.action.focusLeftGroup",
-    },
+    // {
+    //     "key": "cmd+h",
+    //     "command": "workbench.action.focusLeftGroup",
+    // },
     {
         "key": "cmd+k cmd+left",
         "command": "-workbench.action.focusLeftGroup",
