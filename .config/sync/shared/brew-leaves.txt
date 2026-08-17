@@ -1,9 +1,6 @@
-asmvik/formulae/skhd
-asmvik/formulae/yabai
 bat
 btop
 eza
-fish
 fisher
 fzf
 gh
@@ -13,11 +10,12 @@ libqalculate
 mole
 neovim
 octave
-oven-sh/bun/bun
+pnpm
 pyright
 ruff
 tmux
 tree
+tree-sitter-cli
 uv
 wget
 zoxide

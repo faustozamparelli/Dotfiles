@@ -1,9 +1,9 @@
 computer_name=Mac Studio
 inventory_name=mac-studio
-hostname=Host-021.homenet.telecomitalia.it
+hostname=Host-005.homenet.telecomitalia.it
 arch=arm64
 ProductName:		macOS
-ProductVersion:		26.6
-BuildVersion:		25G72
+ProductVersion:		26.6.1
+BuildVersion:		25G76
 brew_prefix=/opt/homebrew
-brew_version=Homebrew 6.0.14
+brew_version=Homebrew 6.0.18

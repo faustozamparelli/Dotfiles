@@ -1,28 +1,27 @@
 Affinity
 ChatGPT
 Claude
-CountUp
 DaVinci Resolve
 Ghostty
 GitButler
 Helium
+Itsycal
 Karabiner-Elements
 Karabiner-EventViewer
-KeyboardCleanTool
-LinearMouse
 MATLAB_R2025b
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 Notion
-Obsidian
+ProtonVPN
 QuickRecorder
 Raycast
 Safari
-Shottr
 Solves
 Spotify
 UTM
 Visual Studio Code
+Vorssaint
 Wispr Flow
 Xcode
+yaak

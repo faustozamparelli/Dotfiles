@@ -81,23 +81,8 @@ mas_ids() {
 }
 
 refresh_brew_formula_inventory() {
-  local cellar
-  cellar="$(brew --cellar)"
-  ruby -rjson -e '
-    cellar, all_file, requested_file = ARGV
-    installed = {}
-    Dir.glob(File.join(cellar, "*", "*", "INSTALL_RECEIPT.json")).sort.each do |receipt|
-      name = File.basename(File.dirname(File.dirname(receipt)))
-      data = JSON.parse(File.read(receipt))
-      tap = data.dig("source", "tap")
-      full_name = tap && tap != "homebrew/core" ? "#{tap}/#{name}" : name
-      installed[full_name] ||= false
-      installed[full_name] ||= data["installed_on_request"] == true
-    end
-    File.write(all_file, installed.keys.sort.join("\n") + "\n")
-    requested = installed.select { |_, on_request| on_request }.keys.sort
-    File.write(requested_file, requested.join("\n") + "\n")
-  ' "$cellar" "$tmp_dir/brew-formulae.txt" "$inventory_dir/brew-leaves.txt"
+  brew list --formula | LC_ALL=C sort > "$tmp_dir/brew-formulae.txt"
+  brew leaves | LC_ALL=C sort > "$inventory_dir/brew-leaves.txt"
 }
 
 plist_dict_is_empty() {

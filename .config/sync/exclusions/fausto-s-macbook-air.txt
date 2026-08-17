@@ -1,0 +1,7 @@
+# Shared software intentionally not needed on MacBook Air.
+cask	affinity
+cask	chatgpt
+cask	claude
+cask	gitbutler
+cask	protonvpn
+cask	yaak

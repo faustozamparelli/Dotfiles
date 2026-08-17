@@ -1,8 +1,6 @@
 bat
 btop
-cairo
 eza
-fish
 fisher
 fzf
 gh
@@ -11,10 +9,8 @@ git-delta
 libqalculate
 mole
 neovim
-node
 octave
-oven-sh/bun/bun
-pkgconf
+pnpm
 pyright
 ruff
 tmux
