@@ -10,7 +10,6 @@ libqalculate
 mole
 neovim
 octave
-pnpm
 pyright
 ruff
 tmux

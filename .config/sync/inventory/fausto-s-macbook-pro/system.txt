@@ -1,9 +1,9 @@
 computer_name=Fausto’s MacBook Pro
 inventory_name=fausto-s-macbook-pro
-hostname=Host-018.homenet.telecomitalia.it
+hostname=Host-008.homenet.telecomitalia.it
 arch=arm64
 ProductName:		macOS
 ProductVersion:		26.6
 BuildVersion:		25G72
 brew_prefix=/opt/homebrew
-brew_version=Homebrew 6.0.11
+brew_version=Homebrew 6.0.18

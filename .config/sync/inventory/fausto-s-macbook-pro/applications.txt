@@ -6,10 +6,9 @@ DaVinci Resolve
 Ghostty
 GitButler
 Helium
+Itsycal
 Karabiner-Elements
 Karabiner-EventViewer
-KeyboardCleanTool
-LinearMouse
 MATLAB_R2025b
 Microsoft Excel
 Microsoft PowerPoint
@@ -18,7 +17,6 @@ Notion
 QuickRecorder
 Raycast
 Safari
-Shottr
 Solves
 Spotify
 UTM
