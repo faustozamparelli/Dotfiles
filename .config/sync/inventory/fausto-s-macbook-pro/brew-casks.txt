@@ -14,4 +14,5 @@ quickrecorder
 raycast
 spotify
 visual-studio-code
+vorssaint
 wispr-flow

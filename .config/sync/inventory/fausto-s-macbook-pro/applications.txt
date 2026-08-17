@@ -21,5 +21,6 @@ Solves
 Spotify
 UTM
 Visual Studio Code
+Vorssaint
 Wispr Flow
 Xcode
