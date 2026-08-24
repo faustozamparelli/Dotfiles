@@ -11,9 +11,9 @@
                         "description": "Minimal setup",
                         "manipulators": [
                             {
-                                "description": "Left Command acts as Super: Command + Control + Option",
+                                "description": "Right Command acts as Super: Command + Control + Option",
                                 "from": {
-                                    "key_code": "left_command",
+                                    "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
