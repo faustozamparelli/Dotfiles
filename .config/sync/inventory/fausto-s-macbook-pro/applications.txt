@@ -19,6 +19,8 @@ Raycast
 Safari
 Solves
 Spotify
+T3 Code (Alpha)
+Tailscale
 UTM
 Visual Studio Code
 Vorssaint

@@ -13,6 +13,8 @@ notion
 quickrecorder
 raycast
 spotify
+t3-code
+tailscale-app
 visual-studio-code
 vorssaint
 wispr-flow
