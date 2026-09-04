@@ -4,6 +4,7 @@ herdr.tab.previous	Herdr	Command	Cmd-h	previous-tab	Select the previous tab
 herdr.tab.next	Herdr	Command	Cmd-l	next-tab	Select the next tab
 herdr.tab.move-left	Herdr	Command	Cmd-Shift-h	move-tab-previous	Move the current tab left
 herdr.tab.move-right	Herdr	Command	Cmd-Shift-l	move-tab-next	Move the current tab right
+herdr.tab.rename	Herdr	Command	Cmd-r	rename-tab	Rename the current tab
 herdr.pane.split-right	Herdr	Command	Cmd-b	split-right	Create a pane on the right
 herdr.pane.split-down	Herdr	Command	Cmd-n	split-down	Create a pane below
 herdr.agent.toggle	Herdr	Command	Cmd-g	agent-tab	Create or focus the full-size Codex tab

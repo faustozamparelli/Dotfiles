@@ -53,8 +53,8 @@ keybind = alt+shift+k=text:\x1b[107;4u
 keybind = alt+shift+l=text:\x1b[108;4u
 
 # Herdr owns workspaces, tabs, and panes. Ghostty translates Command shortcuts.
-# Use a layout-independent shortcut to reload this configuration.
-keybind = cmd+r=reload_config
+# km:herdr.tab.rename
+keybind = cmd+r=text:\x1b[114;9u
 # km:ghostty.escape
 keybind = cmd+a=text:\x1b
 # km:herdr.tab.previous

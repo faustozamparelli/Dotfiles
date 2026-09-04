@@ -1,10 +1,14 @@
 onboarding = false
 
 [theme]
-name = "catppuccin"
+name = "rose-pine"
 auto_switch = true
-dark_name = "catppuccin"
-light_name = "catppuccin-latte"
+dark_name = "rose-pine"
+light_name = "rose-pine-dawn"
+
+[theme.custom]
+panel_bg = "reset"
+surface0 = "reset"
 
 [terminal]
 default_shell = "/opt/homebrew/bin/fish"
@@ -41,7 +45,7 @@ focus_agent = "prefix+alt+1..9" # km:herdr.admin.focus-agent
 
 # Tabs. Frequent Command shortcuts stay available alongside the prefix layer.
 new_tab = ["cmd+t", "prefix+c"] # km:herdr.tab.new km:herdr.admin.new-tab
-rename_tab = "prefix+shift+t" # km:herdr.admin.rename-tab
+rename_tab = ["cmd+r", "prefix+shift+t"] # km:herdr.tab.rename km:herdr.admin.rename-tab
 previous_tab = ["cmd+h", "prefix+p"] # km:herdr.tab.previous km:herdr.admin.previous-tab
 next_tab = ["cmd+l", "prefix+n"] # km:herdr.tab.next km:herdr.admin.next-tab
 move_tab_previous = ["cmd+shift+h", "prefix+alt+left"] # km:herdr.tab.move-left km:herdr.admin.move-tab-left

@@ -136,6 +136,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Command | `Cmd-l` | Select the next tab |
 | Herdr | Command | `Cmd-Shift-h` | Move the current tab left |
 | Herdr | Command | `Cmd-Shift-l` | Move the current tab right |
+| Herdr | Command | `Cmd-r` | Rename the current tab |
 | Herdr | Command | `Cmd-b` | Create a pane on the right |
 | Herdr | Command | `Cmd-n` | Create a pane below |
 | Herdr | Command | `Cmd-g` | Create or focus the full-size Codex tab |
@@ -254,8 +255,10 @@ workspaces replace the old tmux sessions; tabs replace tmux windows.
 - `Alt-h/j/k/l` moves spatially between panes.
 - `Alt-Shift-h/j/k/l` resizes the active pane.
 
-Herdr uses matching Catppuccin dark and light themes for the tab bar, sidebar,
-active borders, and navigation. The sidebar is intentionally compact. At 145
+Herdr uses matching Rosé Pine dark and light themes for the tab bar, sidebar,
+active borders, and navigation. The tab bar inherits Ghostty's exact black or
+white background, while its active tab uses the theme's purple accent. The
+sidebar is intentionally compact. At 145
 terminal columns or less (approximately half of a full-screen Ghostty window
 with the configured font), Herdr switches to its single-column mobile layout
 and hides the persistent sidebar. Herdr responds to terminal columns rather
