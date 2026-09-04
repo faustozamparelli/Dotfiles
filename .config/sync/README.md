@@ -153,12 +153,51 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Alt | `Alt-Shift-k` | Resize the pane up |
 | Herdr | Alt | `Alt-Shift-l` | Resize the pane right |
 | Herdr | Ctrl-Space | `c` | Create a tab in the current workspace |
-| Herdr | Ctrl-Space | `n` | Create and switch to a named workspace |
-| Herdr | Ctrl-Space | `s` | Choose a workspace |
-| Herdr | Ctrl-Space | `W` | Search workspaces, tabs, panes, and agents |
-| Herdr | Ctrl-Space | `w` | Close the current workspace after confirmation |
+| Herdr | Ctrl-Space | `p` | Select the previous tab |
+| Herdr | Ctrl-Space | `n` | Select the next tab |
+| Herdr | Ctrl-Space | `Shift-t` | Rename the current tab |
+| Herdr | Ctrl-Space | `Alt-Left` | Move the current tab left |
+| Herdr | Ctrl-Space | `Alt-Right` | Move the current tab right |
+| Herdr | Ctrl-Space | `1..9` | Switch directly to tab 1-9 |
+| Herdr | Ctrl-Space | `Shift-x` | Close the current tab |
+| Herdr | Ctrl-Space | `Shift-n` | Create and switch to a named workspace |
+| Herdr | Ctrl-Space | `w` | Navigate workspaces |
+| Herdr | Ctrl-Space | `g` | Search workspaces, tabs, panes, and agents |
+| Herdr | Ctrl-Space | `Shift-g` | Create a Git worktree |
+| Herdr | Ctrl-Space | `Shift-o` | Open an existing Git worktree |
+| Herdr | Ctrl-Space | `Alt-x` | Remove a managed Git worktree after confirmation |
+| Herdr | Ctrl-Space | `Shift-w` | Rename the current workspace |
+| Herdr | Ctrl-Space | `Shift-d` | Close the current workspace after confirmation |
+| Herdr | Ctrl-Space | `Shift-Left` | Switch to the previous workspace |
+| Herdr | Ctrl-Space | `Shift-Right` | Switch to the next workspace |
+| Herdr | Ctrl-Space | `Shift-1..9` | Switch directly to workspace 1-9 |
+| Herdr | Ctrl-Space | `[` | Focus the previous agent |
+| Herdr | Ctrl-Space | `]` | Focus the next agent |
+| Herdr | Ctrl-Space | `Alt-1..9` | Focus agent 1-9 |
+| Herdr | Ctrl-Space | `v` | Create a pane on the right |
+| Herdr | Ctrl-Space | `-` | Create a pane below |
+| Herdr | Ctrl-Space | `x` | Close the current pane |
+| Herdr | Ctrl-Space | `Shift-p` | Rename the current pane |
+| Herdr | Ctrl-Space | `e` | Open pane scrollback in the editor |
+| Herdr | Ctrl-Space | `u` | Enter keyboard copy mode |
+| Herdr | Ctrl-Space | `h` | Focus the pane to the left |
+| Herdr | Ctrl-Space | `j` | Focus the pane below |
+| Herdr | Ctrl-Space | `k` | Focus the pane above |
+| Herdr | Ctrl-Space | `l` | Focus the pane to the right |
+| Herdr | Ctrl-Space | `Shift-h` | Swap the current pane left |
+| Herdr | Ctrl-Space | `Shift-j` | Swap the current pane down |
+| Herdr | Ctrl-Space | `Shift-k` | Swap the current pane up |
+| Herdr | Ctrl-Space | `Shift-l` | Swap the current pane right |
+| Herdr | Ctrl-Space | `Tab` | Cycle to the next pane |
+| Herdr | Ctrl-Space | `Shift-Tab` | Cycle to the previous pane |
+| Herdr | Ctrl-Space | `Backspace` | Return to the last focused pane |
+| Herdr | Ctrl-Space | `z` | Toggle pane zoom |
+| Herdr | Ctrl-Space | `r` | Enter pane resize mode |
+| Herdr | Ctrl-Space | `b` | Toggle the sidebar |
+| Herdr | Ctrl-Space | `,` | Open Herdr settings |
+| Herdr | Ctrl-Space | `o` | Open the current notification target |
 | Herdr | Ctrl-Space | `d` | Detach the Herdr client |
-| Herdr | Ctrl-Space | `r` | Reload Herdr configuration |
+| Herdr | Ctrl-Space | `Shift-r` | Reload Herdr configuration |
 | Herdr | Ctrl-Space | `?` | Open searchable keymap help |
 | Neovim | Space | `Space Space` | Save the current file |
 | Neovim | Space | `Space e` | Open Oil file browser |
@@ -199,10 +238,10 @@ The sidebar shows workspaces, tabs, panes, Git context, and agent state. Herdr
 workspaces replace the old tmux sessions; tabs replace tmux windows.
 
 - `Ctrl-h` and `Ctrl-l` switch workspaces.
-- `Ctrl-Space n` asks for a name, then creates a workspace.
-- `Ctrl-Space w` asks for confirmation, then closes the current workspace.
-- `Ctrl-Space s` opens the workspace picker.
-- `Ctrl-Space W` searches workspaces, tabs, panes, and agents.
+- `Ctrl-Space Shift-n` asks for a name, then creates a workspace.
+- `Ctrl-Space Shift-d` asks for confirmation, then closes the current workspace.
+- `Ctrl-Space w` opens workspace navigation.
+- `Ctrl-Space g` searches workspaces, tabs, panes, and agents.
 
 ### Tabs and panes
 
@@ -240,8 +279,8 @@ Read ~/.config/sync/README.md first and follow its agent contract.
 ### Sessions and recovery
 
 - `Ctrl-Space d` detaches without ending programs.
-- `Ctrl-Space s` opens the workspace picker.
-- `Ctrl-Space r` reloads the Herdr configuration after an edit.
+- `Ctrl-Space w` opens workspace navigation.
+- `Ctrl-Space Shift-r` reloads the Herdr configuration after an edit.
 
 Herdr saves workspace, tab, pane, layout, focus, and directory state
 automatically. A running server keeps processes alive. After a full server
@@ -260,7 +299,7 @@ limit is 100,000 lines.
 
 ### Guided Herdr tour
 
-Try this in a disposable workspace. Start by pressing `Ctrl-Space n`, enter
+Try this in a disposable workspace. Start by pressing `Ctrl-Space Shift-n`, enter
 `herdr-tour`, and then run:
 
 ```fish
@@ -282,11 +321,11 @@ Then exercise the interface:
 4. Press `Cmd-g` twice: the first press creates Codex and the second focuses it.
 5. Press `Cmd-Shift-u`, move with Vim keys, select with `Space`, copy with
    `Enter`, and leave with `q`.
-6. Press `Ctrl-Space W` for global navigation and `Ctrl-Space ?` for all keys.
+6. Press `Ctrl-Space g` for global navigation and `Ctrl-Space ?` for all keys.
 7. Press `Ctrl-Space d` to detach. Reopen Ghostty to see it reattach to the
    still-running session.
 
-Use `Cmd-w` to remove the disposable panes and `Ctrl-Space w` to close the
+Use `Cmd-w` to remove the disposable panes and `Ctrl-Space Shift-d` to close the
 `herdr-tour` workspace when finished. CLI discovery is always available with
 `herdr --help` and, for example, `herdr pane --help`.
 
@@ -718,7 +757,7 @@ benefits from an agent.
 ### Work on two projects
 
 1. Open the first project and Neovim.
-2. Press `Ctrl-Space n` to create another Herdr workspace inheriting the current
+2. Press `Ctrl-Space Shift-n` to create another Herdr workspace inheriting the current
    path.
 3. Use `z other-project`, then `n .`.
 4. Switch projects with `Cmd-h` and `Cmd-l`.
@@ -753,7 +792,7 @@ keymap-docs
 keymap-docs --check
 ```
 
-After Herdr changes press `Ctrl-Space r`. Restart Neovim after plugin or startup
+After Herdr changes press `Ctrl-Space Shift-r`. Restart Neovim after plugin or startup
 changes. Ghostty reload behavior depends on the setting changed; reopening it
 is the reliable option.
 

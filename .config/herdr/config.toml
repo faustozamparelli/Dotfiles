@@ -14,37 +14,66 @@ new_cwd = "follow"
 [keys]
 prefix = "ctrl+space"
 
-# Frequent direct shortcuts translated by Ghostty.
-previous_tab = "cmd+h" # km:herdr.tab.previous
-next_tab = "cmd+l" # km:herdr.tab.next
-move_tab_previous = "cmd+shift+h" # km:herdr.tab.move-left
-move_tab_next = "cmd+shift+l" # km:herdr.tab.move-right
-split_vertical = "cmd+b" # km:herdr.pane.split-right
-split_horizontal = "cmd+n" # km:herdr.pane.split-down
-close_pane = "cmd+w" # km:herdr.pane.close
-new_tab = ["cmd+t", "prefix+c"] # km:herdr.tab.new km:herdr.admin.new-tab
-copy_mode = "cmd+shift+u" # km:herdr.copy-mode.enter
-previous_workspace = "ctrl+h" # km:herdr.workspace.previous
-next_workspace = "ctrl+l" # km:herdr.workspace.next
-
-# Prefix administration follows the former tmux layout.
-new_workspace = "prefix+n" # km:herdr.admin.new-workspace
-workspace_picker = "prefix+s" # km:herdr.admin.workspaces
-goto = "prefix+shift+w" # km:herdr.admin.goto
-close_workspace = "prefix+w" # km:herdr.admin.close-workspace
-detach = "prefix+d" # km:herdr.admin.detach
-reload_config = "prefix+r" # km:herdr.admin.reload
+# Ctrl-Space is a complete, collision-free administration layer.
 help = "prefix+?" # km:herdr.admin.help
+settings = "prefix+comma" # km:herdr.admin.settings
+detach = "prefix+d" # km:herdr.admin.detach
+reload_config = "prefix+shift+r" # km:herdr.admin.reload
+open_notification_target = "prefix+o" # km:herdr.admin.notification
 
-# Prefix navigation stays available alongside the direct Option bindings.
-focus_pane_left = "prefix+h"
-focus_pane_down = "prefix+j"
-focus_pane_up = "prefix+k"
-focus_pane_right = "prefix+l"
+# Workspaces and worktrees.
+workspace_picker = "prefix+w" # km:herdr.admin.workspaces
+goto = "prefix+g" # km:herdr.admin.goto
+new_workspace = "prefix+shift+n" # km:herdr.admin.new-workspace
+new_worktree = "prefix+shift+g" # km:herdr.admin.new-worktree
+open_worktree = "prefix+shift+o" # km:herdr.admin.open-worktree
+remove_worktree = "prefix+alt+x" # km:herdr.admin.remove-worktree
+rename_workspace = "prefix+shift+w" # km:herdr.admin.rename-workspace
+close_workspace = "prefix+shift+d" # km:herdr.admin.close-workspace
+previous_workspace = ["ctrl+h", "prefix+shift+left"] # km:herdr.workspace.previous km:herdr.admin.previous-workspace
+next_workspace = ["ctrl+l", "prefix+shift+right"] # km:herdr.workspace.next km:herdr.admin.next-workspace
+switch_workspace = "prefix+shift+1..9" # km:herdr.admin.switch-workspace
+
+# Agents in sidebar order.
+previous_agent = "prefix+[" # km:herdr.admin.previous-agent
+next_agent = "prefix+]" # km:herdr.admin.next-agent
+focus_agent = "prefix+alt+1..9" # km:herdr.admin.focus-agent
+
+# Tabs. Frequent Command shortcuts stay available alongside the prefix layer.
+new_tab = ["cmd+t", "prefix+c"] # km:herdr.tab.new km:herdr.admin.new-tab
+rename_tab = "prefix+shift+t" # km:herdr.admin.rename-tab
+previous_tab = ["cmd+h", "prefix+p"] # km:herdr.tab.previous km:herdr.admin.previous-tab
+next_tab = ["cmd+l", "prefix+n"] # km:herdr.tab.next km:herdr.admin.next-tab
+move_tab_previous = ["cmd+shift+h", "prefix+alt+left"] # km:herdr.tab.move-left km:herdr.admin.move-tab-left
+move_tab_next = ["cmd+shift+l", "prefix+alt+right"] # km:herdr.tab.move-right km:herdr.admin.move-tab-right
+switch_tab = "prefix+1..9" # km:herdr.admin.switch-tab
+close_tab = "prefix+shift+x" # km:herdr.admin.close-tab
+
+# Panes. Alt navigation is implemented below so it can cross Neovim splits.
+split_vertical = ["cmd+b", "prefix+v"] # km:herdr.pane.split-right km:herdr.admin.split-right
+split_horizontal = ["cmd+n", "prefix+minus"] # km:herdr.pane.split-down km:herdr.admin.split-down
+close_pane = ["cmd+w", "prefix+x"] # km:herdr.pane.close km:herdr.admin.close-pane
+rename_pane = "prefix+shift+p" # km:herdr.admin.rename-pane
+edit_scrollback = "prefix+e" # km:herdr.admin.edit-scrollback
+copy_mode = ["cmd+shift+u", "prefix+u"] # km:herdr.copy-mode.enter km:herdr.admin.copy-mode
+focus_pane_left = "prefix+h" # km:herdr.admin.pane-left
+focus_pane_down = "prefix+j" # km:herdr.admin.pane-down
+focus_pane_up = "prefix+k" # km:herdr.admin.pane-up
+focus_pane_right = "prefix+l" # km:herdr.admin.pane-right
+swap_pane_left = "prefix+shift+h" # km:herdr.admin.swap-left
+swap_pane_down = "prefix+shift+j" # km:herdr.admin.swap-down
+swap_pane_up = "prefix+shift+k" # km:herdr.admin.swap-up
+swap_pane_right = "prefix+shift+l" # km:herdr.admin.swap-right
+cycle_pane_next = "prefix+tab" # km:herdr.admin.cycle-pane-next
+cycle_pane_previous = "prefix+shift+tab" # km:herdr.admin.cycle-pane-previous
+last_pane = "prefix+backspace" # km:herdr.admin.last-pane
+zoom = "prefix+z" # km:herdr.admin.zoom-pane
+resize_mode = "prefix+r" # km:herdr.admin.resize-mode
 resize_pane_left = "alt+shift+h" # km:herdr.pane.resize-left
 resize_pane_down = "alt+shift+j" # km:herdr.pane.resize-down
 resize_pane_up = "alt+shift+k" # km:herdr.pane.resize-up
 resize_pane_right = "alt+shift+l" # km:herdr.pane.resize-right
+toggle_sidebar = "prefix+b" # km:herdr.admin.toggle-sidebar
 
 [[keys.command]]
 key = "cmd+g" # km:herdr.agent.toggle

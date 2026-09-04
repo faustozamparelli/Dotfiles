@@ -21,12 +21,51 @@ herdr.pane.resize-down	Herdr	Alt	Alt-Shift-j	resize-down	Resize the pane down
 herdr.pane.resize-up	Herdr	Alt	Alt-Shift-k	resize-up	Resize the pane up
 herdr.pane.resize-right	Herdr	Alt	Alt-Shift-l	resize-right	Resize the pane right
 herdr.admin.new-tab	Herdr	Ctrl-Space	c	new-tab	Create a tab in the current workspace
-herdr.admin.new-workspace	Herdr	Ctrl-Space	n	new-workspace	Create and switch to a named workspace
-herdr.admin.workspaces	Herdr	Ctrl-Space	s	workspace-picker	Choose a workspace
-herdr.admin.goto	Herdr	Ctrl-Space	W	goto	Search workspaces, tabs, panes, and agents
-herdr.admin.close-workspace	Herdr	Ctrl-Space	w	close-workspace	Close the current workspace after confirmation
+herdr.admin.previous-tab	Herdr	Ctrl-Space	p	previous-tab	Select the previous tab
+herdr.admin.next-tab	Herdr	Ctrl-Space	n	next-tab	Select the next tab
+herdr.admin.rename-tab	Herdr	Ctrl-Space	Shift-t	rename-tab	Rename the current tab
+herdr.admin.move-tab-left	Herdr	Ctrl-Space	Alt-Left	move-tab-left	Move the current tab left
+herdr.admin.move-tab-right	Herdr	Ctrl-Space	Alt-Right	move-tab-right	Move the current tab right
+herdr.admin.switch-tab	Herdr	Ctrl-Space	1..9	switch-tab	Switch directly to tab 1-9
+herdr.admin.close-tab	Herdr	Ctrl-Space	Shift-x	close-tab	Close the current tab
+herdr.admin.new-workspace	Herdr	Ctrl-Space	Shift-n	new-workspace	Create and switch to a named workspace
+herdr.admin.workspaces	Herdr	Ctrl-Space	w	workspace-picker	Navigate workspaces
+herdr.admin.goto	Herdr	Ctrl-Space	g	goto	Search workspaces, tabs, panes, and agents
+herdr.admin.new-worktree	Herdr	Ctrl-Space	Shift-g	new-worktree	Create a Git worktree
+herdr.admin.open-worktree	Herdr	Ctrl-Space	Shift-o	open-worktree	Open an existing Git worktree
+herdr.admin.remove-worktree	Herdr	Ctrl-Space	Alt-x	remove-worktree	Remove a managed Git worktree after confirmation
+herdr.admin.rename-workspace	Herdr	Ctrl-Space	Shift-w	rename-workspace	Rename the current workspace
+herdr.admin.close-workspace	Herdr	Ctrl-Space	Shift-d	close-workspace	Close the current workspace after confirmation
+herdr.admin.previous-workspace	Herdr	Ctrl-Space	Shift-Left	previous-workspace	Switch to the previous workspace
+herdr.admin.next-workspace	Herdr	Ctrl-Space	Shift-Right	next-workspace	Switch to the next workspace
+herdr.admin.switch-workspace	Herdr	Ctrl-Space	Shift-1..9	switch-workspace	Switch directly to workspace 1-9
+herdr.admin.previous-agent	Herdr	Ctrl-Space	[	previous-agent	Focus the previous agent
+herdr.admin.next-agent	Herdr	Ctrl-Space	]	next-agent	Focus the next agent
+herdr.admin.focus-agent	Herdr	Ctrl-Space	Alt-1..9	focus-agent	Focus agent 1-9
+herdr.admin.split-right	Herdr	Ctrl-Space	v	split-right	Create a pane on the right
+herdr.admin.split-down	Herdr	Ctrl-Space	-	split-down	Create a pane below
+herdr.admin.close-pane	Herdr	Ctrl-Space	x	close-pane	Close the current pane
+herdr.admin.rename-pane	Herdr	Ctrl-Space	Shift-p	rename-pane	Rename the current pane
+herdr.admin.edit-scrollback	Herdr	Ctrl-Space	e	edit-scrollback	Open pane scrollback in the editor
+herdr.admin.copy-mode	Herdr	Ctrl-Space	u	copy-mode	Enter keyboard copy mode
+herdr.admin.pane-left	Herdr	Ctrl-Space	h	pane-left	Focus the pane to the left
+herdr.admin.pane-down	Herdr	Ctrl-Space	j	pane-down	Focus the pane below
+herdr.admin.pane-up	Herdr	Ctrl-Space	k	pane-up	Focus the pane above
+herdr.admin.pane-right	Herdr	Ctrl-Space	l	pane-right	Focus the pane to the right
+herdr.admin.swap-left	Herdr	Ctrl-Space	Shift-h	swap-left	Swap the current pane left
+herdr.admin.swap-down	Herdr	Ctrl-Space	Shift-j	swap-down	Swap the current pane down
+herdr.admin.swap-up	Herdr	Ctrl-Space	Shift-k	swap-up	Swap the current pane up
+herdr.admin.swap-right	Herdr	Ctrl-Space	Shift-l	swap-right	Swap the current pane right
+herdr.admin.cycle-pane-next	Herdr	Ctrl-Space	Tab	cycle-pane-next	Cycle to the next pane
+herdr.admin.cycle-pane-previous	Herdr	Ctrl-Space	Shift-Tab	cycle-pane-previous	Cycle to the previous pane
+herdr.admin.last-pane	Herdr	Ctrl-Space	Backspace	last-pane	Return to the last focused pane
+herdr.admin.zoom-pane	Herdr	Ctrl-Space	z	zoom-pane	Toggle pane zoom
+herdr.admin.resize-mode	Herdr	Ctrl-Space	r	resize-mode	Enter pane resize mode
+herdr.admin.toggle-sidebar	Herdr	Ctrl-Space	b	toggle-sidebar	Toggle the sidebar
+herdr.admin.settings	Herdr	Ctrl-Space	,	settings	Open Herdr settings
+herdr.admin.notification	Herdr	Ctrl-Space	o	open-notification	Open the current notification target
 herdr.admin.detach	Herdr	Ctrl-Space	d	detach	Detach the Herdr client
-herdr.admin.reload	Herdr	Ctrl-Space	r	reload	Reload Herdr configuration
+herdr.admin.reload	Herdr	Ctrl-Space	Shift-r	reload	Reload Herdr configuration
 herdr.admin.help	Herdr	Ctrl-Space	?	keymap-help	Open searchable keymap help
 nvim.file.save	Neovim	Space	Space Space	save	Save the current file
 nvim.file.oil	Neovim	Space	Space e	oil	Open Oil file browser
