@@ -6,7 +6,7 @@ herdr.tab.move-left	Herdr	Command	Cmd-Shift-h	move-tab-previous	Move the current
 herdr.tab.move-right	Herdr	Command	Cmd-Shift-l	move-tab-next	Move the current tab right
 herdr.pane.split-right	Herdr	Command	Cmd-b	split-right	Create a pane on the right
 herdr.pane.split-down	Herdr	Command	Cmd-n	split-down	Create a pane below
-herdr.agent.toggle	Herdr	Command	Cmd-g	agent-pane	Create or focus the Codex pane
+herdr.agent.toggle	Herdr	Command	Cmd-g	agent-tab	Create or focus the full-size Codex tab
 herdr.pane.close	Herdr	Command	Cmd-w	close-pane	Close the current pane
 herdr.tab.new	Herdr	Command	Cmd-t	new-tab	Create a tab in the current workspace
 herdr.copy-mode.enter	Herdr	Command	Cmd-Shift-u	copy-mode	Enter keyboard copy mode

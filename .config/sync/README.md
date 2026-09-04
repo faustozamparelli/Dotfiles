@@ -11,7 +11,7 @@ macOS
 └── Ghostty                 terminal renderer
     └── Herdr               persistent workspaces, tabs, panes, and agents
         ├── Neovim          editing, files, search, Git, and language tools
-        ├── Codex           agent pane
+        ├── Codex           full-size agent tab
         └── fish            occasional shell commands
 ```
 
@@ -138,7 +138,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Command | `Cmd-Shift-l` | Move the current tab right |
 | Herdr | Command | `Cmd-b` | Create a pane on the right |
 | Herdr | Command | `Cmd-n` | Create a pane below |
-| Herdr | Command | `Cmd-g` | Create or focus the Codex pane |
+| Herdr | Command | `Cmd-g` | Create or focus the full-size Codex tab |
 | Herdr | Command | `Cmd-w` | Close the current pane |
 | Herdr | Command | `Cmd-t` | Create a tab in the current workspace |
 | Herdr | Command | `Cmd-Shift-u` | Enter keyboard copy mode |
@@ -262,11 +262,12 @@ and hides the persistent sidebar. Herdr responds to terminal columns rather
 than the physical display percentage, so adjust `mobile_width_threshold` in
 `~/.config/herdr/config.toml` if another display or font changes that boundary.
 
-### The agent pane
+### The agent tab
 
-`Cmd-g` creates a Codex pane on the right using 40% of the current tab. It
-starts in the current pane's directory. Pressing `Cmd-g` again focuses the
-existing agent pane instead of creating duplicates.
+`Cmd-g` creates a full-size Codex tab in the current workspace. It starts in
+the current pane's directory. Pressing `Cmd-g` again focuses the existing
+agent tab instead of creating duplicates. If an older Codex instance is still
+in a split, `Cmd-g` promotes that pane into its own full-size tab.
 
 Before opening it, make sure the Neovim/shell pane belongs to the correct
 project. Give the agent paths and constraints explicitly. For dotfiles or Mac

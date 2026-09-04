@@ -5,33 +5,35 @@ pane="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
 [[ -n "$pane" ]] || exit 0
 
 current="$(herdr pane current --pane "$pane")"
-tab="$(jq -r '.result.pane.tab_id' <<<"$current")"
+workspace="$(jq -r '.result.pane.workspace_id' <<<"$current")"
 cwd="$(jq -r '.result.pane.foreground_cwd // .result.pane.cwd' <<<"$current")"
 current_agent="$(jq -r '.result.pane.agent // empty' <<<"$current")"
 
 if [[ "$current_agent" == "codex" ]]; then
-  if herdr pane neighbor --pane "$pane" --direction left \
-    | jq -e '.result.neighbor.pane_id' >/dev/null 2>&1; then
-    herdr pane focus --pane "$pane" --direction left >/dev/null
+  agent_pane="$pane"
+else
+  agent_pane="$(
+    herdr agent list \
+      | jq -r --arg workspace "$workspace" \
+        '.result.agents[]? | select(.workspace_id == $workspace and .agent == "codex") | .pane_id' \
+      | head -n 1
+  )"
+fi
+
+if [[ -n "$agent_pane" ]]; then
+  layout="$(herdr pane layout --pane "$agent_pane")"
+  pane_count="$(jq '.result.layout.panes | length' <<<"$layout")"
+  if (( pane_count > 1 )); then
+    herdr pane move "$agent_pane" --new-tab --workspace "$workspace" \
+      --label Codex --focus >/dev/null
+  else
+    herdr agent focus "$agent_pane" >/dev/null
   fi
   exit 0
 fi
 
-agent_pane="$(
-  herdr agent list \
-    | jq -r --arg tab "$tab" \
-      '.result.agents[]? | select(.tab_id == $tab and .agent == "codex") | .pane_id' \
-    | head -n 1
-)"
-
-if [[ -n "$agent_pane" ]]; then
-  herdr agent focus "$agent_pane" >/dev/null
-  exit 0
-fi
-
 created="$(
-  herdr pane split --pane "$pane" --direction right --ratio 0.4 \
-    --cwd "$cwd" --focus
+  herdr tab create --workspace "$workspace" --cwd "$cwd" --label Codex --focus
 )"
-agent_pane="$(jq -r '.result.pane.pane_id' <<<"$created")"
+agent_pane="$(jq -r '.result.root_pane.pane_id' <<<"$created")"
 herdr pane run "$agent_pane" "exec codex" >/dev/null

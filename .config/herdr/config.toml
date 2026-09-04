@@ -79,7 +79,7 @@ toggle_sidebar = "prefix+b" # km:herdr.admin.toggle-sidebar
 key = "cmd+g" # km:herdr.agent.toggle
 type = "shell"
 command = "~/.config/herdr/toggle-agent"
-description = "create or focus the Codex pane"
+description = "create or focus the full-size Codex tab"
 
 [[keys.command]]
 key = "alt+h" # km:herdr.pane.left
