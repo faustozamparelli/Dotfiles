@@ -1,19 +1,19 @@
 Affinity
+Beeper Desktop
 ChatGPT
-Claude
-CountUp
 DaVinci Resolve
+Discord
 Ghostty
 GitButler
 Helium
-Itsycal
 Karabiner-Elements
 Karabiner-EventViewer
-MATLAB_R2025b
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 Notion
+Picture-In-Picture
+ProtonVPN
 QuickRecorder
 Raycast
 Safari
@@ -26,3 +26,4 @@ Visual Studio Code
 Vorssaint
 Wispr Flow
 Xcode
+uBlock Origin Lite

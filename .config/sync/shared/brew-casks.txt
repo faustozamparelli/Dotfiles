@@ -1,12 +1,10 @@
 affinity
 chatgpt
-claude
 codex
 font-sf-mono
 ghostty
 gitbutler
 helium-browser
-itsycal
 karabiner-elements
 microsoft-excel
 notion

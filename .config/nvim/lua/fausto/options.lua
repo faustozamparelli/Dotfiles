@@ -15,14 +15,14 @@ opt.mouse = 'a'
 opt.number = true
 opt.relativenumber = true
 opt.scrolloff = 6
-opt.shiftwidth = 4
+opt.shiftwidth = 2
 opt.signcolumn = 'yes'
 opt.smartcase = true
-opt.softtabstop = 4
+opt.softtabstop = 2
 opt.splitbelow = true
 opt.splitright = true
 opt.statusline = ' %F %m%=%l:%c '
-opt.tabstop = 4
+opt.tabstop = 2
 opt.termguicolors = true
 opt.timeoutlen = 400
 opt.undofile = true
