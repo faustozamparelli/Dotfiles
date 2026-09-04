@@ -1,0 +1,5 @@
+*
+!.gitignore
+!config.toml
+!smart-pane-nav
+!toggle-agent

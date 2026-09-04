@@ -63,10 +63,10 @@ function gcp --description "Commit all changes and push (subject + optional desc
     git push
 end
 
-# Ghostty starts in one predictable tmux workspace. Nested shells and other
-# terminals remain untouched.
-if status is-interactive; and test "$TERM_PROGRAM" = ghostty; and not set -q TMUX; and not set -q FAUSTO_NO_TMUX
-    exec tmux new-session -A -s default
+# Ghostty starts in the persistent Herdr workspace. Shells created inside Herdr
+# inherit HERDR_ENV and therefore do not recurse.
+if status is-interactive; and test "$TERM_PROGRAM" = ghostty; and not set -q HERDR_ENV; and not set -q FAUSTO_NO_HERDR
+    exec herdr
 end
 
 function bcp --description "Bare add -u, commit, and push (subject + optional description)"

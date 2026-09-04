@@ -94,15 +94,15 @@ local function open_external(path)
     end
 end
 
-local function rename_tmux_window(path)
-    if not vim.env.TMUX or not vim.env.TMUX_PANE then
+local function rename_herdr_tab(path)
+    if vim.env.HERDR_ENV ~= '1' or not vim.env.HERDR_TAB_ID then
         return
     end
 
     local name = vim.fn.fnamemodify(path, ':t')
     if name ~= '' then
         name = name:gsub('[:.]', '-')
-        vim.system({ 'tmux', 'rename-window', '-t', vim.env.TMUX_PANE, name }):wait()
+        vim.system({ 'herdr', 'tab', 'rename', vim.env.HERDR_TAB_ID, name }):wait()
     end
 end
 
@@ -116,7 +116,7 @@ function M.open_path(path)
 
     -- Rename immediately from the fzf selection. BufEnter and DirChanged can
     -- occur after fzf has restored its temporary terminal buffer.
-    rename_tmux_window(path)
+    rename_herdr_tab(path)
 
     if stat.type == 'directory' then
         vim.cmd.cd(vim.fn.fnameescape(path))

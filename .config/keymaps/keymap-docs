@@ -29,7 +29,7 @@ awk -F '\t' '
     for (key in keys) {
       split(key, parts, SUBSEP)
       shifted = parts[2]
-      if (shifted ~ /^Cmd-Shift-/) {
+      if (shifted ~ /^Cmd-Shift-/ && shifted != "Cmd-Shift-u") {
         base = shifted; sub(/^Cmd-Shift-/, "Cmd-", base)
         if (!keys[parts[1] SUBSEP base]) { printf "shifted key has no base action: %s\n", shifted > "/dev/stderr"; bad = 1 }
       }
@@ -46,7 +46,7 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
   [[ "$id" == \#* || -z "$id" ]] && continue
   case "$layer" in
     Ghostty) config="$HOME/.config/ghostty/config" ;;
-    tmux) config="$HOME/.config/tmux/tmux.conf" ;;
+    Herdr) config="$HOME/.config/herdr/config.toml" ;;
     Neovim) config="$HOME/.config/nvim/lua/fausto/keymaps.lua" ;;
     *) printf 'unknown layer for %s: %s\n' "$id" "$layer" >&2; exit 1 ;;
   esac
@@ -57,9 +57,9 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
     exit 1
   fi
 
-  if [[ "$layer" == "tmux" && ("$_category" == "Command" || "$_category" == "Alt") ]]; then
-    if ! grep -Fq "km:$id" "$HOME/.config/ghostty/config" && [[ "$_category" == "Command" ]]; then
-      printf 'Command translation missing from Ghostty: %s\n' "$id" >&2
+  if [[ "$layer" == "Herdr" && ("$_category" == "Command" || "$_category" == "Alt" || "$_category" == "Control") ]]; then
+    if ! grep -Fq "km:$id" "$HOME/.config/ghostty/config" && [[ "$_category" != "Ctrl-Space" ]]; then
+      printf 'modified-key translation missing from Ghostty: %s\n' "$id" >&2
       exit 1
     fi
   fi

@@ -28,42 +28,55 @@ quick-terminal-screen = macos-menu-bar
 # Codex uses Ctrl+J (LF) for a newline in the prompt.
 keybind = shift+enter=text:\x0a
 
-# Give tmux session navigation private sequences so macOS cannot consume them.
-keybind = ctrl+h=text:\x1b[5;30024~
-keybind = ctrl+l=text:\x1b[5;30025~
+# Encode modified keys with the Kitty keyboard protocol so Herdr receives the
+# physical shortcut, including Command keys that macOS would otherwise consume.
+# km:herdr.workspace.previous
+keybind = ctrl+h=text:\x1b[104;5u
+# km:herdr.workspace.next
+keybind = ctrl+l=text:\x1b[108;5u
 
-# Give Option navigation private sequences so tmux can route them reliably.
-# Horizontal keys switch sessions; vertical keys move between panes.
-keybind = alt+h=text:\x1b[5;30024~
-keybind = alt+j=text:\x1b[5;30021~
-keybind = alt+k=text:\x1b[5;30022~
-keybind = alt+l=text:\x1b[5;30025~
+# km:herdr.pane.left
+keybind = alt+h=text:\x1b[104;3u
+# km:herdr.pane.down
+keybind = alt+j=text:\x1b[106;3u
+# km:herdr.pane.up
+keybind = alt+k=text:\x1b[107;3u
+# km:herdr.pane.right
+keybind = alt+l=text:\x1b[108;3u
+# km:herdr.pane.resize-left
+keybind = alt+shift+h=text:\x1b[104;4u
+# km:herdr.pane.resize-down
+keybind = alt+shift+j=text:\x1b[106;4u
+# km:herdr.pane.resize-up
+keybind = alt+shift+k=text:\x1b[107;4u
+# km:herdr.pane.resize-right
+keybind = alt+shift+l=text:\x1b[108;4u
 
-# tmux owns windows and panes. Ghostty only translates Command shortcuts.
+# Herdr owns workspaces, tabs, and panes. Ghostty translates Command shortcuts.
 # Use a layout-independent shortcut to reload this configuration.
 keybind = cmd+r=reload_config
 # km:ghostty.escape
 keybind = cmd+a=text:\x1b
-# km:tmux.window.previous
-keybind = cmd+h=text:\x1b[5;30010~
-# km:tmux.window.next
-keybind = cmd+l=text:\x1b[5;30011~
-# km:tmux.window.move-left
-keybind = cmd+shift+h=text:\x1b[5;30012~
-# km:tmux.window.move-right
-keybind = cmd+shift+l=text:\x1b[5;30013~
-# km:tmux.pane.split-right
-keybind = cmd+b=text:\x1b[5;30014~
-# km:tmux.pane.split-down
-keybind = cmd+n=text:\x1b[5;30015~
-# km:tmux.agent.toggle
-keybind = cmd+g=text:\x1b[5;30016~
-# km:tmux.pane.close
-keybind = cmd+w=text:\x1b[5;30017~
-# km:tmux.window.new
-keybind = cmd+t=text:\x1b[5;30018~
-# km:tmux.copy-mode.enter
-keybind = cmd+shift+u=text:\x1b[5;30019~
+# km:herdr.tab.previous
+keybind = cmd+h=text:\x1b[104;9u
+# km:herdr.tab.next
+keybind = cmd+l=text:\x1b[108;9u
+# km:herdr.tab.move-left
+keybind = cmd+shift+h=text:\x1b[104;10u
+# km:herdr.tab.move-right
+keybind = cmd+shift+l=text:\x1b[108;10u
+# km:herdr.pane.split-right
+keybind = cmd+b=text:\x1b[98;9u
+# km:herdr.pane.split-down
+keybind = cmd+n=text:\x1b[110;9u
+# km:herdr.agent.toggle
+keybind = cmd+g=text:\x1b[103;9u
+# km:herdr.pane.close
+keybind = cmd+w=text:\x1b[119;9u
+# km:herdr.tab.new
+keybind = cmd+t=text:\x1b[116;9u
+# km:herdr.copy-mode.enter
+keybind = cmd+shift+u=text:\x1b[117;10u
 
 # Disable Ghostty workspace defaults that would compete with tmux.
 keybind = cmd+d=unbind

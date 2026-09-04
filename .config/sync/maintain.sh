@@ -382,10 +382,6 @@ while IFS= read -r package; do
   installed_brew_packages+=("$package")
 done < "$missing_brew_packages"
 
-if command -v tmux >/dev/null 2>&1 && [[ ! -x "$HOME/.local/share/tmux/plugins/tmux-resurrect/scripts/save.sh" ]]; then
-  "$HOME/.config/tmux/install-plugins"
-fi
-
 while IFS= read -r cask; do
   [[ -z "$cask" ]] && continue
   if is_excluded_here cask "$cask"; then
@@ -538,6 +534,7 @@ done
   .config/sync \
   .config/keymaps \
   .config/nvim \
+  .config/herdr \
   .config/tmux \
   .config/karabiner/karabiner.json \
   ".config/fish/config.fish" \

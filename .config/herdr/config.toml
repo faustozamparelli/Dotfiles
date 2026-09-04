@@ -1,0 +1,113 @@
+onboarding = false
+
+[theme]
+name = "terminal"
+
+[theme.custom]
+accent = "#6d28d9"
+panel_bg = "reset"
+
+[terminal]
+default_shell = "/opt/homebrew/bin/fish"
+shell_mode = "login"
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+space"
+
+# Frequent direct shortcuts translated by Ghostty.
+previous_tab = "cmd+h" # km:herdr.tab.previous
+next_tab = "cmd+l" # km:herdr.tab.next
+move_tab_previous = "cmd+shift+h" # km:herdr.tab.move-left
+move_tab_next = "cmd+shift+l" # km:herdr.tab.move-right
+split_vertical = "cmd+b" # km:herdr.pane.split-right
+split_horizontal = "cmd+n" # km:herdr.pane.split-down
+close_pane = "cmd+w" # km:herdr.pane.close
+new_tab = ["cmd+t", "prefix+c"] # km:herdr.tab.new km:herdr.admin.new-tab
+copy_mode = "cmd+shift+u" # km:herdr.copy-mode.enter
+previous_workspace = "ctrl+h" # km:herdr.workspace.previous
+next_workspace = "ctrl+l" # km:herdr.workspace.next
+
+# Prefix administration follows the former tmux layout.
+new_workspace = "prefix+n" # km:herdr.admin.new-workspace
+workspace_picker = "prefix+s" # km:herdr.admin.workspaces
+goto = "prefix+shift+w" # km:herdr.admin.goto
+close_workspace = "prefix+w" # km:herdr.admin.close-workspace
+detach = "prefix+d" # km:herdr.admin.detach
+reload_config = "prefix+r" # km:herdr.admin.reload
+help = "prefix+?" # km:herdr.admin.help
+
+# Prefix navigation stays available alongside the direct Option bindings.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+resize_pane_left = "alt+shift+h" # km:herdr.pane.resize-left
+resize_pane_down = "alt+shift+j" # km:herdr.pane.resize-down
+resize_pane_up = "alt+shift+k" # km:herdr.pane.resize-up
+resize_pane_right = "alt+shift+l" # km:herdr.pane.resize-right
+
+[[keys.command]]
+key = "cmd+g" # km:herdr.agent.toggle
+type = "shell"
+command = "~/.config/herdr/toggle-agent"
+description = "create or focus the Codex pane"
+
+[[keys.command]]
+key = "alt+h" # km:herdr.pane.left
+type = "shell"
+command = "~/.config/herdr/smart-pane-nav left h"
+description = "focus left, or move left inside Neovim"
+
+[[keys.command]]
+key = "alt+j" # km:herdr.pane.down
+type = "shell"
+command = "~/.config/herdr/smart-pane-nav down j"
+description = "focus down, or move down inside Neovim"
+
+[[keys.command]]
+key = "alt+k" # km:herdr.pane.up
+type = "shell"
+command = "~/.config/herdr/smart-pane-nav up k"
+description = "focus up, or move up inside Neovim"
+
+[[keys.command]]
+key = "alt+l" # km:herdr.pane.right
+type = "shell"
+command = "~/.config/herdr/smart-pane-nav right l"
+description = "focus right, or move right inside Neovim"
+
+[ui]
+sidebar_width = 28
+sidebar_min_width = 20
+sidebar_max_width = 34
+sidebar_collapsed_mode = "hidden"
+mouse_capture = true
+copy_on_select = true
+confirm_close = true
+prompt_new_tab_name = false
+prompt_new_workspace_name = true
+pane_borders = true
+pane_outer_borders = false
+pane_scrollbars = false
+pane_gaps = false
+hide_tab_bar_when_single_tab = true
+tab_bar_position = "top"
+window_title = ""
+status_indicators = "symbols"
+
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "bottom-right"
+
+[session]
+resume_agents_on_restore = true
+
+[experimental]
+pane_history = false
+
+[advanced]
+scrollback_limit_bytes = 10000000

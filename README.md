@@ -91,13 +91,13 @@ also be uninstalled on the Air.
 
 ## Terminal Workflow
 
-Ghostty launches Fish, which attaches or creates the tmux session named
-`default`. Neovim is the primary editor (`c`, `v`, and `m` all open `nvim`).
-Set `FAUSTO_NO_TMUX=1` before starting Fish when an unwrapped shell is needed.
+Ghostty launches Fish, which attaches to the persistent Herdr session. Neovim
+is the primary editor (`c`, `v`, and `m` all open `nvim`). Set
+`FAUSTO_NO_HERDR=1` before starting Fish when an unwrapped shell is needed.
 
 The canonical custom-key inventory is `~/.config/keymaps/registry.tsv`; the
-readable reference is `~/.config/keymaps/REFERENCE.md`. Use `Ctrl-Space ?` in
-tmux or `Space ?` in Neovim for runtime help. Agents changing a binding must
+readable reference is `~/.config/sync/README.md`. Use `Ctrl-Space ?` in Herdr
+or `Space ?` in Neovim for runtime help. Agents changing a binding must
 follow `~/.config/keymaps/AGENTS.md` and run:
 
 ```sh
@@ -105,8 +105,9 @@ keymap-docs
 keymap-docs --check
 ```
 
-tmux snapshots are explicit: `Ctrl-Space S` saves and `Ctrl-Space R` restores.
-They are never written periodically in the background.
+Herdr saves workspace layout automatically. Live pane processes persist while
+the server runs; supported agent conversations can resume after a server
+restart when their Herdr integrations are installed.
 
 ## Sync Files
 

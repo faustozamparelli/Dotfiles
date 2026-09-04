@@ -9,20 +9,20 @@ The intended workspace is:
 ```text
 macOS
 └── Ghostty                 terminal renderer
-    └── tmux                persistent windows and panes
+    └── Herdr               persistent workspaces, tabs, panes, and agents
         ├── Neovim          editing, files, search, Git, and language tools
         ├── Codex           agent pane
         └── fish            occasional shell commands
 ```
 
 The goal is not to memorize every Unix command. Spend most of the day in
-Neovim, let tmux organize long-lived work, and use the shell when it is the
+Neovim, let Herdr organize long-lived work, and use the shell when it is the
 clearest tool for a short operation.
 
 ## Start Here
 
 Open Ghostty. Its fish configuration automatically attaches to the persistent
-tmux session named `default`. Work survives accidental terminal-window closes.
+Herdr session. Work survives accidental terminal-window closes.
 
 The essential loop is:
 
@@ -49,27 +49,30 @@ Git commands, and newly opened terminal processes.
 
 ### Ghostty is only the outer window
 
-Ghostty displays the terminal. It deliberately does not own tabs or splits;
-those default shortcuts are disabled because tmux owns the workspace layout.
-Closing Ghostty does not end the tmux session.
+Ghostty displays the terminal and translates macOS Command and Option chords
+into Kitty keyboard events. It deliberately does not own tabs or splits;
+Herdr owns the workspace layout. Closing Ghostty does not end the Herdr server.
 
-### tmux owns workspaces
+### Herdr owns workspaces
 
-A tmux session contains windows, and each window contains panes:
+A Herdr session contains workspaces, each workspace contains tabs, and each tab
+contains panes:
 
 ```text
 session: default
-├── window 1: project-a
+├── workspace: project-a
+│   └── tab 1: editor
 │   ├── pane: Neovim
 │   └── pane: Codex
-└── window 2: project-b
+└── workspace: project-b
+    └── tab 1: editor
     ├── pane: Neovim
     └── pane: shell
 ```
 
-Use one tmux window per project. A pane is a temporary view within that
-project, not a substitute for a project. New panes and windows inherit the
-current pane's directory.
+Use one Herdr workspace per project and tabs for independent layouts within
+that project. A pane is a temporary view, not a substitute for a project. New
+panes, tabs, and workspaces inherit the current pane's directory.
 
 ### Neovim owns editing
 
@@ -110,11 +113,11 @@ project search and agent behavior unpredictable.
 
 The configuration assigns each modifier a stable job:
 
-- `Ctrl-h/l`: move between tmux sessions.
-- `Cmd`: frequent tmux window operations.
-- `Alt`: directional tmux pane focus; adding Shift resizes.
+- `Ctrl-h/l`: move between Herdr workspaces.
+- `Cmd`: frequent Herdr tab and pane operations.
+- `Alt`: directional Herdr pane focus; adding Shift resizes.
 - `Space`: discoverable Neovim operations grouped by category.
-- `Ctrl-Space`: tmux administration and infrequent operations.
+- `Ctrl-Space`: Herdr administration and infrequent operations.
 - Other `Ctrl` keys retain conventional terminal and editor behavior.
 
 The notation `Ctrl-Space c` means press `Ctrl-Space`, release it, then press
@@ -129,34 +132,34 @@ update the registry and implementation together, then run `keymap-docs`.
 | Layer | Category | Key | Behavior |
 |---|---|---|---|
 | Ghostty | Command | `Cmd-a` | Leave the current editing mode |
-| tmux | Command | `Cmd-h` | Select the previous window |
-| tmux | Command | `Cmd-l` | Select the next window |
-| tmux | Command | `Cmd-Shift-h` | Move the current window left |
-| tmux | Command | `Cmd-Shift-l` | Move the current window right |
-| tmux | Command | `Cmd-b` | Create a pane on the right |
-| tmux | Command | `Cmd-n` | Create a pane below |
-| tmux | Command | `Cmd-g` | Create or focus the Codex pane |
-| tmux | Command | `Cmd-w` | Close the current pane |
-| tmux | Control | `Ctrl-h` | Switch to the previous session |
-| tmux | Control | `Ctrl-l` | Switch to the next session |
-| tmux | Alt | `Alt-h` | Focus the pane to the left |
-| tmux | Alt | `Alt-j` | Focus the pane below |
-| tmux | Alt | `Alt-k` | Focus the pane above |
-| tmux | Alt | `Alt-l` | Focus the pane to the right |
-| tmux | Alt | `Alt-Shift-h` | Resize the pane left |
-| tmux | Alt | `Alt-Shift-j` | Resize the pane down |
-| tmux | Alt | `Alt-Shift-k` | Resize the pane up |
-| tmux | Alt | `Alt-Shift-l` | Resize the pane right |
-| tmux | Ctrl-Space | `c` | Create a tmux window |
-| tmux | Ctrl-Space | `n` | Create and switch to a named session |
-| tmux | Ctrl-Space | `s` | Choose a tmux session |
-| tmux | Ctrl-Space | `W` | Choose a tmux window |
-| tmux | Ctrl-Space | `w` | Kill the current session after confirmation |
-| tmux | Ctrl-Space | `d` | Detach the tmux client |
-| tmux | Ctrl-Space | `r` | Reload tmux configuration |
-| tmux | Ctrl-Space | `S` | Save a session snapshot |
-| tmux | Ctrl-Space | `R` | Restore a session snapshot |
-| tmux | Ctrl-Space | `?` | Open searchable keymap help |
+| Herdr | Command | `Cmd-h` | Select the previous tab |
+| Herdr | Command | `Cmd-l` | Select the next tab |
+| Herdr | Command | `Cmd-Shift-h` | Move the current tab left |
+| Herdr | Command | `Cmd-Shift-l` | Move the current tab right |
+| Herdr | Command | `Cmd-b` | Create a pane on the right |
+| Herdr | Command | `Cmd-n` | Create a pane below |
+| Herdr | Command | `Cmd-g` | Create or focus the Codex pane |
+| Herdr | Command | `Cmd-w` | Close the current pane |
+| Herdr | Command | `Cmd-t` | Create a tab in the current workspace |
+| Herdr | Command | `Cmd-Shift-u` | Enter keyboard copy mode |
+| Herdr | Control | `Ctrl-h` | Switch to the previous workspace |
+| Herdr | Control | `Ctrl-l` | Switch to the next workspace |
+| Herdr | Alt | `Alt-h` | Focus the pane to the left |
+| Herdr | Alt | `Alt-j` | Focus the pane below |
+| Herdr | Alt | `Alt-k` | Focus the pane above |
+| Herdr | Alt | `Alt-l` | Focus the pane to the right |
+| Herdr | Alt | `Alt-Shift-h` | Resize the pane left |
+| Herdr | Alt | `Alt-Shift-j` | Resize the pane down |
+| Herdr | Alt | `Alt-Shift-k` | Resize the pane up |
+| Herdr | Alt | `Alt-Shift-l` | Resize the pane right |
+| Herdr | Ctrl-Space | `c` | Create a tab in the current workspace |
+| Herdr | Ctrl-Space | `n` | Create and switch to a named workspace |
+| Herdr | Ctrl-Space | `s` | Choose a workspace |
+| Herdr | Ctrl-Space | `W` | Search workspaces, tabs, panes, and agents |
+| Herdr | Ctrl-Space | `w` | Close the current workspace after confirmation |
+| Herdr | Ctrl-Space | `d` | Detach the Herdr client |
+| Herdr | Ctrl-Space | `r` | Reload Herdr configuration |
+| Herdr | Ctrl-Space | `?` | Open searchable keymap help |
 | Neovim | Space | `Space Space` | Save the current file |
 | Neovim | Space | `Space e` | Open Oil file browser |
 | Neovim | Direct | `-` | Open the parent directory in Oil |
@@ -188,37 +191,35 @@ update the registry and implementation together, then run `keymap-docs`.
 | Neovim | Direct | `K` | Move selected lines up |
 <!-- KEYMAPS:END -->
 
-## tmux in Practice
+## Herdr in Practice
 
-### Sessions
+### Workspaces
 
-The far-left status strip shows the previous session, the emphasized current
-session, and the next session. With only one session it shows only the current
-name; with two it shows the other session once.
+The sidebar shows workspaces, tabs, panes, Git context, and agent state. Herdr
+workspaces replace the old tmux sessions; tabs replace tmux windows.
 
-- `Ctrl-h` switches to the previous session alphabetically.
-- `Ctrl-l` switches to the next session alphabetically.
-- `Ctrl-Space n` asks for a name, then creates and switches to that session.
-- `Ctrl-Space w` asks for confirmation, then kills the current session.
-- `Ctrl-Space s` remains available when a searchable overview is clearer.
-- `Ctrl-Space W` opens the window chooser.
+- `Ctrl-h` and `Ctrl-l` switch workspaces.
+- `Ctrl-Space n` asks for a name, then creates a workspace.
+- `Ctrl-Space w` asks for confirmation, then closes the current workspace.
+- `Ctrl-Space s` opens the workspace picker.
+- `Ctrl-Space W` searches workspaces, tabs, panes, and agents.
 
-### Windows and panes
+### Tabs and panes
 
-- `Cmd-h` and `Cmd-l` move between project windows.
-- `Cmd-Shift-h` and `Cmd-Shift-l` reorder the current window.
+- `Cmd-h` and `Cmd-l` move between tabs.
+- `Cmd-Shift-h` and `Cmd-Shift-l` reorder the current tab.
+- `Cmd-t` creates a tab.
 - `Cmd-b` creates a pane on the right.
 - `Cmd-n` creates a pane below.
 - `Cmd-w` closes the active pane.
 - `Alt-h/j/k/l` moves spatially between panes.
 - `Alt-Shift-h/j/k/l` resizes the active pane.
 
-The current session is shown at the upper left of the tmux status line. The
-active window has a purple dot in the centered window list.
+Herdr uses the configured purple accent for active borders and navigation.
 
 ### The agent pane
 
-`Cmd-g` creates a Codex pane on the right using 40% of the current window. It
+`Cmd-g` creates a Codex pane on the right using 40% of the current tab. It
 starts in the current pane's directory. Pressing `Cmd-g` again focuses the
 existing agent pane instead of creating duplicates.
 
@@ -233,18 +234,21 @@ Read ~/.config/sync/README.md first and follow its agent contract.
 ### Sessions and recovery
 
 - `Ctrl-Space d` detaches without ending programs.
-- `Ctrl-Space s` opens the session chooser.
-- `Ctrl-Space S` saves a tmux-resurrect snapshot.
-- `Ctrl-Space R` restores the latest snapshot.
-- `Ctrl-Space r` reloads the tmux configuration after an edit.
+- `Ctrl-Space s` opens the workspace picker.
+- `Ctrl-Space r` reloads the Herdr configuration after an edit.
+
+Herdr saves workspace, tab, pane, layout, focus, and directory state
+automatically. A running server keeps processes alive. After a full server
+restart, arbitrary processes become fresh shells; supported agents such as
+Codex can resume native conversations when their integration is installed.
 
 Detach when leaving work running. Close individual panes with `Cmd-w`. Avoid
 typing `exit` into a pane unless ending that shell or process is intentional.
 
 ### Copy mode
 
-tmux has mouse support and vi-style copy mode. Enter copy mode with
-`Ctrl-Space [`; move with Vim keys, press `Space` to begin a selection, and
+Herdr has mouse support and vi-style copy mode. Enter copy mode with
+`Cmd-Shift-u`; move with Vim keys, press `Space` to begin a selection, and
 press `Enter` to copy it. Press `q` to leave copy mode. The terminal history
 limit is 100,000 lines.
 
@@ -404,7 +408,7 @@ searched. Use `Space f a` again when crossing project boundaries.
 - `Ctrl-w =` equalizes split sizes.
 - `:tabnew`, `gt`, and `gT` create and move among tab pages.
 
-Use tmux panes for independent processes and Neovim windows for simultaneous
+Use Herdr panes for independent processes and Neovim windows for simultaneous
 views of editor buffers. Avoid nesting layouts without a reason.
 
 ### Git inside Neovim
@@ -676,7 +680,7 @@ benefits from an agent.
 ### Work on two projects
 
 1. Open the first project and Neovim.
-2. Press `Ctrl-Space c` to create another tmux window inheriting the current
+2. Press `Ctrl-Space n` to create another Herdr workspace inheriting the current
    path.
 3. Use `z other-project`, then `n .`.
 4. Switch projects with `Cmd-h` and `Cmd-l`.
@@ -694,9 +698,9 @@ then commit.
 
 ### Recover the workspace
 
-Reopen Ghostty; it attaches to the existing `default` tmux session. If the
-machine restarted, press `Ctrl-Space R` to restore the latest explicitly saved
-snapshot.
+Reopen Ghostty; it attaches to the persistent Herdr session. After a machine or
+server restart, Herdr recreates the saved layout and working directories and
+resumes supported agent conversations when integrations are available.
 
 ### Edit this setup
 
@@ -711,7 +715,7 @@ keymap-docs
 keymap-docs --check
 ```
 
-After tmux changes press `Ctrl-Space r`. Restart Neovim after plugin or startup
+After Herdr changes press `Ctrl-Space r`. Restart Neovim after plugin or startup
 changes. Ghostty reload behavior depends on the setting changed; reopening it
 is the reliable option.
 
@@ -778,17 +782,18 @@ of this dotfiles contract.
 4. Tell the agent to read this file and finish the new-Mac procedure.
 5. Handle manual sign-ins, licenses, and macOS privacy permissions.
 
-The untracked tmux-resurrect runtime belongs under
-`~/.local/share/tmux/plugins`; only its configuration belongs in dotfiles.
+Herdr logs, sockets, cached manifests, session state, and pane history are
+machine-local. Only `~/.config/herdr/config.toml` and its helper scripts belong
+in dotfiles. The retired tmux configuration remains tracked as an archive.
 
 ## Agent Contract
 
 Agents working on this setup must follow these rules:
 
 1. Read this entire file before changing dotfiles, Mac synchronization,
-   Ghostty, tmux, Neovim, fish, or keymaps.
+   Ghostty, Herdr, Neovim, fish, or keymaps.
 2. Use the bare dotfiles repository; do not recreate tracked configuration.
-3. Preserve the architecture: Ghostty renders, tmux owns workspaces, Neovim
+3. Preserve the architecture: Ghostty renders, Herdr owns workspaces, Neovim
    owns editing, and fish supplies short commands.
 4. Keep this as the only Markdown file under `~/.config`. Update it instead of
    adding repository-specific agent or README files.
@@ -802,7 +807,7 @@ Agents working on this setup must follow these rules:
 For every custom keybinding change:
 
 1. Update `~/.config/keymaps/registry.tsv`, preserving unique IDs.
-2. Update the relevant Ghostty, tmux, or Neovim configuration and include its
+2. Update the relevant Ghostty, Herdr, or Neovim configuration and include its
    `km:<id>` marker (Neovim uses the ID in its mapping helper).
 3. Keep modifier roles consistent with the Keyboard Layers section.
 4. Run `~/.config/keymaps/keymap-docs` to regenerate the table in this file.
@@ -831,7 +836,7 @@ Use these after changing the setup:
 keymap-docs --check
 bash ~/.config/sync/tests/test-maintain.sh
 nvim --headless '+checkhealth' '+qa'
-tmux source-file ~/.config/tmux/tmux.conf
+herdr config check
 fish --no-execute ~/.config/fish/config.fish
 ```
 
