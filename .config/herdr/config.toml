@@ -1,11 +1,10 @@
 onboarding = false
 
 [theme]
-name = "terminal"
-
-[theme.custom]
-accent = "#6d28d9"
-panel_bg = "reset"
+name = "catppuccin"
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
 
 [terminal]
 default_shell = "/opt/homebrew/bin/fish"
@@ -78,10 +77,11 @@ command = "~/.config/herdr/smart-pane-nav right l"
 description = "focus right, or move right inside Neovim"
 
 [ui]
-sidebar_width = 28
-sidebar_min_width = 20
-sidebar_max_width = 34
+sidebar_width = 22
+sidebar_min_width = 16
+sidebar_max_width = 24
 sidebar_collapsed_mode = "hidden"
+mobile_width_threshold = 145
 mouse_capture = true
 copy_on_select = true
 confirm_close = true

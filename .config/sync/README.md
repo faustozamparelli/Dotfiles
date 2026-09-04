@@ -215,7 +215,13 @@ workspaces replace the old tmux sessions; tabs replace tmux windows.
 - `Alt-h/j/k/l` moves spatially between panes.
 - `Alt-Shift-h/j/k/l` resizes the active pane.
 
-Herdr uses the configured purple accent for active borders and navigation.
+Herdr uses matching Catppuccin dark and light themes for the tab bar, sidebar,
+active borders, and navigation. The sidebar is intentionally compact. At 145
+terminal columns or less (approximately half of a full-screen Ghostty window
+with the configured font), Herdr switches to its single-column mobile layout
+and hides the persistent sidebar. Herdr responds to terminal columns rather
+than the physical display percentage, so adjust `mobile_width_threshold` in
+`~/.config/herdr/config.toml` if another display or font changes that boundary.
 
 ### The agent pane
 
@@ -251,6 +257,38 @@ Herdr has mouse support and vi-style copy mode. Enter copy mode with
 `Cmd-Shift-u`; move with Vim keys, press `Space` to begin a selection, and
 press `Enter` to copy it. Press `q` to leave copy mode. The terminal history
 limit is 100,000 lines.
+
+### Guided Herdr tour
+
+Try this in a disposable workspace. Start by pressing `Ctrl-Space n`, enter
+`herdr-tour`, and then run:
+
+```fish
+printf 'workspace: %s\ntab:       %s\npane:      %s\n' \
+    $HERDR_WORKSPACE_ID $HERDR_TAB_ID $HERDR_PANE_ID
+herdr workspace list
+herdr tab list --workspace $HERDR_WORKSPACE_ID
+herdr pane list --workspace $HERDR_WORKSPACE_ID
+herdr pane layout --current
+herdr agent list
+herdr integration status
+```
+
+Then exercise the interface:
+
+1. Press `Cmd-t` to add a tab, and `Cmd-h` / `Cmd-l` to switch tabs.
+2. Press `Cmd-b` for a right pane and `Cmd-n` for a lower pane.
+3. Navigate with `Alt-h/j/k/l` and resize with `Alt-Shift-h/j/k/l`.
+4. Press `Cmd-g` twice: the first press creates Codex and the second focuses it.
+5. Press `Cmd-Shift-u`, move with Vim keys, select with `Space`, copy with
+   `Enter`, and leave with `q`.
+6. Press `Ctrl-Space W` for global navigation and `Ctrl-Space ?` for all keys.
+7. Press `Ctrl-Space d` to detach. Reopen Ghostty to see it reattach to the
+   still-running session.
+
+Use `Cmd-w` to remove the disposable panes and `Ctrl-Space w` to close the
+`herdr-tour` workspace when finished. CLI discovery is always available with
+`herdr --help` and, for example, `herdr pane --help`.
 
 ## Neovim in Practice
 
@@ -778,9 +816,21 @@ of this dotfiles contract.
 1. Follow the root dotfiles bootstrap instructions until the bare repository
    exists.
 2. Run `~/.config/sync/install-agent.sh`.
-3. Sign into an agent application.
-4. Tell the agent to read this file and finish the new-Mac procedure.
-5. Handle manual sign-ins, licenses, and macOS privacy permissions.
+3. Run `brew services start herdr`. This installs a per-user launch agent with
+   `RunAtLoad` and `KeepAlive`, so the Herdr server returns after login/reboot.
+4. Make Homebrew Fish the account login shell:
+
+   ```fish
+   grep -qxF /opt/homebrew/bin/fish /etc/shells; or \
+       echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+   chsh -s /opt/homebrew/bin/fish
+   ```
+
+5. Open Ghostty and verify that it starts Fish, attaches to Herdr, and opens a
+   Fish pane. `echo $HERDR_ENV` should print `1` inside that pane.
+6. Sign into an agent application.
+7. Tell the agent to read this file and finish the new-Mac procedure.
+8. Handle manual sign-ins, licenses, and macOS privacy permissions.
 
 Herdr logs, sockets, cached manifests, session state, and pane history are
 machine-local. Only `~/.config/herdr/config.toml` and its helper scripts belong
