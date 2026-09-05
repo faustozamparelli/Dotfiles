@@ -6,6 +6,7 @@ fzf
 gh
 git
 git-delta
+herdr
 libqalculate
 mole
 neovim
@@ -13,7 +14,6 @@ octave
 pnpm
 pyright
 ruff
-tmux
 tree
 tree-sitter-cli
 uv

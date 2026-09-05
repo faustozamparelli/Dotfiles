@@ -1,8 +1,8 @@
 codex
+discord
 font-sf-mono
 ghostty
 helium-browser
-itsycal
 karabiner-elements
 microsoft-excel
 microsoft-word

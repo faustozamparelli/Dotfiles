@@ -1,9 +1,9 @@
-CountUp
+Discord
 Ghostty
 Helium
-Itsycal
 Karabiner-Elements
 Karabiner-EventViewer
+MagHue
 Microsoft Excel
 Microsoft PowerPoint
 Microsoft Word
