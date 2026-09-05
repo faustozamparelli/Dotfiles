@@ -1,3 +1,4 @@
+beeper
 codex
 discord
 font-sf-mono

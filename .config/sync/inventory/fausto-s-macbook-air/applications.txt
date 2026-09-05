@@ -1,3 +1,4 @@
+Beeper Desktop
 Discord
 Ghostty
 Helium
@@ -9,12 +10,15 @@ Microsoft PowerPoint
 Microsoft Word
 MySielteID
 Notion
+Picture-In-Picture
 ProtonVPN
 QuickRecorder
 Raycast
 Safari
+Solves
 Spotify
 T3 Code (Alpha)
 Visual Studio Code
 Vorssaint
 Wispr Flow
+uBlock Origin Lite
