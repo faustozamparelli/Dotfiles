@@ -12,6 +12,77 @@ local function open_lsp_results_in_side_pane(what)
     vim.cmd.cfirst()
 end
 
+local function current_buffer_directory()
+    local oil_ok, oil = pcall(require, 'oil')
+    if oil_ok then
+        local oil_directory = oil.get_current_dir()
+        if oil_directory then
+            return oil_directory
+        end
+    end
+
+    local path = vim.api.nvim_buf_get_name(0)
+    if vim.bo.buftype == '' and path ~= '' then
+        return vim.fn.fnamemodify(path, ':p:h')
+    end
+
+    return vim.fn.getcwd()
+end
+
+local function run_herdr(command, failure_message)
+    if vim.env.HERDR_ENV ~= '1' or not vim.env.HERDR_PANE_ID then
+        vim.notify('This action needs Neovim to be running inside Herdr', vim.log.levels.WARN)
+        return
+    end
+
+    vim.system(command, {}, function(result)
+        if result.code ~= 0 then
+            vim.schedule(function()
+                local message = vim.trim(result.stderr or '')
+                vim.notify(message ~= '' and message or failure_message, vim.log.levels.ERROR)
+            end)
+        end
+    end)
+end
+
+local function open_codex()
+    run_herdr({
+        vim.fn.expand('~/.config/herdr/open-codex-tab'),
+        current_buffer_directory(),
+    }, 'Could not open a Codex tab in Herdr')
+end
+
+local function split_herdr_pane(direction)
+    run_herdr({
+        'herdr',
+        'pane',
+        'split',
+        '--current',
+        '--direction',
+        direction,
+        '--cwd',
+        current_buffer_directory(),
+        '--focus',
+    }, 'Could not split the Herdr pane')
+end
+
+local function focus_window_or_herdr(direction, nvim_direction)
+    local window = vim.api.nvim_get_current_win()
+    vim.cmd.wincmd(nvim_direction)
+    if vim.api.nvim_get_current_win() ~= window then
+        return
+    end
+
+    run_herdr({
+        'herdr',
+        'pane',
+        'focus',
+        '--current',
+        '--direction',
+        direction,
+    }, 'Could not focus the adjacent Herdr pane')
+end
+
 map({ 'n', 'i', 'v', 's' }, '<Esc>', function()
     if vim.v.hlsearch == 1 then
         vim.schedule(function()
@@ -34,6 +105,19 @@ end, { expr = true, silent = true, desc = 'Accept top completion suggestion' })
 map('n', '<leader><leader>', '<cmd>write<cr>', opts('nvim.file.save', 'Save file'))
 map('n', '<leader>e', '<cmd>Oil<cr>', opts('nvim.file.oil', 'Open Oil'))
 map('n', '-', '<cmd>Oil ..<cr>', opts('nvim.file.parent', 'Open parent directory'))
+map('n', '<leader>ac', open_codex, opts('nvim.ai.codex', 'Open Codex in a Herdr tab'))
+local function split_herdr_right()
+    split_herdr_pane('right')
+end
+
+local function split_herdr_down()
+    split_herdr_pane('down')
+end
+
+map('n', '<D-b>', split_herdr_right, opts('nvim.herdr.split-right-command', 'Split Herdr pane right'))
+map('n', '<leader>pv', split_herdr_right, opts('nvim.herdr.split-right', 'Split Herdr pane right'))
+map('n', '<D-n>', split_herdr_down, opts('nvim.herdr.split-down-command', 'Split Herdr pane down'))
+map('n', '<leader>ph', split_herdr_down, opts('nvim.herdr.split-down', 'Split Herdr pane down'))
 map('n', '<leader>d', function()
     local pattern = vim.fn.getreg('/')
     if pattern == '' then
@@ -204,6 +288,21 @@ map('n', '<leader>le', function()
     vim.fn.setreg('+', table.concat(lines, '\n'))
     vim.notify(string.format('Copied %d diagnostic(s) to clipboard', #lines))
 end, opts('nvim.language.copy-errors', 'Copy error messages'))
+map('n', '<leader>lE', function()
+    local diagnostics = vim.diagnostic.get(nil, {
+        severity = vim.diagnostic.severity.ERROR,
+    })
+    if #diagnostics == 0 then
+        vim.notify('No errors')
+        return
+    end
+
+    vim.fn.setqflist({}, ' ', {
+        title = 'All diagnostic errors',
+        items = vim.diagnostic.toqflist(diagnostics),
+    })
+    vim.cmd.copen()
+end, opts('nvim.language.all-errors', 'Show all errors'))
 map({ 'n', 'x' }, '<leader>lf', function()
     vim.lsp.buf.format({ async = false, timeout_ms = 3000 })
 end, opts('nvim.language.format', 'Format buffer'))
@@ -218,9 +317,10 @@ map('n', '<leader>?', function()
     require('which-key').show({ keys = '<leader>', mode = 'n', delay = 0 })
 end, opts('nvim.help.keys', 'Show leader keymaps'))
 
-for key, direction in pairs({ h = 'h', j = 'j', k = 'k', l = 'l' }) do
-    map('n', '<A-' .. key .. '>', '<C-w>' .. direction, opts('nvim.window.' .. key, 'Move to adjacent pane'))
-    map('t', '<A-' .. key .. '>', '<C-\\><C-n><C-w>' .. direction, opts('nvim.terminal-window.' .. key, 'Move to adjacent pane'))
+for key, direction in pairs({ h = 'left', j = 'down', k = 'up', l = 'right' }) do
+    map('n', '<A-' .. key .. '>', function()
+        focus_window_or_herdr(direction, key)
+    end, opts('nvim.window.' .. key, 'Move to adjacent Neovim window or Herdr pane'))
 end
 
 map({ 'n', 'x', 'o' }, 'H', '^', opts('nvim.motion.line-start', 'Line start'))

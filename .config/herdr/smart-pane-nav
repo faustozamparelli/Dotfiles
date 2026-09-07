@@ -10,7 +10,7 @@ pane="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
 if herdr pane process-info --pane "$pane" \
   | jq -e '.result.process_info.foreground_processes[]? | select(.name == "nvim")' \
     >/dev/null; then
-  herdr pane send-keys "$pane" ctrl+w "$nvim_key" >/dev/null
+  herdr pane send-keys "$pane" "alt+$nvim_key" >/dev/null
 else
   herdr pane focus --pane "$pane" --direction "$direction" >/dev/null
 fi

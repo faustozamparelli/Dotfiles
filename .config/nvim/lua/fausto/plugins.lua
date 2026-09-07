@@ -141,11 +141,13 @@ require('render-markdown').setup({
 
 require('which-key').setup({ preset = 'helix', delay = 250 })
 require('which-key').add({
+    { '<leader>a', group = 'ai' },
     { '<leader>b', group = 'buffer' },
     { '<leader>f', group = 'find' },
     { '<leader>g', group = 'git' },
     { '<leader>l', group = 'language' },
     { '<leader>m', group = 'markdown' },
+    { '<leader>p', group = 'Herdr pane' },
     { '<leader>q', group = 'quit/session' },
     { '<leader>r', group = 'reload' },
 })

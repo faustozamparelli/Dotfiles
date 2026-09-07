@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cwd="${1:?directory required}"
+pane="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
+
+[[ "${HERDR_ENV:-}" == "1" ]] || {
+  printf 'Neovim is not running inside Herdr\n' >&2
+  exit 1
+}
+[[ -n "$pane" ]] || {
+  printf 'No Herdr pane is available\n' >&2
+  exit 1
+}
+[[ -d "$cwd" ]] || {
+  printf 'Directory does not exist: %s\n' "$cwd" >&2
+  exit 1
+}
+
+current="$(herdr pane current --pane "$pane")"
+workspace="$(jq -r '.result.pane.workspace_id' <<<"$current")"
+created="$(
+  herdr tab create \
+    --workspace "$workspace" \
+    --cwd "$cwd" \
+    --label Codex \
+    --focus
+)"
+codex_pane="$(jq -r '.result.root_pane.pane_id' <<<"$created")"
+herdr pane run "$codex_pane" 'exec codex' >/dev/null
