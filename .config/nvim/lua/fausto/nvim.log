@@ -1,0 +1,4 @@
+WRN 2026-09-08T17:11:39.489 ?.72910    server_start:197: Failed to start server: operation not permitted: /var/folders/mt/31kb1bjx2xb90x530l0dkzcw0000gn/T/nvim.faustozamparelli/RzT0IR/nvim.72910.0
+WRN 2026-09-08T17:11:39.532 ?.72910    server_start:197: Failed to start server: operation not permitted: /var/folders/mt/31kb1bjx2xb90x530l0dkzcw0000gn/T/nvim.faustozamparelli/RzT0IR/fzf-lua.1788880299.72910.1
+WRN 2026-09-08T17:15:11.440 ?.75279    server_start:197: Failed to start server: operation not permitted: /var/folders/mt/31kb1bjx2xb90x530l0dkzcw0000gn/T/nvim.faustozamparelli/gzyluZ/nvim.75279.0
+WRN 2026-09-08T17:15:26.060 ?.75414    server_start:197: Failed to start server: operation not permitted: /var/folders/mt/31kb1bjx2xb90x530l0dkzcw0000gn/T/nvim.faustozamparelli/PX6o0l/nvim.75414.0

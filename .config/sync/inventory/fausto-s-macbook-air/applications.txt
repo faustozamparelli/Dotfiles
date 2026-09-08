@@ -1,6 +1,7 @@
 Beeper Desktop
 Discord
 Ghostty
+GitButler
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
@@ -18,6 +19,7 @@ Safari
 Solves
 Spotify
 T3 Code (Alpha)
+Tor Browser
 Visual Studio Code
 Vorssaint
 Wispr Flow

@@ -3,6 +3,7 @@ codex
 discord
 font-sf-mono
 ghostty
+gitbutler
 helium-browser
 karabiner-elements
 microsoft-excel
@@ -12,6 +13,7 @@ quickrecorder
 raycast
 spotify
 t3-code
+tor-browser
 visual-studio-code
 vorssaint
 wispr-flow

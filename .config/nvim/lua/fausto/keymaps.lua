@@ -6,9 +6,8 @@ local function opts(_, description)
     return { silent = true, desc = description }
 end
 
-local function open_lsp_results_in_side_pane(what)
+local function open_lsp_results_in_current_window(what)
     vim.fn.setqflist({}, ' ', what)
-    vim.cmd.vsplit()
     vim.cmd.cfirst()
 end
 
@@ -93,6 +92,9 @@ map({ 'n', 'i', 'v', 's' }, '<Esc>', function()
     return '<Esc>'
 end, { expr = true, silent = true, desc = 'Escape and clear search highlight' })
 
+map('n', 'cm', 'gcc', { remap = true, silent = true, desc = 'Toggle comment on current line' })
+map('x', 'cm', 'gc', { remap = true, silent = true, desc = 'Toggle comment' })
+
 map('i', '<Tab>', function()
     if vim.fn.pumvisible() == 1 then
         local selected = vim.fn.complete_info({ 'selected' }).selected
@@ -118,55 +120,131 @@ map('n', '<D-b>', split_herdr_right, opts('nvim.herdr.split-right-command', 'Spl
 map('n', '<leader>pv', split_herdr_right, opts('nvim.herdr.split-right', 'Split Herdr pane right'))
 map('n', '<D-n>', split_herdr_down, opts('nvim.herdr.split-down-command', 'Split Herdr pane down'))
 map('n', '<leader>ph', split_herdr_down, opts('nvim.herdr.split-down', 'Split Herdr pane down'))
-map('n', '<leader>d', function()
-    local pattern = vim.fn.getreg('/')
-    if pattern == '' then
-        vim.notify('Search for a word first with /', vim.log.levels.WARN)
-        return
+local function replace_plain(text, target, replacement)
+    local pieces = {}
+    local position = 1
+    local count = 0
+
+    while true do
+        local match_start, match_end = text:find(target, position, true)
+        if not match_start then
+            pieces[#pieces + 1] = text:sub(position)
+            break
+        end
+
+        pieces[#pieces + 1] = text:sub(position, match_start - 1)
+        pieces[#pieces + 1] = replacement
+        position = match_end + 1
+        count = count + 1
     end
 
-    vim.ui.input({ prompt = 'Replace matches with (Enter deletes): ' }, function(replacement)
-        if replacement == nil then
+    return table.concat(pieces), count
+end
+
+local function inclusive_end_col(line, column)
+    local end_col = math.min(column, #line)
+
+    while end_col < #line do
+        local byte = line:byte(end_col + 1)
+        if not byte or byte < 0x80 or byte >= 0xC0 then
+            break
+        end
+        end_col = end_col + 1
+    end
+
+    return end_col
+end
+
+map('x', '<leader>r', function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local visual_mode = vim.fn.mode()
+    local region = vim.fn.getregionpos(vim.fn.getpos('v'), vim.fn.getpos('.'), {
+        type = visual_mode,
+        exclusive = vim.o.selection == 'exclusive',
+        eol = true,
+    })
+
+    vim.ui.input({ prompt = 'Word to change: ' }, function(target)
+        if target == nil then
             return
         end
 
-        local bufnr = vim.api.nvim_get_current_buf()
-        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        local matches = {}
-
-        for _, found in ipairs(vim.fn.matchbufline(bufnr, pattern, 1, '$')) do
-            local line = lines[found.lnum]
-            local start_col = found.byteidx
-            local end_col = found.byteidx + #found.text
-
-            while start_col > 0 and not line:sub(start_col, start_col):match('%s') do
-                start_col = start_col - 1
-            end
-            while end_col < #line and not line:sub(end_col + 1, end_col + 1):match('%s') do
-                end_col = end_col + 1
-            end
-
-            local previous = matches[#matches]
-            if not previous or previous.row ~= found.lnum - 1 or previous.start_col ~= start_col then
-                matches[#matches + 1] = {
-                    row = found.lnum - 1,
-                    start_col = start_col,
-                    end_col = end_col,
-                }
-            end
+        if target == '' then
+            vim.notify('Enter a word to change', vim.log.levels.WARN)
+            return
         end
 
-        for index = #matches, 1, -1 do
-            local match = matches[index]
-            if index < #matches then
-                vim.cmd.undojoin()
+        vim.ui.input({ prompt = 'Replace with: ' }, function(replacement)
+            if replacement == nil or not vim.api.nvim_buf_is_valid(bufnr) then
+                return
             end
-            vim.api.nvim_buf_set_text(0, match.row, match.start_col, match.row, match.end_col, { replacement })
-        end
 
-        vim.notify(string.format('%s %d occurrence(s)', replacement == '' and 'Deleted' or 'Replaced', #matches))
+            if replacement == '' then
+                vim.notify('Enter replacement text', vim.log.levels.WARN)
+                return
+            end
+
+            local count = 0
+
+            if visual_mode == 'V' then
+                local start_row = region[1][1][2] - 1
+                local end_row = region[#region][2][2]
+                local selected = vim.api.nvim_buf_get_lines(bufnr, start_row, end_row, false)
+                local changed
+                changed, count = replace_plain(table.concat(selected, '\n'), target, replacement)
+                if count > 0 then
+                    vim.api.nvim_buf_set_lines(
+                        bufnr,
+                        start_row,
+                        end_row,
+                        false,
+                        vim.split(changed, '\n', { plain = true })
+                    )
+                end
+            elseif visual_mode == '\22' then
+                for index = #region, 1, -1 do
+                    local start_pos, end_pos = unpack(region[index])
+                    local row = start_pos[2] - 1
+                    local line = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1]
+                    local start_col = math.min(start_pos[3] - 1, #line)
+                    local end_col = inclusive_end_col(line, end_pos[3])
+                    local selected = line:sub(start_col + 1, end_col)
+                    local changed, replacements = replace_plain(selected, target, replacement)
+
+                    if replacements > 0 then
+                        vim.api.nvim_buf_set_text(bufnr, row, start_col, row, end_col, { changed })
+                        count = count + replacements
+                    end
+                end
+            else
+                local start_pos = region[1][1]
+                local end_pos = region[#region][2]
+                local start_row = start_pos[2] - 1
+                local end_row = end_pos[2] - 1
+                local start_line = vim.api.nvim_buf_get_lines(bufnr, start_row, start_row + 1, false)[1]
+                local end_line = vim.api.nvim_buf_get_lines(bufnr, end_row, end_row + 1, false)[1]
+                local start_col = math.min(start_pos[3] - 1, #start_line)
+                local end_col = inclusive_end_col(end_line, end_pos[3])
+                local selected = vim.api.nvim_buf_get_text(bufnr, start_row, start_col, end_row, end_col, {})
+                local changed
+                changed, count = replace_plain(table.concat(selected, '\n'), target, replacement)
+
+                if count > 0 then
+                    vim.api.nvim_buf_set_text(
+                        bufnr,
+                        start_row,
+                        start_col,
+                        end_row,
+                        end_col,
+                        vim.split(changed, '\n', { plain = true })
+                    )
+                end
+            end
+
+            vim.notify(string.format('Replaced %d occurrence(s)', count))
+        end)
     end)
-end, opts('nvim.search.delete', 'Replace or delete WORD'))
+end, opts('nvim.selection.replace', 'Replace text in selection'))
 
 map('n', '<leader>ff', fzf.files, opts('nvim.find.files', 'Find files'))
 map('n', '<leader>fa', require('fausto.workspace').pick, opts('nvim.find.anywhere', 'Find anywhere'))
@@ -222,6 +300,8 @@ map('n', '<leader>gp', gitsigns.prev_hunk, opts('nvim.git.prev-hunk', 'Previous 
 map('n', '<leader>lr', vim.lsp.buf.rename, opts('nvim.language.rename', 'Rename symbol'))
 map({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts('nvim.language.action', 'Code action'))
 map('n', '<leader>ld', fzf.diagnostics_workspace, opts('nvim.language.diagnostics', 'Workspace diagnostics'))
+map('n', '<leader>ls', fzf.lsp_workspace_symbols, opts('nvim.language.workspace-symbols', 'Workspace symbols'))
+map('n', '<leader>lp', require('fausto.python_source').open, opts('nvim.language.python-source', 'Open Python source'))
 map('n', 'K', vim.lsp.buf.hover, opts('nvim.language.hover', 'Open or focus symbol information'))
 map('n', '<leader>lh', function()
     vim.lsp.buf.hover({
@@ -231,17 +311,17 @@ map('n', '<leader>lh', function()
     })
 end, opts('nvim.language.hover-large', 'Open large symbol information'))
 map('n', 'gd', function()
-    vim.lsp.buf.definition({ on_list = open_lsp_results_in_side_pane })
-end, opts('nvim.language.definition', 'Open definition in side pane'))
+    vim.lsp.buf.definition({ on_list = open_lsp_results_in_current_window })
+end, opts('nvim.language.definition', 'Open definition'))
 map('n', 'gr', fzf.lsp_references, vim.tbl_extend('force', opts('nvim.language.references', 'Find references'), {
     nowait = true,
 }))
 map('n', 'gi', function()
-    vim.lsp.buf.implementation({ on_list = open_lsp_results_in_side_pane })
-end, opts('nvim.language.implementation', 'Open implementation in side pane'))
+    vim.lsp.buf.implementation({ on_list = open_lsp_results_in_current_window })
+end, opts('nvim.language.implementation', 'Open implementation'))
 map('n', 'gy', function()
-    vim.lsp.buf.type_definition({ on_list = open_lsp_results_in_side_pane })
-end, opts('nvim.language.type-definition', 'Open type definition in side pane'))
+    vim.lsp.buf.type_definition({ on_list = open_lsp_results_in_current_window })
+end, opts('nvim.language.type-definition', 'Open type definition'))
 map('n', 'gs', vim.lsp.buf.document_symbol, opts('nvim.language.document-symbols', 'Document symbols'))
 map('n', '<leader>le', function()
     local diagnostics = vim.diagnostic.get(nil, {
@@ -309,7 +389,7 @@ end, opts('nvim.language.format', 'Format buffer'))
 
 map('n', '<leader>bl', '<cmd>bnext<cr>', opts('nvim.buffer.next', 'Next buffer'))
 map('n', '<leader>bh', '<cmd>bprevious<cr>', opts('nvim.buffer.previous', 'Previous buffer'))
-map('n', '<leader>bd', '<cmd>bdelete<cr>', opts('nvim.buffer.delete', 'Delete buffer'))
+map('n', '<leader>bk', '<cmd>bdelete<cr>', opts('nvim.buffer.delete', 'Delete buffer'))
 map('n', '<leader>rr', '<cmd>restart<cr>', opts('nvim.reload.config', 'Reload Neovim configuration'))
 map('n', '<leader>qq', '<cmd>quit<cr>', opts('nvim.quit.buffer', 'Quit window'))
 map('n', '<leader>qa', '<cmd>quitall<cr>', opts('nvim.quit.all', 'Quit Neovim'))
