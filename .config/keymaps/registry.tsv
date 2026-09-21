@@ -136,3 +136,17 @@ nvim.motion.line-end	Neovim	Direct	L	line-end	Move to end of line
 nvim.edit.redo	Neovim	Direct	U	redo	Redo the last change
 nvim.visual.move-down	Neovim	Direct	J	move-selection-down	Move selected lines down
 nvim.visual.move-up	Neovim	Direct	K	move-selection-up	Move selected lines up
+sioyek.scroll.down	Sioyek	Direct	j	move-down	Scroll down a little
+sioyek.scroll.up	Sioyek	Direct	k	move-up	Scroll up a little
+sioyek.page.next	Sioyek	Direct	J	next-page	Go to the next PDF page
+sioyek.page.previous	Sioyek	Direct	K	previous-page	Go to the previous PDF page
+sioyek.menu.highlight	Sioyek	Space	Space h	toggle-highlight	Toggle PDF link highlighting
+sioyek.menu.synctex	Sioyek	Space	Space s	toggle-synctex	Toggle SyncTeX mode
+sioyek.menu.presentation	Sioyek	Space	Space p	toggle-presentation	Toggle presentation mode
+sioyek.menu.drag	Sioyek	Space	Space m	toggle-mouse-drag	Toggle mouse-drag panning
+sioyek.menu.visual-scroll	Sioyek	Space	Space v	toggle-visual-scroll	Toggle visual-mark scrolling
+sioyek.menu.dark	Sioyek	Space	Space d	toggle-dark	Toggle dark mode
+sioyek.menu.width	Sioyek	Space	Space w	fit-width	Fit the page to window width
+sioyek.menu.width-smart	Sioyek	Space	Space W	fit-width-smart	Fit text width, ignoring margins
+sioyek.menu.fullscreen	Sioyek	Space	Space f	toggle-fullscreen	Toggle fullscreen
+sioyek.menu.two-windows	Sioyek	Space	Space t	toggle-two-windows	Toggle the second window
