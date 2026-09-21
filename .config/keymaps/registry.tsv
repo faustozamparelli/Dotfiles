@@ -1,7 +1,6 @@
 # id	layer	category	key	action	description
 karabiner.super	Karabiner	Super	Right Cmd	super-modifier	Hold the global Super modifier
-karabiner.wispr.ptt	Karabiner	Key	Esc	wispr-push-to-talk	Hold physical Escape for Wispr Flow dictation
-karabiner.wispr.escape	Karabiner	Key	§	escape	Send a regular Escape key
+karabiner.wispr.ptt	Karabiner	Key	§	wispr-push-to-talk	Hold the § key for Wispr Flow dictation
 karabiner.arrow.left	Karabiner	Fn	Fn-h	left-arrow	Move left with a physical arrow equivalent
 karabiner.arrow.down	Karabiner	Fn	Fn-j	down-arrow	Move down with a physical arrow equivalent
 karabiner.arrow.up	Karabiner	Fn	Fn-k	up-arrow	Move up with a physical arrow equivalent

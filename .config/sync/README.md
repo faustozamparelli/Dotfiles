@@ -152,8 +152,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | Layer | Category | Key | Behavior |
 |---|---|---|---|
 | Karabiner | Super | `Right Cmd` | Hold the global Super modifier |
-| Karabiner | Key | `Esc` | Hold physical Escape for Wispr Flow dictation |
-| Karabiner | Key | `§` | Send a regular Escape key |
+| Karabiner | Key | `§` | Hold the § key for Wispr Flow dictation |
 | Karabiner | Fn | `Fn-h` | Move left with a physical arrow equivalent |
 | Karabiner | Fn | `Fn-j` | Move down with a physical arrow equivalent |
 | Karabiner | Fn | `Fn-k` | Move up with a physical arrow equivalent |

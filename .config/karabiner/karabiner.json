@@ -23,17 +23,8 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "km:karabiner.wispr.escape — § key sends Escape",
-                                "from": {
-                                    "key_code": "non_us_backslash",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [{ "key_code": "escape" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "km:karabiner.wispr.ptt — Esc sends Control-Shift-F13 for Wispr Flow",
-                                "from": { "key_code": "escape" },
+                                "description": "km:karabiner.wispr.ptt — § key sends Control-Shift-F13 for Wispr Flow",
+                                "from": { "key_code": "non_us_backslash" },
                                 "to": [{
                                     "key_code": "f13",
                                     "modifiers": ["left_control", "left_shift"]
