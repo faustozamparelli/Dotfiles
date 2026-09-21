@@ -97,13 +97,13 @@ arrow keys everywhere.
 
 | Workspace | Applications |
 | --- | --- |
-| WEB | Helium |
-| TERM | Ghostty, T3 Code, Visual Studio Code, Codex, UTM |
-| NOTES | Notion |
-| DOCS | Sioyek, Excel, Affinity |
-| CHAT | Beeper, Discord, ChatGPT |
-| MEDIA | Spotify, DaVinci Resolve, QuickRecorder, Picture-in-Picture |
-| MISC | MacWhisper, OrbStack, VPN/settings utilities, and every unmatched app |
+| WEB | Helium, Safari, Chrome/Firefox, WeBeep |
+| TERM | Ghostty, Terminal, Console, T3 Code, Visual Studio Code, Codex, UTM |
+| NOTES | Notion, Notes, Reminders, Freeform, Journal, Calendar |
+| DOCS | Sioyek, Preview, TextEdit, Books, Dictionary, Excel, Affinity, iWork |
+| CHAT | Beeper, Discord, ChatGPT, Mail, Messages, FaceTime, Phone, Gmail, Outlook/Slack/WhatsApp/Signal |
+| MEDIA | Spotify, SoundCloud, Music, Podcasts, TV, Photos, QuickTime, Voice Memos, DaVinci Resolve, QuickRecorder, Picture-in-Picture |
+| MISC | MacWhisper, OrbStack, system/settings utilities, and every unmatched app |
 
 Each workspace uses a zero-padding accordion: every tiled app fills the usable
 screen and `Super-H/L` moves between apps. `Super-T` toggles the current
