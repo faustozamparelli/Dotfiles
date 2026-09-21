@@ -100,12 +100,12 @@ arrow keys everywhere.
 | WEB | Helium, Safari |
 | TERM | Ghostty, Terminal, Console, T3 Code, Visual Studio Code, Codex, UTM |
 | NOTES | Notion |
-| DOCS | Sioyek, Preview, TextEdit, Books, Dictionary, Excel, Affinity |
+| DOCS | Sioyek, Preview, TextEdit, Books, Dictionary |
 | CHAT | Beeper, Discord, ChatGPT, Mail, Messages, FaceTime, Phone, Gmail |
 | MEDIA | Spotify, SoundCloud, Music, Podcasts, TV, Photos, QuickTime, Voice Memos, DaVinci Resolve, QuickRecorder, Picture-in-Picture |
 | UNI | WeBeep (university materials) |
 | ORG | Calendar, Reminders, Apple Notes, Freeform, Journal |
-| MISC | MacWhisper, OrbStack, system/settings utilities, and every unmatched app |
+| MISC | Unassigned apps (including MacWhisper, Excel, and Affinity), OrbStack, and system/settings utilities |
 
 Each workspace uses a zero-padding accordion: every tiled app fills the usable
 screen and `Super-H/L` moves between apps. `Super-T` toggles the current

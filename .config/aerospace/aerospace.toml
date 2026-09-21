@@ -147,14 +147,6 @@ if.app-id = 'info.sioyek.sioyek'
 run = 'move-node-to-workspace DOCS'
 
 [[on-window-detected]]
-if.app-id = 'com.microsoft.Excel'
-run = 'move-node-to-workspace DOCS'
-
-[[on-window-detected]]
-if.app-id = 'com.canva.affinity'
-run = 'move-node-to-workspace DOCS'
-
-[[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace MEDIA'
 
@@ -216,7 +208,8 @@ run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.goodsnooze.MacWhisper'
-run = ['layout floating', 'move-node-to-workspace MISC']
+run = 'layout floating'
+check-further-callbacks = true
 
 [[on-window-detected]]
 if.app-id = 'dev.kdrag0n.MacVirt'
