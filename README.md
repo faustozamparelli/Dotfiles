@@ -87,9 +87,10 @@ Use `Super-A/S/D/F/G/;` to switch and add Shift to move a window. `Super-H/J/K/L
 focuses windows, while adding Shift moves them. `Super-Tab` focuses the other
 display without moving anything. `Super-Shift-Tab` swaps the focused window
 with the window on the other display while leaving both workspaces in place.
-`Super-Enter`,
-`Super-B`, and `Super-N` open or focus Ghostty, Helium, and Notion on their
-home workspace. Physical `Fn-H/J/K/L` provides arrow keys everywhere.
+`Super-Shift-T` moves the entire current workspace to the other display without
+swapping windows. `Super-Enter`, `Super-B`, and `Super-N` open or focus Ghostty,
+Helium, and Notion on their home workspace. Physical `Fn-H/J/K/L` provides
+arrow keys everywhere.
 
 The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
 readable generated table is in `~/.config/sync/README.md`.
