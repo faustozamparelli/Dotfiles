@@ -12,7 +12,7 @@ accordion-padding = 0
 default-root-container-layout = 'accordion'
 default-root-container-orientation = 'horizontal'
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA', 'MISC']
+persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA', 'UNI', 'ORG', 'MISC']
 
 [gaps]
 inner.horizontal = 0
@@ -56,6 +56,10 @@ ctrl-alt-cmd-f = 'workspace DOCS'
 ctrl-alt-cmd-g = 'workspace CHAT'
 # km:aerospace.workspace.media
 ctrl-alt-cmd-semicolon = 'workspace MEDIA'
+# km:aerospace.workspace.uni
+ctrl-alt-cmd-n = 'workspace UNI'
+# km:aerospace.workspace.org
+ctrl-alt-cmd-comma = 'workspace ORG'
 # km:aerospace.workspace.misc
 ctrl-alt-cmd-m = 'workspace MISC'
 
@@ -71,6 +75,10 @@ ctrl-alt-cmd-shift-f = 'move-node-to-workspace DOCS'
 ctrl-alt-cmd-shift-g = 'move-node-to-workspace CHAT'
 # km:aerospace.window.to-workspace-media
 ctrl-alt-cmd-shift-semicolon = 'move-node-to-workspace MEDIA'
+# km:aerospace.window.to-workspace-uni
+ctrl-alt-cmd-shift-n = 'move-node-to-workspace UNI'
+# km:aerospace.window.to-workspace-org
+ctrl-alt-cmd-shift-comma = 'move-node-to-workspace ORG'
 # km:aerospace.window.to-workspace-misc
 ctrl-alt-cmd-shift-m = 'move-node-to-workspace MISC'
 
@@ -92,7 +100,7 @@ ctrl-alt-cmd-space = "exec-and-forget open -a 'Raycast'"
 # km:aerospace.app.browser
 ctrl-alt-cmd-b = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh WEB net.imput.helium"'
 # km:aerospace.app.notes
-ctrl-alt-cmd-n = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh NOTES notion.id"'
+ctrl-alt-cmd-o = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh NOTES notion.id"'
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
@@ -154,34 +162,39 @@ run = 'move-node-to-workspace MEDIA'
 if.app-id = 'com.blackmagic-design.DaVinciResolveLite'
 run = 'move-node-to-workspace MEDIA'
 
-# Browsers and installed web apps.
+# Browsers installed on these Macs.
 [[on-window-detected]]
-if = 'test %{app-bundle-id} = com.apple.Safari || test %{app-bundle-id} = com.google.Chrome || test %{app-bundle-id} = org.mozilla.firefox || test %{app-bundle-id} = net.imput.helium.app.jkcciickgeobgpkofokhhmpohhachmea'
+if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace WEB'
 
-# Terminal emulators and developer consoles.
+# Installed WeBeep web app: university material.
 [[on-window-detected]]
-if = 'test %{app-bundle-id} = com.apple.Terminal || test %{app-bundle-id} = com.apple.Console || test %{app-bundle-id} = com.googlecode.iterm2 || test %{app-bundle-id} = dev.warp.Warp-Stable || test %{app-bundle-id} = com.github.wez.wezterm || test %{app-bundle-id} = org.alacritty'
+if.app-id = 'net.imput.helium.app.jkcciickgeobgpkofokhhmpohhachmea'
+run = 'move-node-to-workspace UNI'
+
+# Apple terminal and developer console.
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.Terminal || test %{app-bundle-id} = com.apple.Console'
 run = 'move-node-to-workspace TERM'
 
-# Notes, planning, and lightweight personal organization.
+# Apple planning and organization apps; Notion remains in NOTES.
 [[on-window-detected]]
 if = 'test %{app-bundle-id} = com.apple.Notes || test %{app-bundle-id} = com.apple.reminders || test %{app-bundle-id} = com.apple.freeform || test %{app-bundle-id} = com.apple.journal || test %{app-bundle-id} = com.apple.iCal'
-run = 'move-node-to-workspace NOTES'
+run = 'move-node-to-workspace ORG'
 
 # Documents, reading, and lightweight writing.
 [[on-window-detected]]
-if = 'test %{app-bundle-id} = com.apple.Preview || test %{app-bundle-id} = com.apple.TextEdit || test %{app-bundle-id} = com.apple.iBooksX || test %{app-bundle-id} = com.apple.Dictionary || test %{app-bundle-id} = com.apple.iWork.Pages || test %{app-bundle-id} = com.apple.iWork.Numbers || test %{app-bundle-id} = com.apple.iWork.Keynote'
+if = 'test %{app-bundle-id} = com.apple.Preview || test %{app-bundle-id} = com.apple.TextEdit || test %{app-bundle-id} = com.apple.iBooksX || test %{app-bundle-id} = com.apple.Dictionary'
 run = 'move-node-to-workspace DOCS'
 
 # Messaging, calls, and email—including the installed Gmail web app.
 [[on-window-detected]]
-if = 'test %{app-bundle-id} = com.apple.mail || test %{app-bundle-id} = com.apple.MobileSMS || test %{app-bundle-id} = com.apple.FaceTime || test %{app-bundle-id} = com.apple.mobilephone || test %{app-bundle-id} = net.imput.helium.app.fmgjjmmmlfnkbppncabfkddbjimcfncm || test %{app-bundle-id} = com.microsoft.Outlook || test %{app-bundle-id} = com.tinyspeck.slackmacgap || test %{app-bundle-id} = net.whatsapp.WhatsApp || test %{app-bundle-id} = org.whispersystems.signal-desktop'
+if = 'test %{app-bundle-id} = com.apple.mail || test %{app-bundle-id} = com.apple.MobileSMS || test %{app-bundle-id} = com.apple.FaceTime || test %{app-bundle-id} = com.apple.mobilephone || test %{app-bundle-id} = net.imput.helium.app.fmgjjmmmlfnkbppncabfkddbjimcfncm'
 run = 'move-node-to-workspace CHAT'
 
 # Music, video, photos, and audio—including the installed SoundCloud web app.
 [[on-window-detected]]
-if = 'test %{app-bundle-id} = net.imput.helium.app.eikjhbkpemdappjfcmdeeeamdpkgabmk || test %{app-bundle-id} = com.apple.Music || test %{app-bundle-id} = com.apple.podcasts || test %{app-bundle-id} = com.apple.TV || test %{app-bundle-id} = com.apple.Photos || test %{app-bundle-id} = com.apple.QuickTimePlayerX || test %{app-bundle-id} = com.apple.VoiceMemos || test %{app-bundle-id} = com.apple.PhotoBooth || test %{app-bundle-id} = org.videolan.vlc || test %{app-bundle-id} = com.colliderli.iina'
+if = 'test %{app-bundle-id} = net.imput.helium.app.eikjhbkpemdappjfcmdeeeamdpkgabmk || test %{app-bundle-id} = com.apple.Music || test %{app-bundle-id} = com.apple.podcasts || test %{app-bundle-id} = com.apple.TV || test %{app-bundle-id} = com.apple.Photos || test %{app-bundle-id} = com.apple.QuickTimePlayerX || test %{app-bundle-id} = com.apple.VoiceMemos || test %{app-bundle-id} = com.apple.PhotoBooth'
 run = 'move-node-to-workspace MEDIA'
 
 # Small utilities, overlays, and settings windows should not consume the tile tree.

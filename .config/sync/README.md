@@ -170,6 +170,8 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-f` | Switch to the documents workspace |
 | AeroSpace | Super | `Super-g` | Switch to the chat workspace |
 | AeroSpace | Super | `Super-;` | Switch to the media workspace |
+| AeroSpace | Super | `Super-n` | Switch to the university workspace |
+| AeroSpace | Super | `Super-,` | Switch to the organization workspace |
 | AeroSpace | Super | `Super-m` | Switch to the workspace for otherwise unassigned apps |
 | AeroSpace | Super | `Super-Shift-a` | Move the window to the web workspace |
 | AeroSpace | Super | `Super-Shift-s` | Move the window to the terminal workspace |
@@ -177,6 +179,8 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-Shift-f` | Move the window to the documents workspace |
 | AeroSpace | Super | `Super-Shift-g` | Move the window to the chat workspace |
 | AeroSpace | Super | `Super-Shift-;` | Move the window to the media workspace |
+| AeroSpace | Super | `Super-Shift-n` | Move the window to the university workspace |
+| AeroSpace | Super | `Super-Shift-,` | Move the window to the organization workspace |
 | AeroSpace | Super | `Super-Shift-m` | Move the window to the miscellaneous workspace |
 | AeroSpace | Super | `Super-Tab` | Focus the other display without moving anything |
 | AeroSpace | Super | `Super-Shift-Tab` | Swap the focused window with the other display while keeping both workspaces in place |
@@ -186,7 +190,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-Enter` | Open a new Ghostty window |
 | AeroSpace | Super | `Super-Space` | Open Raycast |
 | AeroSpace | Super | `Super-b` | Open Helium |
-| AeroSpace | Super | `Super-n` | Open Notion |
+| AeroSpace | Super | `Super-o` | Open Notion |
 | Ghostty | Command | `Cmd-a` | Leave the current editing mode |
 | Herdr | Command | `Cmd-h` | Select the previous tab |
 | Herdr | Command | `Cmd-l` | Select the next tab |

@@ -18,6 +18,8 @@ aerospace.workspace.notes	AeroSpace	Super	Super-d	workspace-notes	Switch to the 
 aerospace.workspace.docs	AeroSpace	Super	Super-f	workspace-docs	Switch to the documents workspace
 aerospace.workspace.chat	AeroSpace	Super	Super-g	workspace-chat	Switch to the chat workspace
 aerospace.workspace.media	AeroSpace	Super	Super-;	workspace-media	Switch to the media workspace
+aerospace.workspace.uni	AeroSpace	Super	Super-n	workspace-uni	Switch to the university workspace
+aerospace.workspace.org	AeroSpace	Super	Super-,	workspace-org	Switch to the organization workspace
 aerospace.workspace.misc	AeroSpace	Super	Super-m	workspace-misc	Switch to the workspace for otherwise unassigned apps
 aerospace.window.to-workspace-web	AeroSpace	Super	Super-Shift-a	move-to-workspace-web	Move the window to the web workspace
 aerospace.window.to-workspace-term	AeroSpace	Super	Super-Shift-s	move-to-workspace-term	Move the window to the terminal workspace
@@ -25,6 +27,8 @@ aerospace.window.to-workspace-notes	AeroSpace	Super	Super-Shift-d	move-to-worksp
 aerospace.window.to-workspace-docs	AeroSpace	Super	Super-Shift-f	move-to-workspace-docs	Move the window to the documents workspace
 aerospace.window.to-workspace-chat	AeroSpace	Super	Super-Shift-g	move-to-workspace-chat	Move the window to the chat workspace
 aerospace.window.to-workspace-media	AeroSpace	Super	Super-Shift-;	move-to-workspace-media	Move the window to the media workspace
+aerospace.window.to-workspace-uni	AeroSpace	Super	Super-Shift-n	move-to-workspace-uni	Move the window to the university workspace
+aerospace.window.to-workspace-org	AeroSpace	Super	Super-Shift-,	move-to-workspace-org	Move the window to the organization workspace
 aerospace.window.to-workspace-misc	AeroSpace	Super	Super-Shift-m	move-to-workspace-misc	Move the window to the miscellaneous workspace
 aerospace.monitor.focus-next	AeroSpace	Super	Super-Tab	focus-next-monitor	Focus the other display without moving anything
 aerospace.monitor.swap-windows	AeroSpace	Super	Super-Shift-Tab	swap-monitor-windows	Swap the focused window with the other display while keeping both workspaces in place
@@ -34,7 +38,7 @@ aerospace.reset	AeroSpace	Super	Super-r	reset-workspaces	Route every app home an
 aerospace.app.terminal	AeroSpace	Super	Super-Enter	open-terminal	Open a new Ghostty window
 aerospace.app.launcher	AeroSpace	Super	Super-Space	open-launcher	Open Raycast
 aerospace.app.browser	AeroSpace	Super	Super-b	open-browser	Open Helium
-aerospace.app.notes	AeroSpace	Super	Super-n	open-notes	Open Notion
+aerospace.app.notes	AeroSpace	Super	Super-o	open-notes	Open Notion
 ghostty.escape	Ghostty	Command	Cmd-a	escape	Leave the current editing mode
 herdr.tab.previous	Herdr	Command	Cmd-h	previous-tab	Select the previous tab
 herdr.tab.next	Herdr	Command	Cmd-l	next-tab	Select the next tab

@@ -76,14 +76,14 @@ mac-sync
 - Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
 - Space controls Neovim commands.
 
-AeroSpace keeps seven predictable workspaces and routes matching windows once
+AeroSpace keeps nine predictable workspaces and routes matching windows once
 at startup and whenever a new window appears:
 
 ```text
-A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA   M MISC
+A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA   N UNI   , ORG   M MISC
 ```
 
-Use `Super-A/S/D/F/G/;/M` to switch and add Shift to move a window. `Super-H/J/K/L`
+Use `Super-A/S/D/F/G/;/N/,/M` to switch and add Shift to move a window. `Super-H/J/K/L`
 focuses windows, while adding Shift moves them. `Super-M` opens MISC, where
 every otherwise-unassigned regular app is routed automatically. Small utility
 windows are assigned to MISC or MEDIA; Raycast alone remains a floating overlay
@@ -91,18 +91,20 @@ where it was opened. `Super-Tab` focuses the other
 display without moving anything. `Super-Shift-Tab` swaps the focused window
 with the window on the other display while leaving both workspaces in place.
 `Super-Shift-T` moves the entire current workspace to the other display without
-swapping windows. `Super-Enter`, `Super-B`, and `Super-N` open or focus Ghostty,
+swapping windows. `Super-Enter`, `Super-B`, and `Super-O` open or focus Ghostty,
 Helium, and Notion on their home workspace. Physical `Fn-H/J/K/L` provides
 arrow keys everywhere.
 
 | Workspace | Applications |
 | --- | --- |
-| WEB | Helium, Safari, Chrome/Firefox, WeBeep |
+| WEB | Helium, Safari |
 | TERM | Ghostty, Terminal, Console, T3 Code, Visual Studio Code, Codex, UTM |
-| NOTES | Notion, Notes, Reminders, Freeform, Journal, Calendar |
-| DOCS | Sioyek, Preview, TextEdit, Books, Dictionary, Excel, Affinity, iWork |
-| CHAT | Beeper, Discord, ChatGPT, Mail, Messages, FaceTime, Phone, Gmail, Outlook/Slack/WhatsApp/Signal |
+| NOTES | Notion |
+| DOCS | Sioyek, Preview, TextEdit, Books, Dictionary, Excel, Affinity |
+| CHAT | Beeper, Discord, ChatGPT, Mail, Messages, FaceTime, Phone, Gmail |
 | MEDIA | Spotify, SoundCloud, Music, Podcasts, TV, Photos, QuickTime, Voice Memos, DaVinci Resolve, QuickRecorder, Picture-in-Picture |
+| UNI | WeBeep (university materials) |
+| ORG | Calendar, Reminders, Apple Notes, Freeform, Journal |
 | MISC | MacWhisper, OrbStack, system/settings utilities, and every unmatched app |
 
 Each workspace uses a zero-padding accordion: every tiled app fills the usable

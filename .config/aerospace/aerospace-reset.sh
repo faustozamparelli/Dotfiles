@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-workspaces=(WEB TERM NOTES DOCS CHAT MEDIA MISC)
+workspaces=(WEB TERM NOTES DOCS CHAT MEDIA UNI ORG MISC)
 focused_workspace="$(aerospace list-workspaces --focused --format '%{workspace}')"
 
 # Reapply the ordered app routing rules to every open window.
