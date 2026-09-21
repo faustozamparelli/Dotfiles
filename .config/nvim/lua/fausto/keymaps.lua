@@ -248,7 +248,6 @@ end, opts('nvim.selection.replace', 'Replace text in selection'))
 
 map('n', '<leader>ff', fzf.files, opts('nvim.find.files', 'Find files'))
 map('n', '<leader>fa', require('fausto.workspace').pick, opts('nvim.find.anywhere', 'Find anywhere'))
-map('n', '<leader>fg', fzf.live_grep, opts('nvim.find.grep', 'Search project text'))
 map('n', '<leader>fb', fzf.buffers, opts('nvim.find.buffers', 'Find buffers'))
 map('n', '<leader>fr', fzf.oldfiles, opts('nvim.find.recent', 'Find recent files'))
 map('n', '<leader>fh', fzf.helptags, opts('nvim.find.help', 'Search help'))

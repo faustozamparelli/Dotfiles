@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+setup="$HOME/.config/mac-setup"
+shared="$setup/apps.tsv"
+bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
+
+safe_host() {
+  local name
+  name="$(scutil --get ComputerName 2>/dev/null || hostname -s)"
+  printf '%s' "$name" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C tr -cs '[:alnum:]' '-' | sed 's/-$//'
+}
+usage() {
+  cat <<'EOF'
+Share an app (default; Homebrew cask):
+  mac-app <cask>
+  mac-app share <cask>
+  mac-app share --mas <app-store-id> <application name>
+  mac-app share --direct <installer-name> <application name>
+
+Keep an app only on this Mac:
+  mac-app local <cask>
+  mac-app local --mas <app-store-id> <application name>
+
+Install without recording it (temporary):
+  mac-app temporary <cask>
+
+Exclude/unexclude a shared app on this Mac:
+  mac-app skip <cask>
+  mac-app skip --mas <app-store-id>
+  mac-app unskip <cask>
+
+Examples:
+  mac-app firefox
+  mac-app share --mas 497799835 Xcode
+  mac-app local transmission
+  mac-app temporary handbrake
+EOF
+}
+
+[[ $# -gt 0 ]] || { usage; exit 2; }
+action="share"
+case "$1" in
+  share|local|skip|unskip) action="$1"; shift ;;
+  temp|temporary) action="temporary"; shift ;;
+  -h|--help) usage; exit 0 ;;
+esac
+source="cask"
+case "${1:-}" in
+  --mas) source="mas"; shift ;;
+  --direct) source="direct"; shift ;;
+esac
+identifier="${1:-}"
+[[ -n "$identifier" ]] || { usage; exit 2; }
+shift
+name="${*:-$identifier}"
+host="$(safe_host)"
+mkdir -p "$setup/machines"
+
+if [[ "$action" == "temporary" ]]; then
+  case "$source" in
+    cask) brew install --cask --adopt "$identifier" ;;
+    mas) mas install "$identifier" ;;
+    direct) "$setup/direct/$identifier.sh" ;;
+  esac
+  echo "$name was installed temporarily and was not added to dotfiles."
+  exit 0
+fi
+
+case "$action" in
+  share) target="$shared" ;;
+  local) target="$setup/machines/$host.tsv" ;;
+  skip|unskip) target="$setup/machines/$host.skip" ;;
+esac
+
+tmp="$(mktemp)"
+trap 'rm -f "$tmp"' EXIT
+if [[ "$action" == "skip" || "$action" == "unskip" ]]; then
+  touch "$target"
+  grep -Fvx "$source:$identifier" "$target" > "$tmp" || true
+  if [[ "$action" == "skip" ]]; then
+    printf '%s:%s\n' "$source" "$identifier" >> "$tmp"
+  fi
+  awk 'NF && !seen[$0]++' "$tmp" > "$target"
+else
+  [[ -f "$target" ]] || printf '# source\tidentifier\tapplication name\n' > "$target"
+  awk -F '\t' -v s="$source" -v i="$identifier" 'BEGIN { OFS="\t" } /^#/ || !($1 == s && $2 == i)' "$target" > "$tmp"
+  printf '%s\t%s\t%s\n' "$source" "$identifier" "$name" >> "$tmp"
+  { grep '^#' "$tmp" || true; grep -v '^#' "$tmp" | LC_ALL=C sort -t $'\t' -k1,1 -k2,2; } > "$target"
+fi
+
+"$HOME/.local/bin/mac-sync" --no-pull
+relative="${target#"$HOME/"}"
+"${bare[@]}" add "$relative"
+if "${bare[@]}" diff --cached --quiet -- "$relative"; then
+  echo "No manifest change was needed."
+  exit 0
+fi
+"${bare[@]}" commit -m "mac setup: $action $name" -- "$relative"
+"${bare[@]}" pull --rebase --autostash
+"${bare[@]}" push
+echo "$name is recorded as $action; the other Mac will pick it up automatically."

@@ -1,0 +1,26 @@
+# Curated command-line tools shared by every Mac.
+# Temporary project packages do not belong here.
+bat
+btop
+eza
+fd
+fisher
+fzf
+gh
+git
+git-delta
+herdr
+lazygit
+libqalculate
+mas
+mole
+neovim
+pyright
+ruff
+tlrc
+trash
+tree
+tree-sitter-cli
+uv
+wget
+zoxide

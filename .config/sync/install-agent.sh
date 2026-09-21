@@ -1,22 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ ! -d "$HOME/.config/git/dotfiles" || ! -f "$HOME/.config/sync/README.md" ]]; then
-  echo "Dotfiles are not checked out yet." >&2
-  echo "Open the repository README on GitHub and complete the 'New Mac: Get To Start State' steps first." >&2
+if [[ ! -d "$HOME/.config/git/dotfiles" || ! -f "$HOME/.config/mac-setup/apps.tsv" ]]; then
+  echo "Dotfiles are not checked out yet. Follow the New Mac section in ~/README.md." >&2
   exit 1
 fi
-
 if ! command -v brew >/dev/null 2>&1; then
-  echo "Homebrew is required before running this script. Follow the root README first." >&2
+  echo "Homebrew is required. Follow the New Mac section in ~/README.md." >&2
   exit 1
 fi
 
-brew install gh mas ripgrep wget
-brew install --cask codex codexbar
+chmod +x \
+  "$HOME/.local/bin/mac-app" \
+  "$HOME/.local/bin/mac-sync" \
+  "$HOME/.config/aerospace/aerospace-home.sh" \
+  "$HOME/.config/aerospace/aerospace-organize.sh" \
+  "$HOME/.config/mac-setup/direct/"*.sh \
+  "$HOME/.config/keymaps/keymap-docs" \
+  "$HOME/.config/sync/maintain.sh"
 
-bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
-"${bare[@]}" pull --ff-only
+mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
+agent="$HOME/Library/LaunchAgents/com.fausto.mac-sync.plist"
+sed "s|__HOME__|$HOME|g" "$HOME/.config/mac-setup/com.fausto.mac-sync.plist" > "$agent"
+launchctl bootout "gui/$UID/com.fausto.mac-sync" 2>/dev/null || true
 
-echo "Agent dependencies are installed."
-echo "Now sign in to an agent app, then give it: $HOME/.config/sync/README.md"
+"$HOME/.local/bin/mac-sync" --no-pull
+
+launchctl bootstrap "gui/$UID" "$agent"
+
+echo "Mac setup is installed. Shared apps now sync at login and once per hour."
+echo "Some apps still require one-time macOS privacy, helper, or App Store approval."

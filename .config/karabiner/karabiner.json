@@ -11,7 +11,7 @@
                         "description": "Minimal setup",
                         "manipulators": [
                             {
-                                "description": "Right Command acts as Super: Command + Control + Option",
+                                "description": "km:karabiner.super — Right Command acts as Super: Command + Control + Option",
                                 "from": {
                                     "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
@@ -53,55 +53,37 @@
                                 "type": "basic"
                             },
                             {
-                                "description": "Left Control → Fn",
-                                "from": {
-                                    "key_code": "left_control",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [{ "key_code": "fn" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Fn → Left Control",
-                                "from": {
-                                    "key_code": "fn",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [{ "key_code": "left_control" }],
-                                "type": "basic"
-                            },
-                            {
-                                "description": "Control + H → Left Arrow (without other modifiers)",
+                                "description": "km:karabiner.arrow.left — Fn-H acts as Left Arrow",
                                 "from": {
                                     "key_code": "h",
-                                    "modifiers": { "mandatory": ["control"] }
+                                    "modifiers": { "mandatory": ["fn"], "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "left_arrow" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Control + J → Down Arrow",
+                                "description": "km:karabiner.arrow.down — Fn-J acts as Down Arrow",
                                 "from": {
                                     "key_code": "j",
-                                    "modifiers": { "mandatory": ["control"] }
+                                    "modifiers": { "mandatory": ["fn"], "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "down_arrow" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Control + K → Up Arrow",
+                                "description": "km:karabiner.arrow.up — Fn-K acts as Up Arrow",
                                 "from": {
                                     "key_code": "k",
-                                    "modifiers": { "mandatory": ["control"] }
+                                    "modifiers": { "mandatory": ["fn"], "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "up_arrow" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "Control + L → Right Arrow (without other modifiers)",
+                                "description": "km:karabiner.arrow.right — Fn-L acts as Right Arrow",
                                 "from": {
                                     "key_code": "l",
-                                    "modifiers": { "mandatory": ["control"] }
+                                    "modifiers": { "mandatory": ["fn"], "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "right_arrow" }],
                                 "type": "basic"

@@ -1,3 +1,3 @@
-function sync-maintain --description "Refresh Mac sync inventory and stage dotfiles"
+function sync-maintain --description "Install shared apps, validate, and stage dotfiles"
     ~/.config/sync/maintain.sh
 end

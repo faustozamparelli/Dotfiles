@@ -1,0 +1,28 @@
+# source	identifier	application name
+cask	beeper	Beeper Desktop
+cask	codex	Codex
+cask	codexbar	CodexBar
+cask	discord	Discord
+cask	font-sf-mono	SF Mono
+cask	ghostty	Ghostty
+cask	helium-browser	Helium
+cask	karabiner-elements	Karabiner-Elements
+cask	lihaoyun6/tap/quickrecorder	QuickRecorder
+cask	macwhisper	MacWhisper
+cask	microsoft-excel	Microsoft Excel
+cask	nikitabobko/tap/aerospace	AeroSpace
+cask	notion	Notion
+cask	orbstack	OrbStack
+cask	protonvpn	ProtonVPN
+cask	raycast	Raycast
+cask	spotify	Spotify
+cask	t3-code	T3 Code (Alpha)
+cask	visual-studio-code	Visual Studio Code
+cask	vorssaint	Vorssaint
+cask	wispr-flow	Wispr Flow
+direct	maghue	MagHue
+direct	sioyek	Sioyek
+mas	1188705842	MySielteID
+mas	1394359548	Solves
+mas	6475380719	Picture-In-Picture
+mas	6745342698	uBlock Origin Lite

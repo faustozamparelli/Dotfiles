@@ -19,6 +19,25 @@ The goal is not to memorize every Unix command. Spend most of the day in
 Neovim, let Herdr organize long-lived work, and use the shell when it is the
 clearest tool for a short operation.
 
+## App Sync
+
+Use `mac-app` for applications so they are installed on this Mac now and on
+the other Mac automatically at login or within an hour:
+
+```sh
+mac-app firefox
+mac-app share --mas 497799835 Xcode
+mac-app local transmission
+mac-app temporary handbrake
+mac-app skip spotify
+```
+
+Homebrew casks are the default source. App Store apps use their numeric ID,
+and exceptional direct downloads use a reviewed checksum-pinned installer.
+Shared command-line utilities are deliberately curated in
+`~/.config/mac-setup/packages.txt`; arbitrary formulae remain temporary and
+local. The sync installs missing software but never uninstalls it.
+
 ## Start Here
 
 Open Ghostty. Its fish configuration automatically attaches to the persistent
@@ -29,7 +48,7 @@ The essential loop is:
 1. Use `z <project-name>` to jump to a known project.
 2. Run `n .` to open that directory in Neovim.
 3. Use `Space e` or `-` to browse with Oil.
-4. Use `Space f f` to find a file and `Space f g` to search its contents.
+4. Use `Space f f` to find a file and `Space f b` to switch buffers.
 5. Use `Space f a` to jump to a file or project outside the current project.
 6. Press `Cmd-g` when an agent is useful.
 7. Use `Cmd-b` or `Cmd-n` only when another shell pane is genuinely needed.
@@ -113,6 +132,7 @@ project search and agent behavior unpredictable.
 
 The configuration assigns each modifier a stable job:
 
+- `Right Cmd` (`Super`): global macOS windows, workspaces, and app launchers.
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
@@ -131,6 +151,39 @@ update the registry and implementation together, then run `keymap-docs`.
 <!-- KEYMAPS:START -->
 | Layer | Category | Key | Behavior |
 |---|---|---|---|
+| Karabiner | Super | `Right Cmd` | Hold the global Super modifier |
+| Karabiner | Fn | `Fn-h` | Move left with a physical arrow equivalent |
+| Karabiner | Fn | `Fn-j` | Move down with a physical arrow equivalent |
+| Karabiner | Fn | `Fn-k` | Move up with a physical arrow equivalent |
+| Karabiner | Fn | `Fn-l` | Move right with a physical arrow equivalent |
+| AeroSpace | Super | `Super-h` | Focus the window to the left |
+| AeroSpace | Super | `Super-j` | Focus the window below |
+| AeroSpace | Super | `Super-k` | Focus the window above |
+| AeroSpace | Super | `Super-l` | Focus the window to the right |
+| AeroSpace | Super | `Super-Shift-h` | Move the window left |
+| AeroSpace | Super | `Super-Shift-j` | Move the window down |
+| AeroSpace | Super | `Super-Shift-k` | Move the window up |
+| AeroSpace | Super | `Super-Shift-l` | Move the window right |
+| AeroSpace | Super | `Super-a` | Switch to the web workspace |
+| AeroSpace | Super | `Super-s` | Switch to the terminal workspace |
+| AeroSpace | Super | `Super-d` | Switch to the notes workspace |
+| AeroSpace | Super | `Super-f` | Switch to the documents workspace |
+| AeroSpace | Super | `Super-g` | Switch to the chat workspace |
+| AeroSpace | Super | `Super-;` | Switch to the media workspace |
+| AeroSpace | Super | `Super-Shift-a` | Move the window to the web workspace |
+| AeroSpace | Super | `Super-Shift-s` | Move the window to the terminal workspace |
+| AeroSpace | Super | `Super-Shift-d` | Move the window to the notes workspace |
+| AeroSpace | Super | `Super-Shift-f` | Move the window to the documents workspace |
+| AeroSpace | Super | `Super-Shift-g` | Move the window to the chat workspace |
+| AeroSpace | Super | `Super-Shift-;` | Move the window to the media workspace |
+| AeroSpace | Super | `Super-Shift-t` | Focus the other display without moving anything |
+| AeroSpace | Super | `Super-Shift-Tab` | Move the window to the other display and follow it |
+| AeroSpace | Super | `Super-Shift-m` | Move the current workspace to the other display |
+| AeroSpace | Super | `Super-t` | Toggle floating and tiled layout |
+| AeroSpace | Super | `Super-Enter` | Open a new Ghostty window |
+| AeroSpace | Super | `Super-Space` | Open Raycast |
+| AeroSpace | Super | `Super-b` | Open Helium |
+| AeroSpace | Super | `Super-n` | Open Notion |
 | Ghostty | Command | `Cmd-a` | Leave the current editing mode |
 | Herdr | Command | `Cmd-h` | Select the previous tab |
 | Herdr | Command | `Cmd-l` | Select the next tab |
@@ -205,7 +258,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | Neovim | Direct | `-` | Open the parent directory in Oil |
 | Neovim | Space | `Space f f` | Find files |
 | Neovim | Space | `Space f a` | Find files or projects across working roots |
-| Neovim | Space | `Space f g` | Search project text |
 | Neovim | Space | `Space f b` | Find open buffers |
 | Neovim | Space | `Space f r` | Find recent files |
 | Neovim | Space | `Space f h` | Search Neovim help |
@@ -441,7 +493,6 @@ Prefer fuzzy finding when the destination is roughly known:
 
 - `Space f f`: files under the working directory.
 - `Space f a`: files and directories across the main working roots.
-- `Space f g`: text inside files using ripgrep.
 - `Space f b`: currently open buffers.
 - `Space f r`: recently opened files.
 - `Space f h`: Neovim help topics.
@@ -755,7 +806,7 @@ git status
 n .
 ```
 
-Then use `Space f f`, `Space f g`, and `Space f b`. Press `Cmd-g` if the task
+Then use `Space f f` and `Space f b`. Press `Cmd-g` if the task
 benefits from an agent.
 
 ### Work on two projects
@@ -764,7 +815,7 @@ benefits from an agent.
 2. Press `Ctrl-Space Shift-n` to create another Herdr workspace inheriting the current
    path.
 3. Use `z other-project`, then `n .`.
-4. Switch projects with `Cmd-h` and `Cmd-l`.
+4. Switch projects with `Ctrl-h` and `Ctrl-l`.
 
 ### Inspect a change before committing
 
@@ -802,57 +853,39 @@ is the reliable option.
 
 ## Mac Synchronization
 
-This folder keeps the MacBook Air, MacBook Pro, and Mac Studio aligned through
-the bare dotfiles repository. Run:
+The MacBook Air and MacBook Pro use one shared app manifest. Apps are shared by
+default; formulae are shared only when intentionally listed in
+`~/.config/mac-setup/packages.txt`. Run an immediate reconciliation with:
 
 ```fish
-sync-maintain
+mac-sync
 ```
 
-The script:
+Install and share an app with one command. Homebrew casks are the default:
 
-- pulls the bare dotfiles repository with `--ff-only`;
-- refreshes this Mac's inventory under `inventory/<mac-name>/`;
-- reconciles editable software choices in `software-<mac-name>.txt`;
-- installs missing shared Homebrew packages, casks, and App Store apps;
-- tracks VS Code settings and keybindings, with extension IDs kept as a portable restore list;
-- exports/applies manually added macOS App Shortcuts;
-- tracks Marta's portable settings; and
-- stages tracked sync and dotfile paths without committing or pushing.
-
-An empty live App Shortcuts dictionary does not replace a nonempty shared
-mapping; maintenance restores the shared mapping instead. To intentionally
-clear every shortcut for a domain, edit its shared plist explicitly.
-
-`software-<mac-name>.txt` is the editable source of truth. Files under
-`shared/`, `inventory/`, and `state/` are generated or observed state. New
-software defaults to local. Move `[.]` between the `shared` and `local`
-brackets, then run `sync-maintain` again:
-
-```text
-# type  item       shared  local
-cask    marta      []      [.]
+```fish
+mac-app firefox
+mac-app share --mas 497799835 Xcode
+mac-app local transmission
+mac-app skip spotify
+mac-app unskip spotify
 ```
 
-Shared software can be intentionally omitted from one Mac without removing it
-from the other Macs. Add a tab-separated `type` and `item` row to
-`exclusions/<mac-name>.txt`; maintenance will preserve the globally shared
-classification but will neither install nor globally declassify that item on
-the named Mac:
+`mac-app` installs, records, commits, and pushes the one manifest change. A
+LaunchAgent pulls and installs missing items at login and hourly. Per-Mac app
+lists and skip lists live under `~/.config/mac-setup/machines/`. Direct
+downloads require a checksum-pinned installer under `direct/`. Normal manifest
+changes never uninstall software; only entries explicitly reviewed in
+`retired-apps.tsv` are removed during reconciliation.
 
-```text
-brew\tasmvik/formulae/yabai
-```
+The source-built Sioyek updater is tracked at
+`~/.config/mac-setup/direct/sioyek-source.fish`. It builds in a temporary
+directory, verifies the app bundle, replaces `/Applications/Sioyek.app`, and
+cleans its build files when it exits.
 
-`bcp` runs maintenance, stages tracked dotfiles, asks for a commit message, and
-pushes. Inspect `bare status` and relevant diffs first.
-
-Maintenance also stages user-authored Codex skill directories and the custom
-stealth launcher, mode, profile, and theme. It deliberately does not track
-`~/.codex/config.toml`, authentication, bundled system skills, plugin caches,
-sessions, histories, databases, or generated application state. Codex and the
-ChatGPT application may manage some of that state themselves; it is not part
-of this dotfiles contract.
+`sync-maintain` runs the same convergence check, regenerates keymap docs, and
+stages maintained dotfile paths. `bcp` then asks for a commit message and
+pushes.
 
 ### New Mac
 
@@ -871,13 +904,13 @@ of this dotfiles contract.
 
 5. Open Ghostty and verify that it starts Fish, attaches to Herdr, and opens a
    Fish pane. `echo $HERDR_ENV` should print `1` inside that pane.
-6. Sign into an agent application.
-7. Tell the agent to read this file and finish the new-Mac procedure.
-8. Handle manual sign-ins, licenses, and macOS privacy permissions.
+6. Handle manual sign-ins, licenses, App Store authentication, and macOS
+   privacy permissions.
 
 Herdr logs, sockets, cached manifests, session state, and pane history are
 machine-local. Only `~/.config/herdr/config.toml` and its helper scripts belong
-in dotfiles. The retired tmux configuration remains tracked as an archive.
+in dotfiles. The superseded tmux, skhd, yabai, and Micro configurations have
+been removed.
 
 ## Agent Contract
 
@@ -893,15 +926,18 @@ Agents working on this setup must follow these rules:
 5. Do not sync secrets, tokens, browser profiles, histories, caches, keychains,
    databases, or machine-local state.
 6. Prefer Homebrew for packages and casks.
-7. Ask Fausto before changing software from local to shared.
+7. Treat applications as shared unless Fausto uses a local or skip command;
+   keep formulae local unless deliberately added to `packages.txt`.
 8. Never add a removal bucket or uninstall software from the sync script.
-9. Leave commit and push manual unless Fausto explicitly requests them.
+9. `mac-app` may commit and push its single manifest target; leave unrelated
+   commits and pushes manual.
 
 For every custom keybinding change:
 
 1. Update `~/.config/keymaps/registry.tsv`, preserving unique IDs.
-2. Update the relevant Ghostty, Herdr, or Neovim configuration and include its
-   `km:<id>` marker (Neovim uses the ID in its mapping helper).
+2. Update the relevant Karabiner, AeroSpace, Ghostty, Herdr, or Neovim
+   configuration and include its `km:<id>` marker (Neovim uses the ID in its
+   mapping helper).
 3. Keep modifier roles consistent with the Keyboard Layers section.
 4. Run `~/.config/keymaps/keymap-docs` to regenerate the table in this file.
 5. Run `~/.config/keymaps/keymap-docs --check` and relevant configuration tests.
@@ -912,11 +948,9 @@ modifier a new role without explicit approval.
 For periodic sync maintenance:
 
 1. Run `sync-maintain`.
-2. Ask which local software should become shared.
-3. Move only approved `[.]` markers in `software-<mac-name>.txt`.
-4. Run `sync-maintain` and `bare status` again.
-5. Report installations, promotions, and remaining local software.
-6. Ask before running `bcp`.
+2. Inspect `bare status` and relevant diffs.
+3. Report installations and any one-time permissions still needed.
+4. Ask before running `bcp`.
 
 For a new Mac, verify `bare pull --ff-only` and `bare status`, run the installer
 and maintenance script, then report missing manual sign-ins and permissions.
@@ -927,7 +961,10 @@ Use these after changing the setup:
 
 ```fish
 keymap-docs --check
-bash ~/.config/sync/tests/test-maintain.sh
+bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
+jq empty ~/.config/karabiner/karabiner.json
+plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
+mac-sync --no-pull
 nvim --headless '+checkhealth' '+qa'
 herdr config check
 fish --no-execute ~/.config/fish/config.fish

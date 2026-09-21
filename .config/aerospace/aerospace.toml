@@ -1,0 +1,190 @@
+# Right Command is converted to Cmd+Ctrl+Option by Karabiner and acts as Super.
+config-version = 2
+start-at-login = true
+automatically-unhide-macos-hidden-apps = true
+after-login-command = []
+after-startup-command = [
+  'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-organize.sh"',
+]
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+accordion-padding = 0
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA']
+
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
+
+[key-mapping]
+preset = 'qwerty'
+
+[mode.main.binding]
+# km:aerospace.focus.left
+ctrl-alt-cmd-h = 'focus left'
+# km:aerospace.focus.down
+ctrl-alt-cmd-j = 'focus down'
+# km:aerospace.focus.up
+ctrl-alt-cmd-k = 'focus up'
+# km:aerospace.focus.right
+ctrl-alt-cmd-l = 'focus right'
+
+# km:aerospace.move.left
+ctrl-alt-cmd-shift-h = 'move left'
+# km:aerospace.move.down
+ctrl-alt-cmd-shift-j = 'move down'
+# km:aerospace.move.up
+ctrl-alt-cmd-shift-k = 'move up'
+# km:aerospace.move.right
+ctrl-alt-cmd-shift-l = 'move right'
+
+# km:aerospace.workspace.web
+ctrl-alt-cmd-a = 'workspace WEB'
+# km:aerospace.workspace.term
+ctrl-alt-cmd-s = 'workspace TERM'
+# km:aerospace.workspace.notes
+ctrl-alt-cmd-d = 'workspace NOTES'
+# km:aerospace.workspace.docs
+ctrl-alt-cmd-f = 'workspace DOCS'
+# km:aerospace.workspace.chat
+ctrl-alt-cmd-g = 'workspace CHAT'
+# km:aerospace.workspace.media
+ctrl-alt-cmd-semicolon = 'workspace MEDIA'
+
+# km:aerospace.window.to-workspace-web
+ctrl-alt-cmd-shift-a = 'move-node-to-workspace WEB'
+# km:aerospace.window.to-workspace-term
+ctrl-alt-cmd-shift-s = 'move-node-to-workspace TERM'
+# km:aerospace.window.to-workspace-notes
+ctrl-alt-cmd-shift-d = 'move-node-to-workspace NOTES'
+# km:aerospace.window.to-workspace-docs
+ctrl-alt-cmd-shift-f = 'move-node-to-workspace DOCS'
+# km:aerospace.window.to-workspace-chat
+ctrl-alt-cmd-shift-g = 'move-node-to-workspace CHAT'
+# km:aerospace.window.to-workspace-media
+ctrl-alt-cmd-shift-semicolon = 'move-node-to-workspace MEDIA'
+
+# km:aerospace.monitor.focus-next
+ctrl-alt-cmd-shift-t = 'focus-monitor --wrap-around next'
+# km:aerospace.monitor.move-window-next
+ctrl-alt-cmd-shift-tab = 'move-node-to-monitor --focus-follows-window --wrap-around next'
+# km:aerospace.monitor.move-workspace-next
+ctrl-alt-cmd-shift-m = 'move-workspace-to-monitor --wrap-around next'
+
+# km:aerospace.layout.toggle
+ctrl-alt-cmd-t = 'layout floating tiling'
+# km:aerospace.app.terminal
+ctrl-alt-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh TERM com.mitchellh.ghostty"'
+# km:aerospace.app.launcher
+ctrl-alt-cmd-space = "exec-and-forget open -a 'Raycast'"
+# km:aerospace.app.browser
+ctrl-alt-cmd-b = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh WEB net.imput.helium"'
+# km:aerospace.app.notes
+ctrl-alt-cmd-n = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh NOTES notion.id"'
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace TERM'
+
+[[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = 'move-node-to-workspace WEB'
+
+[[on-window-detected]]
+if.app-id = 'com.t3tools.t3code'
+run = 'move-node-to-workspace TERM'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = 'move-node-to-workspace TERM'
+
+[[on-window-detected]]
+if.app-id = 'com.automattic.beeper.desktop'
+run = 'move-node-to-workspace CHAT'
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace CHAT'
+
+[[on-window-detected]]
+if.app-id = 'notion.id'
+run = 'move-node-to-workspace NOTES'
+
+[[on-window-detected]]
+if.app-id = 'info.sioyek.sioyek'
+run = 'move-node-to-workspace DOCS'
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Excel'
+run = 'move-node-to-workspace DOCS'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace MEDIA'
+
+# Small utilities, overlays, and settings windows should not consume the tile tree.
+[[on-window-detected]]
+if.app-id = 'com.raycast.macos'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.steipete.codexbar'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-EventViewer'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.goodsnooze.MacWhisper'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'dev.kdrag0n.MacVirt'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'ch.protonvpn.mac'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.lihaoyun6.QuickRecorder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.vorssaint.utils'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.electron.wispr-flow'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.kamenlevi.MagHue'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.tonycoco.Picture-In-Picture'
+run = ['layout floating', 'move-node-to-workspace MEDIA']
+
+[[on-window-detected]]
+if.app-id = 'barinov.calculator.ios'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'net.raymondhill.uBlock-Origin-Lite'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.sielte.MySielteID'
+run = 'layout floating'

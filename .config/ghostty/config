@@ -78,7 +78,7 @@ keybind = cmd+t=text:\x1b[116;9u
 # km:herdr.copy-mode.enter
 keybind = cmd+shift+u=text:\x1b[117;10u
 
-# Disable Ghostty workspace defaults that would compete with tmux.
+# Disable Ghostty workspace defaults that would compete with Herdr.
 keybind = cmd+d=unbind
 keybind = cmd+shift+d=unbind
 keybind = cmd+[=unbind

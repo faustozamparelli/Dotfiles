@@ -30,5 +30,4 @@ alias py='python'
 
 alias b='bat'
 alias cl='clear'
-alias fi='yazi'
 alias c='code -r'

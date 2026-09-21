@@ -3,7 +3,8 @@ set -gx PATH \
 	$HOME_BREW/bin \
 	$HOME_BREW/sbin \
 	$PATH
-set -gx PATH /Users/faustozamparelli/.local/bin $PATH
+test -d $HOME_BREW/opt/trash/bin; and fish_add_path $HOME_BREW/opt/trash/bin
+set -gx PATH $HOME/.local/bin $PATH
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
@@ -26,7 +27,6 @@ alias python "uv run python"
 alias py python
 alias b bat
 alias cl clear
-alias fi yazi
 alias sv "source .venv/bin/activate.fish"
 alias n nvim
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"

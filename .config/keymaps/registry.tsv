@@ -1,4 +1,37 @@
 # id	layer	category	key	action	description
+karabiner.super	Karabiner	Super	Right Cmd	super-modifier	Hold the global Super modifier
+karabiner.arrow.left	Karabiner	Fn	Fn-h	left-arrow	Move left with a physical arrow equivalent
+karabiner.arrow.down	Karabiner	Fn	Fn-j	down-arrow	Move down with a physical arrow equivalent
+karabiner.arrow.up	Karabiner	Fn	Fn-k	up-arrow	Move up with a physical arrow equivalent
+karabiner.arrow.right	Karabiner	Fn	Fn-l	right-arrow	Move right with a physical arrow equivalent
+aerospace.focus.left	AeroSpace	Super	Super-h	focus-left	Focus the window to the left
+aerospace.focus.down	AeroSpace	Super	Super-j	focus-down	Focus the window below
+aerospace.focus.up	AeroSpace	Super	Super-k	focus-up	Focus the window above
+aerospace.focus.right	AeroSpace	Super	Super-l	focus-right	Focus the window to the right
+aerospace.move.left	AeroSpace	Super	Super-Shift-h	move-left	Move the window left
+aerospace.move.down	AeroSpace	Super	Super-Shift-j	move-down	Move the window down
+aerospace.move.up	AeroSpace	Super	Super-Shift-k	move-up	Move the window up
+aerospace.move.right	AeroSpace	Super	Super-Shift-l	move-right	Move the window right
+aerospace.workspace.web	AeroSpace	Super	Super-a	workspace-web	Switch to the web workspace
+aerospace.workspace.term	AeroSpace	Super	Super-s	workspace-term	Switch to the terminal workspace
+aerospace.workspace.notes	AeroSpace	Super	Super-d	workspace-notes	Switch to the notes workspace
+aerospace.workspace.docs	AeroSpace	Super	Super-f	workspace-docs	Switch to the documents workspace
+aerospace.workspace.chat	AeroSpace	Super	Super-g	workspace-chat	Switch to the chat workspace
+aerospace.workspace.media	AeroSpace	Super	Super-;	workspace-media	Switch to the media workspace
+aerospace.window.to-workspace-web	AeroSpace	Super	Super-Shift-a	move-to-workspace-web	Move the window to the web workspace
+aerospace.window.to-workspace-term	AeroSpace	Super	Super-Shift-s	move-to-workspace-term	Move the window to the terminal workspace
+aerospace.window.to-workspace-notes	AeroSpace	Super	Super-Shift-d	move-to-workspace-notes	Move the window to the notes workspace
+aerospace.window.to-workspace-docs	AeroSpace	Super	Super-Shift-f	move-to-workspace-docs	Move the window to the documents workspace
+aerospace.window.to-workspace-chat	AeroSpace	Super	Super-Shift-g	move-to-workspace-chat	Move the window to the chat workspace
+aerospace.window.to-workspace-media	AeroSpace	Super	Super-Shift-;	move-to-workspace-media	Move the window to the media workspace
+aerospace.monitor.focus-next	AeroSpace	Super	Super-Shift-t	focus-next-monitor	Focus the other display without moving anything
+aerospace.monitor.move-window-next	AeroSpace	Super	Super-Shift-Tab	move-window-next-monitor	Move the window to the other display and follow it
+aerospace.monitor.move-workspace-next	AeroSpace	Super	Super-Shift-m	move-workspace-next-monitor	Move the current workspace to the other display
+aerospace.layout.toggle	AeroSpace	Super	Super-t	toggle-layout	Toggle floating and tiled layout
+aerospace.app.terminal	AeroSpace	Super	Super-Enter	open-terminal	Open a new Ghostty window
+aerospace.app.launcher	AeroSpace	Super	Super-Space	open-launcher	Open Raycast
+aerospace.app.browser	AeroSpace	Super	Super-b	open-browser	Open Helium
+aerospace.app.notes	AeroSpace	Super	Super-n	open-notes	Open Notion
 ghostty.escape	Ghostty	Command	Cmd-a	escape	Leave the current editing mode
 herdr.tab.previous	Herdr	Command	Cmd-h	previous-tab	Select the previous tab
 herdr.tab.next	Herdr	Command	Cmd-l	next-tab	Select the next tab
@@ -73,7 +106,6 @@ nvim.file.oil	Neovim	Space	Space e	oil	Open Oil file browser
 nvim.file.parent	Neovim	Direct	-	oil-parent	Open the parent directory in Oil
 nvim.find.files	Neovim	Space	Space f f	find-files	Find files
 nvim.find.anywhere	Neovim	Space	Space f a	find-anywhere	Find files or projects across working roots
-nvim.find.grep	Neovim	Space	Space f g	live-grep	Search project text
 nvim.find.buffers	Neovim	Space	Space f b	find-buffers	Find open buffers
 nvim.find.recent	Neovim	Space	Space f r	recent-files	Find recent files
 nvim.find.help	Neovim	Space	Space f h	help-tags	Search Neovim help

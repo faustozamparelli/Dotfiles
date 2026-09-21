@@ -18,5 +18,27 @@
 [core]
 	pager = delta
 	editor = code --wait
+	excludesFile = ~/.config/git/.gitignore
+[interactive]
+	diffFilter = delta --color-only
 [delta]
 	line-numbers = true
+	navigate = true
+[merge]
+	conflictstyle = diff3
+[diff]
+	colorMoved = default
+[pull]
+	rebase = true
+[alias]
+	s = status -s
+	st = status
+	co = commit
+	ch = checkout
+	rh = reset HEAD
+	aa = add -A
+	pr = pull --rebase
+	br = branch
+	bra = branch -a
+	coa = commit -a --amend --no-edit
+	lg = log --graph --abbrev-commit --decorate --date=relative --format=format:\"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)\" --all

@@ -1,122 +1,100 @@
 # Dotfiles
 
-This repo is the source of truth for Fausto's Mac dotfiles and sync automation.
+This repository is the source of truth for Fausto's Mac configuration. Apps
+are shared by default, command-line packages are shared only when listed, and
+each Mac may have a tiny local app list or skip list.
 
-## New Mac: Get To Start State
+## New Mac
 
-Read this on GitHub in the browser, then run these commands manually.
+These are the only bootstrap steps that cannot live inside the repository.
 
-1. Install Homebrew:
+1. Sign in to the Mac App Store, then install Homebrew:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-if [ -x /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -x /usr/local/bin/brew ]; then
-  eval "$(/usr/local/bin/brew shellenv)"
-fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-2. Install GitHub CLI and authenticate. This repo is private, so do this before cloning dotfiles:
+2. Authenticate and check out the private bare dotfiles repository:
 
 ```sh
 brew install git gh
 gh auth login
 gh auth setup-git
-```
-
-3. Clone and check out the bare dotfiles repo:
-
-```sh
 mkdir -p "$HOME/.config/git"
 git clone --bare https://github.com/faustozamparelli/Dotfiles.git "$HOME/.config/git/dotfiles"
 git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" config --local status.showUntrackedFiles no
 git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" checkout
 ```
 
-If checkout reports conflicts, move the listed stock files aside and rerun the checkout command.
+If checkout reports conflicts, move only the listed stock files aside and run
+the checkout command again.
 
-At this point the dotfiles are present, including the `bare` alias and `~/.config/sync`.
-
-4. Start the post-checkout automation:
+3. Install everything and enable automatic sync:
 
 ```sh
 ~/.config/sync/install-agent.sh
 ```
 
-5. Sign in to Codex or another agent, then give it:
+The installer handles Homebrew casks, Mac App Store IDs, and reviewed pinned
+downloads. macOS may still ask once for Accessibility, system extensions,
+privileged helpers, or application sign-in; those approvals cannot safely be
+automated.
+
+## Installing apps
+
+Use `mac-app` instead of installing an app separately on each Mac:
+
+```sh
+mac-app firefox                         # shared Homebrew cask (default)
+mac-app share --mas 497799835 Xcode    # shared Mac App Store app
+mac-app local transmission             # only this Mac
+mac-app temporary handbrake            # install without tracking
+mac-app skip spotify                    # exclude a shared app on this Mac
+mac-app unskip spotify
+```
+
+The command installs the app, commits its manifest entry, and pushes it. Every
+other Mac runs `mac-sync` at login and hourly. Direct downloads require a small
+reviewed installer under `~/.config/mac-setup/direct`; MagHue is the initial
+example and is pinned by SHA-256.
+
+Shared CLI tools live in `~/.config/mac-setup/packages.txt`. Ordinary
+`brew install` packages stay local and temporary unless intentionally added to
+that short list. Removing an entry never automatically uninstalls software.
+
+Run a sync immediately with:
+
+```sh
+mac-sync
+```
+
+## Keyboard model
+
+- Right Command is the global Super key, implemented by Karabiner.
+- Super controls macOS windows and launches common apps through AeroSpace.
+- Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
+- Space controls Neovim commands.
+
+AeroSpace keeps six predictable workspaces and routes matching windows once
+at startup and whenever a new window appears:
 
 ```text
-~/.config/sync/agent.md
+A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA
 ```
 
-## Maintenance
+Use `Super-A/S/D/F/G/;` to switch and add Shift to move a window. `Super-H/J/K/L`
+focuses windows, while adding Shift moves them. `Super-Shift-T` focuses the
+other display without moving anything, `Super-Shift-Tab` moves the current
+window there, and `Super-Shift-M` moves the whole workspace. `Super-Enter`,
+`Super-B`, and `Super-N` open or focus Ghostty, Helium, and Notion on their
+home workspace. Physical `Fn-H/J/K/L` provides arrow keys everywhere.
 
-After setup, use Fish and run:
+The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
+readable generated table is in `~/.config/sync/README.md`.
 
-```sh
-sync-maintain
-```
+## Dotfile maintenance
 
-This writes this Mac's inventory under `~/.config/sync/inventory/<mac-name>/`, stages stable config, and shows `bare status`. Retired VS Code settings and extension names remain tracked for reference, but maintenance and bootstrap never install them.
-
-`bcp` runs `sync-maintain` before committing and pushing, so normal bare pushes refresh inventory and reduce extension conflicts.
-
-Review and commit intentionally:
-
-```sh
-bare status
-bcp
-```
-
-### macOS default applications
-
-The MacBook Air's explicit file-type "Open With" choices are tracked in
-`~/.config/duti/defaults.duti`. Browser and mail defaults are excluded because
-macOS protects them from this mechanism. This is an occasional manual sync;
-`duti` is intentionally not kept installed.
-
-On the Air after changing defaults in macOS, ask an agent to recapture the
-explicit Launch Services choices into that file, then commit and push. On the
-Pro after pulling, run:
-
-```sh
-brew install duti
-duti ~/.config/duti/defaults.duti
-brew uninstall duti
-```
-
-The target applications must already be installed. After applying, `duti` may
-also be uninstalled on the Air.
-
-## Terminal Workflow
-
-Ghostty launches Fish, which attaches to the persistent Herdr session. Neovim
-is the primary editor (`c`, `v`, and `m` all open `nvim`). Set
-`FAUSTO_NO_HERDR=1` before starting Fish when an unwrapped shell is needed.
-
-The canonical custom-key inventory is `~/.config/keymaps/registry.tsv`; the
-readable reference is `~/.config/sync/README.md`. Use `Ctrl-Space ?` in Herdr
-or `Space ?` in Neovim for runtime help. Agents changing a binding must
-follow `~/.config/keymaps/AGENTS.md` and run:
-
-```sh
-keymap-docs
-keymap-docs --check
-```
-
-Herdr saves workspace layout automatically. Live pane processes persist while
-the server runs; supported agent conversations can resume after a server
-restart when their Herdr integrations are installed.
-
-## Sync Files
-
-```text
-~/.config/sync/agent.md          Agent handoff after dotfiles are already checked out.
-~/.config/sync/README.md         Manual sync notes before agent handoff.
-~/.config/sync/install-agent.sh  Installs agent dependencies and starts post-checkout setup.
-~/.config/sync/maintain.sh       Periodic sync/inventory maintenance.
-~/.config/sync/clarifications.md Open questions and findings.
-~/.config/sync/inventory/        Per-Mac package/app snapshots.
-~/.config/sync/state/            Per-Mac sync bookkeeping.
-```
+`bcp` validates the app and keymap configuration, stages the maintained
+dotfiles, then asks for a commit message and pushes. `sync-maintain` performs
+the validation and staging without committing.

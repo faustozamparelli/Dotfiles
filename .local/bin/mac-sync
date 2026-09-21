@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH"
+
+setup="$HOME/.config/mac-setup"
+shared="$setup/apps.tsv"
+packages="$setup/packages.txt"
+retired="$setup/retired-apps.tsv"
+bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
+pull=true
+quiet=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --no-pull) pull=false ;;
+    --quiet) quiet=true ;;
+    -h|--help)
+      echo "usage: mac-sync [--no-pull] [--quiet]"
+      exit 0
+      ;;
+    *) echo "unknown argument: $arg" >&2; exit 2 ;;
+  esac
+done
+
+log() { $quiet || printf '%s\n' "$*"; }
+safe_host() {
+  local name
+  name="$(scutil --get ComputerName 2>/dev/null || hostname -s)"
+  printf '%s' "$name" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C tr -cs '[:alnum:]' '-' | sed 's/-$//'
+}
+
+host="$(safe_host)"
+local_apps="$setup/machines/$host.tsv"
+skip_file="$setup/machines/$host.skip"
+lock="${TMPDIR:-/tmp}/fausto-mac-sync.lock"
+if ! mkdir "$lock" 2>/dev/null; then
+  old_pid="$(cat "$lock/pid" 2>/dev/null || true)"
+  if [[ "$old_pid" =~ ^[0-9]+$ ]] && kill -0 "$old_pid" 2>/dev/null; then
+    log "mac-sync is already running"
+    exit 0
+  fi
+  rm -f "$lock/pid"
+  rmdir "$lock" 2>/dev/null || { echo "Cannot clear stale mac-sync lock: $lock" >&2; exit 1; }
+  mkdir "$lock"
+fi
+printf '%s\n' "$$" > "$lock/pid"
+trap 'rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true' EXIT
+
+if [[ ! -f "$shared" || ! -f "$packages" ]]; then
+  echo "mac-sync manifest is missing from $setup" >&2
+  exit 1
+fi
+
+if $pull && [[ -d "$HOME/.config/git/dotfiles" ]]; then
+  if "${bare[@]}" diff --quiet && "${bare[@]}" diff --cached --quiet; then
+    log "Pulling dotfiles..."
+    "${bare[@]}" pull --ff-only || echo "Warning: dotfiles pull failed; using the local manifest." >&2
+  else
+    echo "Warning: local dotfile changes found; skipped automatic pull." >&2
+  fi
+fi
+
+manifest_files=("$shared")
+[[ -f "$local_apps" ]] && manifest_files+=("$local_apps")
+[[ -f "$retired" ]] && manifest_files+=("$retired")
+if ! awk -F '\t' '
+  /^#/ || NF == 0 { next }
+  NF != 3 || ($1 != "cask" && $1 != "mas" && $1 != "direct") || $2 == "" || $3 == "" { bad=1 }
+  seen[$1 SUBSEP $2]++ { bad=1 }
+  END { exit bad }
+' "${manifest_files[@]}"; then
+  echo "Invalid or duplicate row in an app manifest." >&2
+  exit 1
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required. Follow the bootstrap section in ~/README.md." >&2
+  exit 1
+fi
+
+failed=0
+is_skipped() {
+  local key="$1"
+  [[ -f "$skip_file" ]] && grep -Fxq "$key" "$skip_file"
+}
+
+installed_formulae="$(brew list --formula 2>/dev/null || true)"
+missing_formulae=()
+while IFS= read -r package; do
+  [[ -z "$package" || "$package" == \#* ]] && continue
+  if ! grep -Fxq "$package" <<<"$installed_formulae"; then
+    missing_formulae+=("$package")
+  fi
+done < "$packages"
+if ((${#missing_formulae[@]})); then
+  log "Installing shared command-line tools: ${missing_formulae[*]}"
+  for package in "${missing_formulae[@]}"; do
+    brew install "$package" || failed=1
+  done
+fi
+
+installed_casks="$(brew list --cask 2>/dev/null || true)"
+retire_manifest() {
+  local source identifier name token app_path trash_bin
+  [[ -f "$retired" ]] || return 0
+  trash_bin="/opt/homebrew/opt/trash/bin/trash"
+  [[ -x "$trash_bin" ]] || trash_bin="/usr/bin/trash"
+  while IFS=$'\t' read -r -u 3 source identifier name; do
+    [[ -z "$source" || "$source" == \#* ]] && continue
+    token="${identifier##*/}"
+    app_path="/Applications/$name.app"
+    if [[ "$source" == "cask" ]] && grep -Fxq "$token" <<<"$installed_casks"; then
+      log "Removing retired app $name from Homebrew..."
+      brew uninstall --cask "$token" || failed=1
+    fi
+    if [[ -d "$app_path" ]]; then
+      log "Moving retired app $name to Trash..."
+      if [[ -x "$trash_bin" ]]; then
+        "$trash_bin" "$app_path" || failed=1
+      else
+        echo "Cannot retire $name: no trash command is available." >&2
+        failed=1
+      fi
+    fi
+  done 3< "$retired"
+}
+
+retire_manifest
+
+install_manifest() {
+  local manifest="$1" source identifier name token script
+  [[ -f "$manifest" ]] || return 0
+  while IFS=$'\t' read -r -u 3 source identifier name; do
+    [[ -z "$source" || "$source" == \#* ]] && continue
+    if [[ "$manifest" == "$shared" ]] && is_skipped "$source:$identifier"; then
+      log "Skipping $name on $host"
+      continue
+    fi
+    case "$source" in
+      cask)
+        token="${identifier##*/}"
+        if ! grep -Fxq "$token" <<<"$installed_casks"; then
+          log "Installing $name from Homebrew..."
+          brew install --cask --adopt "$identifier" || failed=1
+        fi
+        ;;
+      mas)
+        if [[ ! -d "/Applications/$name.app" ]]; then
+          if command -v mas >/dev/null 2>&1; then
+            log "Installing $name from the App Store..."
+            mas install "$identifier" || failed=1
+          else
+            echo "Cannot install $name: mas is unavailable." >&2
+            failed=1
+          fi
+        fi
+        ;;
+      direct)
+        script="$setup/direct/$identifier.sh"
+        if [[ -x "$script" ]]; then
+          log "Checking pinned direct install: $name"
+          "$script" || failed=1
+        else
+          echo "Missing executable direct installer: $script" >&2
+          failed=1
+        fi
+        ;;
+      *) echo "Unknown app source '$source' in $manifest" >&2; failed=1 ;;
+    esac
+  done 3< "$manifest"
+}
+
+install_manifest "$shared"
+install_manifest "$local_apps"
+
+shortcuts_changed=false
+for shortcut_file in "$setup/keyboard/"*.plist; do
+  [[ -f "$shortcut_file" ]] || continue
+  domain="$(basename "$shortcut_file" .plist)"
+  current="$(defaults read "$domain" NSUserKeyEquivalents 2>/dev/null || true)"
+  wanted="$(cat "$shortcut_file")"
+  if [[ "$current" != "$wanted" ]]; then
+    if defaults write "$domain" NSUserKeyEquivalents "$wanted" 2>/dev/null; then
+      shortcuts_changed=true
+    else
+      log "macOS did not allow background shortcut changes for $domain; leaving them unchanged."
+    fi
+  fi
+done
+$shortcuts_changed && killall cfprefsd 2>/dev/null || true
+
+if [[ -x "$HOME/.config/keymaps/keymap-docs" ]]; then
+  "$HOME/.config/keymaps/keymap-docs" --check || failed=1
+fi
+
+if ((failed)); then
+  echo "mac-sync finished with errors; rerun it after resolving the messages above." >&2
+  exit 1
+fi
+log "mac-sync complete for $host"
