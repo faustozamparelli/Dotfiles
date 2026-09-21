@@ -21,7 +21,7 @@ while IFS=$'\t' read -r window_id bundle_id; do
 done < <(aerospace list-windows --monitor all --format '%{window-id}%{tab}%{app-bundle-id}')
 
 # Accordion with zero padding gives every tiled app the entire workspace.
-# Super-H/L changes the visible app; Super-T toggles side-by-side tiles.
+# Super-H/L changes the visible app; Super-W toggles side-by-side tiles.
 for workspace in "${workspaces[@]}"; do
   aerospace layout --workspace "$workspace" --root h_accordion >/dev/null 2>&1 || true
 done

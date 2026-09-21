@@ -90,7 +90,7 @@ windows are assigned to MISC or MEDIA; Raycast alone remains a floating overlay
 where it was opened. `Super-Tab` focuses the other
 display without moving anything. `Super-Shift-Tab` swaps the focused window
 with the window on the other display while leaving both workspaces in place.
-`Super-Shift-T` moves the entire current workspace to the other display without
+`Super-Q` moves the entire current workspace to the other display without
 swapping windows. `Super-Enter`, `Super-B`, and `Super-O` open or focus Ghostty,
 Helium, and Notion on their home workspace. Physical `Fn-H/J/K/L` provides
 arrow keys everywhere.
@@ -108,7 +108,7 @@ arrow keys everywhere.
 | MISC | Unassigned apps (including MacWhisper, Excel, and Affinity), OrbStack, and system/settings utilities |
 
 Each workspace uses a zero-padding accordion: every tiled app fills the usable
-screen and `Super-H/L` moves between apps. `Super-T` toggles the current
+screen and `Super-H/L` moves between apps. `Super-W` toggles the current
 workspace between this full-window view and side-by-side tiles. `Super-R`
 re-routes every open app to its category, restores regular windows to tiling,
 and returns all workspaces to full-window accordion view.

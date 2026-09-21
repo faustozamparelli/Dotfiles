@@ -87,10 +87,10 @@ ctrl-alt-cmd-tab = 'focus-monitor --wrap-around next'
 # km:aerospace.monitor.swap-windows
 ctrl-alt-cmd-shift-tab = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-swap-monitor-windows.sh"'
 # km:aerospace.monitor.move-workspace-next
-ctrl-alt-cmd-shift-t = 'move-workspace-to-monitor --wrap-around next'
+ctrl-alt-cmd-q = 'move-workspace-to-monitor --wrap-around next'
 
 # km:aerospace.layout.toggle
-ctrl-alt-cmd-t = 'layout --root accordion tiles'
+ctrl-alt-cmd-w = 'layout --root accordion tiles'
 # km:aerospace.reset
 ctrl-alt-cmd-r = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-reset.sh"'
 # km:aerospace.app.terminal
