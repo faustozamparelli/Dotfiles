@@ -76,15 +76,17 @@ mac-sync
 - Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
 - Space controls Neovim commands.
 
-AeroSpace keeps six predictable workspaces and routes matching windows once
+AeroSpace keeps seven predictable workspaces and routes matching windows once
 at startup and whenever a new window appears:
 
 ```text
-A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA
+A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA   M MISC
 ```
 
 Use `Super-A/S/D/F/G/;` to switch and add Shift to move a window. `Super-H/J/K/L`
-focuses windows, while adding Shift moves them. `Super-Tab` focuses the other
+focuses windows, while adding Shift moves them. `Super-M` opens MISC, where
+every otherwise-unassigned regular app is routed automatically. Small utility
+overlays remain floating on the workspace where they were opened. `Super-Tab` focuses the other
 display without moving anything. `Super-Shift-Tab` swaps the focused window
 with the window on the other display while leaving both workspaces in place.
 `Super-Shift-T` moves the entire current workspace to the other display without

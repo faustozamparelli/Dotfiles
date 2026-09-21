@@ -170,6 +170,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-f` | Switch to the documents workspace |
 | AeroSpace | Super | `Super-g` | Switch to the chat workspace |
 | AeroSpace | Super | `Super-;` | Switch to the media workspace |
+| AeroSpace | Super | `Super-m` | Switch to the workspace for otherwise unassigned apps |
 | AeroSpace | Super | `Super-Shift-a` | Move the window to the web workspace |
 | AeroSpace | Super | `Super-Shift-s` | Move the window to the terminal workspace |
 | AeroSpace | Super | `Super-Shift-d` | Move the window to the notes workspace |

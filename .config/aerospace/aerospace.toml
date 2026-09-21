@@ -12,7 +12,7 @@ accordion-padding = 0
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA']
+persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA', 'MISC']
 
 [gaps]
 inner.horizontal = 0
@@ -56,6 +56,8 @@ ctrl-alt-cmd-f = 'workspace DOCS'
 ctrl-alt-cmd-g = 'workspace CHAT'
 # km:aerospace.workspace.media
 ctrl-alt-cmd-semicolon = 'workspace MEDIA'
+# km:aerospace.workspace.misc
+ctrl-alt-cmd-m = 'workspace MISC'
 
 # km:aerospace.window.to-workspace-web
 ctrl-alt-cmd-shift-a = 'move-node-to-workspace WEB'
@@ -188,3 +190,9 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.sielte.MySielteID'
 run = 'layout floating'
+
+# Every regular app without a category lands in one predictable fallback space.
+# Earlier matching rules stop callback processing, so this cannot override them.
+[[on-window-detected]]
+if = 'true'
+run = 'move-node-to-workspace MISC'
