@@ -26,6 +26,24 @@
                                 "type": "basic"
                             },
                             {
+                                "description": "km:karabiner.wispr.escape — Fn-Esc sends Escape",
+                                "from": {
+                                    "key_code": "escape",
+                                    "modifiers": { "mandatory": ["fn"] }
+                                },
+                                "to": [{ "key_code": "escape" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "km:karabiner.wispr.ptt — Esc sends Control-Shift-F13 for Wispr Flow",
+                                "from": { "key_code": "escape" },
+                                "to": [{
+                                    "key_code": "f13",
+                                    "modifiers": ["left_control", "left_shift"]
+                                }],
+                                "type": "basic"
+                            },
+                            {
                                 "description": "F5 / Dictation key → Keyboard brightness down",
                                 "from": {
                                     "key_code": "f5",
