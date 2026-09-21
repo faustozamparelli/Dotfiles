@@ -3,7 +3,6 @@ chatgpt
 codex
 font-sf-mono
 ghostty
-gitbutler
 helium-browser
 karabiner-elements
 microsoft-excel

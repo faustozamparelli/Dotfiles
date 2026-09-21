@@ -2,14 +2,16 @@ affinity
 beeper
 chatgpt
 codex
+codexbar
 discord
 font-sf-mono
 ghostty
-gitbutler
 helium-browser
 karabiner-elements
+macwhisper
 microsoft-excel
 notion
+orbstack
 quickrecorder
 raycast
 spotify

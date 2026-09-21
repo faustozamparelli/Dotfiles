@@ -1,17 +1,20 @@
 Affinity
 Beeper Desktop
 ChatGPT
+CodexBar
 DaVinci Resolve
 Discord
 Ghostty
-GitButler
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
+MacWhisper
+MagHue
 Microsoft Excel
 Microsoft PowerPoint
 MySielteID
 Notion
+OrbStack
 Picture-In-Picture
 ProtonVPN
 QuickRecorder
@@ -25,5 +28,4 @@ UTM
 Visual Studio Code
 Vorssaint
 Wispr Flow
-Xcode
 uBlock Origin Lite
