@@ -4,13 +4,13 @@ start-at-login = true
 automatically-unhide-macos-hidden-apps = true
 after-login-command = []
 after-startup-command = [
-  'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-organize.sh"',
+  'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-reset.sh"',
 ]
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 accordion-padding = 0
-default-root-container-layout = 'tiles'
-default-root-container-orientation = 'auto'
+default-root-container-layout = 'accordion'
+default-root-container-orientation = 'horizontal'
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 persistent-workspaces = ['WEB', 'TERM', 'NOTES', 'DOCS', 'CHAT', 'MEDIA', 'MISC']
 
@@ -71,6 +71,8 @@ ctrl-alt-cmd-shift-f = 'move-node-to-workspace DOCS'
 ctrl-alt-cmd-shift-g = 'move-node-to-workspace CHAT'
 # km:aerospace.window.to-workspace-media
 ctrl-alt-cmd-shift-semicolon = 'move-node-to-workspace MEDIA'
+# km:aerospace.window.to-workspace-misc
+ctrl-alt-cmd-shift-m = 'move-node-to-workspace MISC'
 
 # km:aerospace.monitor.focus-next
 ctrl-alt-cmd-tab = 'focus-monitor --wrap-around next'
@@ -80,7 +82,9 @@ ctrl-alt-cmd-shift-tab = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace
 ctrl-alt-cmd-shift-t = 'move-workspace-to-monitor --wrap-around next'
 
 # km:aerospace.layout.toggle
-ctrl-alt-cmd-t = 'layout floating tiling'
+ctrl-alt-cmd-t = 'layout --root accordion tiles'
+# km:aerospace.reset
+ctrl-alt-cmd-r = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-reset.sh"'
 # km:aerospace.app.terminal
 ctrl-alt-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.config/aerospace/aerospace-home.sh TERM com.mitchellh.ghostty"'
 # km:aerospace.app.launcher
@@ -107,11 +111,23 @@ if.app-id = 'com.microsoft.VSCode'
 run = 'move-node-to-workspace TERM'
 
 [[on-window-detected]]
+if = 'test %{app-name} = Codex'
+run = 'move-node-to-workspace TERM'
+
+[[on-window-detected]]
+if.app-id = 'com.utmapp.UTM'
+run = 'move-node-to-workspace TERM'
+
+[[on-window-detected]]
 if.app-id = 'com.automattic.beeper.desktop'
 run = 'move-node-to-workspace CHAT'
 
 [[on-window-detected]]
 if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace CHAT'
+
+[[on-window-detected]]
+if = 'test %{app-name} = ChatGPT || test %{app-bundle-id} = com.openai.chat'
 run = 'move-node-to-workspace CHAT'
 
 [[on-window-detected]]
@@ -127,7 +143,15 @@ if.app-id = 'com.microsoft.Excel'
 run = 'move-node-to-workspace DOCS'
 
 [[on-window-detected]]
+if.app-id = 'com.canva.affinity'
+run = 'move-node-to-workspace DOCS'
+
+[[on-window-detected]]
 if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace MEDIA'
+
+[[on-window-detected]]
+if.app-id = 'com.blackmagic-design.DaVinciResolveLite'
 run = 'move-node-to-workspace MEDIA'
 
 # Small utilities, overlays, and settings windows should not consume the tile tree.
@@ -137,43 +161,43 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.steipete.codexbar'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'org.pqrs.Karabiner-EventViewer'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.goodsnooze.MacWhisper'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'dev.kdrag0n.MacVirt'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'ch.protonvpn.mac'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.lihaoyun6.QuickRecorder'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MEDIA']
 
 [[on-window-detected]]
 if.app-id = 'com.vorssaint.utils'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.electron.wispr-flow'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.kamenlevi.MagHue'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.tonycoco.Picture-In-Picture'
@@ -181,15 +205,19 @@ run = ['layout floating', 'move-node-to-workspace MEDIA']
 
 [[on-window-detected]]
 if.app-id = 'barinov.calculator.ios'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'net.raymondhill.uBlock-Origin-Lite'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 [[on-window-detected]]
 if.app-id = 'com.sielte.MySielteID'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace MISC']
+
+[[on-window-detected]]
+if.app-id = 'io.tailscale.ipn.macsys'
+run = ['layout floating', 'move-node-to-workspace MISC']
 
 # Every regular app without a category lands in one predictable fallback space.
 # Earlier matching rules stop callback processing, so this cannot override them.

@@ -83,16 +83,33 @@ at startup and whenever a new window appears:
 A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA   M MISC
 ```
 
-Use `Super-A/S/D/F/G/;` to switch and add Shift to move a window. `Super-H/J/K/L`
+Use `Super-A/S/D/F/G/;/M` to switch and add Shift to move a window. `Super-H/J/K/L`
 focuses windows, while adding Shift moves them. `Super-M` opens MISC, where
 every otherwise-unassigned regular app is routed automatically. Small utility
-overlays remain floating on the workspace where they were opened. `Super-Tab` focuses the other
+windows are assigned to MISC or MEDIA; Raycast alone remains a floating overlay
+where it was opened. `Super-Tab` focuses the other
 display without moving anything. `Super-Shift-Tab` swaps the focused window
 with the window on the other display while leaving both workspaces in place.
 `Super-Shift-T` moves the entire current workspace to the other display without
 swapping windows. `Super-Enter`, `Super-B`, and `Super-N` open or focus Ghostty,
 Helium, and Notion on their home workspace. Physical `Fn-H/J/K/L` provides
 arrow keys everywhere.
+
+| Workspace | Applications |
+| --- | --- |
+| WEB | Helium |
+| TERM | Ghostty, T3 Code, Visual Studio Code, Codex, UTM |
+| NOTES | Notion |
+| DOCS | Sioyek, Excel, Affinity |
+| CHAT | Beeper, Discord, ChatGPT |
+| MEDIA | Spotify, DaVinci Resolve, QuickRecorder, Picture-in-Picture |
+| MISC | MacWhisper, OrbStack, VPN/settings utilities, and every unmatched app |
+
+Each workspace uses a zero-padding accordion: every tiled app fills the usable
+screen and `Super-H/L` moves between apps. `Super-T` toggles the current
+workspace between this full-window view and side-by-side tiles. `Super-R`
+re-routes every open app to its category, restores regular windows to tiling,
+and returns all workspaces to full-window accordion view.
 
 The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
 readable generated table is in `~/.config/sync/README.md`.
