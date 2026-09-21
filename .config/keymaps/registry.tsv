@@ -24,9 +24,8 @@ aerospace.window.to-workspace-notes	AeroSpace	Super	Super-Shift-d	move-to-worksp
 aerospace.window.to-workspace-docs	AeroSpace	Super	Super-Shift-f	move-to-workspace-docs	Move the window to the documents workspace
 aerospace.window.to-workspace-chat	AeroSpace	Super	Super-Shift-g	move-to-workspace-chat	Move the window to the chat workspace
 aerospace.window.to-workspace-media	AeroSpace	Super	Super-Shift-;	move-to-workspace-media	Move the window to the media workspace
-aerospace.monitor.focus-next	AeroSpace	Super	Super-Shift-t	focus-next-monitor	Focus the other display without moving anything
-aerospace.monitor.move-window-next	AeroSpace	Super	Super-Shift-Tab	move-window-next-monitor	Move the window to the other display and follow it
-aerospace.monitor.move-workspace-next	AeroSpace	Super	Super-Shift-m	move-workspace-next-monitor	Move the current workspace to the other display
+aerospace.monitor.focus-next	AeroSpace	Super	Super-Tab	focus-next-monitor	Focus the other display without moving anything
+aerospace.monitor.swap-windows	AeroSpace	Super	Super-Shift-Tab	swap-monitor-windows	Swap the focused window with the other display while keeping both workspaces in place
 aerospace.layout.toggle	AeroSpace	Super	Super-t	toggle-layout	Toggle floating and tiled layout
 aerospace.app.terminal	AeroSpace	Super	Super-Enter	open-terminal	Open a new Ghostty window
 aerospace.app.launcher	AeroSpace	Super	Super-Space	open-launcher	Open Raycast

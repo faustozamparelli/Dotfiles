@@ -15,6 +15,7 @@ chmod +x \
   "$HOME/.local/bin/mac-sync" \
   "$HOME/.config/aerospace/aerospace-home.sh" \
   "$HOME/.config/aerospace/aerospace-organize.sh" \
+  "$HOME/.config/aerospace/aerospace-swap-monitor-windows.sh" \
   "$HOME/.config/mac-setup/direct/"*.sh \
   "$HOME/.config/keymaps/keymap-docs" \
   "$HOME/.config/sync/maintain.sh"

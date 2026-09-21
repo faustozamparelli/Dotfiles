@@ -84,9 +84,10 @@ A WEB   S TERM   D NOTES   F DOCS   G CHAT   ; MEDIA
 ```
 
 Use `Super-A/S/D/F/G/;` to switch and add Shift to move a window. `Super-H/J/K/L`
-focuses windows, while adding Shift moves them. `Super-Shift-T` focuses the
-other display without moving anything, `Super-Shift-Tab` moves the current
-window there, and `Super-Shift-M` moves the whole workspace. `Super-Enter`,
+focuses windows, while adding Shift moves them. `Super-Tab` focuses the other
+display without moving anything. `Super-Shift-Tab` swaps the focused window
+with the window on the other display while leaving both workspaces in place.
+`Super-Enter`,
 `Super-B`, and `Super-N` open or focus Ghostty, Helium, and Notion on their
 home workspace. Physical `Fn-H/J/K/L` provides arrow keys everywhere.
 

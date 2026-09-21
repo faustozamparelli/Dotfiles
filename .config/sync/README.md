@@ -176,9 +176,8 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-Shift-f` | Move the window to the documents workspace |
 | AeroSpace | Super | `Super-Shift-g` | Move the window to the chat workspace |
 | AeroSpace | Super | `Super-Shift-;` | Move the window to the media workspace |
-| AeroSpace | Super | `Super-Shift-t` | Focus the other display without moving anything |
-| AeroSpace | Super | `Super-Shift-Tab` | Move the window to the other display and follow it |
-| AeroSpace | Super | `Super-Shift-m` | Move the current workspace to the other display |
+| AeroSpace | Super | `Super-Tab` | Focus the other display without moving anything |
+| AeroSpace | Super | `Super-Shift-Tab` | Swap the focused window with the other display while keeping both workspaces in place |
 | AeroSpace | Super | `Super-t` | Toggle floating and tiled layout |
 | AeroSpace | Super | `Super-Enter` | Open a new Ghostty window |
 | AeroSpace | Super | `Super-Space` | Open Raycast |
