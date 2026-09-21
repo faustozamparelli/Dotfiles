@@ -141,6 +141,10 @@ install_manifest() {
       cask)
         token="${identifier##*/}"
         if ! grep -Fxq "$token" <<<"$installed_casks"; then
+          if [[ "$token" == "protonvpn" && -d "/Applications/ProtonVPN.app" ]]; then
+            log "ProtonVPN is already installed outside Homebrew; leaving it in place."
+            continue
+          fi
           log "Installing $name from Homebrew..."
           brew install --cask --adopt "$identifier" || failed=1
         fi
