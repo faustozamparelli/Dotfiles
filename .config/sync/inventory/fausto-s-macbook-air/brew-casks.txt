@@ -1,14 +1,17 @@
 beeper
 codex
+codexbar
 discord
 font-sf-mono
 ghostty
 gitbutler
 helium-browser
 karabiner-elements
+macwhisper
 microsoft-excel
 microsoft-word
 notion
+orbstack
 quickrecorder
 raycast
 spotify
@@ -17,4 +20,3 @@ tor-browser
 visual-studio-code
 vorssaint
 wispr-flow
-zoomer

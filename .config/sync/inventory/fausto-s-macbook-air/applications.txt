@@ -1,16 +1,19 @@
 Beeper Desktop
+CodexBar
 Discord
 Ghostty
 GitButler
 Helium
 Karabiner-Elements
 Karabiner-EventViewer
+MacWhisper
 MagHue
 Microsoft Excel
 Microsoft PowerPoint
 Microsoft Word
 MySielteID
 Notion
+OrbStack
 Picture-In-Picture
 ProtonVPN
 QuickRecorder
