@@ -16,6 +16,7 @@ mas
 mole
 neovim
 pyright
+ripgrep
 ruff
 tlrc
 trash

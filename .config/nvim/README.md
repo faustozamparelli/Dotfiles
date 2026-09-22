@@ -45,13 +45,16 @@ Useful built-in commands include `:help topic`, `:checkhealth`, `:messages`,
 | Normal | `-` | Opens the parent directory in Oil | Use repeatedly to move upward. |
 | Normal | `<leader>ff` | Finds files under the current working directory | Type part of a path, move through results, then press Enter. |
 | Normal | `<leader>fa` | Finds files, directories, and external documents across configured locations | Select a directory to switch to it, a text file to edit it, or another file to open it with macOS. |
-| Normal | `<leader>fg` | Searches the current project by text | Type text or a regular expression, select a result, and press Enter. |
+| Normal | `<leader>fg` | Searches file contents in the current Git repository with ripgrep | Type text or a regular expression, select a result, and press Enter. |
 | Normal | `<leader>fb` | Finds an open buffer | Select a buffer and press Enter. |
 | Normal | `<leader>fr` | Finds a recently opened file | Select a path and press Enter. |
 | Normal | `<leader>fh` | Searches Neovim help | Search for an option, command, or concept and press Enter. |
 | Normal | `<leader>fF` | Reveals the current file in macOS Finder | Use while editing a real file. |
 | Normal | `<leader>d` | Replaces or deletes every whitespace-delimited WORD containing the last search match | First search with `/pattern`. Then press `<leader>d` and enter the replacement; submit an empty replacement to delete the matching WORDs. |
 | Any listed mode | `Esc` | Leaves the current mode and clears highlighted search matches | The search pattern remains available to `n`, `N`, and `<leader>d`. |
+
+`<leader>fg` uses the repository containing the current file, even when
+Neovim's working directory is elsewhere. Ripgrep respects `.gitignore`.
 
 `<leader>fa` searches these roots recursively:
 
@@ -160,21 +163,6 @@ disabled; blame appears only when requested.
 | --- | --- | --- |
 | Normal | `<leader>mp` | Toggles rendered Markdown in the current buffer. |
 | Normal | `<leader>mb` | Saves the current Markdown file and opens it in the macOS Helium application. |
-| Visual | Finish a character- or line-wise selection | Toggles a persistent yellow highlight over the selected Markdown text. |
-| Visual/mouse | Release the left mouse button after selecting | Toggles a persistent Markdown highlight. |
-| Normal/mouse | Right-click a highlight | Removes the persistent highlight under the pointer. |
-
-Persistent highlights are a custom feature, separate from Markdown syntax.
-Selecting exactly the same range again removes it, while overlapping ranges
-are merged. Blockwise selections are not supported. Highlights are restored
-per file and saved as JSON below:
-
-```text
-stdpath("data")/markdown-highlights/
-```
-
-On the usual macOS setup that is below `~/.local/share/nvim/`. The storage
-filename is a hash of the Markdown file's normalized absolute path.
 
 render-markdown.nvim styles headings, bullets, checkboxes, fenced code, and
 inline code. Its custom palette follows the editor's light or dark appearance.
@@ -246,6 +234,7 @@ They must be available separately on `$PATH`.
 | `ruff` | Python linting and formatting through Ruff's language server | Required for Ruff diagnostics/formatting. |
 | `clangd` | C, C++, Objective-C, Objective-C++, and CUDA language intelligence | Required for those filetypes. |
 | `fzf` | Interactive fuzzy selection | Required by fzf-lua. |
+| `rg` (ripgrep) | Searches repository file contents for `<leader>fg` | Required for live grep. |
 | `file` | MIME detection in the anywhere picker | Required for correct text-versus-external opening. |
 | `zoxide` | Records directories selected in the anywhere picker | Optional. |
 | `open` | Finder reveal, external documents, and Helium integration | macOS feature. |
@@ -282,8 +271,8 @@ exist in the diagnostic collection and may appear in `<leader>ld`.
 
 On macOS, the theme checks system appearance every two seconds. Dark mode uses
 `habamax`; light mode uses `morning`. Both receive custom backgrounds, subtle
-cursor lines, cyan accents, rounded floating-window borders, Markdown colors,
-and persistent-highlight colors. On other systems, the current Neovim
+cursor lines, cyan accents, rounded floating-window borders, and Markdown colors.
+On other systems, the current Neovim
 background setting determines the initial appearance.
 
 When running inside Herdr (`HERDR_ENV=1` with `HERDR_TAB_ID` set), entering a
@@ -302,11 +291,10 @@ lua/fausto/keymaps.lua           custom shortcuts
 lua/fausto/autocmds.lua          save, format, yank, and Herdr automation
 lua/fausto/workspace.lua         cross-workspace anywhere picker
 lua/fausto/python_source.lua     real Python source resolver
-lua/fausto/markdown_highlights.lua persistent Markdown selections
 ```
 
 The modules load in the order shown by `init.lua`: options, theme, plugins,
-LSP, keymaps, general autocommands, then persistent Markdown highlights.
+LSP, keymaps, and general autocommands.
 
 ## Troubleshooting
 

@@ -248,6 +248,15 @@ end, opts('nvim.selection.replace', 'Replace text in selection'))
 
 map('n', '<leader>ff', fzf.files, opts('nvim.find.files', 'Find files'))
 map('n', '<leader>fa', require('fausto.workspace').pick, opts('nvim.find.anywhere', 'Find anywhere'))
+map('n', '<leader>fg', function()
+    local root = vim.fs.root(current_buffer_directory(), '.git')
+    if not root then
+        vim.notify('The current file is not in a Git repository', vim.log.levels.WARN)
+        return
+    end
+
+    fzf.live_grep({ cwd = root })
+end, opts('nvim.find.grep', 'Search repository file contents'))
 map('n', '<leader>fb', fzf.buffers, opts('nvim.find.buffers', 'Find buffers'))
 map('n', '<leader>fr', fzf.oldfiles, opts('nvim.find.recent', 'Find recent files'))
 map('n', '<leader>fh', fzf.helptags, opts('nvim.find.help', 'Search help'))
