@@ -163,7 +163,7 @@ disabled; blame appears only when requested.
 | --- | --- | --- |
 | Normal | `<leader>mp` | Toggles rendered Markdown in the current buffer. |
 | Normal | `<leader>mb` | Saves the current Markdown file and opens it in the macOS Helium application. |
-| Normal | `gf` on a Markdown link | Opens a web link in the browser or a relative file link in Neovim. Place the cursor on the link text or target. On ordinary file paths, `gf` keeps its usual behavior. |
+| Normal | `gf` on a Markdown link | Opens a web link in Helium or a relative file link in Neovim. Place the cursor on the link text or target. On ordinary file paths, `gf` keeps its usual behavior. |
 
 render-markdown.nvim styles headings, bullets, checkboxes, fenced code, and
 inline code. Its custom palette follows the editor's light or dark appearance.

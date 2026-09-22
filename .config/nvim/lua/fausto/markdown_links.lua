@@ -32,6 +32,18 @@ function M.follow()
         return
     end
 
+    if target:match('^https?://') then
+        vim.system({ 'open', '-a', 'Helium', target }, { text = true }, function(result)
+            if result.code ~= 0 then
+                vim.schedule(function()
+                    local message = vim.trim(result.stderr or '')
+                    vim.notify(message ~= '' and message or 'Could not open link in Helium', vim.log.levels.ERROR)
+                end)
+            end
+        end)
+        return
+    end
+
     if target:match('^[%a][%w+.-]*:') then
         local _, err = vim.ui.open(target)
         if err then
