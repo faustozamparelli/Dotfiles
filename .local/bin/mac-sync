@@ -178,6 +178,10 @@ install_manifest() {
 install_manifest "$shared"
 install_manifest "$local_apps"
 
+if [[ -f "$setup/open-in-herdr/install.sh" ]]; then
+  "$setup/open-in-herdr/install.sh" || failed=1
+fi
+
 shortcuts_changed=false
 for shortcut_file in "$setup/keyboard/"*.plist; do
   [[ -f "$shortcut_file" ]] || continue

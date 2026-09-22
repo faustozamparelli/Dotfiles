@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+log="$HOME/Library/Logs/open-in-herdr.log"
+
+open_file() {
+  local file="$1" directory name created pane attempt
+  [[ -f "$file" ]] || { printf 'Not a file: %s\n' "$file" >&2; return 1; }
+  directory="$(dirname "$file")"
+  name="$(basename "$file")"
+
+  # Finder may launch Ghostty and Herdr for the first time on this Mac.
+  open -a Ghostty
+  for ((attempt = 0; attempt < 40; attempt++)); do
+    if created="$(herdr tab create --cwd "$directory" --label "$name" --env "FAUSTO_OPEN_FILE=$file" --focus 2>/dev/null)"; then
+      break
+    fi
+    sleep 0.25
+  done
+  if [[ -z "${created:-}" ]]; then
+    # A fresh session can have no workspace yet. Creating one also creates its first tab.
+    created="$(herdr workspace create --cwd "$directory" --label "$(basename "$directory")" --env "FAUSTO_OPEN_FILE=$file" --focus)" || return 1
+  fi
+  pane="$(jq -er '.result.root_pane.pane_id' <<<"$created")"
+  herdr pane run "$pane" 'exec nvim -- "$FAUSTO_OPEN_FILE"' >/dev/null
+}
+
+for file in "$@"; do
+  open_file "$file" >>"$log" 2>&1 || true
+done
