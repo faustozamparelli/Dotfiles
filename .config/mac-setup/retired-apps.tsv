@@ -1,5 +1,6 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
 cask	gitbutler	GitButler
+cask	homerow	homerow
 cask	tor-browser	Tor Browser
 mas	462062816	Microsoft PowerPoint
