@@ -30,13 +30,15 @@ mac-app share --mas 497799835 Xcode
 mac-app local transmission
 mac-app temporary handbrake
 mac-app skip spotify
+mac-app remove spotify
 ```
 
 Homebrew casks are the default source. App Store apps use their numeric ID,
 and exceptional direct downloads use a reviewed checksum-pinned installer.
 Shared command-line utilities are deliberately curated in
 `~/.config/mac-setup/packages.txt`; arbitrary formulae remain temporary and
-local. The sync installs missing software but never uninstalls it.
+local. The sync installs missing software and removes only apps explicitly
+recorded for retirement.
 
 ## Start Here
 
@@ -911,14 +913,19 @@ mac-app share --mas 497799835 Xcode
 mac-app local transmission
 mac-app skip spotify
 mac-app unskip spotify
+mac-app remove spotify
+mac-app remove --mas 497799835
 ```
 
-`mac-app` installs, records, commits, and pushes the one manifest change. A
-LaunchAgent pulls and installs missing items at login and hourly. Per-Mac app
-lists and skip lists live under `~/.config/mac-setup/machines/`. Direct
-downloads require a checksum-pinned installer under `direct/`. Normal manifest
-changes never uninstall software; only entries explicitly reviewed in
-`retired-apps.tsv` are removed during reconciliation.
+`mac-app` records, commits, and pushes app changes. A LaunchAgent pulls and
+reconciles at login and hourly. Per-Mac app lists and skip lists live under
+`~/.config/mac-setup/machines/`. Direct downloads require a checksum-pinned
+installer under `direct/`. `mac-app remove` takes a shared app identifier,
+removes its row from `apps.tsv`, records the exact row in `retired-apps.tsv`,
+and runs `mac-sync` locally. Run `mac-sync` manually on the other Mac to apply
+the removal there; its scheduled sync may apply it sooner. Ordinary manifest
+edits do not uninstall software. Sharing or locally installing a retired app
+again clears its retirement entry.
 
 The source-built Sioyek updater is tracked at
 `~/.config/mac-setup/direct/sioyek-source.fish`. It builds in a temporary
@@ -970,8 +977,9 @@ Agents working on this setup must follow these rules:
 6. Prefer Homebrew for packages and casks.
 7. Treat applications as shared unless Fausto uses a local or skip command;
    keep formulae local unless deliberately added to `packages.txt`.
-8. Never add a removal bucket or uninstall software from the sync script.
-9. `mac-app` may commit and push its single manifest target; leave unrelated
+8. Only entries explicitly recorded in `retired-apps.tsv` may cause app
+   removal during sync.
+9. `mac-app` may commit and push its own manifest targets; leave unrelated
    commits and pushes manual.
 
 For every custom keybinding change:

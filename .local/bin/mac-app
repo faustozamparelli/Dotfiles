@@ -3,6 +3,7 @@ set -euo pipefail
 
 setup="$HOME/.config/mac-setup"
 shared="$setup/apps.tsv"
+retired="$setup/retired-apps.tsv"
 bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
 safe_host() {
@@ -25,6 +26,11 @@ Keep an app only on this Mac:
 Install without recording it (temporary):
   mac-app temporary <cask>
 
+Remove a shared app from both Macs (run mac-sync on the other Mac):
+  mac-app remove <cask>
+  mac-app remove --mas <app-store-id>
+  mac-app remove --direct <installer-name>
+
 Exclude/unexclude a shared app on this Mac:
   mac-app skip <cask>
   mac-app skip --mas <app-store-id>
@@ -41,7 +47,7 @@ EOF
 [[ $# -gt 0 ]] || { usage; exit 2; }
 action="share"
 case "$1" in
-  share|local|skip|unskip) action="$1"; shift ;;
+  share|local|skip|unskip|remove) action="$1"; shift ;;
   temp|temporary) action="temporary"; shift ;;
   -h|--help) usage; exit 0 ;;
 esac
@@ -56,6 +62,36 @@ shift
 name="${*:-$identifier}"
 host="$(safe_host)"
 mkdir -p "$setup/machines"
+
+if [[ "$action" == "remove" ]]; then
+  if (($#)); then
+    echo "Remove takes an identifier only; the application name comes from apps.tsv." >&2
+    exit 2
+  fi
+  row="$(awk -F '\t' -v s="$source" -v i="$identifier" '$1 == s && $2 == i { print; exit }' "$shared")"
+  if [[ -z "$row" ]]; then
+    echo "$source:$identifier is not a shared app in $shared." >&2
+    exit 1
+  fi
+  IFS=$'\t' read -r source identifier name <<< "$row"
+  [[ -f "$retired" ]] || printf '# Explicit removals applied on every Mac. Nothing else is auto-uninstalled.\n# source\tidentifier\tapplication name\n' > "$retired"
+  tmp_shared="$(mktemp)"
+  tmp_retired="$(mktemp)"
+  trap 'rm -f "$tmp_shared" "$tmp_retired"' EXIT
+  awk -F '\t' -v s="$source" -v i="$identifier" '!($1 == s && $2 == i)' "$shared" > "$tmp_shared"
+  awk -F '\t' -v s="$source" -v i="$identifier" 'BEGIN { OFS="\t" } /^#/ || !($1 == s && $2 == i)' "$retired" > "$tmp_retired"
+  printf '%s\t%s\t%s\n' "$source" "$identifier" "$name" >> "$tmp_retired"
+  { grep '^#' "$tmp_retired" || true; grep -v '^#' "$tmp_retired" | LC_ALL=C sort -t $'\t' -k1,1 -k2,2; } > "$retired"
+  cat "$tmp_shared" > "$shared"
+
+  "$HOME/.local/bin/mac-sync" --no-pull
+  "${bare[@]}" add "${shared#"$HOME/"}" "${retired#"$HOME/"}"
+  "${bare[@]}" commit -m "mac setup: remove $name" -- "${shared#"$HOME/"}" "${retired#"$HOME/"}"
+  "${bare[@]}" pull --rebase --autostash
+  "${bare[@]}" push
+  echo "$name was removed on this Mac. Run mac-sync on the other Mac to remove it there."
+  exit 0
+fi
 
 if [[ "$action" == "temporary" ]]; then
   case "$source" in
@@ -89,14 +125,23 @@ else
   { grep '^#' "$tmp" || true; grep -v '^#' "$tmp" | LC_ALL=C sort -t $'\t' -k1,1 -k2,2; } > "$target"
 fi
 
+targets=("${target#"$HOME/"}")
+if [[ "$action" == "share" || "$action" == "local" ]] && [[ -f "$retired" ]] &&
+   awk -F '\t' -v s="$source" -v i="$identifier" '$1 == s && $2 == i { found=1 } END { exit !found }' "$retired"; then
+  tmp_retired="$(mktemp)"
+  awk -F '\t' -v s="$source" -v i="$identifier" '!($1 == s && $2 == i)' "$retired" > "$tmp_retired"
+  cat "$tmp_retired" > "$retired"
+  rm -f "$tmp_retired"
+  targets+=("${retired#"$HOME/"}")
+fi
+
 "$HOME/.local/bin/mac-sync" --no-pull
-relative="${target#"$HOME/"}"
-"${bare[@]}" add "$relative"
-if "${bare[@]}" diff --cached --quiet -- "$relative"; then
+"${bare[@]}" add "${targets[@]}"
+if "${bare[@]}" diff --cached --quiet -- "${targets[@]}"; then
   echo "No manifest change was needed."
   exit 0
 fi
-"${bare[@]}" commit -m "mac setup: $action $name" -- "$relative"
+"${bare[@]}" commit -m "mac setup: $action $name" -- "${targets[@]}"
 "${bare[@]}" pull --rebase --autostash
 "${bare[@]}" push
 echo "$name is recorded as $action; the other Mac will pick it up automatically."

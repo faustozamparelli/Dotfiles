@@ -52,12 +52,15 @@ mac-app local transmission             # only this Mac
 mac-app temporary handbrake            # install without tracking
 mac-app skip spotify                    # exclude a shared app on this Mac
 mac-app unskip spotify
+mac-app remove spotify                  # remove here; run mac-sync on the other Mac
 ```
 
-The command installs the app, commits its manifest entry, and pushes it. Every
-other Mac runs `mac-sync` at login and hourly. Direct downloads require a small
-reviewed installer under `~/.config/mac-setup/direct`; MagHue is the initial
-example and is pinned by SHA-256.
+The command records the app change, commits it, and pushes it. `mac-app remove`
+also removes the shared app locally and records its retirement; run `mac-sync`
+on the other Mac to apply the removal there. A LaunchAgent also runs `mac-sync`
+at login and hourly. Direct downloads require a small reviewed installer under
+`~/.config/mac-setup/direct`; MagHue is the initial example and is pinned by
+SHA-256.
 
 Shared CLI tools live in `~/.config/mac-setup/packages.txt`. Ordinary
 `brew install` packages stay local and temporary unless intentionally added to
