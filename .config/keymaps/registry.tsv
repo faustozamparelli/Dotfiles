@@ -32,7 +32,7 @@ aerospace.window.to-workspace-uni	AeroSpace	Super	Super-Shift-n	move-to-workspac
 aerospace.window.to-workspace-org	AeroSpace	Super	Super-Shift-,	move-to-workspace-org	Move the window to the organization workspace
 aerospace.window.to-workspace-misc	AeroSpace	Super	Super-Shift-m	move-to-workspace-misc	Move the window to the miscellaneous workspace
 aerospace.monitor.focus-next	AeroSpace	Super	Super-Tab	focus-next-monitor	Focus the other display without moving anything
-aerospace.monitor.swap-windows	AeroSpace	Super	Super-Shift-Tab	swap-monitor-windows	Swap the focused window with the other display while keeping both workspaces in place
+aerospace.monitor.swap-windows	AeroSpace	Super	Super-Shift-Tab	swap-monitor-windows	Swap the visible workspaces between displays, keeping each window in its workspace
 aerospace.monitor.move-workspace-next	AeroSpace	Super	Super-q	move-workspace-next-monitor	Move the current workspace to the other display without swapping
 aerospace.layout.toggle	AeroSpace	Super	Super-w	toggle-layout	Toggle full-window accordion and side-by-side tiles
 aerospace.reset	AeroSpace	Super	Super-r	reset-workspaces	Route every app home and restore full-window accordion layouts

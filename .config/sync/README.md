@@ -196,7 +196,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | AeroSpace | Super | `Super-Shift-,` | Move the window to the organization workspace |
 | AeroSpace | Super | `Super-Shift-m` | Move the window to the miscellaneous workspace |
 | AeroSpace | Super | `Super-Tab` | Focus the other display without moving anything |
-| AeroSpace | Super | `Super-Shift-Tab` | Swap the focused window with the other display while keeping both workspaces in place |
+| AeroSpace | Super | `Super-Shift-Tab` | Swap the visible workspaces between displays, keeping each window in its workspace |
 | AeroSpace | Super | `Super-q` | Move the current workspace to the other display without swapping |
 | AeroSpace | Super | `Super-w` | Toggle full-window accordion and side-by-side tiles |
 | AeroSpace | Super | `Super-r` | Route every app home and restore full-window accordion layouts |
