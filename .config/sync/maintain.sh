@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
+bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs"
