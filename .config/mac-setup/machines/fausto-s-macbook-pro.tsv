@@ -1,5 +1,6 @@
 # Apps used only on this Mac. Same format as apps.tsv.
 cask	affinity	Affinity
+cask	chatgpt	ChatGPT
 cask	tailscale-app	Tailscale
 mas	571213070	DaVinci Resolve
 mas	1538878817	UTM

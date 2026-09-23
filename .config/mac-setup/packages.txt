@@ -1,5 +1,5 @@
 # Curated command-line tools shared by every Mac.
-# Temporary project packages do not belong here, unless they are shared between macs or used often for developement.
+# Formulae here are shared and protected on every Mac. Everything else is temporary.
 bat
 btop
 cmake
@@ -47,7 +47,7 @@ superlu
 pybind11
 open-mpi
 
-# Python
+# Python libraries available to the Homebrew interpreter outside uv projects
 numpy
 scipy
 python-matplotlib

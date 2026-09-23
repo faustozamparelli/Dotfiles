@@ -31,7 +31,7 @@ usage: mac-sync [--no-pull] [--quiet] [--nuke]
 Options:
   --no-pull          Do not automatically pull the dotfiles repository.
   --quiet            Suppress normal informational output.
-  --nuke   Make packages.txt authoritative for Homebrew formulae.
+  --nuke             Make packages.txt authoritative for Homebrew formulae.
                      Extra top-level formulae are made eligible for autoremove,
                      then unused formulae and dependencies are removed.
 EOF
@@ -178,6 +178,27 @@ is_skipped() {
 
 wanted_packages=()
 
+if ! awk '
+  /^[[:space:]]*#/ || /^[[:space:]]*$/ {
+    next
+  }
+
+  $0 ~ /^[[:space:]]/ || $0 ~ /[[:space:]]$/ || NF != 1 {
+    bad=1
+  }
+
+  seen[$0]++ {
+    bad=1
+  }
+
+  END {
+    exit bad
+  }
+' "$packages"; then
+  echo "packages.txt contains a duplicate or malformed formula name." >&2
+  exit 1
+fi
+
 while IFS= read -r package; do
   [[ -z "$package" || "$package" == \#* ]] && continue
   wanted_packages+=("$package")
@@ -308,7 +329,21 @@ if $prune_packages; then
              >/dev/null; then
 
           # Homebrew decides which packages are actually safe to remove.
-          brew autoremove || failed=1
+          if ! brew autoremove; then
+            echo "Homebrew autoremove failed; protecting any temporary formulae that remain installed." >&2
+
+            remaining_packages=()
+            for formula in "${extra_packages[@]}"; do
+              if brew list --versions "$formula" >/dev/null 2>&1; then
+                remaining_packages+=("$formula")
+              fi
+            done
+
+            if ((${#remaining_packages[@]})); then
+              brew tab --installed-on-request "${remaining_packages[@]}" >/dev/null || true
+            fi
+            failed=1
+          fi
 
         else
           echo "Could not mark temporary formulae for removal." >&2
@@ -336,7 +371,40 @@ fi
 
 
 # ---------------------------------------------------------------------------
-# GCC stable command names
+# Shared Python libraries outside uv projects
+# ---------------------------------------------------------------------------
+
+# Homebrew links most Python library formulae into its main interpreter.
+# pytorch is intentionally installed in an isolated libexec environment, so
+# expose only that library through the base interpreter's user site. Standard
+# virtual environments disable the user site and therefore remain isolated.
+
+python_bin="$brew_prefix/bin/python3"
+
+if [[ -x "$python_bin" ]] && brew list --versions pytorch >/dev/null 2>&1; then
+  python_user_site="$("$python_bin" -m site --user-site)"
+  pytorch_site="$(
+    find "$brew_prefix/opt/pytorch/libexec/lib" \
+      -mindepth 2 \
+      -maxdepth 2 \
+      -type d \
+      -name site-packages \
+      2>/dev/null |
+      head -n 1
+  )"
+
+  if [[ -n "$pytorch_site" ]]; then
+    mkdir -p "$python_user_site"
+    printf '%s\n' "$pytorch_site" > "$python_user_site/homebrew-shared.pth"
+  else
+    echo "Could not locate pytorch's Python site-packages directory." >&2
+    failed=1
+  fi
+fi
+
+
+# ---------------------------------------------------------------------------
+# Stable language command names
 # ---------------------------------------------------------------------------
 
 # Homebrew versions GCC executable names, for example:
@@ -344,8 +412,8 @@ fi
 #   gcc-16
 #   g++-16
 #
-# Maintain stable names for shells, build systems, clangd, and scripts.
-# Refresh the links automatically after Homebrew upgrades GCC.
+# Maintain stable names for shells, explicit GNU builds, and scripts. Refresh
+# the links automatically after Homebrew upgrades Python or GCC.
 
 toolchain_bin="$HOME/.local/toolchains/bin"
 mkdir -p "$toolchain_bin"
@@ -357,7 +425,8 @@ latest_gcc="$(
     -name 'gcc-*' \
     2>/dev/null |
     grep -E '/gcc-[0-9]+$' |
-    head -n 1
+    LC_ALL=C sort -V |
+    tail -n 1
 )"
 
 latest_gxx="$(
@@ -367,10 +436,11 @@ latest_gxx="$(
     -name 'g++-*' \
     2>/dev/null |
     grep -E '/g\+\+-[0-9]+$' |
-    head -n 1
+    LC_ALL=C sort -V |
+    tail -n 1
 )"
 
-for tool in gcc g++; do
+for tool in python gcc g++; do
   link="$toolchain_bin/$tool"
 
   if [[ -e "$link" && ! -L "$link" ]]; then
@@ -378,6 +448,12 @@ for tool in gcc g++; do
     failed=1
   fi
 done
+
+if [[ -x "$python_bin" ]]; then
+  if [[ ! -e "$toolchain_bin/python" || -L "$toolchain_bin/python" ]]; then
+    ln -sfn "$python_bin" "$toolchain_bin/python"
+  fi
+fi
 
 if [[ -n "$latest_gcc" ]]; then
   if [[ ! -e "$toolchain_bin/gcc" || -L "$toolchain_bin/gcc" ]]; then

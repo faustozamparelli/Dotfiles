@@ -8,17 +8,11 @@ fish_add_path -g \
     $HOME/.local/toolchains/bin \
     $HOME/.local/bin \
     $PNPM_HOME/bin \
-    $HOMEBREW_PREFIX/opt/python/libexec/bin \
     $HOMEBREW_PREFIX/bin \
     $HOMEBREW_PREFIX/sbin
 
-# mac-sync maintains stable gcc/g++ links across Homebrew major upgrades.
-if test -x $HOME/.local/toolchains/bin/gcc
-    set -gx CC $HOME/.local/toolchains/bin/gcc
-end
-if test -x $HOME/.local/toolchains/bin/g++
-    set -gx CXX $HOME/.local/toolchains/bin/g++
-end
+# mac-sync maintains stable python, gcc, and g++ command names. Apple Clang
+# remains the default C/C++ compiler; select gcc/g++ in projects that need GNU.
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 

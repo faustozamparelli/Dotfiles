@@ -37,8 +37,9 @@ Homebrew casks are the default source. App Store apps use their numeric ID,
 and exceptional direct downloads use a reviewed checksum-pinned installer.
 Shared command-line utilities are deliberately curated in
 `~/.config/mac-setup/packages.txt`; arbitrary formulae remain temporary and
-local. The sync installs missing software and removes only apps explicitly
-recorded for retirement.
+local. `mac-sync --nuke` removes temporary formulae while retaining dependencies
+still needed by the curated set. The sync removes apps only when they are
+explicitly recorded for retirement.
 
 ## Start Here
 
@@ -730,10 +731,10 @@ b          bat
 o          open
 cl         clear
 fi         yazi
-py         uv run python
-python     uv run python
+py         Homebrew Python (alias for python)
+python     stable Homebrew Python command maintained by mac-sync
 sv         activate .venv for fish
-nb         jupyter notebook
+nb         jupyter lab
 ```
 
 Use `type <name>` to discover whether a name is an executable, function, or
@@ -816,8 +817,10 @@ state; review the target repository and branch first.
 
 ### Python through uv
 
-The `python` and `py` aliases run `uv run python`, allowing uv to use the
-project environment. Typical commands:
+`python` and `py` use the shared Homebrew interpreter, including the Python
+libraries listed in `packages.txt`, which is useful for loose scripts and a
+REPL. Inside a project, use uv explicitly so dependencies stay declared and
+isolated. Typical commands:
 
 ```fish
 uv init
@@ -904,6 +907,19 @@ default; formulae are shared only when intentionally listed in
 ```fish
 mac-sync
 ```
+
+Install an experimental formula normally with `brew install`; it remains local
+and temporary. Add only frequently used or current-project formulae to
+`packages.txt`. To remove every temporary top-level formula and any dependency
+that is no longer needed, run:
+
+```fish
+mac-sync --nuke
+```
+
+The nuke operation does not touch casks or App Store applications. Use
+`mac-app` for applications: shared is the default, `local` records an app for
+one Mac, and `temporary` installs it without recording it.
 
 Install and share an app with one command. Homebrew casks are the default:
 

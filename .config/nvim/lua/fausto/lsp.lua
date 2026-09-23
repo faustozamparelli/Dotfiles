@@ -10,10 +10,47 @@ vim.diagnostic.config({
     float = { severity = vim.diagnostic.severity.ERROR },
 })
 
+local function python_environment(_, config)
+    local root = config.root_dir or vim.fn.getcwd()
+    local project_python = vim.fs.joinpath(root, '.venv', 'bin', 'python')
+
+    config.settings = config.settings or {}
+    config.settings.python = config.settings.python or {}
+    config.settings.python.analysis = config.settings.python.analysis or {}
+
+    if vim.fn.executable(project_python) == 1 then
+        config.settings.python.pythonPath = project_python
+        return
+    end
+
+    if vim.env.VIRTUAL_ENV then
+        local active_python = vim.fs.joinpath(vim.env.VIRTUAL_ENV, 'bin', 'python')
+        if vim.fn.executable(active_python) == 1 then
+            config.settings.python.pythonPath = active_python
+            return
+        end
+    end
+
+    local python = vim.fn.exepath('python3')
+    if python ~= '' then
+        config.settings.python.pythonPath = python
+    end
+
+    -- Most Homebrew Python libraries are linked into the main interpreter's
+    -- site-packages. Formulae such as pytorch are intentionally isolated in
+    -- libexec, so expose those stubs/sources to Pyright only when no project
+    -- virtual environment is active.
+    local extra_paths = vim.fn.glob('/opt/homebrew/opt/pytorch/libexec/lib/python*/site-packages', true, true)
+    if #extra_paths > 0 then
+        config.settings.python.analysis.extraPaths = extra_paths
+    end
+end
+
 vim.lsp.config('pyright', {
     cmd = { 'pyright-langserver', '--stdio' },
     filetypes = { 'python' },
-    root_markers = { 'pyproject.toml', 'uv.lock', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+    root_markers = { '.venv', 'pyproject.toml', 'uv.lock', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+    before_init = python_environment,
     settings = {
         python = {
             analysis = {
@@ -30,14 +67,11 @@ vim.lsp.config('ruff', {
     root_markers = { 'pyproject.toml', 'uv.lock', 'ruff.toml', '.ruff.toml', '.git' },
 })
 
-local toolchain_bin = vim.fs.joinpath(vim.env.HOME, '.local', 'toolchains', 'bin')
-
 vim.lsp.config('clangd', {
     cmd = {
         '/usr/bin/clangd',
         '--background-index',
         '--clang-tidy',
-        '--query-driver=' .. toolchain_bin .. '/gcc,' .. toolchain_bin .. '/g++',
     },
     filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
     root_markers = { 'compile_commands.json', 'compile_flags.txt', '.clangd', '.git' },

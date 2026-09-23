@@ -1,9 +1,4 @@
-If:
-  PathMatch: '.*\.c$'
-CompileFlags:
-  Compiler: /Users/faustozamparelli/.local/toolchains/bin/gcc
----
-If:
-  PathMatch: '.*\.(cc|cpp|cxx|c\+\+|hh|hpp|hxx|h\+\+)$'
-CompileFlags:
-  Compiler: /Users/faustozamparelli/.local/toolchains/bin/g++
+# Project compile flags come from compile_commands.json. Keep the global
+# configuration neutral so Apple clangd uses the compiler recorded by the
+# project's native macOS build instead of mixing Apple Clang with GCC headers.
+{}

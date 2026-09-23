@@ -247,6 +247,29 @@ with background indexing and clang-tidy enabled. Project roots are detected
 from normal files such as `pyproject.toml`, Ruff configuration, compilation
 databases, and `.git`.
 
+Pyright selects a project's `.venv/bin/python` first, then an activated virtual
+environment. With neither present it uses Homebrew Python and can also inspect
+the isolated site-packages shipped by Homebrew's `pytorch` formula. This keeps
+the shared scientific packages useful for loose files without leaking them into
+uv project environments. `mac-sync` exposes PyTorch to the base Homebrew
+interpreter through its user site; normal virtual environments disable that
+user site.
+
+For C and C++, clangd needs compile flags, not linker configuration. With CMake,
+generate a compilation database and expose it at the project root:
+
+```sh
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+ln -s build/compile_commands.json compile_commands.json
+```
+
+The database tells clangd which Homebrew headers each target actually uses.
+Keep linking in the build system with `target_link_libraries`; do not add every
+library from `packages.txt` to `.clangd`. Apple Clang is the default on macOS;
+the stable `~/.local/toolchains/bin/gcc` and `g++` commands remain available for
+projects that specifically require GNU. A project-local `.clangd` is only
+needed for exceptional flags or when the compilation database lives elsewhere.
+
 Only error-level diagnostics are drawn as signs, underlines, virtual text, and
 floating diagnostics. This keeps warnings visually quiet, although they still
 exist in the diagnostic collection and may appear in `<leader>ld`.
