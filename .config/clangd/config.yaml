@@ -1,2 +1,9 @@
+If:
+  PathMatch: '.*\.c$'
 CompileFlags:
-  Add: [-std=c++17, -I/Users/faustozamparelli/.config/cppheaders]
+  Compiler: /Users/faustozamparelli/.local/toolchains/bin/gcc
+---
+If:
+  PathMatch: '.*\.(cc|cpp|cxx|c\+\+|hh|hpp|hxx|h\+\+)$'
+CompileFlags:
+  Compiler: /Users/faustozamparelli/.local/toolchains/bin/g++

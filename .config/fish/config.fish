@@ -1,10 +1,24 @@
-set -gx HOME_BREW /opt/homebrew
-set -gx PATH \
-	$HOME_BREW/bin \
-	$HOME_BREW/sbin \
-	$PATH
-test -d $HOME_BREW/opt/trash/bin; and fish_add_path $HOME_BREW/opt/trash/bin
-set -gx PATH $HOME/.local/bin $PATH
+set -gx HOMEBREW_PREFIX /opt/homebrew
+set -gx PNPM_HOME $HOME/Library/pnpm
+
+# Keep one deterministic toolchain path on both Macs. fish_add_path normalizes
+# paths and prevents the duplicate Homebrew entries produced by editing PATH.
+set -g fish_user_paths
+fish_add_path -g \
+    $HOME/.local/toolchains/bin \
+    $HOME/.local/bin \
+    $PNPM_HOME/bin \
+    $HOMEBREW_PREFIX/opt/python/libexec/bin \
+    $HOMEBREW_PREFIX/bin \
+    $HOMEBREW_PREFIX/sbin
+
+# mac-sync maintains stable gcc/g++ links across Homebrew major upgrades.
+if test -x $HOME/.local/toolchains/bin/gcc
+    set -gx CC $HOME/.local/toolchains/bin/gcc
+end
+if test -x $HOME/.local/toolchains/bin/g++
+    set -gx CXX $HOME/.local/toolchains/bin/g++
+end
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
@@ -19,17 +33,20 @@ if type -q zoxide
         zoxide init fish | source
 end
 
-alias nb "jupyter notebook"
+alias nb "jupyter lab"
 alias l "eza -a --git"
 alias ls l
 alias o open
-alias python "uv run python"
 alias py python
 alias b bat
 alias cl clear
 alias sv "source .venv/bin/activate.fish"
 alias n nvim
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
+
+function amsc-env --description "Load the manually managed AMSC C++ libraries"
+    source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads/Cpp/AMSC/env.fish"
+end
 
 # Route only the stealth profile through the monochrome presentation wrapper.
 # Every other Codex invocation keeps the normal full-color TUI.

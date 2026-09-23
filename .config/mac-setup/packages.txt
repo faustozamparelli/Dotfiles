@@ -1,20 +1,30 @@
 # Curated command-line tools shared by every Mac.
-# Temporary project packages do not belong here.
+# Temporary project packages do not belong here, unless they are shared between macs or used often for developement.
 bat
 btop
+cmake
 eza
 fd
+fish
 fisher
 fzf
+gcc
 gh
 git
 git-delta
 herdr
+jupyterlab
 lazygit
 libqalculate
+lua
+lua-language-server
 mas
 mole
 neovim
+node
+pnpm
+pkgconf
+python
 pyright
 ripgrep
 ruff
@@ -22,6 +32,24 @@ tlrc
 trash
 tree
 tree-sitter-cli
+typescript
 uv
+vtsls
 wget
 zoxide
+
+# C / C++
+ninja
+eigen
+openblas
+suite-sparse
+superlu
+pybind11
+open-mpi
+
+# Python
+numpy
+scipy
+python-matplotlib
+pytorch
+mpi4py

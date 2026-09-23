@@ -10,6 +10,7 @@ bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 "${bare[@]}" add \
   .gitconfig \
   .config/aerospace \
+  .config/clangd \
   .config/fish/config.fish \
   .config/fish/fish_plugins \
   .config/fish/functions/sync-maintain.fish \

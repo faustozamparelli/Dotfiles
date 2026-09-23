@@ -8,114 +8,448 @@ shared="$setup/apps.tsv"
 packages="$setup/packages.txt"
 retired="$setup/retired-apps.tsv"
 bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
+
 pull=true
 quiet=false
+prune_packages=false
 
 for arg in "$@"; do
   case "$arg" in
-    --no-pull) pull=false ;;
-    --quiet) quiet=true ;;
+    --no-pull)
+      pull=false
+      ;;
+    --quiet)
+      quiet=true
+      ;;
+    --nuke)
+      prune_packages=true
+      ;;
     -h|--help)
-      echo "usage: mac-sync [--no-pull] [--quiet]"
+      cat <<'EOF'
+usage: mac-sync [--no-pull] [--quiet] [--nuke]
+
+Options:
+  --no-pull          Do not automatically pull the dotfiles repository.
+  --quiet            Suppress normal informational output.
+  --nuke   Make packages.txt authoritative for Homebrew formulae.
+                     Extra top-level formulae are made eligible for autoremove,
+                     then unused formulae and dependencies are removed.
+EOF
       exit 0
       ;;
-    *) echo "unknown argument: $arg" >&2; exit 2 ;;
+    *)
+      echo "unknown argument: $arg" >&2
+      exit 2
+      ;;
   esac
 done
 
-log() { $quiet || printf '%s\n' "$*"; }
+log() {
+  $quiet || printf '%s\n' "$*"
+}
+
 safe_host() {
   local name
   name="$(scutil --get ComputerName 2>/dev/null || hostname -s)"
-  printf '%s' "$name" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C tr -cs '[:alnum:]' '-' | sed 's/-$//'
+  printf '%s' "$name" |
+    LC_ALL=C tr '[:upper:]' '[:lower:]' |
+    LC_ALL=C tr -cs '[:alnum:]' '-' |
+    sed 's/-$//'
 }
 
 host="$(safe_host)"
 local_apps="$setup/machines/$host.tsv"
 skip_file="$setup/machines/$host.skip"
+
 lock="${TMPDIR:-/tmp}/fausto-mac-sync.lock"
+
 if ! mkdir "$lock" 2>/dev/null; then
   old_pid="$(cat "$lock/pid" 2>/dev/null || true)"
-  if [[ "$old_pid" =~ ^[0-9]+$ ]] && kill -0 "$old_pid" 2>/dev/null; then
+
+  if [[ "$old_pid" =~ ^[0-9]+$ ]] &&
+     kill -0 "$old_pid" 2>/dev/null; then
     log "mac-sync is already running"
     exit 0
   fi
-  rm -f "$lock/pid"
-  rmdir "$lock" 2>/dev/null || { echo "Cannot clear stale mac-sync lock: $lock" >&2; exit 1; }
-  mkdir "$lock"
+
+  # The process recorded in the lock is no longer alive.
+  # Remove the entire stale lock directory, including temporary
+  # files created by --nuke.
+  rm -rf "$lock"
+
+  mkdir "$lock" || {
+    echo "Cannot recreate mac-sync lock: $lock" >&2
+    exit 1
+  }
 fi
+
 printf '%s\n' "$$" > "$lock/pid"
-trap 'rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true' EXIT
+
+trap 'rm -rf "$lock"' EXIT
 
 if [[ ! -f "$shared" || ! -f "$packages" ]]; then
   echo "mac-sync manifest is missing from $setup" >&2
   exit 1
 fi
 
+
+# ---------------------------------------------------------------------------
+# Dotfiles
+# ---------------------------------------------------------------------------
+
 if $pull && [[ -d "$HOME/.config/git/dotfiles" ]]; then
-  if "${bare[@]}" diff --quiet && "${bare[@]}" diff --cached --quiet; then
+  if "${bare[@]}" diff --quiet &&
+     "${bare[@]}" diff --cached --quiet; then
+
     log "Pulling dotfiles..."
-    "${bare[@]}" pull --ff-only || echo "Warning: dotfiles pull failed; using the local manifest." >&2
+
+    "${bare[@]}" pull --ff-only || {
+      echo "Warning: dotfiles pull failed; using the local manifest." >&2
+    }
   else
     echo "Warning: local dotfile changes found; skipped automatic pull." >&2
   fi
 fi
 
+
+# ---------------------------------------------------------------------------
+# Validate app manifests
+# ---------------------------------------------------------------------------
+
 manifest_files=("$shared")
+
 [[ -f "$local_apps" ]] && manifest_files+=("$local_apps")
 [[ -f "$retired" ]] && manifest_files+=("$retired")
+
 if ! awk -F '\t' '
-  /^#/ || NF == 0 { next }
-  NF != 3 || ($1 != "cask" && $1 != "mas" && $1 != "direct") || $2 == "" || $3 == "" { bad=1 }
-  seen[$1 SUBSEP $2]++ { bad=1 }
-  END { exit bad }
+  /^#/ || NF == 0 {
+    next
+  }
+
+  NF != 3 ||
+  ($1 != "cask" && $1 != "mas" && $1 != "direct") ||
+  $2 == "" ||
+  $3 == "" {
+    bad=1
+  }
+
+  seen[$1 SUBSEP $2]++ {
+    bad=1
+  }
+
+  END {
+    exit bad
+  }
 ' "${manifest_files[@]}"; then
   echo "Invalid or duplicate row in an app manifest." >&2
   exit 1
 fi
+
+
+# ---------------------------------------------------------------------------
+# Homebrew
+# ---------------------------------------------------------------------------
 
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is required. Follow the bootstrap section in ~/README.md." >&2
   exit 1
 fi
 
+brew_prefix="$(brew --prefix)"
+
 failed=0
+
+
+# ---------------------------------------------------------------------------
+# Machine-specific skips
+# ---------------------------------------------------------------------------
+
 is_skipped() {
   local key="$1"
-  [[ -f "$skip_file" ]] && grep -Fxq "$key" "$skip_file"
+
+  [[ -f "$skip_file" ]] &&
+    grep -Fxq "$key" "$skip_file"
 }
 
-installed_formulae="$(brew list --formula 2>/dev/null || true)"
-missing_formulae=()
+
+# ---------------------------------------------------------------------------
+# Shared Homebrew formulae
+# ---------------------------------------------------------------------------
+
+wanted_packages=()
+
 while IFS= read -r package; do
   [[ -z "$package" || "$package" == \#* ]] && continue
-  if ! grep -Fxq "$package" <<<"$installed_formulae"; then
-    missing_formulae+=("$package")
-  fi
+  wanted_packages+=("$package")
 done < "$packages"
-if ((${#missing_formulae[@]})); then
-  log "Installing shared command-line tools: ${missing_formulae[*]}"
-  for package in "${missing_formulae[@]}"; do
-    brew install "$package" || failed=1
-  done
+
+if ((${#wanted_packages[@]} == 0)); then
+  echo "packages.txt contains no Homebrew formulae." >&2
+  exit 1
 fi
 
+
+# ---------------------------------------------------------------------------
+# Install / protect packages.txt
+# ---------------------------------------------------------------------------
+
+# Do this in ONE Homebrew invocation instead of checking every formula
+# separately.
+#
+# Already-installed formulae are left at their current versions.
+# Automatic cleanup is disabled here because mac-sync manages cleanup itself.
+
+log "Checking shared Homebrew formulae..."
+
+brew_log="$lock/brew-install.log"
+
+if ! HOMEBREW_NO_INSTALL_UPGRADE=1 \
+     HOMEBREW_NO_INSTALL_CLEANUP=1 \
+     brew install "${wanted_packages[@]}" >"$brew_log" 2>&1; then
+
+  cat "$brew_log" >&2
+  failed=1
+fi
+
+# Everything in packages.txt is deliberate top-level user intent.
+# brew tab accepts multiple formulae, so mark all of them with one invocation.
+
+if ((failed == 0)); then
+  brew tab \
+    --installed-on-request \
+    "${wanted_packages[@]}" \
+    >/dev/null || {
+      echo "Could not mark shared formulae as explicitly installed." >&2
+      failed=1
+    }
+fi
+
+
+# ---------------------------------------------------------------------------
+# --nuke
+# ---------------------------------------------------------------------------
+
+if $prune_packages; then
+  if ((failed)); then
+    echo "Skipping Homebrew nuke because package setup failed." >&2
+  else
+    wanted_formulae="$lock/wanted-formulae"
+    wanted_prefixes="$lock/wanted-prefixes"
+    installed_formulae="$lock/installed-formulae"
+    extra_formulae="$lock/extra-formulae"
+
+    # Resolve ALL manifest aliases in one Homebrew invocation.
+    #
+    # For example:
+    #
+    #   python
+    #
+    # may resolve to:
+    #
+    #   /opt/homebrew/opt/python@3.14
+
+    if ! brew --prefix \
+         --installed \
+         "${wanted_packages[@]}" \
+         > "$wanted_prefixes"; then
+
+      echo "Could not resolve packages.txt formulae; refusing to nuke." >&2
+      failed=1
+    fi
+
+    if ((failed == 0)); then
+
+      while IFS= read -r prefix; do
+        [[ -z "$prefix" ]] && continue
+        basename "$prefix"
+      done < "$wanted_prefixes" |
+        LC_ALL=C sort -u \
+        > "$wanted_formulae"
+
+
+      # Get all explicitly requested formulae with ONE Homebrew invocation.
+
+      brew list \
+        --formula \
+        --installed-on-request |
+        LC_ALL=C sort -u \
+        > "$installed_formulae"
+
+
+      # installed-on-request MINUS packages.txt = temporary packages
+
+      LC_ALL=C comm \
+        -23 \
+        "$installed_formulae" \
+        "$wanted_formulae" \
+        > "$extra_formulae"
+
+
+      if [[ -s "$extra_formulae" ]]; then
+        log "Temporary Homebrew formulae not present in packages.txt:"
+
+        extra_packages=()
+
+        while IFS= read -r formula; do
+          [[ -z "$formula" ]] && continue
+
+          log "  $formula"
+          extra_packages+=("$formula")
+        done < "$extra_formulae"
+
+
+        # Mark ALL temporary packages dependency-only in ONE invocation.
+
+        log "Removing temporary Homebrew formulae..."
+
+        if brew tab \
+             --no-installed-on-request \
+             "${extra_packages[@]}" \
+             >/dev/null; then
+
+          # Homebrew decides which packages are actually safe to remove.
+          brew autoremove || failed=1
+
+        else
+          echo "Could not mark temporary formulae for removal." >&2
+          failed=1
+        fi
+
+      else
+        log "No temporary Homebrew formulae to remove."
+      fi
+    fi
+  fi
+fi
+
+
+# ---------------------------------------------------------------------------
+# pnpm
+# ---------------------------------------------------------------------------
+
+# pnpm keeps global executable shims here. Creating the directory during sync
+# ensures Fish can add it to PATH immediately on every managed Mac.
+
+if brew list --versions pnpm >/dev/null 2>&1; then
+  mkdir -p "$HOME/Library/pnpm/bin"
+fi
+
+
+# ---------------------------------------------------------------------------
+# GCC stable command names
+# ---------------------------------------------------------------------------
+
+# Homebrew versions GCC executable names, for example:
+#
+#   gcc-16
+#   g++-16
+#
+# Maintain stable names for shells, build systems, clangd, and scripts.
+# Refresh the links automatically after Homebrew upgrades GCC.
+
+toolchain_bin="$HOME/.local/toolchains/bin"
+mkdir -p "$toolchain_bin"
+
+latest_gcc="$(
+  find "$brew_prefix/bin" \
+    -maxdepth 1 \
+    \( -type f -o -type l \) \
+    -name 'gcc-*' \
+    2>/dev/null |
+    grep -E '/gcc-[0-9]+$' |
+    head -n 1
+)"
+
+latest_gxx="$(
+  find "$brew_prefix/bin" \
+    -maxdepth 1 \
+    \( -type f -o -type l \) \
+    -name 'g++-*' \
+    2>/dev/null |
+    grep -E '/g\+\+-[0-9]+$' |
+    head -n 1
+)"
+
+for tool in gcc g++; do
+  link="$toolchain_bin/$tool"
+
+  if [[ -e "$link" && ! -L "$link" ]]; then
+    echo "Cannot manage $link because it is not a symlink." >&2
+    failed=1
+  fi
+done
+
+if [[ -n "$latest_gcc" ]]; then
+  if [[ ! -e "$toolchain_bin/gcc" || -L "$toolchain_bin/gcc" ]]; then
+    ln -sfn "$latest_gcc" "$toolchain_bin/gcc"
+  fi
+fi
+
+if [[ -n "$latest_gxx" ]]; then
+  if [[ ! -e "$toolchain_bin/g++" || -L "$toolchain_bin/g++" ]]; then
+    ln -sfn "$latest_gxx" "$toolchain_bin/g++"
+  fi
+fi
+
+
+# ---------------------------------------------------------------------------
+# clangd
+# ---------------------------------------------------------------------------
+
+# clangd uses the XDG config in the dotfiles repository.
+# Apple clangd expects the same configuration under Library/Preferences.
+
+clangd_preferences="$HOME/Library/Preferences/clangd"
+mkdir -p "$clangd_preferences"
+
+clangd_config_link="$clangd_preferences/config.yaml"
+
+if [[ ! -e "$clangd_config_link" || -L "$clangd_config_link" ]]; then
+  ln -sfn \
+    "$HOME/.config/clangd/config.yaml" \
+    "$clangd_config_link"
+else
+  echo "Cannot manage $clangd_config_link because it is not a symlink." >&2
+  failed=1
+fi
+
+
+# ---------------------------------------------------------------------------
+# Retired applications
+# ---------------------------------------------------------------------------
+
 installed_casks="$(brew list --cask 2>/dev/null || true)"
+
 retire_manifest() {
-  local source identifier name token app_path trash_bin
+  local source
+  local identifier
+  local name
+  local token
+  local app_path
+  local trash_bin
+
   [[ -f "$retired" ]] || return 0
-  trash_bin="/opt/homebrew/opt/trash/bin/trash"
+
+  trash_bin="$brew_prefix/opt/trash/bin/trash"
   [[ -x "$trash_bin" ]] || trash_bin="/usr/bin/trash"
+
   while IFS=$'\t' read -r -u 3 source identifier name; do
     [[ -z "$source" || "$source" == \#* ]] && continue
+
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
-    if [[ "$source" == "cask" ]] && grep -Fxq "$token" <<<"$installed_casks"; then
+
+    if [[ "$source" == "cask" ]] &&
+       grep -Fxq "$token" <<<"$installed_casks"; then
+
       log "Removing retired app $name from Homebrew..."
+
       brew uninstall --cask "$token" || failed=1
     fi
+
     if [[ -d "$app_path" ]]; then
       log "Moving retired app $name to Trash..."
+
       if [[ -x "$trash_bin" ]]; then
         "$trash_bin" "$app_path" || failed=1
       else
@@ -128,29 +462,54 @@ retire_manifest() {
 
 retire_manifest
 
+
+# ---------------------------------------------------------------------------
+# Install applications
+# ---------------------------------------------------------------------------
+
 install_manifest() {
-  local manifest="$1" source identifier name token script
+  local manifest="$1"
+  local source
+  local identifier
+  local name
+  local token
+  local script
+
   [[ -f "$manifest" ]] || return 0
+
   while IFS=$'\t' read -r -u 3 source identifier name; do
     [[ -z "$source" || "$source" == \#* ]] && continue
-    if [[ "$manifest" == "$shared" ]] && is_skipped "$source:$identifier"; then
+
+    if [[ "$manifest" == "$shared" ]] &&
+       is_skipped "$source:$identifier"; then
+
       log "Skipping $name on $host"
       continue
     fi
+
     case "$source" in
+
       cask)
         token="${identifier##*/}"
+
         if ! grep -Fxq "$token" <<<"$installed_casks"; then
-          if [[ "$token" == "protonvpn" && -d "/Applications/ProtonVPN.app" ]]; then
+
+          if [[ "$token" == "protonvpn" &&
+                -d "/Applications/ProtonVPN.app" ]]; then
+
             log "ProtonVPN is already installed outside Homebrew; leaving it in place."
             continue
           fi
+
           log "Installing $name from Homebrew..."
+
           brew install --cask --adopt "$identifier" || failed=1
         fi
         ;;
+
       mas)
         if [[ ! -d "/Applications/$name.app" ]]; then
+
           if command -v mas >/dev/null 2>&1; then
             log "Installing $name from the App Store..."
             mas install "$identifier" || failed=1
@@ -160,8 +519,10 @@ install_manifest() {
           fi
         fi
         ;;
+
       direct)
         script="$setup/direct/$identifier.sh"
+
         if [[ -x "$script" ]]; then
           log "Checking pinned direct install: $name"
           "$script" || failed=1
@@ -170,24 +531,42 @@ install_manifest() {
           failed=1
         fi
         ;;
-      *) echo "Unknown app source '$source' in $manifest" >&2; failed=1 ;;
+
+      *)
+        echo "Unknown app source '$source' in $manifest" >&2
+        failed=1
+        ;;
     esac
+
   done 3< "$manifest"
 }
 
 install_manifest "$shared"
 install_manifest "$local_apps"
 
+
+# ---------------------------------------------------------------------------
+# Open in Herdr
+# ---------------------------------------------------------------------------
+
 if [[ -f "$setup/open-in-herdr/install.sh" ]]; then
   "$setup/open-in-herdr/install.sh" || failed=1
 fi
 
+
+# ---------------------------------------------------------------------------
+# Keyboard shortcuts
+# ---------------------------------------------------------------------------
+
 shortcuts_changed=false
+
 for shortcut_file in "$setup/keyboard/"*.plist; do
   [[ -f "$shortcut_file" ]] || continue
+
   domain="$(basename "$shortcut_file" .plist)"
   current="$(defaults read "$domain" NSUserKeyEquivalents 2>/dev/null || true)"
   wanted="$(cat "$shortcut_file")"
+
   if [[ "$current" != "$wanted" ]]; then
     if defaults write "$domain" NSUserKeyEquivalents "$wanted" 2>/dev/null; then
       shortcuts_changed=true
@@ -196,14 +575,27 @@ for shortcut_file in "$setup/keyboard/"*.plist; do
     fi
   fi
 done
-$shortcuts_changed && killall cfprefsd 2>/dev/null || true
+
+$shortcuts_changed &&
+  killall cfprefsd 2>/dev/null || true
+
+
+# ---------------------------------------------------------------------------
+# Keymap documentation
+# ---------------------------------------------------------------------------
 
 if [[ -x "$HOME/.config/keymaps/keymap-docs" ]]; then
   "$HOME/.config/keymaps/keymap-docs" --check || failed=1
 fi
 
+
+# ---------------------------------------------------------------------------
+# Finish
+# ---------------------------------------------------------------------------
+
 if ((failed)); then
   echo "mac-sync finished with errors; rerun it after resolving the messages above." >&2
   exit 1
 fi
+
 log "mac-sync complete for $host"
