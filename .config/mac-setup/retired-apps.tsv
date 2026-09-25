@@ -1,5 +1,6 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
+cask	discord	Discord
 cask	gitbutler	GitButler
 cask	homerow	homerow
 cask	tor-browser	Tor Browser
