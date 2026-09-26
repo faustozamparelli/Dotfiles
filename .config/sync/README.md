@@ -170,41 +170,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | Karabiner | Fn | `Fn-j` | Move down with a physical arrow equivalent |
 | Karabiner | Fn | `Fn-k` | Move up with a physical arrow equivalent |
 | Karabiner | Fn | `Fn-l` | Move right with a physical arrow equivalent |
-| AeroSpace | Super | `Super-h` | Focus the window to the left |
-| AeroSpace | Super | `Super-j` | Focus the window below |
-| AeroSpace | Super | `Super-k` | Focus the window above |
-| AeroSpace | Super | `Super-l` | Focus the window to the right |
-| AeroSpace | Super | `Super-Shift-h` | Move the window left |
-| AeroSpace | Super | `Super-Shift-j` | Move the window down |
-| AeroSpace | Super | `Super-Shift-k` | Move the window up |
-| AeroSpace | Super | `Super-Shift-l` | Move the window right |
-| AeroSpace | Super | `Super-a` | Switch to the web workspace |
-| AeroSpace | Super | `Super-s` | Switch to the terminal workspace |
-| AeroSpace | Super | `Super-d` | Switch to the notes workspace |
-| AeroSpace | Super | `Super-f` | Switch to the documents workspace |
-| AeroSpace | Super | `Super-g` | Switch to the chat workspace |
-| AeroSpace | Super | `Super-;` | Switch to the media workspace |
-| AeroSpace | Super | `Super-n` | Switch to the university workspace |
-| AeroSpace | Super | `Super-,` | Switch to the organization workspace |
-| AeroSpace | Super | `Super-m` | Switch to the workspace for otherwise unassigned apps |
-| AeroSpace | Super | `Super-Shift-a` | Move the window to the web workspace |
-| AeroSpace | Super | `Super-Shift-s` | Move the window to the terminal workspace |
-| AeroSpace | Super | `Super-Shift-d` | Move the window to the notes workspace |
-| AeroSpace | Super | `Super-Shift-f` | Move the window to the documents workspace |
-| AeroSpace | Super | `Super-Shift-g` | Move the window to the chat workspace |
-| AeroSpace | Super | `Super-Shift-;` | Move the window to the media workspace |
-| AeroSpace | Super | `Super-Shift-n` | Move the window to the university workspace |
-| AeroSpace | Super | `Super-Shift-,` | Move the window to the organization workspace |
-| AeroSpace | Super | `Super-Shift-m` | Move the window to the miscellaneous workspace |
-| AeroSpace | Super | `Super-Tab` | Focus the other display without moving anything |
-| AeroSpace | Super | `Super-Shift-Tab` | Swap the visible workspaces between displays, keeping each window in its workspace |
-| AeroSpace | Super | `Super-q` | Move the current workspace to the other display without swapping |
-| AeroSpace | Super | `Super-w` | Toggle full-window accordion and side-by-side tiles |
-| AeroSpace | Super | `Super-r` | Route every app home and restore full-window accordion layouts |
-| AeroSpace | Super | `Super-Enter` | Open a new Ghostty window |
-| AeroSpace | Super | `Super-Space` | Open Raycast |
-| AeroSpace | Super | `Super-b` | Open Helium |
-| AeroSpace | Super | `Super-o` | Open Notion |
 | Ghostty | Command | `Cmd-a` | Leave the current editing mode |
 | Herdr | Command | `Cmd-h` | Select the previous tab |
 | Herdr | Command | `Cmd-l` | Select the next tab |
@@ -1001,7 +966,7 @@ Agents working on this setup must follow these rules:
 For every custom keybinding change:
 
 1. Update `~/.config/keymaps/registry.tsv`, preserving unique IDs.
-2. Update the relevant Karabiner, AeroSpace, Ghostty, Herdr, or Neovim
+2. Update the relevant Karabiner, Ghostty, Herdr, or Neovim
    configuration and include its `km:<id>` marker (Neovim uses the ID in its
    mapping helper).
 3. Keep modifier roles consistent with the Keyboard Layers section.

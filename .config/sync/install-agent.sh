@@ -13,9 +13,6 @@ fi
 chmod +x \
   "$HOME/.local/bin/mac-app" \
   "$HOME/.local/bin/mac-sync" \
-  "$HOME/.config/aerospace/aerospace-home.sh" \
-  "$HOME/.config/aerospace/aerospace-reset.sh" \
-  "$HOME/.config/aerospace/aerospace-swap-monitor-windows.sh" \
   "$HOME/.config/mac-setup/direct/"*.sh \
   "$HOME/.config/keymaps/keymap-docs" \
   "$HOME/.config/mac-setup/open-in-herdr/install.sh" \

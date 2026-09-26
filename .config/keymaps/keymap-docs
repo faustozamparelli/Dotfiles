@@ -48,7 +48,6 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
     Ghostty) config="$HOME/.config/ghostty/config" ;;
     Herdr) config="$HOME/.config/herdr/config.toml" ;;
     Neovim) config="$HOME/.config/nvim/lua/fausto/keymaps.lua" ;;
-    AeroSpace) config="$HOME/.config/aerospace/aerospace.toml" ;;
     Karabiner) config="$HOME/.config/karabiner/karabiner.json" ;;
     Sioyek) config="$HOME/.config/sioyek/keys_user.config" ;;
     *) printf 'unknown layer for %s: %s\n' "$id" "$layer" >&2; exit 1 ;;
