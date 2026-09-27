@@ -1,151 +1,126 @@
 {
-    "files.autoSave": "afterDelay",
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.formatOnPaste": true,
-    "window.zoomLevel": -1.5,
-    "editor.fontFamily": "",
-    "editor.accessibilitySupport": "off",
-    "terminal.integrated.defaultProfile.osx": "fish",
-    "terminal.integrated.cursorStyle": "line",
-    //"terminal.integrated.defaultLocation": "editor",
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Dark Modern",
+  "workbench.preferredLightColorTheme": "Light Modern",
+  "workbench.colorTheme": "Dark Modern",
+  "workbench.colorCustomizations": {
+    "[Dark Modern]": {
+      "editor.background": "#000000",
+      "sideBar.background": "#000000",
+      "panel.background": "#000000",
+      "editor.lineHighlightBackground": "#111827",
+      "editorCursor.foreground": "#67e8f9"
     },
-    "prettier.tabWidth": 4,
-    "workbench.startupEditor": "none",
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true,
-    "editor.detectIndentation": false,
-    "explorer.confirmDelete": false,
-    "git.enableSmartCommit": true,
-    "git.confirmSync": false,
-    "git.autofetch": true,
-    "explorer.confirmPasteNative": false,
-    "editor.wordWrap": "on",
-    "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
-    },
-    "C_Cpp.formatting": "clangFormat",
-    "security.workspace.trust.untrustedFiles": "open",
-    "[python]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "charliermarsh.ruff",
-    },
-    "python.languageServer": "Pylance",
-    "python.analysis.typeCheckingMode": "basic",
-    "python.analysis.diagnosticMode": "openFilesOnly",
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportGeneralTypeIssues": "none",
-    },
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.stubPath": "",
-    "window.autoDetectColorScheme": true,
-    "chat.editing.confirmEditRequestRemoval": false,
-    "explorer.autoReveal": false,
-    "editor.hover.enabled": "on",
-    "workbench.hover.delay": 500,
-    "terminal.integrated.fontSize": 18,
-    "notebook.output.scrolling": true,
-    "editor.scrollbar.vertical": "hidden",
-    "chat.viewSessions.orientation": "stacked",
-    "markdown.preview.fontSize": 18,
-    "workbench.browser.openLocalhostLinks": false,
-    "workbench.colorCustomizations": {},
-    "workbench.editorAssociations": {
-        "*.md": "vscode.markdown.preview.editor",
-        "*.markdown": "vscode.markdown.preview.editor",
-    },
-    "workbench.diffEditorAssociations": {
-        "*.md": "vscode.markdown.preview.editor",
-        "*.markdown": "vscode.markdown.preview.editor",
-    },
-    "diffEditor.renderSideBySide": false,
-    "scm.diffDecorations": "gutter",
-    "chat.disableAIFeatures": true,
-    // "workbench.editor.enablePreview": true,
-    // "workbench.editor.enablePreviewFromQuickOpen": true,
-    "workbench.editor.enablePreview": false,
-    "workbench.editor.enablePreviewFromQuickOpen": false,
-    // "workbench.editor.showTabs": "single",
-    // "workbench.editor.limit.enabled": true,
-    // "workbench.editor.limit.value": 1,
-    // "workbench.editor.limit.perEditorGroup": true,
-    "workbench.editor.labelFormat": "long",
-    "workbench.preferredDarkColorTheme": "GitHub Dark Default",
-    "notebook.output.textLineLimit": 500,
-    "notebook.output.wordWrap": true,
-    "vim.useSystemClipboard": true,
-
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": ["H"],
-            "after": ["^"],
-        },
-        {
-            "before": ["L"],
-            "after": ["$"],
-        },
-        {
-            "before": ["U"],
-            "after": ["<C-r>"],
-        },
-        {
-            "before": ["<space>", "<space>"],
-            "commands": ["workbench.action.files.save"],
-        },
-        {
-            "before": [":", "w"],
-            "commands": [
-                "workbench.action.files.save",
-                "editor.action.formatDocument",
-            ],
-        },
-    ],
-
-    "vim.visualModeKeyBindingsNonRecursive": [
-        {
-            "before": ["J"],
-            "commands": ["editor.action.moveLinesDownAction"],
-        },
-        {
-            "before": ["K"],
-            "commands": ["editor.action.moveLinesUpAction"],
-        },
-    ],
-    "editor.suggest.preview": true,
-    "editor.parameterHints.enabled": true,
-    "editor.parameterHints.cycle": true,
-    "cSpell.enabled": false,
-    "[plaintext]": {
-        "cSpell.enabled": true,
-    },
-    "[markdown]": {
-        "cSpell.enabled": true,
-    },
-    "[latex]": {
-        "cSpell.enabled": true,
-    },
-    "[tex]": {
-        "cSpell.enabled": true,
-    },
-    "[restructuredtext]": {
-        "cSpell.enabled": true,
-    },
-    "[asciidoc]": {
-        "cSpell.enabled": true,
-    },
-    "terminal.integrated.commandsToSkipShell": ["matlab.interrupt"],
-    "explorer.confirmDragAndDrop": false,
-    "octave-formatter.pythonPath": "Users/faustozamparelli/.local/share/uv/python/cpython-3.14-macos-aarch64-none/bin/python3.14",
-    "editor.fontSize": 18,
-    "editor.minimap.size": "fill",
-    "editor.minimap.showSlider": "always",
-    "editor.minimap.side": "left",
-    "security.promptForLocalFileProtocolHandling": false,
-    "chat.editor.fontSize": 18,
-    "chat.fontSize": 18,
+    "[Light Modern]": {
+      "editor.background": "#ffffff",
+      "sideBar.background": "#ffffff",
+      "panel.background": "#ffffff",
+      "editor.lineHighlightBackground": "#edf2f7",
+      "editorCursor.foreground": "#0369a1"
+    }
+  },
+  "window.zoomLevel": -0.5,
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "editor.fontFamily": "SF Mono",
+  "editor.fontSize": 15,
+  "editor.fontLigatures": false,
+  "editor.lineNumbers": "relative",
+  "editor.cursorSurroundingLines": 6,
+  "editor.renderWhitespace": "boundary",
+  "editor.renderControlCharacters": true,
+  "editor.wordWrap": "on",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "editor.minimap.enabled": false,
+  "editor.stickyScroll.enabled": false,
+  "files.autoSave": "off",
+  "explorer.autoReveal": true,
+  "explorer.decorations.badges": true,
+  "git.autorefresh": true,
+  "git.decorations.enabled": true,
+  "scm.diffDecorations": "all",
+  "diffEditor.renderSideBySide": true,
+  "terminal.integrated.defaultProfile.osx": "fish",
+  "terminal.integrated.profiles.osx": {
+    "fish": { "path": "/opt/homebrew/bin/fish", "args": ["--login"] }
+  },
+  "terminal.integrated.fontFamily": "SF Mono",
+  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.macOptionIsMeta": true,
+  "terminal.integrated.scrollback": 10000,
+  "ruff.configurationPreference": "filesystemFirst",
+  "python.analysis.typeCheckingMode": "basic",
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  },
+  "[c]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.formatOnSave": true
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.formatOnSave": true
+  },
+  "vim.leader": "<space>",
+  "vim.enableNeovim": false,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.incsearch": true,
+  "vim.hlsearch": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    // km:vscode.file.save
+    { "before": ["<leader>", "<leader>"], "commands": ["workbench.action.files.save"] },
+    // km:vscode.file.explorer
+    { "before": ["<leader>", "e"], "commands": ["workbench.view.explorer"] },
+    // km:vscode.find.files
+    { "before": ["<leader>", "f", "f"], "commands": ["workbench.action.quickOpen"] },
+    // km:vscode.find.grep
+    { "before": ["<leader>", "f", "g"], "commands": ["workbench.action.findInFiles"] },
+    // km:vscode.find.buffers
+    { "before": ["<leader>", "f", "b"], "commands": ["workbench.action.showAllEditors"] },
+    // km:vscode.find.recent
+    { "before": ["<leader>", "f", "r"], "commands": ["workbench.action.openRecent"] },
+    // km:vscode.git.status
+    { "before": ["<leader>", "g", "s"], "commands": ["workbench.view.scm"] },
+    // km:vscode.git.diff
+    { "before": ["<leader>", "g", "d"], "commands": ["git.openChange"] },
+    // km:vscode.git.next-hunk
+    { "before": ["<leader>", "g", "n"], "commands": ["editor.action.dirtydiff.next"] },
+    // km:vscode.git.previous-hunk
+    { "before": ["<leader>", "g", "p"], "commands": ["editor.action.dirtydiff.previous"] },
+    // km:vscode.language.rename
+    { "before": ["<leader>", "l", "r"], "commands": ["editor.action.rename"] },
+    // km:vscode.language.action
+    { "before": ["<leader>", "l", "a"], "commands": ["editor.action.quickFix"] },
+    // km:vscode.language.format
+    { "before": ["<leader>", "l", "f"], "commands": ["editor.action.formatDocument"] },
+    // km:vscode.language.diagnostics
+    { "before": ["<leader>", "l", "d"], "commands": ["workbench.actions.view.problems"] },
+    // km:vscode.buffer.next
+    { "before": ["<leader>", "b", "l"], "commands": ["workbench.action.nextEditor"] },
+    // km:vscode.buffer.previous
+    { "before": ["<leader>", "b", "h"], "commands": ["workbench.action.previousEditor"] },
+    // km:vscode.buffer.close
+    { "before": ["<leader>", "b", "d"], "commands": ["workbench.action.closeActiveEditor"] },
+    // km:vscode.help.keys
+    { "before": ["<leader>", "?"], "commands": ["workbench.action.openGlobalKeybindings"] },
+    // km:vscode.motion.line-start
+    { "before": ["H"], "after": ["^"] },
+    // km:vscode.motion.line-end
+    { "before": ["L"], "after": ["$"] },
+    // km:vscode.edit.redo
+    { "before": ["U"], "after": ["<C-r>"] }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    // km:vscode.visual.move-down
+    { "before": ["J"], "commands": ["editor.action.moveLinesDownAction"] },
+    // km:vscode.visual.move-up
+    { "before": ["K"], "commands": ["editor.action.moveLinesUpAction"] }
+  ]
 }

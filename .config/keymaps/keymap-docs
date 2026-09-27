@@ -50,11 +50,18 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
     Neovim) config="$HOME/.config/nvim/lua/fausto/keymaps.lua" ;;
     Karabiner) config="$HOME/.config/karabiner/karabiner.json" ;;
     Sioyek) config="$HOME/.config/sioyek/keys_user.config" ;;
+    "VS Code") config="$HOME/Library/Application Support/Code/User/keybindings.json" ;;
     *) printf 'unknown layer for %s: %s\n' "$id" "$layer" >&2; exit 1 ;;
   esac
   marker="km:$id"
   [[ "$layer" == "Neovim" ]] && marker="'$id'"
-  if [[ ! -f "$config" ]] || ! grep -Fq "$marker" "$config"; then
+  if [[ "$layer" == "VS Code" ]]; then
+    if ! grep -Fq "$marker" "$config" &&
+       ! grep -Fq "$marker" "$HOME/Library/Application Support/Code/User/settings.json"; then
+      printf 'binding missing from VS Code settings: %s\n' "$id" >&2
+      exit 1
+    fi
+  elif [[ ! -f "$config" ]] || ! grep -Fq "$marker" "$config"; then
     printf 'binding missing from %s: %s\n' "$config" "$id" >&2
     exit 1
   fi

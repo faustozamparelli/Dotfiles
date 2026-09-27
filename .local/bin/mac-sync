@@ -111,6 +111,12 @@ if $pull && [[ -d "$HOME/.config/git/dotfiles" ]]; then
   fi
 fi
 
+if [[ -f "$HOME/.config/sync/chatgpt-settings.json" ]]; then
+  python3 "$HOME/.config/sync/chatgpt-settings.py" apply || {
+    echo "Warning: ChatGPT preferences need reconciliation; other Mac setup will continue." >&2
+  }
+fi
+
 
 # ---------------------------------------------------------------------------
 # Validate app manifests
@@ -158,7 +164,6 @@ fi
 brew_prefix="$(brew --prefix)"
 
 failed=0
-
 
 # ---------------------------------------------------------------------------
 # Machine-specific skips
@@ -619,6 +624,24 @@ install_manifest() {
 
 install_manifest "$shared"
 install_manifest "$local_apps"
+
+# VS Code stays small: install only the extensions listed in dotfiles.
+# Missing extensions are added; locally chosen extensions are left alone.
+vscode_extensions="$HOME/.config/sync/vscode-extensions.txt"
+vscode_cli="$(command -v code || true)"
+if [[ -z "$vscode_cli" && -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]]; then
+  vscode_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+fi
+if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
+  installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+  while IFS= read -r extension; do
+    [[ -z "$extension" || "$extension" == \#* ]] && continue
+    if ! grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
+      log "Installing VS Code extension $extension..."
+      "$vscode_cli" --install-extension "$extension" || failed=1
+    fi
+  done < "$vscode_extensions"
+fi
 
 
 # Retire the former generated default editor on each Mac.

@@ -1,0 +1,5 @@
+# Core editing and the languages used in the former Neovim setup.
+vscodevim.vim
+ms-python.python
+llvm-vs-code-extensions.vscode-clangd
+charliermarsh.ruff

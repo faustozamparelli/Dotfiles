@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+if command -v code >/dev/null 2>&1; then
+  exec code --wait "$@"
+fi
+exec "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --wait "$@"

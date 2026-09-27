@@ -116,3 +116,40 @@ sioyek.menu.width	Sioyek	Space	Space w	fit-width	Fit the page to window width
 sioyek.menu.width-smart	Sioyek	Space	Space W	fit-width-smart	Fit text width, ignoring margins
 sioyek.menu.fullscreen	Sioyek	Space	Space f	toggle-fullscreen	Toggle fullscreen
 sioyek.menu.two-windows	Sioyek	Space	Space t	toggle-two-windows	Toggle the second window
+vscode.tab.previous	VS Code	Command	Cmd-h	previous-editor	Select the previous editor tab
+vscode.tab.next	VS Code	Command	Cmd-l	next-editor	Select the next editor tab
+vscode.tab.move-left	VS Code	Command	Cmd-Shift-h	move-editor-left	Move the current editor tab left
+vscode.tab.move-right	VS Code	Command	Cmd-Shift-l	move-editor-right	Move the current editor tab right
+vscode.pane.split-right	VS Code	Command	Cmd-b	split-editor-right	Split the editor to the right
+vscode.pane.split-down	VS Code	Command	Cmd-n	split-editor-down	Split the editor below
+vscode.tab.close	VS Code	Command	Cmd-w	close-editor	Close the active editor tab
+vscode.terminal.new	VS Code	Command	Cmd-t	new-terminal	Create an integrated terminal
+vscode.terminal.side	VS Code	Command	Cmd-Shift-t	terminal-side	Open a terminal beside the editor
+vscode.escape	VS Code	Command	Cmd-a	escape	Return to Vim Normal mode
+vscode.pane.left	VS Code	Alt	Alt-h	focus-left	Focus the pane to the left
+vscode.pane.down	VS Code	Alt	Alt-j	focus-down	Focus the pane below
+vscode.pane.up	VS Code	Alt	Alt-k	focus-up	Focus the pane above
+vscode.pane.right	VS Code	Alt	Alt-l	focus-right	Focus the pane to the right
+vscode.file.save	VS Code	Space	Space Space	save-file	Save the current file
+vscode.file.explorer	VS Code	Space	Space e	open-explorer	Open the file explorer
+vscode.find.files	VS Code	Space	Space f f	find-files	Find files in the current project
+vscode.find.grep	VS Code	Space	Space f g	find-text	Search text across project files
+vscode.find.buffers	VS Code	Space	Space f b	find-editors	Find open editors
+vscode.find.recent	VS Code	Space	Space f r	find-recent	Open a recent file or project
+vscode.git.status	VS Code	Space	Space g s	git-status	Show all changed files in Source Control
+vscode.git.diff	VS Code	Space	Space g d	git-diff	Diff the current file
+vscode.git.next-hunk	VS Code	Space	Space g n	next-change	Jump to the next changed block
+vscode.git.previous-hunk	VS Code	Space	Space g p	previous-change	Jump to the previous changed block
+vscode.language.rename	VS Code	Space	Space l r	rename-symbol	Rename the symbol
+vscode.language.action	VS Code	Space	Space l a	code-action	Show available code actions
+vscode.language.format	VS Code	Space	Space l f	format-file	Format the current file
+vscode.language.diagnostics	VS Code	Space	Space l d	show-problems	Show workspace problems
+vscode.buffer.next	VS Code	Space	Space b l	next-buffer	Select the next editor tab
+vscode.buffer.previous	VS Code	Space	Space b h	previous-buffer	Select the previous editor tab
+vscode.buffer.close	VS Code	Space	Space b d	close-buffer	Close the active editor tab
+vscode.help.keys	VS Code	Space	Space ?	keybinding-help	Open VS Code keyboard shortcuts
+vscode.motion.line-start	VS Code	Direct	H	line-start	Move to the first nonblank character
+vscode.motion.line-end	VS Code	Direct	L	line-end	Move to the end of the line
+vscode.edit.redo	VS Code	Direct	U	redo	Redo the last change
+vscode.visual.move-down	VS Code	Direct	J	move-selection-down	Move selected lines down
+vscode.visual.move-up	VS Code	Direct	K	move-selection-up	Move selected lines up

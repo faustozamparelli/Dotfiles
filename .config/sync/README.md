@@ -4,7 +4,16 @@ This is the single human and agent manual for this dotfiles setup. It explains
 the working model, the custom keymaps, the terminal tools already installed,
 and the rules for safely changing or synchronizing the configuration.
 
-The intended workspace is:
+The primary workspace is now:
+
+```text
+VS Code
+├── editor with Vim motions
+├── Source Control for changed files
+└── integrated fish terminal
+```
+
+The former terminal workspace remains available during the transition:
 
 ```text
 macOS
@@ -15,9 +24,8 @@ macOS
         └── fish            occasional shell commands
 ```
 
-The goal is not to memorize every Unix command. Spend most of the day in
-Neovim, let Herdr organize long-lived work, and use the shell when it is the
-clearest tool for a short operation.
+The goal is not to memorize every Unix command. Use VS Code for editing,
+reviewing Codex changes, and the integrated terminal.
 
 ## App Sync
 
@@ -41,7 +49,39 @@ local. `mac-sync --nuke` removes temporary formulae while retaining dependencies
 still needed by the curated set. The sync removes apps only when they are
 explicitly recorded for retirement.
 
-## Start Here
+## VS Code Workspace
+
+Open a project folder with `code .` (or `n .` in fish). Keep the project root
+open while Codex edits it. VS Code refreshes files changed outside the editor;
+its Explorer marks changed files and the Source Control view lists Git changes,
+including new files. Press `Space g s` in Vim Normal mode to open that list,
+select a file to see its diff, and use `Space g d` to compare the current file.
+For files outside a Git repository, open their containing folder in VS Code
+and use the Explorer; Source Control requires Git.
+
+VS Code follows macOS light and dark mode. Its editor uses SF Mono, relative
+line numbers, two-space indentation when a file has no detected style, and
+Space as the Vim leader. `Space f f` finds files, `Space f g` searches their
+contents, and `Space Space` saves. Python uses Pylance and Ruff; C/C++ uses
+clangd. Formatting runs on save for those languages. Autosave is off so the
+save and formatting step is deliberate.
+
+Command keys manage tabs and panes: `Cmd-h/l` select editor tabs,
+`Cmd-Shift-h/l` reorder them, `Cmd-b/n` split right/down, `Cmd-w` closes
+an editor, and `Cmd-t` creates an integrated fish terminal. `Alt-h/j/k/l`
+focuses adjacent editor panes. `Cmd-a` leaves Vim Insert or Visual mode.
+The full map appears in the generated keymap reference below.
+
+The VS Code settings and keybindings are tracked in the dotfiles repository.
+`vscode-extensions.txt` lists the small extension set; `mac-sync` installs
+missing extensions on either Mac. Run `sync-maintain` after changing VS Code
+settings, inspect the staged diff, then use `bcp` to commit and push. The
+other Mac receives those settings during its usual dotfiles pull. The
+integrated terminal runs fish directly and does not start Herdr. The older
+Ghostty, Herdr, and Neovim guide below remains relevant while those apps are
+still installed.
+
+## Former Terminal Workspace
 
 Open Ghostty. Its fish configuration automatically attaches to the persistent
 Herdr session. Work survives accidental terminal-window closes.
@@ -52,7 +92,7 @@ The tracked choices are in `~/.config/duti/defaults.duti`.
 The essential loop is:
 
 1. Use `z <project-name>` to jump to a known project.
-2. Run `n .` to open that directory in Neovim.
+2. Run `nvim .` to open that directory in Neovim.
 3. Use `Space e` or `-` to browse with Oil.
 4. Use `Space f f` to find a file and `Space f b` to switch buffers.
 5. Use `Space f a` to jump to a file or project outside the current project.
@@ -64,7 +104,7 @@ An example:
 
 ```fish
 z my-project
-n .
+nvim .
 ```
 
 Inside Neovim, `:pwd` shows the directory used by file search, text search,
@@ -119,7 +159,7 @@ fzf-lua, Git, and terminal commands. Start Neovim from the project root:
 
 ```fish
 z project-name
-n .
+nvim .
 ```
 
 Useful checks and corrections inside Neovim:
@@ -274,6 +314,43 @@ update the registry and implementation together, then run `keymap-docs`.
 | Sioyek | Space | `Space W` | Fit text width, ignoring margins |
 | Sioyek | Space | `Space f` | Toggle fullscreen |
 | Sioyek | Space | `Space t` | Toggle the second window |
+| VS Code | Command | `Cmd-h` | Select the previous editor tab |
+| VS Code | Command | `Cmd-l` | Select the next editor tab |
+| VS Code | Command | `Cmd-Shift-h` | Move the current editor tab left |
+| VS Code | Command | `Cmd-Shift-l` | Move the current editor tab right |
+| VS Code | Command | `Cmd-b` | Split the editor to the right |
+| VS Code | Command | `Cmd-n` | Split the editor below |
+| VS Code | Command | `Cmd-w` | Close the active editor tab |
+| VS Code | Command | `Cmd-t` | Create an integrated terminal |
+| VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
+| VS Code | Command | `Cmd-a` | Return to Vim Normal mode |
+| VS Code | Alt | `Alt-h` | Focus the pane to the left |
+| VS Code | Alt | `Alt-j` | Focus the pane below |
+| VS Code | Alt | `Alt-k` | Focus the pane above |
+| VS Code | Alt | `Alt-l` | Focus the pane to the right |
+| VS Code | Space | `Space Space` | Save the current file |
+| VS Code | Space | `Space e` | Open the file explorer |
+| VS Code | Space | `Space f f` | Find files in the current project |
+| VS Code | Space | `Space f g` | Search text across project files |
+| VS Code | Space | `Space f b` | Find open editors |
+| VS Code | Space | `Space f r` | Open a recent file or project |
+| VS Code | Space | `Space g s` | Show all changed files in Source Control |
+| VS Code | Space | `Space g d` | Diff the current file |
+| VS Code | Space | `Space g n` | Jump to the next changed block |
+| VS Code | Space | `Space g p` | Jump to the previous changed block |
+| VS Code | Space | `Space l r` | Rename the symbol |
+| VS Code | Space | `Space l a` | Show available code actions |
+| VS Code | Space | `Space l f` | Format the current file |
+| VS Code | Space | `Space l d` | Show workspace problems |
+| VS Code | Space | `Space b l` | Select the next editor tab |
+| VS Code | Space | `Space b h` | Select the previous editor tab |
+| VS Code | Space | `Space b d` | Close the active editor tab |
+| VS Code | Space | `Space ?` | Open VS Code keyboard shortcuts |
+| VS Code | Direct | `H` | Move to the first nonblank character |
+| VS Code | Direct | `L` | Move to the end of the line |
+| VS Code | Direct | `U` | Redo the last change |
+| VS Code | Direct | `J` | Move selected lines down |
+| VS Code | Direct | `K` | Move selected lines up |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -683,7 +760,7 @@ termination has failed and data loss is acceptable.
 ### Friendly aliases
 
 ```text
-n          nvim
+n          VS Code (reuse the current window)
 l / ls     eza -a --git
 b          bat
 o          open
@@ -808,7 +885,7 @@ yet understood.
 ```fish
 z project-name
 git status
-n .
+nvim .
 ```
 
 Then use `Space f f` and `Space f b`. Press `Cmd-g` if the task
@@ -819,7 +896,7 @@ benefits from an agent.
 1. Open the first project and Neovim.
 2. Press `Ctrl-Space Shift-n` to create another Herdr workspace inheriting the current
    path.
-3. Use `z other-project`, then `n .`.
+3. Use `z other-project`, then `nvim .`.
 4. Switch projects with `Ctrl-h` and `Ctrl-l`.
 
 ### Inspect a change before committing
@@ -842,7 +919,7 @@ resumes supported agent conversations when integrations are available.
 ### Edit this setup
 
 ```fish
-n ~/.config
+nvim ~/.config
 ```
 
 Use `Space f f` to locate the relevant configuration. After keymap changes run:
@@ -910,6 +987,25 @@ cleans its build files when it exits.
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
 
+### ChatGPT app preferences
+
+The installed ChatGPT desktop app uses the `com.openai.codex` settings domain.
+`~/.config/sync/chatgpt-settings.json` tracks portable choices such as the
+default model, theme, desktop display options, plugin enablement, Dock icon,
+and update preferences. It is a selected snapshot, not a copy of the app's
+entire state. Credentials, MCP server setup, trusted project paths,
+conversations, sidebar data, window positions, and caches remain local.
+
+After changing ChatGPT settings, run `sync-maintain`. It captures these
+preferences and stages the dotfiles changes for review. Inspect `bare diff
+--staged`, then use `bcp` to commit and push. On the other Mac, `mac-sync`
+pulls the dotfiles and applies the snapshot. The scheduled sync also does this
+at login and hourly. If that Mac has different local preferences, application
+pauses with a message instead of overwriting them. Run
+`python3 ~/.config/sync/chatgpt-settings.py capture` there to keep its local
+choices, or `python3 ~/.config/sync/chatgpt-settings.py apply --force` to use
+the tracked choices, then run `mac-sync` again.
+
 ### New Mac
 
 1. Follow the root dotfiles bootstrap instructions until the bare repository
@@ -940,10 +1036,10 @@ been removed.
 Agents working on this setup must follow these rules:
 
 1. Read this entire file before changing dotfiles, Mac synchronization,
-   Ghostty, Herdr, Neovim, fish, or keymaps.
+   VS Code, Ghostty, Herdr, Neovim, fish, or keymaps.
 2. Use the bare dotfiles repository; do not recreate tracked configuration.
-3. Preserve the architecture: Ghostty renders, Herdr owns workspaces, Neovim
-   owns editing, and fish supplies short commands.
+3. Use VS Code for the primary editor and terminal. Keep the former Ghostty,
+   Herdr, and Neovim configuration intact until those apps are retired.
 4. Keep this as the only Markdown file under `~/.config`. Update it instead of
    adding repository-specific agent or README files.
 5. Do not sync secrets, tokens, browser profiles, histories, caches, keychains,
@@ -959,7 +1055,7 @@ Agents working on this setup must follow these rules:
 For every custom keybinding change:
 
 1. Update `~/.config/keymaps/registry.tsv`, preserving unique IDs.
-2. Update the relevant Karabiner, Ghostty, Herdr, or Neovim
+2. Update the relevant VS Code, Karabiner, Ghostty, Herdr, or Neovim
    configuration and include its `km:<id>` marker (Neovim uses the ID in its
    mapping helper).
 3. Keep modifier roles consistent with the Keyboard Layers section.

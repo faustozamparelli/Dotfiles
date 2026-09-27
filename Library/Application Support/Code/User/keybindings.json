@@ -1,148 +1,30 @@
-// Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "cmd+0",
-        "command": "workbench.action.zoomReset",
-    },
-    {
-        "key": "cmd+numpad0",
-        "command": "-workbench.action.zoomReset",
-    },
-    {
-        "key": "cmd+h",
-        "command": "workbench.action.previousEditor",
-    },
-    {
-        "key": "cmd+l",
-        "command": "workbench.action.nextEditor",
-    },
-    {
-        "key": "cmd+shift+h",
-        "command": "workbench.action.moveEditorLeftInGroup",
-    },
-    {
-        "key": "cmd+shift+l",
-        "command": "workbench.action.moveEditorRightInGroup",
-    },
-    {
-        "key": "shift+cmd+,",
-        "command": "workbench.action.openSettingsJson",
-    },
-    {
-        "key": "cmd+r",
-        "command": "code-runner.run",
-    },
-    {
-        "key": "ctrl+alt+n",
-        "command": "-code-runner.run",
-    },
-    {
-        "key": "cmd+k cmd+m",
-        "command": "workbench.action.maximizeEditorHideSidebar",
-        "when": "auxiliaryBarVisible || sideBarVisible || editorPartMultipleEditorGroups && !editorPartMaximizedEditorGroup",
-    },
-    {
-        "key": "cmd+s",
-        "command": "workbench.action.toggleSidebarVisibility",
-    },
-    {
-        "key": "cmd+b",
-        "command": "-workbench.action.toggleSidebarVisibility",
-    },
-    {
-        "key": "shift+cmd+s",
-        "command": "workbench.action.toggleAuxiliaryBar",
-    },
-    {
-        "key": "alt+cmd+b",
-        "command": "-workbench.action.toggleAuxiliaryBar",
-    },
-    {
-        "key": "ctrl+s",
-        "command": "workbench.action.files.save",
-    },
-    {
-        "key": "cmd+s",
-        "command": "-workbench.action.files.save",
-    },
-    {
-        "key": "shift+tab",
-        "command": "-editor.action.inlineSuggest.commitAlternativeAction",
-        "when": "inlineEditIsVisible && inlineSuggestionAlternativeActionVisible",
-    },
-    {
-        "key": "shift+tab",
-        "command": "-editor.action.inlineSuggest.commitAlternativeAction",
-        "when": "inInlineEditsPreviewEditor",
-    },
-    {
-        "key": "ctrl+c",
-        "command": "problems-copy.copyAll",
-        "args": {
-            "errors": true,
-            "simpleTemplate": true,
-        },
-    },
-    {
-        "key": "cmd+a",
-        "command": "type",
-        "args": {
-            "text": "",
-        },
-    },
-    {
-        "key": "cmd+a",
-        "command": "extension.vim_escape",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Insert'",
-    },
-    {
-        "key": "cmd+a",
-        "command": "extension.vim_escape",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Visual'",
-    },
-    {
-        "key": "cmd+a",
-        "command": "extension.vim_escape",
-        "when": "editorTextFocus && vim.active && vim.mode == 'VisualLine'",
-    },
-    {
-        "key": "cmd+a",
-        "command": "extension.vim_escape",
-        "when": "editorTextFocus && vim.active && vim.mode == 'VisualBlock'",
-    },
-    {
-        "key": "shift+cmd+t",
-        "command": "workbench.action.createTerminalEditorSide",
-    },
-    // {
-    //     "key": "cmd+l",
-    //     "command": "workbench.action.focusRightGroup",
-    // },
-    {
-        "key": "cmd+k cmd+right",
-        "command": "-workbench.action.focusRightGroup",
-    },
-    // {
-    //     "key": "cmd+h",
-    //     "command": "workbench.action.focusLeftGroup",
-    // },
-    {
-        "key": "cmd+k cmd+left",
-        "command": "-workbench.action.focusLeftGroup",
-    },
-    {
-        "key": "ctrl+shift+`",
-        "command": "-workbench.action.terminal.new",
-        "when": "terminalProcessSupported || terminalWebExtensionContributedProfile",
-    },
-    {
-        "key": "cmd+t",
-        "command": "workbench.action.terminal.toggleTerminal",
-        "when": "terminal.active",
-    },
-    {
-        "key": "ctrl+`",
-        "command": "-workbench.action.terminal.toggleTerminal",
-        "when": "terminal.active",
-    },
+  // km:vscode.tab.previous
+  { "key": "cmd+h", "command": "workbench.action.previousEditor" },
+  // km:vscode.tab.next
+  { "key": "cmd+l", "command": "workbench.action.nextEditor" },
+  // km:vscode.tab.move-left
+  { "key": "cmd+shift+h", "command": "workbench.action.moveEditorLeftInGroup" },
+  // km:vscode.tab.move-right
+  { "key": "cmd+shift+l", "command": "workbench.action.moveEditorRightInGroup" },
+  // km:vscode.pane.split-right
+  { "key": "cmd+b", "command": "workbench.action.splitEditorRight" },
+  // km:vscode.pane.split-down
+  { "key": "cmd+n", "command": "workbench.action.splitEditorDown" },
+  // km:vscode.tab.close
+  { "key": "cmd+w", "command": "workbench.action.closeActiveEditor", "when": "!terminalFocus" },
+  // km:vscode.terminal.new
+  { "key": "cmd+t", "command": "workbench.action.terminal.new" },
+  // km:vscode.terminal.side
+  { "key": "cmd+shift+t", "command": "workbench.action.createTerminalEditorSide" },
+  // km:vscode.escape
+  { "key": "cmd+a", "command": "extension.vim_escape", "when": "editorTextFocus && vim.active && vim.mode != 'Normal'" },
+  // km:vscode.pane.left
+  { "key": "alt+h", "command": "workbench.action.navigateLeft", "when": "!terminalFocus" },
+  // km:vscode.pane.down
+  { "key": "alt+j", "command": "workbench.action.navigateDown", "when": "!terminalFocus" },
+  // km:vscode.pane.up
+  { "key": "alt+k", "command": "workbench.action.navigateUp", "when": "!terminalFocus" },
+  // km:vscode.pane.right
+  { "key": "alt+l", "command": "workbench.action.navigateRight", "when": "!terminalFocus" }
 ]
