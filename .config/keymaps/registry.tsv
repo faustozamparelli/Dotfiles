@@ -127,7 +127,6 @@ vscode.terminal.toggle	VS Code	Command	Cmd-t	focus-terminal	Show the terminal in
 vscode.terminal.side	VS Code	Command	Cmd-Shift-t	terminal-side	Open a terminal beside the editor
 vscode.view.explorer	VS Code	Command	Cmd-e	toggle-explorer	Show or hide the file explorer
 vscode.view.git	VS Code	Command	Cmd-g	toggle-git	Show or hide Source Control
-vscode.git.dotfiles	VS Code	Command	Cmd-Shift-g	dotfiles-status	Show the bare dotfiles Git status in a terminal editor
 vscode.escape	VS Code	Command	Cmd-a	escape	Return to Vim Normal mode
 vscode.pane.left	VS Code	Alt	Alt-h	focus-left	Focus the pane to the left
 vscode.pane.down	VS Code	Alt	Alt-j	focus-down	Focus the pane below

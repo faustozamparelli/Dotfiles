@@ -13,15 +13,15 @@ VS Code
 └── integrated fish terminal
 ```
 
-The former terminal workspace remains available during the transition:
+The optional terminal workspace remains available:
 
 ```text
 macOS
 └── Ghostty                 terminal renderer
     └── Herdr               persistent workspaces, tabs, panes, and agents
-        ├── Neovim          editing, files, search, Git, and language tools
+        ├── fish            bare terminal commands
         ├── Codex           full-size agent tab
-        └── fish            occasional shell commands
+        └── other commands
 ```
 
 The goal is not to memorize every Unix command. Use VS Code for editing,
@@ -59,9 +59,9 @@ Control lists Git changes, including new files. `Cmd-e` shows or hides
 Explorer, and `Cmd-g` shows or hides Source Control from any VS Code pane.
 Select a changed file for its diff or use `Space g d` while editing a file.
 For files outside a Git repository, use Explorer; Source Control requires Git.
-From any project, `Cmd-Shift-g` opens a full-size terminal editor and prints
-the bare dotfiles repository status. Run `bare status -sb` there to refresh it;
-the Source Control pane remains dedicated to repositories in the open folder.
+The Source Control pane is dedicated to repositories in the open folder. Use
+`bare status -sb` in the terminal to check the dotfiles repository from any
+project.
 
 VS Code follows macOS light and dark mode: a pure black dark background and a
 cool soft gray light background, with colorful code and terminal text. Its
@@ -85,10 +85,14 @@ missing extensions on either Mac. Run `sync-maintain` after changing VS Code
 settings, inspect the staged diff, then use `bcp` to commit and push. The
 other Mac receives those settings during its usual dotfiles pull. The
 integrated terminal runs fish directly and does not start Herdr. The older
-Ghostty, Herdr, and Neovim guide below remains relevant while those apps are
-still installed.
+Ghostty and Herdr remain installed. Neovim is retired on both Macs; its
+configuration and keymap reference stay tracked for possible reuse.
 
-## Former Terminal Workspace
+## Ghostty and Herdr Terminal Workspace
+
+The Neovim instructions in this section are historical reference. Neovim is
+uninstalled; use VS Code for editing and its integrated terminal for commands.
+Ghostty and Herdr still work as a separate terminal workspace.
 
 Open Ghostty. Its fish configuration automatically attaches to the persistent
 Herdr session. Work survives accidental terminal-window closes.
@@ -332,7 +336,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
 | VS Code | Command | `Cmd-e` | Show or hide the file explorer |
 | VS Code | Command | `Cmd-g` | Show or hide Source Control |
-| VS Code | Command | `Cmd-Shift-g` | Show the bare dotfiles Git status in a terminal editor |
 | VS Code | Command | `Cmd-a` | Return to Vim Normal mode |
 | VS Code | Alt | `Alt-h` | Focus the pane to the left |
 | VS Code | Alt | `Alt-j` | Focus the pane below |
@@ -991,6 +994,10 @@ The source-built Sioyek updater is tracked at
 directory, verifies the app bundle, replaces `/Applications/Sioyek.app`, and
 cleans its build files when it exits.
 
+`retired-apps.tsv` also records explicitly retired Homebrew formulae. The
+`formula neovim` entry removes Neovim and unused dependencies on each Mac
+during normal sync while leaving `~/.config/nvim` tracked.
+
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
@@ -1046,8 +1053,8 @@ Agents working on this setup must follow these rules:
 1. Read this entire file before changing dotfiles, Mac synchronization,
    VS Code, Ghostty, Herdr, Neovim, fish, or keymaps.
 2. Use the bare dotfiles repository; do not recreate tracked configuration.
-3. Use VS Code for the primary editor and terminal. Keep the former Ghostty,
-   Herdr, and Neovim configuration intact until those apps are retired.
+3. Use VS Code for the primary editor and terminal. Keep Ghostty and Herdr
+   installed and preserve the tracked Neovim configuration after retirement.
 4. Keep this as the only Markdown file under `~/.config`. Update it instead of
    adding repository-specific agent or README files.
 5. Do not sync secrets, tokens, browser profiles, histories, caches, keychains,
@@ -1093,7 +1100,6 @@ bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
 jq empty ~/.config/karabiner/karabiner.json
 plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
 mac-sync --no-pull
-nvim --headless '+checkhealth' '+qa'
 herdr config check
 fish --no-execute ~/.config/fish/config.fish
 ```

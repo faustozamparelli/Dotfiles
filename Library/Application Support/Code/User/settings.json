@@ -96,11 +96,7 @@
   "terminal.integrated.defaultProfile.osx": "fish",
   "terminal.integrated.defaultLocation": "editor",
   "terminal.integrated.profiles.osx": {
-    "fish": { "path": "/opt/homebrew/bin/fish", "args": ["--login"] },
-    "Dotfiles status": {
-      "path": "/opt/homebrew/bin/fish",
-      "args": ["--login", "-c", "bare status -sb; exec /opt/homebrew/bin/fish --login"]
-    }
+    "fish": { "path": "/opt/homebrew/bin/fish", "args": ["--login"] }
   },
   "terminal.integrated.fontFamily": "SF Mono",
   "terminal.integrated.fontSize": 15,

@@ -127,13 +127,14 @@ manifest_files=("$shared")
 [[ -f "$local_apps" ]] && manifest_files+=("$local_apps")
 [[ -f "$retired" ]] && manifest_files+=("$retired")
 
-if ! awk -F '\t' '
+if ! awk -F '\t' -v retired_manifest="$retired" '
   /^#/ || NF == 0 {
     next
   }
 
   NF != 3 ||
-  ($1 != "cask" && $1 != "mas" && $1 != "direct") ||
+  ($1 != "cask" && $1 != "mas" && $1 != "direct" &&
+   !($1 == "formula" && FILENAME == retired_manifest)) ||
   $2 == "" ||
   $3 == "" {
     bad=1
@@ -516,6 +517,18 @@ retire_manifest() {
 
   while IFS=$'\t' read -r -u 3 source identifier name; do
     [[ -z "$source" || "$source" == \#* ]] && continue
+
+    if [[ "$source" == "formula" ]]; then
+      if brew list --formula --versions "$identifier" >/dev/null 2>&1; then
+        log "Removing retired formula $name from Homebrew..."
+        if brew uninstall --formula "$identifier"; then
+          brew autoremove || failed=1
+        else
+          failed=1
+        fi
+      fi
+      continue
+    fi
 
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
