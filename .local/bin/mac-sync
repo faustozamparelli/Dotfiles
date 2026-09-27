@@ -538,7 +538,15 @@ retire_manifest() {
 
       log "Removing retired app $name from Homebrew..."
 
-      brew uninstall --cask "$token" || failed=1
+      if [[ "$token" == "chatgpt" || "$token" == "visual-studio-code" ]]; then
+        # Zap can fail on macOS privacy-protected files. Force removal clears
+        # the cask record, then the named per-user data is cleaned below.
+        if ! brew uninstall --cask --zap "$token"; then
+          brew uninstall --cask --force "$token" || failed=1
+        fi
+      else
+        brew uninstall --cask "$token" || failed=1
+      fi
     fi
 
     if [[ -d "$app_path" ]]; then
@@ -551,6 +559,41 @@ retire_manifest() {
         failed=1
       fi
     fi
+
+    # The cask may already be gone while user caches remain.
+    case "$token" in
+      visual-studio-code)
+        rm -rf -- "$HOME/.vscode" \
+          "$HOME/Library/Application Support/Code" \
+          "$HOME/Library/Caches/com.microsoft.VSCode" \
+          "$HOME/Library/Caches/com.microsoft.VSCode.ShipIt" \
+          "$HOME/Library/HTTPStorages/com.microsoft.VSCode" \
+          "$HOME/Library/Preferences/com.microsoft.VSCode.plist" \
+          "$HOME/Library/Preferences/com.microsoft.VSCode.helper.plist" \
+          "$HOME/Library/Saved Application State/com.microsoft.VSCode.savedState" || failed=1
+        ;;
+      chatgpt)
+        rm -rf -- "$HOME/Library/Application Support/Codex" \
+          "$HOME/Library/Application Support/com.openai.codex" \
+          "$HOME/Library/Application Support/OpenAI/Codex" \
+          "$HOME/Library/Application Support/com.openai.chat" \
+          "$HOME/Library/Caches/Codex" \
+          "$HOME/Library/Caches/com.openai.codex" \
+          "$HOME/Library/Caches/com.openai.chat" \
+          "$HOME/Library/Caches/com.openai.sky.CUAService" \
+          "$HOME/Library/Caches/Homebrew/Cask"/chatgpt--* \
+          "$HOME/Library/Caches/Homebrew/downloads"/*--ChatGPT-darwin-arm64-* \
+          "$HOME/Library/Caches/com.apple.nsurlsessiond/Downloads/com.openai.codex" \
+          "$HOME/Library/HTTPStorages/com.openai.codex" \
+          "$HOME/Library/HTTPStorages/com.openai.codex.binarycookies" \
+          "$HOME/Library/HTTPStorages/com.openai.sky.CUAService" \
+          "$HOME/Library/HTTPStorages/com.openai.sky.CUAService.binarycookies" \
+          "$HOME/Library/Logs/com.openai.codex" \
+          "$HOME/Library/Preferences/com.openai.codex.plist" \
+          "$HOME/Library/Preferences/com.openai.sky.CUAService.plist" \
+          "$HOME/Library/Saved Application State/com.openai.codex.savedState" || failed=1
+        ;;
+    esac
   done 3< "$retired"
 }
 
@@ -638,26 +681,7 @@ install_manifest() {
 install_manifest "$shared"
 install_manifest "$local_apps"
 
-# VS Code stays small: install only the extensions listed in dotfiles.
-# Missing extensions are added; locally chosen extensions are left alone.
-vscode_extensions="$HOME/.config/sync/vscode-extensions.txt"
-vscode_cli="$(command -v code || true)"
-if [[ -z "$vscode_cli" && -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]]; then
-  vscode_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-fi
-if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
-  installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
-  while IFS= read -r extension; do
-    [[ -z "$extension" || "$extension" == \#* ]] && continue
-    if ! grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
-      log "Installing VS Code extension $extension..."
-      "$vscode_cli" --install-extension "$extension" || failed=1
-    fi
-  done < "$vscode_extensions"
-fi
-
-
-# Retire the former generated default editor on each Mac.
+# Retire old file associations after removing VS Code.
 python3 "$setup/remove-open-in-herdr.py" || failed=1
 
 

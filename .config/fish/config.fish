@@ -17,8 +17,8 @@ test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
 set -gx THEME dark
-set -gx EDITOR $HOME/.local/bin/vscode-wait
-set -gx VISUAL $HOME/.local/bin/vscode-wait
+set -gx EDITOR nvim
+set -gx VISUAL nvim
 set fish_greeting ""
 set -g pure_enable_git true
 
@@ -35,7 +35,7 @@ alias py python
 alias b bat
 alias cl clear
 alias sv "source .venv/bin/activate.fish"
-alias n "code --reuse-window"
+alias n "nvim"
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 
 function amsc-env --description "Load the manually managed AMSC C++ libraries"

@@ -20,6 +20,7 @@ lua
 lua-language-server
 mas
 mole
+neovim
 node
 pnpm
 pkgconf

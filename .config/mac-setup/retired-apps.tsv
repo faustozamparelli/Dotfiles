@@ -1,10 +1,11 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
-formula	neovim	Neovim
+cask	chatgpt	ChatGPT
 cask	discord	Discord
 cask	gitbutler	GitButler
 cask	homerow	homerow
 cask	nikitabobko/tap/aerospace	AeroSpace
 cask	tor-browser	Tor Browser
-mas	462062816	Microsoft PowerPoint
 cask	t3-code	T3 Code (Alpha)
+cask	visual-studio-code	Visual Studio Code
+mas	462062816	Microsoft PowerPoint

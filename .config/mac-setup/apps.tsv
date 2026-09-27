@@ -1,6 +1,5 @@
 # source	identifier	application name
 cask	beeper	Beeper Desktop
-cask	chatgpt	ChatGPT
 cask	codex	Codex
 cask	codexbar	CodexBar
 cask	copilot-cli	copilot-cli
@@ -16,7 +15,6 @@ cask	orbstack	OrbStack
 cask	protonvpn	ProtonVPN
 cask	raycast	Raycast
 cask	spotify	Spotify
-cask	visual-studio-code	Visual Studio Code
 cask	vorssaint	Vorssaint
 cask	wispr-flow	Wispr Flow
 direct	maghue	MagHue

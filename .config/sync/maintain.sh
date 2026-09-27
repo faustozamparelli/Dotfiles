@@ -16,6 +16,7 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .codex/skills/grill-me \
   .codex/skills/spam-senders \
   .config/clangd \
+  .config/duti/defaults.duti \
   .config/fish/config.fish \
   .config/fish/fish_plugins \
   .config/fish/functions/sync-maintain.fish \
@@ -30,14 +31,10 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/sync/README.md \
   .config/sync/codex-technical.json \
   .config/sync/codex-technical.py \
-  .config/sync/vscode-extensions.txt \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \
   .local/bin/mac-app \
   .local/bin/mac-sync \
-  .local/bin/vscode-wait \
-  "Library/Application Support/Code/User/settings.json" \
-  "Library/Application Support/Code/User/keybindings.json" \
   README.md
 
 "${bare[@]}" status --short
