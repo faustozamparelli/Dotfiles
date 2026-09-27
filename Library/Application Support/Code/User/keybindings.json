@@ -19,6 +19,8 @@
   // km:vscode.view.git
   { "key": "cmd+g", "command": "workbench.view.scm" },
   { "key": "cmd+g", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible && activeViewlet == 'workbench.view.scm'" },
+  // km:vscode.view.secondary-sidebar
+  { "key": "cmd+shift+e", "command": "workbench.action.toggleAuxiliaryBar" },
   // km:vscode.terminal.toggle
   { "key": "cmd+t", "command": "runCommands", "args": { "commands": ["workbench.action.terminal.focus", "workbench.action.terminal.moveToEditor"] } },
   { "key": "cmd+t", "command": "workbench.action.openPreviousRecentlyUsedEditorInGroup", "when": "terminalEditorFocus" },
