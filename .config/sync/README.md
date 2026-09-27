@@ -935,9 +935,10 @@ pushes.
 
 Custom skills under `~/.codex/skills/context7-docs`, `grill-me`, and
 `spam-senders`, plus `~/.agents/skills/context7-mcp`, are tracked in dotfiles.
-`~/.config/sync/codex-technical.json` records installed plugin IDs and their
-enabled/disabled choices
-and the public HTTPS addresses of remote MCP servers. `sync-maintain` captures
+`~/.config/sync/codex-technical.json` records installed plugin IDs and
+explicit enabled/disabled choices from Codex config, including remote
+integrations the CLI plugin list may omit, plus the public HTTPS addresses of
+remote MCP servers. `sync-maintain` captures
 these choices and stages them for review; after commit and push, `mac-sync`
 merges them into `~/.codex/config.toml` on the other Mac at login or hourly.
 Existing local MCP headers, credentials, and machine-specific servers remain

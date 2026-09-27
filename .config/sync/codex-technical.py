@@ -30,7 +30,15 @@ def safe_url(value):
 def snapshot_from_config():
     with CONFIG.open("rb") as stream:
         config = tomllib.load(stream)
-    plugins = installed_plugins()
+    # The CLI inventory can omit remote integrations even when their enabled
+    # choices remain in config.toml. Preserve those explicit choices too.
+    plugins = {
+        name: settings["enabled"]
+        for name, settings in config.get("plugins", {}).items()
+        if isinstance(settings, dict) and isinstance(settings.get("enabled"), bool)
+    }
+    plugins.update(installed_plugins())
+    plugins = dict(sorted(plugins.items()))
     servers = {
         name: {"url": settings["url"]}
         for name, settings in sorted(config.get("mcp_servers", {}).items())

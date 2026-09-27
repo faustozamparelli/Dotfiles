@@ -12,6 +12,7 @@
     "codex-app-tools@openai-bundled": true,
     "computer-use@openai-bundled": true,
     "documents@openai-primary-runtime": true,
+    "github@openai-curated": true,
     "github@openai-curated-remote": true,
     "gmail@openai-curated-remote": true,
     "google-calendar@openai-curated-remote": true,
