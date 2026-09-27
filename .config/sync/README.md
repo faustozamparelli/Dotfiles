@@ -46,15 +46,8 @@ explicitly recorded for retirement.
 Open Ghostty. Its fish configuration automatically attaches to the persistent
 Herdr session. Work survives accidental terminal-window closes.
 
-Finder opens common text and source files through the generated **Open in Herdr**
-app. Each file gets a new Herdr tab in the active workspace, running Neovim in
-Ghostty. If Herdr has no workspace yet, the opener creates one for the file's
-directory. You can also run `open -a 'Open in Herdr' path/to/file` for a file
-without a listed extension. The app and its macOS file associations are built
-from `~/.config/mac-setup/open-in-herdr/` by `mac-sync`, so the same preferences
-are applied on both MacBooks. Edit that tracked source to change the supported
-extensions, then run `mac-sync --no-pull`; the generated app in `~/Applications`
-is not stored in Git.
+Finder opens text and source files with the configured macOS default apps.
+The tracked choices are in `~/.config/duti/defaults.duti`.
 
 The essential loop is:
 

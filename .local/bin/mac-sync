@@ -621,13 +621,8 @@ install_manifest "$shared"
 install_manifest "$local_apps"
 
 
-# ---------------------------------------------------------------------------
-# Open in Herdr
-# ---------------------------------------------------------------------------
-
-if [[ -f "$setup/open-in-herdr/install.sh" ]]; then
-  "$setup/open-in-herdr/install.sh" || failed=1
-fi
+# Retire the former generated default editor on each Mac.
+python3 "$setup/remove-open-in-herdr.py" || failed=1
 
 
 # ---------------------------------------------------------------------------

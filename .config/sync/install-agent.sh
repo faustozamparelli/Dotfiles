@@ -15,8 +15,6 @@ chmod +x \
   "$HOME/.local/bin/mac-sync" \
   "$HOME/.config/mac-setup/direct/"*.sh \
   "$HOME/.config/keymaps/keymap-docs" \
-  "$HOME/.config/mac-setup/open-in-herdr/install.sh" \
-  "$HOME/.config/mac-setup/open-in-herdr/open-files" \
   "$HOME/.config/sync/maintain.sh"
 
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
