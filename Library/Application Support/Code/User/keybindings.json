@@ -13,8 +13,17 @@
   { "key": "cmd+n", "command": "workbench.action.splitEditorDown" },
   // km:vscode.tab.close
   { "key": "cmd+w", "command": "workbench.action.closeActiveEditor", "when": "!terminalFocus" },
-  // km:vscode.terminal.new
-  { "key": "cmd+t", "command": "workbench.action.terminal.new" },
+  // km:vscode.view.explorer
+  { "key": "cmd+e", "command": "workbench.view.explorer" },
+  { "key": "cmd+e", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
+  // km:vscode.view.git
+  { "key": "cmd+g", "command": "workbench.view.scm" },
+  { "key": "cmd+g", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible && activeViewlet == 'workbench.view.scm'" },
+  // km:vscode.git.dotfiles
+  { "key": "cmd+shift+g", "command": "workbench.action.terminal.newWithProfile", "args": { "profileName": "Dotfiles status", "location": "editor" } },
+  // km:vscode.terminal.toggle
+  { "key": "cmd+t", "command": "runCommands", "args": { "commands": ["workbench.action.terminal.focus", "workbench.action.terminal.moveToEditor"] } },
+  { "key": "cmd+t", "command": "workbench.action.openPreviousRecentlyUsedEditorInGroup", "when": "terminalEditorFocus" },
   // km:vscode.terminal.side
   { "key": "cmd+shift+t", "command": "workbench.action.createTerminalEditorSide" },
   // km:vscode.escape

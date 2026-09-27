@@ -51,26 +51,33 @@ explicitly recorded for retirement.
 
 ## VS Code Workspace
 
-Open a project folder with `code .` (or `n .` in fish). Keep the project root
-open while Codex edits it. VS Code refreshes files changed outside the editor;
-its Explorer marks changed files and the Source Control view lists Git changes,
-including new files. Press `Space g s` in Vim Normal mode to open that list,
-select a file to see its diff, and use `Space g d` to compare the current file.
-For files outside a Git repository, open their containing folder in VS Code
-and use the Explorer; Source Control requires Git.
+Open a project folder with `code .` (or `n .` in fish). This reuses the
+current VS Code window; `Cmd-Shift-n` creates a separate window when needed.
+Keep the project root open while Codex edits it. VS Code refreshes files
+changed outside the editor; its Explorer marks changed files and Source
+Control lists Git changes, including new files. `Cmd-e` shows or hides
+Explorer, and `Cmd-g` shows or hides Source Control from any VS Code pane.
+Select a changed file for its diff or use `Space g d` while editing a file.
+For files outside a Git repository, use Explorer; Source Control requires Git.
+From any project, `Cmd-Shift-g` opens a full-size terminal editor and prints
+the bare dotfiles repository status. Run `bare status -sb` there to refresh it;
+the Source Control pane remains dedicated to repositories in the open folder.
 
-VS Code follows macOS light and dark mode. Its editor uses SF Mono, relative
-line numbers, two-space indentation when a file has no detected style, and
-Space as the Vim leader. `Space f f` finds files, `Space f g` searches their
-contents, and `Space Space` saves. Python uses Pylance and Ruff; C/C++ uses
-clangd. Formatting runs on save for those languages. Autosave is off so the
-save and formatting step is deliberate.
+VS Code follows macOS light and dark mode: a pure black dark background and a
+cool soft gray light background, with colorful code and terminal text. Its
+editor uses SF Mono, relative line numbers, and two-space indentation when a
+file has no detected style. Space remains the Vim leader for editing actions:
+`Space f f` finds files, `Space f g` searches contents, and `Space Space`
+saves. Python uses Pylance and Ruff; C/C++ uses clangd. Formatting runs on
+save for those languages. Autosave is off so saving is deliberate.
 
 Command keys manage tabs and panes: `Cmd-h/l` select editor tabs,
-`Cmd-Shift-h/l` reorder them, `Cmd-b/n` split right/down, `Cmd-w` closes
-an editor, and `Cmd-t` creates an integrated fish terminal. `Alt-h/j/k/l`
-focuses adjacent editor panes. `Cmd-a` leaves Vim Insert or Visual mode.
-The full map appears in the generated keymap reference below.
+`Cmd-Shift-h/l` reorder them, `Cmd-b/n` split right/down, and `Cmd-w`
+closes an editor. `Cmd-t` shows the integrated fish terminal in a full-size
+editor tab; press it again to return to the previous file while keeping the
+terminal session. `Cmd-Shift-t` opens a terminal beside the editor.
+`Alt-h/j/k/l` focuses adjacent editor panes. `Cmd-a` leaves Vim Insert or
+Visual mode. The full map appears in the generated keymap reference below.
 
 The VS Code settings and keybindings are tracked in the dotfiles repository.
 `vscode-extensions.txt` lists the small extension set; `mac-sync` installs
@@ -321,20 +328,21 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-b` | Split the editor to the right |
 | VS Code | Command | `Cmd-n` | Split the editor below |
 | VS Code | Command | `Cmd-w` | Close the active editor tab |
-| VS Code | Command | `Cmd-t` | Create an integrated terminal |
+| VS Code | Command | `Cmd-t` | Show the terminal in an editor tab or return to the previous file |
 | VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
+| VS Code | Command | `Cmd-e` | Show or hide the file explorer |
+| VS Code | Command | `Cmd-g` | Show or hide Source Control |
+| VS Code | Command | `Cmd-Shift-g` | Show the bare dotfiles Git status in a terminal editor |
 | VS Code | Command | `Cmd-a` | Return to Vim Normal mode |
 | VS Code | Alt | `Alt-h` | Focus the pane to the left |
 | VS Code | Alt | `Alt-j` | Focus the pane below |
 | VS Code | Alt | `Alt-k` | Focus the pane above |
 | VS Code | Alt | `Alt-l` | Focus the pane to the right |
 | VS Code | Space | `Space Space` | Save the current file |
-| VS Code | Space | `Space e` | Open the file explorer |
 | VS Code | Space | `Space f f` | Find files in the current project |
 | VS Code | Space | `Space f g` | Search text across project files |
 | VS Code | Space | `Space f b` | Find open editors |
 | VS Code | Space | `Space f r` | Open a recent file or project |
-| VS Code | Space | `Space g s` | Show all changed files in Source Control |
 | VS Code | Space | `Space g d` | Diff the current file |
 | VS Code | Space | `Space g n` | Jump to the next changed block |
 | VS Code | Space | `Space g p` | Jump to the previous changed block |

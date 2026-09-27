@@ -1,22 +1,70 @@
 {
   "window.autoDetectColorScheme": true,
+  "window.openFoldersInNewWindow": "off",
+  "window.openFilesInNewWindow": "off",
   "workbench.preferredDarkColorTheme": "Dark Modern",
   "workbench.preferredLightColorTheme": "Light Modern",
   "workbench.colorTheme": "Dark Modern",
   "workbench.colorCustomizations": {
     "[Dark Modern]": {
       "editor.background": "#000000",
+      "editor.foreground": "#e8e8e8",
       "sideBar.background": "#000000",
       "panel.background": "#000000",
+      "terminal.background": "#000000",
+      "terminal.foreground": "#e8e8e8",
       "editor.lineHighlightBackground": "#111827",
-      "editorCursor.foreground": "#67e8f9"
+      "editor.selectionBackground": "#23495e",
+      "editorCursor.foreground": "#67e8f9",
+      "gitDecoration.addedResourceForeground": "#66e4a3",
+      "gitDecoration.modifiedResourceForeground": "#ffb86c",
+      "gitDecoration.deletedResourceForeground": "#ff6a78",
+      "terminal.ansiRed": "#ff6a78",
+      "terminal.ansiGreen": "#66e4a3",
+      "terminal.ansiYellow": "#ffd56a",
+      "terminal.ansiBlue": "#72a7ff",
+      "terminal.ansiMagenta": "#da91ff",
+      "terminal.ansiCyan": "#67d8ff"
     },
     "[Light Modern]": {
-      "editor.background": "#ffffff",
-      "sideBar.background": "#ffffff",
-      "panel.background": "#ffffff",
-      "editor.lineHighlightBackground": "#edf2f7",
-      "editorCursor.foreground": "#0369a1"
+      "editor.background": "#e9edf2",
+      "editor.foreground": "#182431",
+      "sideBar.background": "#e1e7ed",
+      "panel.background": "#e9edf2",
+      "terminal.background": "#e9edf2",
+      "terminal.foreground": "#182431",
+      "editor.lineHighlightBackground": "#dce5ee",
+      "editor.selectionBackground": "#c5d8eb",
+      "editorCursor.foreground": "#005b95",
+      "gitDecoration.addedResourceForeground": "#087f48",
+      "gitDecoration.modifiedResourceForeground": "#a84400",
+      "gitDecoration.deletedResourceForeground": "#b02946",
+      "terminal.ansiRed": "#b02946",
+      "terminal.ansiGreen": "#087f48",
+      "terminal.ansiYellow": "#8f6500",
+      "terminal.ansiBlue": "#0069a8",
+      "terminal.ansiMagenta": "#8a3caa",
+      "terminal.ansiCyan": "#007f95"
+    }
+  },
+  "editor.tokenColorCustomizations": {
+    "[Dark Modern]": {
+      "comments": "#8b95a7",
+      "strings": "#66e4a3",
+      "numbers": "#ffb86c",
+      "keywords": "#ff6ac1",
+      "functions": "#67d8ff",
+      "types": "#b69cff",
+      "variables": "#e8e8e8"
+    },
+    "[Light Modern]": {
+      "comments": "#657384",
+      "strings": "#087f48",
+      "numbers": "#a84400",
+      "keywords": "#a60069",
+      "functions": "#0069a8",
+      "types": "#6246aa",
+      "variables": "#182431"
     }
   },
   "window.zoomLevel": -0.5,
@@ -41,17 +89,30 @@
   "explorer.autoReveal": true,
   "explorer.decorations.badges": true,
   "git.autorefresh": true,
+  "scm.alwaysShowRepositories": true,
   "git.decorations.enabled": true,
   "scm.diffDecorations": "all",
   "diffEditor.renderSideBySide": true,
   "terminal.integrated.defaultProfile.osx": "fish",
+  "terminal.integrated.defaultLocation": "editor",
   "terminal.integrated.profiles.osx": {
-    "fish": { "path": "/opt/homebrew/bin/fish", "args": ["--login"] }
+    "fish": { "path": "/opt/homebrew/bin/fish", "args": ["--login"] },
+    "Dotfiles status": {
+      "path": "/opt/homebrew/bin/fish",
+      "args": ["--login", "-c", "bare status -sb; exec /opt/homebrew/bin/fish --login"]
+    }
   },
   "terminal.integrated.fontFamily": "SF Mono",
   "terminal.integrated.fontSize": 15,
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.macOptionIsMeta": true,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.view.explorer",
+    "workbench.view.scm",
+    "workbench.action.toggleSidebarVisibility",
+    "workbench.action.terminal.focus",
+    "workbench.action.openPreviousRecentlyUsedEditorInGroup"
+  ],
   "terminal.integrated.scrollback": 10000,
   "ruff.configurationPreference": "filesystemFirst",
   "python.analysis.typeCheckingMode": "basic",
@@ -76,8 +137,6 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     // km:vscode.file.save
     { "before": ["<leader>", "<leader>"], "commands": ["workbench.action.files.save"] },
-    // km:vscode.file.explorer
-    { "before": ["<leader>", "e"], "commands": ["workbench.view.explorer"] },
     // km:vscode.find.files
     { "before": ["<leader>", "f", "f"], "commands": ["workbench.action.quickOpen"] },
     // km:vscode.find.grep
@@ -86,8 +145,6 @@
     { "before": ["<leader>", "f", "b"], "commands": ["workbench.action.showAllEditors"] },
     // km:vscode.find.recent
     { "before": ["<leader>", "f", "r"], "commands": ["workbench.action.openRecent"] },
-    // km:vscode.git.status
-    { "before": ["<leader>", "g", "s"], "commands": ["workbench.view.scm"] },
     // km:vscode.git.diff
     { "before": ["<leader>", "g", "d"], "commands": ["git.openChange"] },
     // km:vscode.git.next-hunk
