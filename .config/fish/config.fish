@@ -11,6 +11,9 @@ fish_add_path -g \
     $HOMEBREW_PREFIX/bin \
     $HOMEBREW_PREFIX/sbin
 
+# OpenBLAS is keg-only; expose its pkg-config file for quick C/C++ builds.
+set -gx PKG_CONFIG_PATH $HOMEBREW_PREFIX/opt/openblas/lib/pkgconfig $PKG_CONFIG_PATH
+
 # mac-sync maintains stable python, gcc, and g++ command names. Apple Clang
 # remains the default C/C++ compiler; select gcc/g++ in projects that need GNU.
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish

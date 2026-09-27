@@ -38,6 +38,9 @@ vtsls
 wget
 zoxide
 
+# Raycast screenshot OCR extension
+tesseract
+
 # C / C++
 ninja
 eigen

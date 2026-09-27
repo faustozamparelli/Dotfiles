@@ -795,6 +795,18 @@ uv run pytest
 uv sync
 ```
 
+The shared Homebrew Python also provides NumPy, SciPy, Matplotlib, PyTorch,
+and mpi4py for quick scripts without creating a uv project. `nb` opens
+JupyterLab; its default Python kernel can import these same libraries. Keep
+these formulae in `packages.txt` even if `brew autoremove` reports them as
+unneeded by other formulae.
+
+For quick C and C++ programs, use `cc file.c -o app` or
+`c++ file.cpp -o app`; `gcc` and `g++` select the shared GNU compiler instead.
+`pkg-config --cflags --libs eigen3`, `openblas`, and `superlu` provide flags
+for the shared numerical libraries. For reproducible projects, use CMake and
+Ninja and declare the libraries there.
+
 Use a project's declared dependencies instead of installing packages globally.
 
 ### Codex
