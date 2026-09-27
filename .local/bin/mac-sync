@@ -581,6 +581,8 @@ retire_manifest() {
           "$HOME/Library/Caches/com.openai.codex" \
           "$HOME/Library/Caches/com.openai.chat" \
           "$HOME/Library/Caches/com.openai.sky.CUAService" \
+          "$HOME/Library/Group Containers"/*.com.openai.sky.CUAService \
+          "$HOME/Library/Application Scripts"/*.com.openai.sky.CUAService \
           "$HOME/Library/Caches/Homebrew/Cask"/chatgpt--* \
           "$HOME/Library/Caches/Homebrew/downloads"/*--ChatGPT-darwin-arm64-* \
           "$HOME/Library/Caches/com.apple.nsurlsessiond/Downloads/com.openai.codex" \
