@@ -1,0 +1,12 @@
+# Commands for this dotfiles setup. Project justfiles should wrap their own tools.
+
+check:
+    fish --no-execute ~/.config/fish/config.fish
+    ~/.config/keymaps/keymap-docs --check
+    bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
+    jq empty ~/.config/karabiner/karabiner.json
+    plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
+    herdr config check
+
+sync:
+    mac-sync --no-pull

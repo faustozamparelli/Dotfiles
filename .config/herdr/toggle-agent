@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+kind="${1:-codex}"
+case "$kind" in
+  codex) label="Codex" ;;
+  pi) label="Pi" ;;
+  *) printf 'Unsupported agent: %s\n' "$kind" >&2; exit 2 ;;
+esac
+
 pane="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
 [[ -n "$pane" ]] || exit 0
 
@@ -9,13 +16,13 @@ workspace="$(jq -r '.result.pane.workspace_id' <<<"$current")"
 cwd="$(jq -r '.result.pane.foreground_cwd // .result.pane.cwd' <<<"$current")"
 current_agent="$(jq -r '.result.pane.agent // empty' <<<"$current")"
 
-if [[ "$current_agent" == "codex" ]]; then
+if [[ "$current_agent" == "$kind" ]]; then
   agent_pane="$pane"
 else
   agent_pane="$(
     herdr agent list \
-      | jq -r --arg workspace "$workspace" \
-        '.result.agents[]? | select(.workspace_id == $workspace and .agent == "codex") | .pane_id' \
+      | jq -r --arg workspace "$workspace" --arg kind "$kind" \
+        '.result.agents[]? | select(.workspace_id == $workspace and .agent == $kind) | .pane_id' \
       | head -n 1
   )"
 fi
@@ -25,7 +32,7 @@ if [[ -n "$agent_pane" ]]; then
   pane_count="$(jq '.result.layout.panes | length' <<<"$layout")"
   if (( pane_count > 1 )); then
     herdr pane move "$agent_pane" --new-tab --workspace "$workspace" \
-      --label Codex --focus >/dev/null
+      --label "$label" --focus >/dev/null
   else
     herdr agent focus "$agent_pane" >/dev/null
   fi
@@ -33,7 +40,7 @@ if [[ -n "$agent_pane" ]]; then
 fi
 
 created="$(
-  herdr tab create --workspace "$workspace" --cwd "$cwd" --label Codex --focus
+  herdr tab create --workspace "$workspace" --cwd "$cwd" --label "$label" --focus
 )"
 agent_pane="$(jq -r '.result.root_pane.pane_id' <<<"$created")"
-herdr pane run "$agent_pane" "exec codex" >/dev/null
+herdr pane run "$agent_pane" "exec $kind" >/dev/null

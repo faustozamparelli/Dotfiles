@@ -71,6 +71,8 @@ keybind = cmd+b=text:\x1b[98;9u
 keybind = cmd+n=text:\x1b[110;9u
 # km:herdr.agent.toggle
 keybind = cmd+g=text:\x1b[103;9u
+# km:herdr.agent.pi
+keybind = cmd+shift+g=text:\x1b[103;10u
 # km:herdr.pane.close
 keybind = cmd+w=text:\x1b[119;9u
 # km:herdr.tab.new

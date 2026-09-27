@@ -178,6 +178,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Command | `Cmd-b` | Create a pane on the right |
 | Herdr | Command | `Cmd-n` | Create a pane below |
 | Herdr | Command | `Cmd-g` | Create or focus the full-size Codex tab |
+| Herdr | Command | `Cmd-Shift-g` | Create or focus the full-size Pi tab |
 | Herdr | Command | `Cmd-w` | Close the current pane |
 | Herdr | Command | `Cmd-t` | Create a tab in the current workspace |
 | Herdr | Command | `Cmd-Shift-u` | Enter keyboard copy mode |
@@ -318,10 +319,10 @@ than the physical display percentage, so adjust `mobile_width_threshold` in
 
 ### The agent tab
 
-`Cmd-g` creates a full-size Codex tab in the current workspace. It starts in
-the current pane's directory. Pressing `Cmd-g` again focuses the existing
-agent tab instead of creating duplicates. If an older Codex instance is still
-in a split, `Cmd-g` promotes that pane into its own full-size tab.
+`Cmd-g` creates or focuses a full-size Codex tab; `Cmd-Shift-g` does the
+same for Pi. Each starts in the current pane's directory. Repeating a shortcut
+focuses its agent instead of creating duplicates, or promotes an agent out of
+a split into its own tab.
 
 Before opening it, make sure the Neovim/shell pane belongs to the correct
 project. Give the agent paths and constraints explicitly. For dotfiles or Mac
@@ -808,6 +809,87 @@ for the shared numerical libraries. For reproducible projects, use CMake and
 Ninja and declare the libraries there.
 
 Use a project's declared dependencies instead of installing packages globally.
+
+### just: project commands
+
+`just` is a global command runner. A project `justfile` should wrap its existing
+tools. This Mac setup has `just check` for read-only validation and `just sync`
+for `mac-sync --no-pull`; run `just --list` to see recipes. A Python project
+could use:
+
+```just
+check:
+    uv run ruff check .
+    uv run pyright
+
+test:
+    uv run pytest
+
+run:
+    uv run python main.py
+```
+
+A C/C++ `build` recipe can call `cmake -S . -B build -G Ninja` followed by
+`cmake --build build`. Add only recipes that match a project's actual commands.
+
+### Jupytext: opt-in notebook pairs
+
+JupyterLab stays the notebook UI. Pair only a chosen notebook with a Python
+script containing `# %%` cell markers:
+
+```fish
+jupytext --set-formats ipynb,py:percent notebook.ipynb
+jupytext --paired-paths notebook.ipynb
+jupytext --sync notebook.py
+```
+
+Edit the `.py` file in Neovim and use Ruff, Pyright, ripgrep, Git diff, or
+coding agents on it. Run `jupytext --sync notebook.py` after script edits.
+JupyterLab's Jupytext extension maintains explicitly paired files when saving
+in the UI. No project-wide pairing rule is set; existing notebooks stay as
+they are. `mac-sync` restores the extension after a JupyterLab upgrade.
+
+### Jujutsu with Git
+
+`jj` is available for local changes; Git and `gh` remain installed. In a clean,
+chosen Git repository, `jj git init --git-repo=.` adds a colocated `.jj`
+without converting any other repository. Try the practice repo in
+`/private/tmp/jj-practice-*` first:
+
+```fish
+jj status                 # working copy status
+jj diff                   # current change, shown with delta
+jj log                    # change graph
+jj describe -m "message"  # name the current change
+jj new                    # start a fresh change
+jj undo                   # undo the last jj operation
+jj redo                   # redo a just-undone operation
+```
+
+A colocated repo may show a detached Git HEAD. Check `jj status` and
+`git status` before mixing mutations from both tools. Git branches, remotes,
+GitHub, and `gh` remain available. LazyGit has been uninstalled; Neovim's Git
+picker remains.
+
+### Pi and Pi Desktop
+
+Pi uses the official `@earendil-works/pi-coding-agent` npm package. On another
+Mac, install it with `npm install -g --ignore-scripts
+@earendil-works/pi-coding-agent`, then use `pi` and `/login openai-codex` for
+the existing subscription. `~/.config/sync/pi-agent.json` tracks only portable
+settings: subscription provider, model, built-in read/bash/edit/write tools,
+Neovim as external editor, and quiet startup. `mac-sync` merges them if Pi is
+installed. Credentials, sessions, and the Herdr Pi integration stay local.
+Existing project `AGENTS.md` files provide instructions when relevant; Codex
+plugins and MCP servers were not copied into Pi.
+
+Herdr's native Pi integration reports agent state. `Cmd-Shift-g` creates or
+focuses its own Pi tab; `Cmd-g` remains Codex. Optional Pi Desktop uses the
+same Pi executable and session store for diffs, permissions, worktrees,
+changed files, tool calls, and session review. It asks before edits, stays
+closed at login, and leaves its council feature off. Neovim remains the editor.
+Pi Desktop is installed locally from the checksum-verified FaqFirebase alpha
+release; its installer is not in the shared app manifest.
 
 ### Codex
 

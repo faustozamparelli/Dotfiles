@@ -117,6 +117,31 @@ if [[ -f "$HOME/.config/sync/codex-technical.json" ]]; then
   }
 fi
 
+# Merge only portable Pi defaults. Credentials, sessions, and local extensions
+# stay in ~/.pi/agent and are never read into the dotfiles repository.
+if command -v pi >/dev/null 2>&1 &&
+   [[ -f "$HOME/.config/sync/pi-agent.json" ]]; then
+  python3 - "$HOME/.config/sync/pi-agent.json" "$HOME/.pi/agent/settings.json" <<'PYPI' || {
+import json
+import os
+import sys
+from pathlib import Path
+
+profile = json.loads(Path(sys.argv[1]).read_text())
+target = Path(sys.argv[2])
+current = json.loads(target.read_text()) if target.exists() else {}
+updated = {**current, **profile}
+if updated != current:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temporary = target.with_name(target.name + '.new')
+    temporary.write_text(json.dumps(updated, indent=2) + '\n')
+    os.chmod(temporary, 0o600)
+    temporary.replace(target)
+PYPI
+    echo "Warning: Pi defaults could not be applied; other Mac setup will continue." >&2
+  }
+fi
+
 
 # ---------------------------------------------------------------------------
 # Validate app manifests
@@ -249,6 +274,25 @@ if ((failed == 0)); then
       echo "Could not mark shared formulae as explicitly installed." >&2
       failed=1
     }
+fi
+
+
+# Homebrew isolates JupyterLab and Jupytext in separate Python environments.
+# Install the small Jupytext extension into JupyterLab's current environment;
+# repeat only when a Homebrew upgrade replaces that environment.
+if ((failed == 0)) &&
+   [[ " ${wanted_packages[*]} " == *" jupyterlab "* ]] &&
+   [[ " ${wanted_packages[*]} " == *" jupytext "* ]]; then
+  lab_python="$(brew --prefix jupyterlab)/libexec/bin/python"
+  if [[ -x "$lab_python" ]] &&
+     ! "$lab_python" -c 'import jupytext, jupyterlab_jupytext' >/dev/null 2>&1; then
+    log "Connecting Jupytext to JupyterLab..."
+    jupytext_version="$(jupytext --version)"
+    uv pip install --python "$lab_python" "jupytext==$jupytext_version" || {
+      echo "Could not install Jupytext into JupyterLab's environment." >&2
+      failed=1
+    }
+  fi
 fi
 
 

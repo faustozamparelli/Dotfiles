@@ -13,8 +13,10 @@ gh
 git
 git-delta
 herdr
+jj
 jupyterlab
-lazygit
+jupytext
+just
 libqalculate
 lua
 lua-language-server

@@ -25,12 +25,14 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/herdr \
   .config/karabiner/karabiner.json \
   .config/keymaps \
+  .config/jj/config.toml \
   .config/mac-setup \
   .config/nvim \
   .config/sioyek \
   .config/sync/README.md \
   .config/sync/codex-technical.json \
   .config/sync/codex-technical.py \
+  .config/sync/pi-agent.json \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \
   .local/bin/mac-app \
