@@ -111,9 +111,9 @@ if $pull && [[ -d "$HOME/.config/git/dotfiles" ]]; then
   fi
 fi
 
-if [[ -f "$HOME/.config/sync/chatgpt-settings.json" ]]; then
-  python3 "$HOME/.config/sync/chatgpt-settings.py" apply || {
-    echo "Warning: ChatGPT preferences need reconciliation; other Mac setup will continue." >&2
+if [[ -f "$HOME/.config/sync/codex-technical.json" ]]; then
+  python3 "$HOME/.config/sync/codex-technical.py" apply || {
+    echo "Warning: Codex technical setup could not be applied; other Mac setup will continue." >&2
   }
 fi
 

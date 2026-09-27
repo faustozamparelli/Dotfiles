@@ -3,13 +3,18 @@ set -euo pipefail
 
 bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
-python3 "$HOME/.config/sync/chatgpt-settings.py" capture
+python3 "$HOME/.config/sync/codex-technical.py" capture
 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs"
 "$HOME/.config/keymaps/keymap-docs" --check
 
+"${bare[@]}" add -u -- .config/sync
 "${bare[@]}" add \
   .gitconfig \
+  .agents/skills/context7-mcp \
+  .codex/skills/context7-docs \
+  .codex/skills/grill-me \
+  .codex/skills/spam-senders \
   .config/clangd \
   .config/fish/config.fish \
   .config/fish/fish_plugins \
@@ -23,8 +28,8 @@ python3 "$HOME/.config/sync/chatgpt-settings.py" capture
   .config/nvim \
   .config/sioyek \
   .config/sync/README.md \
-  .config/sync/chatgpt-settings.json \
-  .config/sync/chatgpt-settings.py \
+  .config/sync/codex-technical.json \
+  .config/sync/codex-technical.py \
   .config/sync/vscode-extensions.txt \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \

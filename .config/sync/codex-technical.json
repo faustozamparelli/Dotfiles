@@ -1,0 +1,28 @@
+{
+  "mcp_servers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "exa": {
+      "url": "https://mcp.exa.ai/mcp"
+    }
+  },
+  "plugins": {
+    "browser@openai-bundled": true,
+    "codex-app-tools@openai-bundled": true,
+    "computer-use@openai-bundled": true,
+    "documents@openai-primary-runtime": true,
+    "github@openai-curated-remote": true,
+    "gmail@openai-curated-remote": true,
+    "google-calendar@openai-curated-remote": true,
+    "notion@openai-curated-remote": true,
+    "openai-templates@openai-curated-remote": true,
+    "pdf@openai-primary-runtime": true,
+    "plugin-management@openai-curated-remote": true,
+    "presentations@openai-primary-runtime": true,
+    "spreadsheets@openai-primary-runtime": true,
+    "template-creator@openai-primary-runtime": true,
+    "unified-computer-use@openai-bundled": true,
+    "visualize@openai-bundled": true
+  }
+}

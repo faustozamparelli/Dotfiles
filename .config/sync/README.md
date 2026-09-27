@@ -1002,24 +1002,27 @@ during normal sync while leaving `~/.config/nvim` tracked.
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
 
-### ChatGPT app preferences
+### Codex technical setup
 
-The installed ChatGPT desktop app uses the `com.openai.codex` settings domain.
-`~/.config/sync/chatgpt-settings.json` tracks portable choices such as the
-default model, theme, desktop display options, plugin enablement, Dock icon,
-and update preferences. It is a selected snapshot, not a copy of the app's
-entire state. Credentials, MCP server setup, trusted project paths,
-conversations, sidebar data, window positions, and caches remain local.
+Custom skills under `~/.codex/skills/context7-docs`, `grill-me`, and
+`spam-senders`, plus `~/.agents/skills/context7-mcp`, are tracked in dotfiles.
+`~/.config/sync/codex-technical.json` records installed plugin IDs and their
+enabled/disabled choices
+and the public HTTPS addresses of remote MCP servers. `sync-maintain` captures
+these choices and stages them for review; after commit and push, `mac-sync`
+merges them into `~/.codex/config.toml` on the other Mac at login or hourly.
+Existing local MCP headers, credentials, and machine-specific servers remain
+untouched. Plugin files and caches are installed by Codex, not copied through
+Git. To install missing plugins on the other Mac, run
+`python3 ~/.config/sync/codex-technical.py restore-plugins` there after sync;
+it uses the Codex plugin installer and may need account authorization. API
+keys and account connections must be set up locally.
 
-After changing ChatGPT settings, run `sync-maintain`. It captures these
-preferences and stages the dotfiles changes for review. Inspect `bare diff
---staged`, then use `bcp` to commit and push. On the other Mac, `mac-sync`
-pulls the dotfiles and applies the snapshot. The scheduled sync also does this
-at login and hourly. If that Mac has different local preferences, application
-pauses with a message instead of overwriting them. Run
-`python3 ~/.config/sync/chatgpt-settings.py capture` there to keep its local
-choices, or `python3 ~/.config/sync/chatgpt-settings.py apply --force` to use
-the tracked choices, then run `mac-sync` again.
+Model, theme, fonts, desktop appearance, Dock and update preferences are local
+choices and are not captured. Neither the full Codex config nor conversations,
+trusted project paths, plugin caches, MCP secrets, or app state are tracked.
+The technical snapshot is a selected list: a new custom skill or local MCP
+server needs deliberate review before it is added to dotfiles.
 
 ### New Mac
 
