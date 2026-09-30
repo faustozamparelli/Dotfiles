@@ -240,24 +240,6 @@ if ((${#wanted_packages[@]} == 0)); then
   exit 1
 fi
 
-# The Lis formula lives in this dotfiles checkout because Homebrew Core does
-# not provide one. Materialize a local tap before resolving the package list.
-lis_formula="$setup/formula/lis.rb"
-lis_package="faustozamparelli/local/lis"
-if [[ " ${wanted_packages[*]} " == *" $lis_package "* ]]; then
-  tap_dir="$(brew --repository)/Library/Taps/faustozamparelli/homebrew-local"
-  if [[ ! -d "$tap_dir" ]]; then
-    log "Creating local Homebrew tap for Lis..."
-    brew tap-new --no-git faustozamparelli/local || exit 1
-  fi
-  if [[ ! -f "$lis_formula" ]]; then
-    echo "Missing Lis formula: $lis_formula" >&2
-    exit 1
-  fi
-  mkdir -p "$tap_dir/Formula"
-  cp "$lis_formula" "$tap_dir/Formula/lis.rb"
-fi
-
 
 # ---------------------------------------------------------------------------
 # Install / protect packages.txt
@@ -294,10 +276,8 @@ if ((failed == 0)); then
     }
 fi
 
-
 # Homebrew isolates JupyterLab and Jupytext in separate Python environments.
-# Install the small Jupytext extension into JupyterLab's current environment;
-# repeat only when a Homebrew upgrade replaces that environment.
+# Restore their notebook extension after a JupyterLab upgrade.
 if ((failed == 0)) &&
    [[ " ${wanted_packages[*]} " == *" jupyterlab "* ]] &&
    [[ " ${wanted_packages[*]} " == *" jupytext "* ]]; then
@@ -312,6 +292,7 @@ if ((failed == 0)) &&
     }
   fi
 fi
+
 
 
 # ---------------------------------------------------------------------------
@@ -437,125 +418,32 @@ if brew list --versions pnpm >/dev/null 2>&1; then
   mkdir -p "$HOME/Library/pnpm/bin"
 fi
 
-
-# ---------------------------------------------------------------------------
-# Shared Python libraries outside uv projects
-# ---------------------------------------------------------------------------
-
-# Homebrew links most Python library formulae into its main interpreter.
-# pytorch is intentionally installed in an isolated libexec environment, so
-# expose only that library through the base interpreter's user site. Standard
-# virtual environments disable the user site and therefore remain isolated.
-
+# Keep the Homebrew Python command stable for scripts and editor integrations.
 python_bin="$brew_prefix/bin/python3"
-
-if [[ -x "$python_bin" ]] && brew list --versions pytorch >/dev/null 2>&1; then
-  python_user_site="$("$python_bin" -m site --user-site)"
-  pytorch_site="$(
-    find "$brew_prefix/opt/pytorch/libexec/lib" \
-      -mindepth 2 \
-      -maxdepth 2 \
-      -type d \
-      -name site-packages \
-      2>/dev/null |
-      head -n 1
-  )"
-
-  if [[ -n "$pytorch_site" ]]; then
-    mkdir -p "$python_user_site"
-    printf '%s\n' "$pytorch_site" > "$python_user_site/homebrew-shared.pth"
-  else
-    echo "Could not locate pytorch's Python site-packages directory." >&2
-    failed=1
-  fi
-fi
-
-
-# ---------------------------------------------------------------------------
-# Stable language command names
-# ---------------------------------------------------------------------------
-
-# Homebrew versions GCC executable names, for example:
-#
-#   gcc-16
-#   g++-16
-#
-# Maintain stable names for shells, explicit GNU builds, and scripts. Refresh
-# the links automatically after Homebrew upgrades Python or GCC.
-
 toolchain_bin="$HOME/.local/toolchains/bin"
 mkdir -p "$toolchain_bin"
-
-latest_gcc="$(
-  find "$brew_prefix/bin" \
-    -maxdepth 1 \
-    \( -type f -o -type l \) \
-    -name 'gcc-*' \
-    2>/dev/null |
-    grep -E '/gcc-[0-9]+$' |
-    LC_ALL=C sort -V |
-    tail -n 1
-)"
-
-latest_gxx="$(
-  find "$brew_prefix/bin" \
-    -maxdepth 1 \
-    \( -type f -o -type l \) \
-    -name 'g++-*' \
-    2>/dev/null |
-    grep -E '/g\+\+-[0-9]+$' |
-    LC_ALL=C sort -V |
-    tail -n 1
-)"
-
-for tool in python gcc g++; do
-  link="$toolchain_bin/$tool"
-
-  if [[ -e "$link" && ! -L "$link" ]]; then
-    echo "Cannot manage $link because it is not a symlink." >&2
-    failed=1
-  fi
-done
-
-if [[ -x "$python_bin" ]]; then
-  if [[ ! -e "$toolchain_bin/python" || -L "$toolchain_bin/python" ]]; then
-    ln -sfn "$python_bin" "$toolchain_bin/python"
-  fi
-fi
-
-if [[ -n "$latest_gcc" ]]; then
-  if [[ ! -e "$toolchain_bin/gcc" || -L "$toolchain_bin/gcc" ]]; then
-    ln -sfn "$latest_gcc" "$toolchain_bin/gcc"
-  fi
-fi
-
-if [[ -n "$latest_gxx" ]]; then
-  if [[ ! -e "$toolchain_bin/g++" || -L "$toolchain_bin/g++" ]]; then
-    ln -sfn "$latest_gxx" "$toolchain_bin/g++"
-  fi
-fi
-
-
-# ---------------------------------------------------------------------------
-# clangd
-# ---------------------------------------------------------------------------
-
-# clangd uses the XDG config in the dotfiles repository.
-# Apple clangd expects the same configuration under Library/Preferences.
-
-clangd_preferences="$HOME/Library/Preferences/clangd"
-mkdir -p "$clangd_preferences"
-
-clangd_config_link="$clangd_preferences/config.yaml"
-
-if [[ ! -e "$clangd_config_link" || -L "$clangd_config_link" ]]; then
-  ln -sfn \
-    "$HOME/.config/clangd/config.yaml" \
-    "$clangd_config_link"
-else
-  echo "Cannot manage $clangd_config_link because it is not a symlink." >&2
+if [[ -e "$toolchain_bin/python" && ! -L "$toolchain_bin/python" ]]; then
+  echo "Cannot manage $toolchain_bin/python because it is not a symlink." >&2
   failed=1
+elif [[ -x "$python_bin" ]]; then
+  ln -sfn "$python_bin" "$toolchain_bin/python"
 fi
+
+# Supply container-only Lis and compiler include paths to Neovim without
+# installing the course toolchain on macOS. A regular file is needed because
+# the container cannot follow a symlink to the host's dotfiles checkout.
+if [[ -d "$HOME/shared-folder" ]] &&
+   command -v docker >/dev/null 2>&1 &&
+   docker inspect amsc >/dev/null 2>&1; then
+  amsc_config="$HOME/shared-folder/.clangd"
+  if [[ -L "$amsc_config" && "$(readlink "$amsc_config")" == "$setup/amsc.clangd" ]]; then
+    rm "$amsc_config"
+  fi
+  if [[ ! -e "$amsc_config" && ! -L "$amsc_config" ]]; then
+    cp "$setup/amsc.clangd" "$amsc_config"
+  fi
+fi
+
 
 
 # ---------------------------------------------------------------------------
@@ -571,6 +459,9 @@ retire_manifest() {
   local token
   local app_path
   local trash_bin
+  local tool
+  local link
+  local -a retired_formulae=()
 
   [[ -f "$retired" ]] || return 0
 
@@ -582,12 +473,7 @@ retire_manifest() {
 
     if [[ "$source" == "formula" ]]; then
       if brew list --formula --versions "$identifier" >/dev/null 2>&1; then
-        log "Removing retired formula $name from Homebrew..."
-        if brew uninstall --formula "$identifier"; then
-          brew autoremove || failed=1
-        else
-          failed=1
-        fi
+        retired_formulae+=("$identifier")
       fi
       continue
     fi
@@ -659,6 +545,42 @@ retire_manifest() {
         ;;
     esac
   done 3< "$retired"
+
+  if ((${#retired_formulae[@]})); then
+    log "Removing retired formulae no longer required by shared packages..."
+    if brew tab --no-installed-on-request "${retired_formulae[@]}"; then
+      brew autoremove || failed=1
+    else
+      failed=1
+    fi
+  fi
+
+  # Clean up the links and user-site file previously created by mac-sync.
+  if grep -Fq $'formula\tgcc\t' "$retired"; then
+    for tool in gcc g++; do
+      link="$HOME/.local/toolchains/bin/$tool"
+      [[ -L "$link" ]] && rm -f "$link"
+    done
+    rmdir "$HOME/.local/toolchains/bin" 2>/dev/null || true
+  fi
+  if grep -Fq $'formula\tpytorch\t' "$retired" && [[ -d "$HOME/Library/Python" ]]; then
+    find "$HOME/Library/Python" -type f -name homebrew-shared.pth -delete
+  fi
+  if grep -Fq $'formula\tfaustozamparelli/local/lis\t' "$retired"; then
+    # Homebrew's autoremove does not select formulae from a local, gitless tap.
+    if brew list --formula --versions lis >/dev/null 2>&1; then
+      brew uninstall --formula lis || failed=1
+    fi
+    if ! brew list --formula --versions lis >/dev/null 2>&1 &&
+       [[ -f "$(brew --repository)/Library/Taps/faustozamparelli/homebrew-local/Formula/lis.rb" ]]; then
+      brew untap faustozamparelli/local || failed=1
+    fi
+  fi
+  if grep -Fq $'formula\topen-mpi\t' "$retired" &&
+     ! brew list --formula --versions pmix >/dev/null 2>&1 &&
+     [[ -f "$brew_prefix/etc/pmix-mca-params.conf" ]]; then
+    "$trash_bin" "$brew_prefix/etc/pmix-mca-params.conf" || failed=1
+  fi
 }
 
 retire_manifest

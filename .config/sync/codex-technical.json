@@ -25,6 +25,7 @@
     "spreadsheets@openai-primary-runtime": true,
     "template-creator@openai-primary-runtime": true,
     "unified-computer-use@openai-bundled": true,
-    "visualize@openai-bundled": true
+    "visualize@openai-bundled": true,
+    "work-pets@openai-curated-remote": true
   }
 }

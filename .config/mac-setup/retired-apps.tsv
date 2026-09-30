@@ -9,3 +9,19 @@ cask	tor-browser	Tor Browser
 cask	t3-code	T3 Code (Alpha)
 cask	visual-studio-code	Visual Studio Code
 mas	462062816	Microsoft PowerPoint
+formula	cmake	CMake
+formula	gcc	GCC
+formula	pkgconf	pkgconf
+formula	ninja	Ninja
+formula	eigen	Eigen
+formula	openblas	OpenBLAS
+formula	suite-sparse	SuiteSparse
+formula	superlu	SuperLU
+formula	pybind11	pybind11
+formula	open-mpi	Open MPI
+formula	faustozamparelli/local/lis	Lis
+formula	numpy	NumPy
+formula	scipy	SciPy
+formula	python-matplotlib	Matplotlib
+formula	pytorch	PyTorch
+formula	mpi4py	mpi4py

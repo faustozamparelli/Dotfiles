@@ -51,3 +51,7 @@ Thumbs.db
 .config/fish/functions/fisher.fish
 .config/fish/.python-version
 .config/fish/test.py
+
+# Python bytecode and generated caches
+__pycache__/
+*.pyc

@@ -35,15 +35,6 @@ local function python_environment(_, config)
     if python ~= '' then
         config.settings.python.pythonPath = python
     end
-
-    -- Most Homebrew Python libraries are linked into the main interpreter's
-    -- site-packages. Formulae such as pytorch are intentionally isolated in
-    -- libexec, so expose those stubs/sources to Pyright only when no project
-    -- virtual environment is active.
-    local extra_paths = vim.fn.glob('/opt/homebrew/opt/pytorch/libexec/lib/python*/site-packages', true, true)
-    if #extra_paths > 0 then
-        config.settings.python.analysis.extraPaths = extra_paths
-    end
 end
 
 vim.lsp.config('pyright', {
@@ -69,9 +60,7 @@ vim.lsp.config('ruff', {
 
 vim.lsp.config('clangd', {
     cmd = {
-        '/usr/bin/clangd',
-        '--background-index',
-        '--clang-tidy',
+        vim.fn.expand('~/.config/mac-setup/amsc-clangd.sh'),
     },
     filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
     root_markers = { 'compile_commands.json', 'compile_flags.txt', '.clangd', '.git' },

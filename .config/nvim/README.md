@@ -233,7 +233,7 @@ They must be available separately on `$PATH`.
 | --- | --- | --- |
 | `pyright-langserver` | Python completion, auto-imports, types, hover, navigation, references, and diagnostics | Required for Python LSP features. |
 | `ruff` | Python linting and formatting through Ruff's language server | Required for Ruff diagnostics/formatting. |
-| `clangd` | C, C++, Objective-C, Objective-C++, and CUDA language intelligence | Required for those filetypes. |
+| `clangd` | C and C++ completion, diagnostics, navigation, and formatting | Provided by macOS. |
 | `fzf` | Interactive fuzzy selection | Required by fzf-lua. |
 | `rg` (ripgrep) | Searches repository file contents for `<leader>fg` | Required for live grep. |
 | `file` | MIME detection in the anywhere picker | Required for correct text-versus-external opening. |
@@ -242,33 +242,19 @@ They must be available separately on `$PATH`.
 | `herdr` | Renames tabs, creates terminal panes, and opens Codex in a dedicated Herdr tab | Optional; these integrations are active only when Neovim runs inside Herdr. |
 | `Helium` | External Markdown viewing | Optional; needed only for `<leader>mb`. |
 
-Pyright uses basic type checking. Ruff and Pyright attach to Python. clangd runs
-with background indexing and clang-tidy enabled. Project roots are detected
-from normal files such as `pyproject.toml`, Ruff configuration, compilation
-databases, and `.git`.
+Pyright uses basic type checking. Ruff and Pyright attach to Python. Apple's
+`clangd` attaches to C and C++ files. Project roots are detected from files
+such as `pyproject.toml`, Ruff configuration, compilation databases, and `.git`.
 
 Pyright selects a project's `.venv/bin/python` first, then an activated virtual
-environment. With neither present it uses Homebrew Python and can also inspect
-the isolated site-packages shipped by Homebrew's `pytorch` formula. This keeps
-the shared scientific packages useful for loose files without leaking them into
-uv project environments. `mac-sync` exposes PyTorch to the base Homebrew
-interpreter through its user site; normal virtual environments disable that
-user site.
+environment. With neither present it uses Homebrew Python. Project libraries
+belong in each project's `uv` environment.
 
-For C and C++, clangd needs compile flags, not linker configuration. With CMake,
-generate a compilation database and expose it at the project root:
-
-```sh
-cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-ln -s build/compile_commands.json compile_commands.json
-```
-
-The database tells clangd which Homebrew headers each target actually uses.
-Keep linking in the build system with `target_link_libraries`; do not add every
-library from `packages.txt` to `.clangd`. Apple Clang is the default on macOS;
-the stable `~/.local/toolchains/bin/gcc` and `g++` commands remain available for
-projects that specifically require GNU. A project-local `.clangd` is only
-needed for exceptional flags or when the compilation database lives elsewhere.
+For C and C++ files opened on the Mac, `clangd` supplies editor features and
+formatting. Files under `~/shared-folder` use the running AMSC container's
+`clangd` and module headers; other files use macOS `clangd`. Course builds and
+libraries run in the professor's container. See `~/.config/sync/README.md` for
+the AMSC workflow.
 
 Only error-level diagnostics are drawn as signs, underlines, virtual text, and
 floating diagnostics. This keeps warnings visually quiet, although they still

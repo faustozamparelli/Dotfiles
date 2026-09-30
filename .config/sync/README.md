@@ -556,8 +556,8 @@ added.
 
 ### Language intelligence
 
-Python uses Pyright and Ruff. C/C++ uses clangd. Supported files format before
-save.
+Python uses Pyright and Ruff; C and C++ use macOS `clangd`. These files format
+before save.
 
 - `Space l r`: rename a symbol across the project.
 - `Space l a`: available code actions.
@@ -782,10 +782,9 @@ state; review the target repository and branch first.
 
 ### Python through uv
 
-`python` and `py` use the shared Homebrew interpreter, including the Python
-libraries listed in `packages.txt`, which is useful for loose scripts and a
-REPL. Inside a project, use uv explicitly so dependencies stay declared and
-isolated. Typical commands:
+`python` and `py` use the shared Homebrew interpreter for scripts and editor
+integrations. Install project libraries with uv so each project's dependencies
+stay declared and isolated. Typical commands:
 
 ```fish
 uv init
@@ -796,19 +795,47 @@ uv run pytest
 uv sync
 ```
 
-The shared Homebrew Python also provides NumPy, SciPy, Matplotlib, PyTorch,
-and mpi4py for quick scripts without creating a uv project. `nb` opens
-JupyterLab; its default Python kernel can import these same libraries. Keep
-these formulae in `packages.txt` even if `brew autoremove` reports them as
-unneeded by other formulae.
-
-For quick C and C++ programs, use `cc file.c -o app` or
-`c++ file.cpp -o app`; `gcc` and `g++` select the shared GNU compiler instead.
-`pkg-config --cflags --libs eigen3`, `openblas`, and `superlu` provide flags
-for the shared numerical libraries. For reproducible projects, use CMake and
-Ninja and declare the libraries there.
+`nb` opens JupyterLab. Create a `uv` project and add the libraries it needs
+before using notebooks or Python scripts for that project. C and C++ course
+work uses the professor's container rather than shared Mac packages.
 
 Use a project's declared dependencies instead of installing packages globally.
+
+### AMSC container with Mac Neovim
+
+The `amsc` Fish alias starts the professor's container and opens Bash in
+`/shared-folder`. That directory is `~/shared-folder` on the Mac, so edit there
+with Neovim outside Docker and run builds inside Docker:
+
+```fish
+amsc
+module load gcc-glibc/11.2.0
+module load lis/2.0.30
+gcc myprogram.c -I"$mkLisInc" -L"$mkLisLib" -llis -o myprogram
+```
+
+For files under `~/shared-folder`, Neovim starts `clangd` inside the running
+container. The wrapper maps Mac file paths to `/shared-folder`, loads GCC and
+Lis, and uses the regular `.clangd` file copied into the shared folder by
+`mac-sync`. This provides Lis headers, completion, diagnostics, formatting,
+and navigation among files in the shared folder while the C/C++ packages
+remain absent from Homebrew. Container-only header files cannot be opened
+directly on the Mac. Other C/C++ files use macOS's built-in `clangd`. Start
+`amsc` before opening a shared-folder project in Neovim.
+
+The current container has Ubuntu `clangd` installed. A newly created AMSC
+container needs it once; after starting that container, run on the Mac:
+
+```sh
+docker exec -u root amsc apt-get update
+docker exec -u root amsc env DEBIAN_FRONTEND=noninteractive apt-get install -y clangd
+mac-sync --no-pull
+```
+
+For a project with further module dependencies, generate its
+[`compile_commands.json`](https://clangd.llvm.org/installation.html#compile_commandsjson)
+inside the container so its commands and paths name the Linux compiler and
+headers. `clangd` reads that database through the shared folder.
 
 ### just: project commands
 
@@ -828,9 +855,6 @@ test:
 run:
     uv run python main.py
 ```
-
-A C/C++ `build` recipe can call `cmake -S . -B build -G Ninja` followed by
-`cmake --build build`. Add only recipes that match a project's actual commands.
 
 ### Jupytext: opt-in notebook pairs
 
@@ -975,44 +999,11 @@ that is no longer needed, run:
 mac-sync --nuke
 ```
 
-### Lis for C linear systems
-
-Lis 2.1.13 is pinned in `packages.txt` as `faustozamparelli/local/lis`.
-`mac-sync` creates a local Homebrew tap from the tracked formula and installs
-it on each Mac. The release comes from the [official Lis download](https://www.ssisc.org/lis/index.en.html)
-and is checked against the SHA-256 in `formula/lis.rb`. The iCloud `ShortTerm`
-source folder is no longer needed for building or linking class projects.
-
-Compile and run the tracked two-variable example:
-
-```sh
-cd ~/.config/mac-setup
-cc -Wall -Wextra -I"$(brew --prefix lis)/include" examples/lis-solve.c \
-  -L"$(brew --prefix lis)/lib" -llis -o /tmp/lis-solve
-/tmp/lis-solve
-# x = (0.090909091, 0.636363636)
-```
-
-In your own project, include `<lis.h>` and use the same include and library
-flags. The example creates a matrix and right-hand side, selects conjugate
-gradient (`-i cg`) for a symmetric positive definite matrix, calls
-`lis_solve`, reads the answer, and frees the Lis objects. See the [Lis user
-guide](https://www.ssisc.org/lis/index.en.html) for other solvers and matrix
-formats. This formula builds the serial, real-valued static library; it does
-not enable Lis's optional MPI, OpenMP, or Fortran interfaces.
-
-To stop sharing Lis and uninstall it on both Macs, remove its line from
-`packages.txt` and add this row to `retired-apps.tsv` (with actual tabs):
-
-```text
-formula	faustozamparelli/local/lis	Lis
-```
-
-Commit and push those manifest edits, then run `mac-sync` here. The other Mac's
-scheduled sync applies the same retirement after it pulls; `mac-sync` there
-does it immediately. Removing only the `packages.txt` line does not uninstall
-the formula. The old iCloud source folder is separate from the Homebrew
-installation and can be deleted whenever you no longer want that copy.
+The C/C++ formulae and shared scientific Python libraries are retired in
+`retired-apps.tsv`. `mac-sync` removes them when no remaining shared formula
+requires them. The professor's container supplies the C/C++ environment;
+Python project dependencies belong in `uv` environments. Ruff, Pyright,
+JupyterLab, Jupytext, and the Homebrew Python interpreter remain available.
 
 The nuke operation does not touch casks or App Store applications. Use
 `mac-app` for applications: shared is the default, `local` records an app for

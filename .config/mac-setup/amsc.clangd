@@ -1,0 +1,14 @@
+# This file is linked into ~/shared-folder for container-backed editing.
+# The paths are Linux paths inside the professor's AMSC container.
+CompileFlags:
+  Add: [-I/u/sw/toolchains/gcc-glibc/11.2.0/pkgs/lis/2.0.30/include]
+---
+If:
+  PathMatch: .*\.c
+CompileFlags:
+  Compiler: /u/sw/toolchains/gcc-glibc/11.2.0/prefix/bin/gcc
+---
+If:
+  PathMatch: .*\.(cc|cpp|cxx|C)
+CompileFlags:
+  Compiler: /u/sw/toolchains/gcc-glibc/11.2.0/prefix/bin/g++

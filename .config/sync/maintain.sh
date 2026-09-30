@@ -15,7 +15,6 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .codex/skills/context7-docs \
   .codex/skills/grill-me \
   .codex/skills/spam-senders \
-  .config/clangd \
   .config/duti/defaults.duti \
   .config/fish/config.fish \
   .config/fish/fish_plugins \

@@ -11,11 +11,7 @@ fish_add_path -g \
     $HOMEBREW_PREFIX/bin \
     $HOMEBREW_PREFIX/sbin
 
-# OpenBLAS is keg-only; expose its pkg-config file for quick C/C++ builds.
-set -gx PKG_CONFIG_PATH $HOMEBREW_PREFIX/opt/openblas/lib/pkgconfig $PKG_CONFIG_PATH
-
-# mac-sync maintains stable python, gcc, and g++ command names. Apple Clang
-# remains the default C/C++ compiler; select gcc/g++ in projects that need GNU.
+# mac-sync maintains a stable Homebrew Python command for editor integrations.
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
@@ -41,9 +37,8 @@ alias sv "source .venv/bin/activate.fish"
 alias n "nvim"
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 
-function amsc-env --description "Load the manually managed AMSC C++ libraries"
-    source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads/Cpp/AMSC/env.fish"
-end
+# amsc container
+alias amsc='docker start amsc >/dev/null && docker exec -it -w /shared-folder amsc /bin/bash --rcfile /u/sw/etc/bash.bashrc -i'
 
 # Route only the stealth profile through the monochrome presentation wrapper.
 # Every other Codex invocation keeps the normal full-color TUI.

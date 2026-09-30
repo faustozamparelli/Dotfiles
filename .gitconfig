@@ -17,7 +17,7 @@
 	undo = reset -- soft HEAD^
 [core]
 	pager = delta
-	editor = code --wait
+	editor = nvim
 	excludesFile = ~/.config/git/.gitignore
 [interactive]
 	diffFilter = delta --color-only

@@ -2,13 +2,11 @@
 # Formulae here are shared and protected on every Mac. Everything else is temporary.
 bat
 btop
-cmake
 eza
 fd
 fish
 fisher
 fzf
-gcc
 gh
 git
 git-delta
@@ -25,7 +23,6 @@ mole
 neovim
 node
 pnpm
-pkgconf
 python
 pyright
 ripgrep
@@ -42,20 +39,3 @@ zoxide
 
 # Raycast screenshot OCR extension
 tesseract
-
-# C / C++
-ninja
-eigen
-openblas
-suite-sparse
-superlu
-pybind11
-open-mpi
-faustozamparelli/local/lis
-
-# Python libraries available to the Homebrew interpreter outside uv projects
-numpy
-scipy
-python-matplotlib
-pytorch
-mpi4py
