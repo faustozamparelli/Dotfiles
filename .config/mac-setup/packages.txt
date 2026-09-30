@@ -51,6 +51,7 @@ suite-sparse
 superlu
 pybind11
 open-mpi
+faustozamparelli/local/lis
 
 # Python libraries available to the Homebrew interpreter outside uv projects
 numpy

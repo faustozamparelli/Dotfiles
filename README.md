@@ -65,6 +65,8 @@ SHA-256.
 Shared CLI tools live in `~/.config/mac-setup/packages.txt`. Ordinary
 `brew install` packages stay local and temporary unless intentionally added to
 that short list. Removing an entry never automatically uninstalls software.
+Lis is tracked as a pinned local Homebrew formula; see the Lis install, C
+example, and removal steps in `~/.config/sync/README.md`.
 
 Run a sync immediately with:
 

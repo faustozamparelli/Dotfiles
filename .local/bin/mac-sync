@@ -240,6 +240,24 @@ if ((${#wanted_packages[@]} == 0)); then
   exit 1
 fi
 
+# The Lis formula lives in this dotfiles checkout because Homebrew Core does
+# not provide one. Materialize a local tap before resolving the package list.
+lis_formula="$setup/formula/lis.rb"
+lis_package="faustozamparelli/local/lis"
+if [[ " ${wanted_packages[*]} " == *" $lis_package "* ]]; then
+  tap_dir="$(brew --repository)/Library/Taps/faustozamparelli/homebrew-local"
+  if [[ ! -d "$tap_dir" ]]; then
+    log "Creating local Homebrew tap for Lis..."
+    brew tap-new --no-git faustozamparelli/local || exit 1
+  fi
+  if [[ ! -f "$lis_formula" ]]; then
+    echo "Missing Lis formula: $lis_formula" >&2
+    exit 1
+  fi
+  mkdir -p "$tap_dir/Formula"
+  cp "$lis_formula" "$tap_dir/Formula/lis.rb"
+fi
+
 
 # ---------------------------------------------------------------------------
 # Install / protect packages.txt

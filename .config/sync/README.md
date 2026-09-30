@@ -975,6 +975,45 @@ that is no longer needed, run:
 mac-sync --nuke
 ```
 
+### Lis for C linear systems
+
+Lis 2.1.13 is pinned in `packages.txt` as `faustozamparelli/local/lis`.
+`mac-sync` creates a local Homebrew tap from the tracked formula and installs
+it on each Mac. The release comes from the [official Lis download](https://www.ssisc.org/lis/index.en.html)
+and is checked against the SHA-256 in `formula/lis.rb`. The iCloud `ShortTerm`
+source folder is no longer needed for building or linking class projects.
+
+Compile and run the tracked two-variable example:
+
+```sh
+cd ~/.config/mac-setup
+cc -Wall -Wextra -I"$(brew --prefix lis)/include" examples/lis-solve.c \
+  -L"$(brew --prefix lis)/lib" -llis -o /tmp/lis-solve
+/tmp/lis-solve
+# x = (0.090909091, 0.636363636)
+```
+
+In your own project, include `<lis.h>` and use the same include and library
+flags. The example creates a matrix and right-hand side, selects conjugate
+gradient (`-i cg`) for a symmetric positive definite matrix, calls
+`lis_solve`, reads the answer, and frees the Lis objects. See the [Lis user
+guide](https://www.ssisc.org/lis/index.en.html) for other solvers and matrix
+formats. This formula builds the serial, real-valued static library; it does
+not enable Lis's optional MPI, OpenMP, or Fortran interfaces.
+
+To stop sharing Lis and uninstall it on both Macs, remove its line from
+`packages.txt` and add this row to `retired-apps.tsv` (with actual tabs):
+
+```text
+formula	faustozamparelli/local/lis	Lis
+```
+
+Commit and push those manifest edits, then run `mac-sync` here. The other Mac's
+scheduled sync applies the same retirement after it pulls; `mac-sync` there
+does it immediately. Removing only the `packages.txt` line does not uninstall
+the formula. The old iCloud source folder is separate from the Homebrew
+installation and can be deleted whenever you no longer want that copy.
+
 The nuke operation does not touch casks or App Store applications. Use
 `mac-app` for applications: shared is the default, `local` records an app for
 one Mac, and `temporary` installs it without recording it.
