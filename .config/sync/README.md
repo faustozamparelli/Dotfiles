@@ -815,13 +815,14 @@ gcc myprogram.c -I"$mkLisInc" -L"$mkLisLib" -llis -o myprogram
 ```
 
 For files under `~/shared-folder`, Neovim starts `clangd` inside the running
-container. The wrapper maps Mac file paths to `/shared-folder`, loads GCC and
-Lis, and uses the regular `.clangd` file copied into the shared folder by
-`mac-sync`. This provides Lis headers, completion, diagnostics, formatting,
-and navigation among files in the shared folder while the C/C++ packages
-remain absent from Homebrew. Container-only header files cannot be opened
-directly on the Mac. Other C/C++ files use macOS's built-in `clangd`. Start
-`amsc` before opening a shared-folder project in Neovim.
+container. The wrapper maps Mac file paths to `/shared-folder` and loads the
+GCC toolchain. While the container is running, `mac-sync --no-pull` discovers
+its installed library headers and writes `~/shared-folder/.clangd`. This gives
+Neovim completion, diagnostics, and formatting for the container's C/C++
+libraries without installing them on macOS. Start `amsc` before opening a
+shared-folder project in Neovim; run `mac-sync --no-pull` again if the
+container's library set changes. Container-only header files cannot be opened
+directly on the Mac. Other C/C++ files use macOS's built-in `clangd`.
 
 The current container has Ubuntu `clangd` installed. A newly created AMSC
 container needs it once; after starting that container, run on the Mac:
@@ -832,10 +833,11 @@ docker exec -u root amsc env DEBIAN_FRONTEND=noninteractive apt-get install -y c
 mac-sync --no-pull
 ```
 
-For a project with further module dependencies, generate its
+For a project needing module-specific macros or compiler options, generate its
 [`compile_commands.json`](https://clangd.llvm.org/installation.html#compile_commandsjson)
 inside the container so its commands and paths name the Linux compiler and
-headers. `clangd` reads that database through the shared folder.
+headers. `clangd` reads that database through the shared folder. Build and run
+course code only inside the container after loading the modules it needs.
 
 ### just: project commands
 

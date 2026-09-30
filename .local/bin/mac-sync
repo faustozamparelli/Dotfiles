@@ -429,18 +429,27 @@ elif [[ -x "$python_bin" ]]; then
   ln -sfn "$python_bin" "$toolchain_bin/python"
 fi
 
-# Supply container-only Lis and compiler include paths to Neovim without
-# installing the course toolchain on macOS. A regular file is needed because
-# the container cannot follow a symlink to the host's dotfiles checkout.
+# Supply the container's installed library headers to Neovim without
+# installing course libraries on macOS. A regular file is needed because the
+# container cannot follow a symlink to the host's dotfiles checkout.
 if [[ -d "$HOME/shared-folder" ]] &&
    command -v docker >/dev/null 2>&1 &&
-   docker inspect amsc >/dev/null 2>&1; then
+   [[ "$(docker inspect --format '{{.State.Running}}' amsc 2>/dev/null || true)" == true ]]; then
   amsc_config="$HOME/shared-folder/.clangd"
-  if [[ -L "$amsc_config" && "$(readlink "$amsc_config")" == "$setup/amsc.clangd" ]]; then
+  amsc_generated="$lock/amsc.clangd"
+  if ! "$setup/amsc-clangd-config.sh" > "$amsc_generated"; then
+    rm -f "$amsc_generated"
+    echo "Warning: could not discover AMSC headers; keeping the existing .clangd." >&2
+  elif [[ -L "$amsc_config" && "$(readlink "$amsc_config")" == "$setup/amsc.clangd" ]]; then
     rm "$amsc_config"
   fi
-  if [[ ! -e "$amsc_config" && ! -L "$amsc_config" ]]; then
-    cp "$setup/amsc.clangd" "$amsc_config"
+  if [[ -s "$amsc_generated" && -f "$amsc_config" ]] &&
+     { head -n 1 "$amsc_config" | grep -Fqx '# Managed by mac-sync for container-backed editing in ~/shared-folder.' ||
+       head -n 1 "$amsc_config" | grep -Fqx '# This file is linked into ~/shared-folder for container-backed editing.'; } &&
+     ! cmp -s "$amsc_generated" "$amsc_config"; then
+    cp "$amsc_generated" "$amsc_config"
+  elif [[ -s "$amsc_generated" && ! -e "$amsc_config" && ! -L "$amsc_config" ]]; then
+    cp "$amsc_generated" "$amsc_config"
   fi
 fi
 
