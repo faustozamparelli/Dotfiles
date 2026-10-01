@@ -899,10 +899,11 @@ picker remains.
 
 ### Pi and Pi Desktop
 
-Pi uses the official `@earendil-works/pi-coding-agent` npm package. On another
-Mac, install it with `npm install -g --ignore-scripts
-@earendil-works/pi-coding-agent`, then use `pi` and `/login openai-codex` for
-the existing subscription. `~/.config/sync/pi-agent.json` tracks only portable
+Pi uses the official `@earendil-works/pi-coding-agent` npm package. `mac-sync`
+installs version 0.87.1 when Pi is missing, through the shared Pi Desktop
+installer. Existing Pi installations keep their current version. On another
+Mac, run `mac-sync`, then use `pi` and `/login openai-codex` for the existing
+subscription. `~/.config/sync/pi-agent.json` tracks only portable
 settings: subscription provider, model, built-in read/bash/edit/write tools,
 Neovim as external editor, and quiet startup. `mac-sync` merges them if Pi is
 installed. Credentials, sessions, and the Herdr Pi integration stay local.
@@ -914,8 +915,11 @@ focuses its own Pi tab; `Cmd-g` remains Codex. Optional Pi Desktop uses the
 same Pi executable and session store for diffs, permissions, worktrees,
 changed files, tool calls, and session review. It asks before edits, stays
 closed at login, and leaves its council feature off. Neovim remains the editor.
-Pi Desktop is installed locally from the checksum-verified FaqFirebase alpha
-release; its installer is not in the shared app manifest.
+Pi Desktop is shared through `~/.config/mac-setup/apps.tsv`. Its tracked
+installer, `~/.config/mac-setup/direct/pi-desktop.sh`, verifies the SHA-256 of
+the FaqFirebase v0.1.9-alpha Apple Silicon archive before installing it in
+`/Applications`. Existing installations stay in place. The dotfiles repository
+shares app manifests and installers; each Mac installs its own app bundles.
 
 ### Codex
 
