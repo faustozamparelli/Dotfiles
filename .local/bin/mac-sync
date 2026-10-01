@@ -530,27 +530,16 @@ retire_manifest() {
           "$HOME/Library/Saved Application State/com.microsoft.VSCode.savedState" || failed=1
         ;;
       chatgpt)
-        rm -rf -- "$HOME/Library/Application Support/Codex" \
-          "$HOME/Library/Application Support/com.openai.codex" \
-          "$HOME/Library/Application Support/OpenAI/Codex" \
-          "$HOME/Library/Application Support/com.openai.chat" \
-          "$HOME/Library/Caches/Codex" \
-          "$HOME/Library/Caches/com.openai.codex" \
+        # Codex is a separate, still-managed app. Its com.openai.codex and
+        # CUAService data must survive retirement of the ChatGPT desktop app.
+        rm -rf -- "$HOME/Library/Application Support/com.openai.chat" \
           "$HOME/Library/Caches/com.openai.chat" \
-          "$HOME/Library/Caches/com.openai.sky.CUAService" \
-          "$HOME/Library/Group Containers"/*.com.openai.sky.CUAService \
-          "$HOME/Library/Application Scripts"/*.com.openai.sky.CUAService \
           "$HOME/Library/Caches/Homebrew/Cask"/chatgpt--* \
           "$HOME/Library/Caches/Homebrew/downloads"/*--ChatGPT-darwin-arm64-* \
-          "$HOME/Library/Caches/com.apple.nsurlsessiond/Downloads/com.openai.codex" \
-          "$HOME/Library/HTTPStorages/com.openai.codex" \
-          "$HOME/Library/HTTPStorages/com.openai.codex.binarycookies" \
-          "$HOME/Library/HTTPStorages/com.openai.sky.CUAService" \
-          "$HOME/Library/HTTPStorages/com.openai.sky.CUAService.binarycookies" \
-          "$HOME/Library/Logs/com.openai.codex" \
-          "$HOME/Library/Preferences/com.openai.codex.plist" \
-          "$HOME/Library/Preferences/com.openai.sky.CUAService.plist" \
-          "$HOME/Library/Saved Application State/com.openai.codex.savedState" || failed=1
+          "$HOME/Library/HTTPStorages/com.openai.chat" \
+          "$HOME/Library/HTTPStorages/com.openai.chat.binarycookies" \
+          "$HOME/Library/Preferences/com.openai.chat.plist" \
+          "$HOME/Library/Saved Application State/com.openai.chat.savedState" || failed=1
         ;;
     esac
   done 3< "$retired"
