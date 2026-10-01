@@ -19,6 +19,7 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/fish/config.fish \
   .config/fish/fish_plugins \
   .config/fish/functions/sync-maintain.fish \
+  .config/gh/config.yml \
   .config/ghostty \
   .config/git/.gitignore \
   .config/herdr \
@@ -36,6 +37,7 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/sync/maintain.sh \
   .local/bin/mac-app \
   .local/bin/mac-sync \
+  .codexbar/config.json \
   README.md
 
 "${bare[@]}" status --short
