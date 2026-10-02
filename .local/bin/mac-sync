@@ -563,11 +563,95 @@ retire_manifest() {
   fi
 }
 
-# Permanently remove retired PDF viewers and their narrowly scoped user data.
-# Run before generic retirement so app bundles are not left in Trash.
-if [[ -x "$setup/retire-pdf-viewers.sh" ]] &&
-   grep -Fq $'direct\tsioyek\t' "$retired"; then
-  "$setup/retire-pdf-viewers.sh" || failed=1
+# Permanent, idempotent PDF retirement. A subshell keeps cleanup helpers and
+# its status isolated; no separate installer/cleanup script is needed.
+retire_pdf_viewers() (
+  failed=0
+  remove_pdf_data() {
+    local path
+    for path in "$@"; do
+      [[ -e "$path" || -L "$path" ]] || continue
+      log "Removing retired PDF viewer data: $path"
+      rm -rf -- "$path" || failed=1
+    done
+  }
+  for app in Highlights Negative Sioyek MuPDF mupdf; do
+    if pgrep -if "/${app}.app/Contents/MacOS/" >/dev/null; then
+      osascript -e "tell application \"$app\" to quit" || failed=1
+      sleep 1
+      if pgrep -if "/${app}.app/Contents/MacOS/" >/dev/null; then
+        echo "Cannot retire $app while running (check save dialogs)." >&2
+        exit 1
+      fi
+    fi
+  done
+  for agent in "$HOME"/Library/LaunchAgents/*[Ss]ioyek*.plist; do
+    [[ -f "$agent" ]] || continue
+    launchctl bootout "gui/$(id -u)" "$agent" 2>/dev/null || true
+    remove_pdf_data "$agent"
+  done
+  for token in sioyek mupdf; do
+    if brew list --cask "$token" >/dev/null 2>&1; then
+      brew uninstall --cask --zap "$token" || {
+        brew uninstall --cask --force "$token" || failed=1
+      }
+    fi
+  done
+  if brew list --formula --versions mupdf >/dev/null 2>&1; then
+    brew uninstall --formula mupdf || failed=1
+  fi
+  for app in Highlights Negative Sioyek sioyek MuPDF mupdf; do
+    path="/Applications/$app.app"
+    if [[ -d "$path" && ! -w "$path/Contents" ]]; then
+      # Scheduled sync never prompts; authorize in a terminal with sudo -v.
+      sudo -n /bin/rm -rf -- "$path" || failed=1
+    else
+      remove_pdf_data "$path"
+    fi
+    remove_pdf_data "$HOME/Applications/$app.app"
+  done
+  remove_pdf_data "$HOME/.config/sioyek" "$HOME/.config/mupdf" "$HOME/.mupdf" \
+    "$HOME/.cache/sioyek" "$HOME/.cache/mupdf" \
+    "$HOME/.local/share/sioyek" "$HOME/.local/share/mupdf" \
+    "$HOME/Library/Application Support/Sioyek" "$HOME/Library/Application Support/sioyek" \
+    "$HOME/Library/Application Support/MuPDF" "$HOME/Library/Application Support/mupdf" \
+    "$HOME/Library/Logs/sioyek-system-theme.log"
+  cache_root="$(getconf DARWIN_USER_CACHE_DIR)"
+  temp_root="$(getconf DARWIN_USER_TEMP_DIR)"
+  for id in net.highlightsapp.universal pl.mackozer.Negative info.sioyek.sioyek com.artifex.mupdf; do
+    for root in "Application Support" "Caches" "HTTPStorages" "WebKit" "Containers" "Application Scripts"; do
+      remove_pdf_data "$HOME/Library/$root/$id"
+    done
+    remove_pdf_data "$HOME/Library/Preferences/$id.plist" \
+      "$HOME/Library/Saved Application State/$id.savedState" \
+      "$HOME/Library/HTTPStorages/$id.binarycookies" "$cache_root/$id" "$temp_root/$id"
+    for path in "$HOME/Library/Preferences/ByHost/$id".*.plist \
+      "$cache_root"/com.apple.WebKit.*+"$id"; do
+      remove_pdf_data "$path"
+    done
+  done
+  for path in "$HOME"/Library/Logs/DiagnosticReports/[Ss]ioyek-* \
+    "$HOME"/Library/Logs/DiagnosticReports/Highlights-* \
+    "$HOME"/Library/Logs/DiagnosticReports/Negative-* \
+    "$HOME"/Library/Logs/DiagnosticReports/[Mm]u[Pp][Dd][Ff]-* \
+    "$HOME"/Library/Application\ Support/CrashReporter/[Ss]ioyek_*.plist \
+    "$HOME"/Library/Caches/Homebrew/*mupdf* \
+    "$HOME"/Library/Caches/Homebrew/*sioyek* \
+    "$HOME"/Library/Caches/Homebrew/downloads/*--mupdf* \
+    "$HOME"/Library/Caches/Homebrew/downloads/*--sioyek* \
+    /Applications/.sioyek-codex-new /Applications/.sioyek-codex-old; do
+    remove_pdf_data "$path"
+  done
+  # Never remove cloud documents. Only prune empty app directories.
+  cloud="$HOME/Library/Mobile Documents/iCloud~net~highlightsapp"
+  rmdir "$cloud/Documents" 2>/dev/null || true
+  if [[ -d "$cloud" ]]; then
+    rmdir "$cloud" 2>/dev/null || sudo -n /bin/rmdir "$cloud" 2>/dev/null || true
+  fi
+  exit "$failed"
+)
+if grep -Fq $'direct\tsioyek\t' "$retired"; then
+  retire_pdf_viewers || failed=1
   installed_casks="$(brew list --cask 2>/dev/null || true)"
 fi
 retire_manifest

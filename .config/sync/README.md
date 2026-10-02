@@ -1014,10 +1014,11 @@ edits do not uninstall software. Sharing or locally installing a retired app
 again clears its retirement entry.
 
 MuPDF, Highlights, Negative, and Sioyek are retired on every Mac. The
-idempotent `~/.config/mac-setup/retire-pdf-viewers.sh` removes their app bundles,
+idempotent cleanup built into `mac-sync` removes their app bundles,
 formula/cask installations, appearance automation, and app-specific user data.
 It preserves PDF documents. macOS privacy restrictions may require granting
 Full Disk Access to the terminal running `mac-sync` to remove sandbox data.
+For administrator-owned app bundles, run `sudo -v` before `mac-sync`.
 
 `retired-apps.tsv` also records explicit removals. VS Code and
 ChatGPT are retired on each Mac; Neovim is installed from `packages.txt`.
