@@ -1,5 +1,11 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
+cask	mupdf	MuPDF
+cask	sioyek	Sioyek
+direct	sioyek	Sioyek
+formula	mupdf	MuPDF
+mas	1498912833	Highlights
+mas	1378123825	Negative
 cask	chatgpt	ChatGPT
 cask	discord	Discord
 cask	gitbutler	GitButler

@@ -148,7 +148,7 @@ The configuration assigns each modifier a stable job:
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
-- `Space`: discoverable Neovim operations and Sioyek reading controls.
+- `Space`: discoverable Neovim operations.
 - `Ctrl-Space`: Herdr administration and infrequent operations.
 - Other `Ctrl` keys retain conventional terminal and editor behavior.
 
@@ -267,20 +267,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | Neovim | Direct | `U` | Redo the last change |
 | Neovim | Direct | `J` | Move selected lines down |
 | Neovim | Direct | `K` | Move selected lines up |
-| Sioyek | Direct | `j` | Scroll down a little |
-| Sioyek | Direct | `k` | Scroll up a little |
-| Sioyek | Direct | `J` | Go to the next PDF page |
-| Sioyek | Direct | `K` | Go to the previous PDF page |
-| Sioyek | Space | `Space h` | Toggle PDF link highlighting |
-| Sioyek | Space | `Space s` | Toggle SyncTeX mode |
-| Sioyek | Space | `Space p` | Toggle presentation mode |
-| Sioyek | Space | `Space m` | Toggle mouse-drag panning |
-| Sioyek | Space | `Space v` | Toggle visual-mark scrolling |
-| Sioyek | Space | `Space d` | Toggle dark mode |
-| Sioyek | Space | `Space w` | Fit the page to window width |
-| Sioyek | Space | `Space W` | Fit text width, ignoring margins |
-| Sioyek | Space | `Space f` | Toggle fullscreen |
-| Sioyek | Space | `Space t` | Toggle the second window |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -587,16 +573,6 @@ Neovim's help is searchable with `Space f h`. Useful topics:
 
 In help, place the cursor on a `|tag|` and press `Ctrl-]`; press `Ctrl-o` to go
 back.
-
-## Sioyek PDF Reading
-
-`j/k` scroll in small steps and `J/K` change PDF pages. Press `Space`, then a
-letter for the former function-key actions: `d` dark mode, `f` fullscreen,
-`w/W` fit page/text width, `p` presentation, `h` link highlighting, `s`
-SyncTeX, `m` mouse-drag panning, `v` visual scrolling, and `t` the second
-window. This is a key sequence, not an on-screen popup. `PageDown` and
-`PageUp` remain available for screen-sized scrolling. The bindings live in
-`~/.config/sioyek/keys_user.config` so app updates do not replace them.
 
 ## fish and Terminal Fundamentals
 
@@ -1037,10 +1013,11 @@ the removal there; its scheduled sync may apply it sooner. Ordinary manifest
 edits do not uninstall software. Sharing or locally installing a retired app
 again clears its retirement entry.
 
-The source-built Sioyek updater is tracked at
-`~/.config/mac-setup/direct/sioyek-source.fish`. It builds in a temporary
-directory, verifies the app bundle, replaces `/Applications/Sioyek.app`, and
-cleans its build files when it exits.
+MuPDF, Highlights, Negative, and Sioyek are retired on every Mac. The
+idempotent `~/.config/mac-setup/retire-pdf-viewers.sh` removes their app bundles,
+formula/cask installations, appearance automation, and app-specific user data.
+It preserves PDF documents. macOS privacy restrictions may require granting
+Full Disk Access to the terminal running `mac-sync` to remove sandbox data.
 
 `retired-apps.tsv` also records explicit removals. VS Code and
 ChatGPT are retired on each Mac; Neovim is installed from `packages.txt`.

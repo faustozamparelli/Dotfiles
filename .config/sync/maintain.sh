@@ -28,7 +28,6 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/jj/config.toml \
   .config/mac-setup \
   .config/nvim \
-  .config/sioyek \
   .config/sync/README.md \
   .config/sync/codex-technical.json \
   .config/sync/codex-technical.py \

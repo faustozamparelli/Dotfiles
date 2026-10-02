@@ -455,6 +455,13 @@ retire_manifest() {
   while IFS=$'\t' read -r -u 3 source identifier name; do
     [[ -z "$source" || "$source" == \#* ]] && continue
 
+    # Dedicated PDF retirement handles permanent deletion and reports privacy
+    # failures. Do not hide failures by moving remaining apps to Trash.
+    case "$source:$identifier" in
+      cask:mupdf|cask:sioyek|direct:sioyek|formula:mupdf|mas:1498912833|mas:1378123825)
+        continue ;;
+    esac
+
     if [[ "$source" == "formula" ]]; then
       if brew list --formula --versions "$identifier" >/dev/null 2>&1; then
         retired_formulae+=("$identifier")
@@ -556,6 +563,13 @@ retire_manifest() {
   fi
 }
 
+# Permanently remove retired PDF viewers and their narrowly scoped user data.
+# Run before generic retirement so app bundles are not left in Trash.
+if [[ -x "$setup/retire-pdf-viewers.sh" ]] &&
+   grep -Fq $'direct\tsioyek\t' "$retired"; then
+  "$setup/retire-pdf-viewers.sh" || failed=1
+  installed_casks="$(brew list --cask 2>/dev/null || true)"
+fi
 retire_manifest
 
 
