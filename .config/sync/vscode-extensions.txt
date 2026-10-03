@@ -1,5 +1,12 @@
-# Core editing and the languages used in the former Neovim setup.
+# Editing, languages, Codex, and the current window customization.
 vscodevim.vim
 ms-python.python
+ms-python.vscode-pylance
 llvm-vs-code-extensions.vscode-clangd
 charliermarsh.ruff
+openai.chatgpt
+subframe7536.custom-ui-style
+# Notebook support installed during VS Code migration.
+ms-toolsai.jupyter
+# Keep the C/C++ debugger; duplicate IntelliSense is disabled in settings.
+ms-vscode.cpptools

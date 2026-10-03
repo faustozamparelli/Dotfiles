@@ -1,0 +1,2 @@
+# Optional environment manager; project environments are managed with uv.
+ms-python.vscode-python-envs

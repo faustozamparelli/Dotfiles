@@ -656,6 +656,7 @@ if grep -Fq $'direct\tsioyek\t' "$retired"; then
 fi
 retire_manifest
 "$setup/retire-pi-zed.sh" || failed=1
+python3 "$setup/cleanup-orphan-app-data.py" --delete || failed=1
 
 
 # ---------------------------------------------------------------------------
@@ -757,6 +758,20 @@ if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
   done < "$vscode_extensions"
 fi
 
+# Keep explicitly unwanted optional extensions off, including Python's pack extras.
+vscode_disabled="$HOME/.config/sync/vscode-disabled-extensions.txt"
+if [[ -f "$vscode_disabled" && -n "$vscode_cli" ]]; then
+  installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+  while IFS= read -r extension; do
+    [[ -z "$extension" || "$extension" == \#* ]] && continue
+    if grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
+      log "Removing optional VS Code extension $extension..."
+      "$vscode_cli" --uninstall-extension "$extension" || failed=1
+    fi
+  done < "$vscode_disabled"
+fi
+
+python3 "$HOME/.config/sync/app-preferences.py" apply || failed=1
 
 # Retire the former generated file opener.
 python3 "$setup/remove-open-in-herdr.py" || failed=1

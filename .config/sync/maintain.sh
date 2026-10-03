@@ -4,6 +4,7 @@ set -euo pipefail
 bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
 python3 "$HOME/.config/sync/codex-technical.py" capture
+python3 "$HOME/.config/sync/app-preferences.py" capture
 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs"
 "$HOME/.config/keymaps/keymap-docs" --check
@@ -26,17 +27,20 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/karabiner/karabiner.json \
   .config/keymaps \
   .config/jj/config.toml \
+  .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .config/nvim \
   .config/sync/README.md \
   .config/sync/codex-technical.json \
   .config/sync/codex-technical.py \
   .config/sync/vscode-extensions.txt \
+  .config/sync/vscode-disabled-extensions.txt \
+  .config/sync/app-preferences.json \
+  .config/sync/app-preferences.py \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \
   .local/bin/mac-app \
   .local/bin/mac-sync \
-  .codexbar/config.json \
   "Library/Application Support/Code/User/settings.json" \
   "Library/Application Support/Code/User/keybindings.json" \
   README.md

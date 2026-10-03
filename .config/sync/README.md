@@ -303,6 +303,15 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Direct | `U` | Redo the last change |
 | VS Code | Direct | `J` | Move selected lines down |
 | VS Code | Direct | `K` | Move selected lines up |
+| VS Code | Space | `Space e` | Open the project file explorer |
+| VS Code | Space | `Space a c` | Open the Codex sidebar |
+| VS Code | Space | `Space m p` | Open rendered Markdown |
+| VS Code | Space | `Space f F` | Reveal the current file in Finder |
+| VS Code | Space | `Space l s` | Search workspace symbols in available indexes |
+| VS Code | Space | `Space l p` | Open the symbol definition or Python source |
+| VS Code | Space | `Space b k` | Close the active editor like Neovim |
+| VS Code | Direct | `cm (Normal)` | Toggle comment on the current line |
+| VS Code | Direct | `cm (Visual)` | Toggle comment on selected lines |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -915,12 +924,17 @@ Its last tracked configuration before retirement was restored from the parent
 of commit `bc45353`, including Vim navigation and the existing themes.
 The bare dotfiles repository tracks only
 `~/Library/Application Support/Code/User/settings.json`, `keybindings.json`,
-and `~/.config/sync/vscode-extensions.txt`. `sync-maintain` stages these files;
+`~/.config/sync/vscode-extensions.txt`, and `vscode-disabled-extensions.txt`.
+`sync-maintain` stages these files;
 `mac-sync` installs missing listed extensions on each Mac. Extension binaries,
 credentials, workspace storage, logs, and caches stay local.
 
-The extension list retains Vim, Python, clangd, and Ruff. The Python extension
-also installs Pylance, Debugpy, and Python Environments. Built-in AI is disabled,
+The extension list retains Vim, Python, Pylance, clangd, Ruff, Codex, and the
+current Custom UI Style window customization, plus Jupyter for notebooks and
+Microsoft C/C++ for its debugger. Microsoft IntelliSense is disabled because
+clangd owns C/C++ analysis. The Python extension may also
+install Debugpy; `vscode-disabled-extensions.txt` removes the optional Python
+Environments extension after installation. Built-in AI is disabled,
 and Python uses the existing interpreter workflow instead of the experimental
 environments integration. Open a project folder with `code path/to/project`;
 avoid opening the entire home or iCloud directory as a workspace.
@@ -931,6 +945,29 @@ scanning. Python reports diagnostics on open files with library indexing off.
 clangd runs at most two workers without background project indexing; this
 reduces cross-file symbol search until those files are opened. Formatting,
 completion, and the restored keybindings remain available.
+
+Markdown files (`.md` and `.markdown`) open as the built-in rendered preview
+from Explorer. Use **View: Reopen Editor With... → Text Editor** to edit the
+source. Git diffs keep the source text. This uses no extra preview extension.
+
+The Fish login terminal uses the existing prompt, aliases and toolchain PATH;
+Herdr only starts automatically in Ghostty, so it does not nest inside VS Code.
+Terminal splits inherit the current directory and persistent sessions are
+explicitly enabled. Vim uses smart-case searching and Neovim's 400 ms mapping
+timeout. Added equivalents include `Space e` (Explorer), `Space a c` (Codex),
+`Space m p` (Markdown preview), `Space f F` (Finder), `Space l s` (symbols),
+`Space l p` (definition/Python source), `Space b k` (close), and `cm` (comments).
+Python defaults to the project `.venv` for newly opened workspaces; an already
+selected interpreter must be changed with **Python: Select Interpreter**.
+
+Remaining migration decisions: Oil's editable directory buffers and Herdr's
+persistent agent/worktree management have no exact built-in equivalents.
+VS Code's clangd currently runs locally; Neovim's `amsc-clangd.sh` also handles
+the course container's compiler and headers. Configure that project separately
+or attach through Dev Containers instead of applying the container wrapper
+globally. Lua language support is a useful optional extension for editing
+Neovim config; JavaScript/TypeScript already have built-in language support.
+Fish keeps `EDITOR`/`VISUAL` as Neovim until the VS Code trial is complete.
 
 To diagnose a recurring spike, run `code --status` while it happens and use
 **Developer: Open Process Explorer** to identify the busy process. If the
@@ -1070,6 +1107,34 @@ Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
+
+### Portable app performance settings
+
+`~/.config/sync/app-preferences.json` shares a reviewed whitelist of performance
+preferences for installed apps. `app-preferences.py apply` runs during
+`mac-sync`; `capture` runs before reconciliation during `sync-maintain` so
+changes made in the apps can be staged. Full application plists stay local.
+The portable Qalculate numeric/formatting preferences in
+`~/.config/qalculate/qalc.cfg` are tracked; calculation histories stay local.
+
+Vorssaint keeps temperature readings with a supported five-second refresh;
+unused network monitoring is disabled. CodexBar uses adaptive refresh and
+follows system Low Power Mode. Its provider IDs, enabled choices and selected
+source are shared through the whitelist, merged into
+`~/.config/codexbar/config.json` while preserving local credentials. The old
+tracked `~/.codexbar/config.json` was an inactive duplicate and has been removed.
+
+Ghostty uses a non-blinking default cursor and keeps vsync enabled. Neovim
+checks macOS appearance every thirty seconds and when regaining focus instead
+of launching `defaults` every two seconds.
+
+`python3 ~/.config/mac-setup/cleanup-orphan-app-data.py --delete` removes only a reviewed,
+explicitly approved list of obsolete app-data folders after checking app bundles,
+executables and running processes. Existing installations keep their data.
+Discord, GitButler and Tor Browser also require their retirement entries.
+This never removes project or document directories. macOS Full Disk Access may
+be needed for protected folders. Without `--delete`, the script archives data
+locally for review instead of permanently deleting it.
 
 ### Codex technical setup
 

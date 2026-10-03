@@ -81,7 +81,9 @@ function M.setup()
     end
 
     local timer = vim.uv.new_timer()
-    timer:start(2000, 2000, vim.schedule_wrap(refresh_async))
+    timer:start(30000, 30000, vim.schedule_wrap(refresh_async))
+
+    vim.api.nvim_create_autocmd('FocusGained', { callback = refresh_async })
 
     vim.api.nvim_create_autocmd('VimLeavePre', {
         callback = function()

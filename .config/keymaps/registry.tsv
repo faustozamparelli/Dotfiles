@@ -139,3 +139,12 @@ vscode.motion.line-end	VS Code	Direct	L	line-end	Move to the end of the line
 vscode.edit.redo	VS Code	Direct	U	redo	Redo the last change
 vscode.visual.move-down	VS Code	Direct	J	move-selection-down	Move selected lines down
 vscode.visual.move-up	VS Code	Direct	K	move-selection-up	Move selected lines up
+vscode.file.explorer	VS Code	Space	Space e	open-explorer	Open the project file explorer
+vscode.ai.codex	VS Code	Space	Space a c	open-codex	Open the Codex sidebar
+vscode.markdown.preview	VS Code	Space	Space m p	preview-markdown	Open rendered Markdown
+vscode.find.finder	VS Code	Space	Space f F	reveal-finder	Reveal the current file in Finder
+vscode.language.workspace-symbols	VS Code	Space	Space l s	workspace-symbols	Search workspace symbols in available indexes
+vscode.language.python-source	VS Code	Space	Space l p	python-source	Open the symbol definition or Python source
+vscode.buffer.delete	VS Code	Space	Space b k	delete-buffer	Close the active editor like Neovim
+vscode.edit.comment	VS Code	Direct	cm (Normal)	comment-line	Toggle comment on the current line
+vscode.visual.comment	VS Code	Direct	cm (Visual)	comment-selection	Toggle comment on selected lines

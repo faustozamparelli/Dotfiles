@@ -4,7 +4,7 @@ confirm-close-surface = false
 working-directory = home
 
 cursor-style = bar
-#cursor-style-blink = false
+cursor-style-blink = false
 shell-integration-features = no-cursor
 
 font-size = 15
