@@ -715,7 +715,6 @@ l / ls     eza -a --git
 b          bat
 o          open
 cl         clear
-fi         yazi
 py         Homebrew Python (alias for python)
 python     stable Homebrew Python command maintained by mac-sync
 sv         activate .venv for fish
@@ -862,9 +861,10 @@ course code only inside the container after loading the modules it needs.
 ### just: project commands
 
 `just` is a global command runner. A project `justfile` should wrap its existing
-tools. This Mac setup has `just check` for read-only validation and `just sync`
-for `mac-sync --no-pull`; run `just --list` to see recipes. A Python project
-could use:
+tools. This Mac setup's recipes live in `~/.config/mac-setup/justfile`:
+`just --justfile ~/.config/mac-setup/justfile check` performs read-only
+validation and the `sync` recipe runs `mac-sync --no-pull`. Use that same
+`--justfile` argument with `--list` to see recipes. A Python project could use:
 
 ```just
 check:
@@ -880,8 +880,8 @@ run:
 
 ### Jupytext: opt-in notebook pairs
 
-JupyterLab stays the notebook UI. Pair only a chosen notebook with a Python
-script containing `# %%` cell markers:
+JupyterLab or VS Code can be the notebook UI. Pair only a chosen notebook with
+a Python script containing `# %%` cell markers:
 
 ```fish
 jupytext --set-formats ipynb,py:percent notebook.ipynb
@@ -889,7 +889,7 @@ jupytext --paired-paths notebook.ipynb
 jupytext --sync notebook.py
 ```
 
-Edit the `.py` file in Neovim and use Ruff, Pyright, ripgrep, Git diff, or
+Edit the `.py` file in Neovim or VS Code and use Ruff, Pyright, ripgrep, Git diff, or
 coding agents on it. Run `jupytext --sync notebook.py` after script edits.
 JupyterLab's Jupytext extension maintains explicitly paired files when saving
 in the UI. No project-wide pairing rule is set; existing notebooks stay as
@@ -1035,6 +1035,37 @@ staging and separate Git worktrees for concurrent agent changes. Extra Lua/TOML
 extensions are not priorities for the current Python/C++ workload. Oil's editable
 directory buffers and Herdr's agent/worktree management still have no exact
 built-in equivalents. Fish keeps `EDITOR`/`VISUAL` as Neovim during the trial.
+
+#### Terminal tools and optional editor companions
+
+Keep the shared extension list focused on the active Python/C++ workflow.
+The terminal tools do not each need their own editor extension:
+
+| Terminal tools | Existing VS Code companion |
+| --- | --- |
+| Fish, Pure, zoxide, fzf | Fish terminal with the existing prompt and shell integration; Quick Open for editor files |
+| ripgrep, fd, eza, bat | Search, Explorer and source editors |
+| uv, Ruff, Python, Jupyter | Tracked Python/Ruff/Jupyter extensions and manually invoked uv tasks |
+| Git, delta, gh | Built-in source control and visual diffs; keep `gh` for GitHub operations |
+| just | Invoke project recipes in the terminal or define an explicit project task |
+| btop | Keep system monitoring in the terminal |
+
+Two optional extensions add distinct functionality, but neither is installed
+by the shared manifest:
+
+- [Jupytext Sync](https://marketplace.visualstudio.com/items?itemName=caenrigen.jupytext-sync)
+  (`caenrigen.jupytext-sync`) keeps explicitly paired notebooks and `.py`
+  files synchronized on save. This is useful when Codex edits the text version
+  while the notebook UI shows outputs. It needs Jupytext in the Python
+  environment it selects. The existing CLI workflow remains sufficient for
+  manual sync; the Jupyter extension already runs `# %%` Python cells.
+- [JJ View](https://marketplace.visualstudio.com/items?itemName=jj-view.jj-view)
+  (`jj-view.jj-view`) adds a Jujutsu graph and change management in the editor.
+  Consider it only for repositories actively using `jj`. Its defaults include
+  polling and recursive repository detection. If adopted, use
+  `jj-view.fileWatcherMode: "watch"` and
+  `jj-view.autoRepositoryDetection: false` to prefer native events and workspace
+  roots; the watcher may still fall back to polling.
 
 Documentation verified through Context7 `/microsoft/vscode-docs` and
 `/websites/astral_sh_uv`, plus [uv notebooks](https://docs.astral.sh/uv/guides/integration/jupyter/)
