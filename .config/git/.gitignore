@@ -38,7 +38,8 @@ Thumbs.db
 .config/nvim/*.log
 .config/nvim/lua/fausto/*.log
 .config/karabiner/automatic_backups/
-.config/qalculate/
+.config/qalculate/*
+!.config/qalculate/qalc.cfg
 .config/fish/fish_variables
 .config/fish/secrets.fish
 .config/fish/completions/
