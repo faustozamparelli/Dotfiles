@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Retire the old file opener and VS Code defaults on each Mac."""
+"""Retire the old generated file opener on each Mac."""
 import os
 import plistlib
 import shutil
@@ -16,7 +16,7 @@ if prefs.exists():
     data = plistlib.loads(prefs.read_bytes())
     for row in data.get('LSHandlers', []):
         for key, value in list(row.items()):
-            if key.startswith('LSHandlerRole') and value in {former, 'com.microsoft.VSCode'}:
+            if key.startswith('LSHandlerRole') and value == former:
                 tag = row.get('LSHandlerContentTag', '')
                 content_type = row.get('LSHandlerContentType', '')
                 row[key] = ('net.imput.helium' if tag in {'md', 'markdown', 'html', 'htm'}

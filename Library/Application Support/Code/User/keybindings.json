@@ -1,0 +1,39 @@
+[
+  // km:vscode.tab.previous
+  { "key": "cmd+h", "command": "workbench.action.previousEditor" },
+  // km:vscode.tab.next
+  { "key": "cmd+l", "command": "workbench.action.nextEditor" },
+  // km:vscode.tab.move-left
+  { "key": "cmd+shift+h", "command": "workbench.action.moveEditorLeftInGroup" },
+  // km:vscode.tab.move-right
+  { "key": "cmd+shift+l", "command": "workbench.action.moveEditorRightInGroup" },
+  // km:vscode.pane.split-right
+  { "key": "cmd+b", "command": "workbench.action.splitEditorRight" },
+  // km:vscode.pane.split-down
+  { "key": "cmd+n", "command": "workbench.action.splitEditorDown" },
+  // km:vscode.tab.close
+  { "key": "cmd+w", "command": "workbench.action.closeActiveEditor", "when": "!terminalFocus" },
+  // km:vscode.view.explorer
+  { "key": "cmd+e", "command": "workbench.view.explorer" },
+  { "key": "cmd+e", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
+  // km:vscode.view.git
+  { "key": "cmd+g", "command": "workbench.view.scm" },
+  { "key": "cmd+g", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible && activeViewlet == 'workbench.view.scm'" },
+  // km:vscode.view.secondary-sidebar
+  { "key": "cmd+shift+e", "command": "workbench.action.toggleAuxiliaryBar" },
+  // km:vscode.terminal.toggle
+  { "key": "cmd+t", "command": "runCommands", "args": { "commands": ["workbench.action.terminal.focus", "workbench.action.terminal.moveToEditor"] } },
+  { "key": "cmd+t", "command": "workbench.action.openPreviousRecentlyUsedEditorInGroup", "when": "terminalEditorFocus" },
+  // km:vscode.terminal.side
+  { "key": "cmd+shift+t", "command": "workbench.action.createTerminalEditorSide" },
+  // km:vscode.escape
+  { "key": "cmd+a", "command": "extension.vim_escape", "when": "editorTextFocus && vim.active && vim.mode != 'Normal'" },
+  // km:vscode.pane.left
+  { "key": "alt+h", "command": "workbench.action.navigateLeft", "when": "!terminalFocus" },
+  // km:vscode.pane.down
+  { "key": "alt+j", "command": "workbench.action.navigateDown", "when": "!terminalFocus" },
+  // km:vscode.pane.up
+  { "key": "alt+k", "command": "workbench.action.navigateUp", "when": "!terminalFocus" },
+  // km:vscode.pane.right
+  { "key": "alt+l", "command": "workbench.action.navigateRight", "when": "!terminalFocus" }
+]

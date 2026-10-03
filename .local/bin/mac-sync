@@ -739,7 +739,26 @@ install_manifest() {
 install_manifest "$shared"
 install_manifest "$local_apps"
 
-# Retire old file associations after removing VS Code.
+# VS Code stays small: install only the extensions listed in dotfiles.
+# Missing extensions are added; locally chosen extensions are left alone.
+vscode_extensions="$HOME/.config/sync/vscode-extensions.txt"
+vscode_cli="$(command -v code || true)"
+if [[ -z "$vscode_cli" && -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]]; then
+  vscode_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+fi
+if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
+  installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+  while IFS= read -r extension; do
+    [[ -z "$extension" || "$extension" == \#* ]] && continue
+    if ! grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
+      log "Installing VS Code extension $extension..."
+      "$vscode_cli" --install-extension "$extension" || failed=1
+    fi
+  done < "$vscode_extensions"
+fi
+
+
+# Retire the former generated file opener.
 python3 "$setup/remove-open-in-herdr.py" || failed=1
 
 

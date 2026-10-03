@@ -266,6 +266,43 @@ update the registry and implementation together, then run `keymap-docs`.
 | Neovim | Direct | `U` | Redo the last change |
 | Neovim | Direct | `J` | Move selected lines down |
 | Neovim | Direct | `K` | Move selected lines up |
+| VS Code | Command | `Cmd-h` | Select the previous editor tab |
+| VS Code | Command | `Cmd-l` | Select the next editor tab |
+| VS Code | Command | `Cmd-Shift-h` | Move the current editor tab left |
+| VS Code | Command | `Cmd-Shift-l` | Move the current editor tab right |
+| VS Code | Command | `Cmd-b` | Split the editor to the right |
+| VS Code | Command | `Cmd-n` | Split the editor below |
+| VS Code | Command | `Cmd-w` | Close the active editor tab |
+| VS Code | Command | `Cmd-t` | Show the terminal in an editor tab or return to the previous file |
+| VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
+| VS Code | Command | `Cmd-e` | Show or hide the file explorer |
+| VS Code | Command | `Cmd-g` | Show or hide Source Control |
+| VS Code | Command | `Cmd-a` | Return to Vim Normal mode |
+| VS Code | Alt | `Alt-h` | Focus the pane to the left |
+| VS Code | Alt | `Alt-j` | Focus the pane below |
+| VS Code | Alt | `Alt-k` | Focus the pane above |
+| VS Code | Alt | `Alt-l` | Focus the pane to the right |
+| VS Code | Space | `Space Space` | Save the current file |
+| VS Code | Space | `Space f f` | Find files in the current project |
+| VS Code | Space | `Space f g` | Search text across project files |
+| VS Code | Space | `Space f b` | Find open editors |
+| VS Code | Space | `Space f r` | Open a recent file or project |
+| VS Code | Space | `Space g d` | Diff the current file |
+| VS Code | Space | `Space g n` | Jump to the next changed block |
+| VS Code | Space | `Space g p` | Jump to the previous changed block |
+| VS Code | Space | `Space l r` | Rename the symbol |
+| VS Code | Space | `Space l a` | Show available code actions |
+| VS Code | Space | `Space l f` | Format the current file |
+| VS Code | Space | `Space l d` | Show workspace problems |
+| VS Code | Space | `Space b l` | Select the next editor tab |
+| VS Code | Space | `Space b h` | Select the previous editor tab |
+| VS Code | Space | `Space b d` | Close the active editor tab |
+| VS Code | Space | `Space ?` | Open VS Code keyboard shortcuts |
+| VS Code | Direct | `H` | Move to the first nonblank character |
+| VS Code | Direct | `L` | Move to the end of the line |
+| VS Code | Direct | `U` | Redo the last change |
+| VS Code | Direct | `J` | Move selected lines down |
+| VS Code | Direct | `K` | Move selected lines up |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -871,6 +908,35 @@ A colocated repo may show a detached Git HEAD. Check `jj status` and
 GitHub, and `gh` remain available. LazyGit has been uninstalled; Neovim's Git
 picker remains.
 
+### VS Code
+
+VS Code is shared through `apps.tsv` alongside the terminal workspace.
+Its last tracked configuration before retirement was restored from the parent
+of commit `bc45353`, including Vim navigation and the existing themes.
+The bare dotfiles repository tracks only
+`~/Library/Application Support/Code/User/settings.json`, `keybindings.json`,
+and `~/.config/sync/vscode-extensions.txt`. `sync-maintain` stages these files;
+`mac-sync` installs missing listed extensions on each Mac. Extension binaries,
+credentials, workspace storage, logs, and caches stay local.
+
+The extension list retains Vim, Python, clangd, and Ruff. The Python extension
+also installs Pylance, Debugpy, and Python Environments. Built-in AI is disabled,
+and Python uses the existing interpreter workflow instead of the experimental
+environments integration. Open a project folder with `code path/to/project`;
+avoid opening the entire home or iCloud directory as a workspace.
+
+Generated directories and virtual environments are excluded from file watching
+and search. Git discovery is limited to open editors without parent repository
+scanning. Python reports diagnostics on open files with library indexing off.
+clangd runs at most two workers without background project indexing; this
+reduces cross-file symbol search until those files are opened. Formatting,
+completion, and the restored keybindings remain available.
+
+To diagnose a recurring spike, run `code --status` while it happens and use
+**Developer: Open Process Explorer** to identify the busy process. If the
+extension host is responsible, run **Help: Start Extension Bisect**. Test with
+the actual project before concluding that a previous CPU issue is resolved.
+
 ### Codex
 
 The preferred entry point is `Cmd-g`, which creates or focuses the project
@@ -998,8 +1064,8 @@ Pi Desktop, the Pi coding agent, and Zed are retired on every Mac.
 `mac-sync` permanently removes their apps, Pi npm packages, settings, MCP
 configuration, credentials, extensions, sessions, logs, and app caches.
 
-`retired-apps.tsv` also records explicit removals. VS Code and
-ChatGPT are retired on each Mac; Neovim is installed from `packages.txt`.
+`retired-apps.tsv` also records explicit removals. ChatGPT is retired on each
+Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
 stages maintained dotfile paths. `bcp` then asks for a commit message and
