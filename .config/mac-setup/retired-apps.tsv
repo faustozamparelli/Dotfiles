@@ -13,7 +13,6 @@ cask	homerow	homerow
 cask	nikitabobko/tap/aerospace	AeroSpace
 cask	tor-browser	Tor Browser
 cask	t3-code	T3 Code (Alpha)
-cask	visual-studio-code	Visual Studio Code
 mas	462062816	Microsoft PowerPoint
 formula	cmake	CMake
 formula	gcc	GCC
