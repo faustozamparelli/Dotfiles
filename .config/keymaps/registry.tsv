@@ -14,7 +14,6 @@ herdr.tab.rename	Herdr	Command	Cmd-r	rename-tab	Rename the current tab
 herdr.pane.split-right	Herdr	Command	Cmd-b	split-right	Create a pane on the right
 herdr.pane.split-down	Herdr	Command	Cmd-n	split-down	Create a pane below
 herdr.agent.toggle	Herdr	Command	Cmd-g	agent-tab	Create or focus the full-size Codex tab
-herdr.agent.pi	Herdr	Command	Cmd-Shift-g	pi-agent-tab	Create or focus the full-size Pi tab
 herdr.pane.close	Herdr	Command	Cmd-w	close-pane	Close the current pane
 herdr.tab.new	Herdr	Command	Cmd-t	new-tab	Create a tab in the current workspace
 herdr.copy-mode.enter	Herdr	Command	Cmd-Shift-u	copy-mode	Enter keyboard copy mode

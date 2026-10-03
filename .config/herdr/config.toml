@@ -86,12 +86,6 @@ command = "~/.config/herdr/toggle-agent codex"
 description = "create or focus the full-size Codex tab"
 
 [[keys.command]]
-key = "cmd+shift+g" # km:herdr.agent.pi
-type = "shell"
-command = "~/.config/herdr/toggle-agent pi"
-description = "create or focus the full-size Pi tab"
-
-[[keys.command]]
 key = "alt+h" # km:herdr.pane.left
 type = "shell"
 command = "~/.config/herdr/smart-pane-nav left h"

@@ -4,7 +4,6 @@ set -euo pipefail
 kind="${1:-codex}"
 case "$kind" in
   codex) label="Codex" ;;
-  pi) label="Pi" ;;
   *) printf 'Unsupported agent: %s\n' "$kind" >&2; exit 2 ;;
 esac
 

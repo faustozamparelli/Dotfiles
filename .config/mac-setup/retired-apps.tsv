@@ -31,3 +31,5 @@ formula	scipy	SciPy
 formula	python-matplotlib	Matplotlib
 formula	pytorch	PyTorch
 formula	mpi4py	mpi4py
+cask	zed	zed
+direct	pi-desktop	Pi Desktop

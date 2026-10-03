@@ -178,7 +178,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Command | `Cmd-b` | Create a pane on the right |
 | Herdr | Command | `Cmd-n` | Create a pane below |
 | Herdr | Command | `Cmd-g` | Create or focus the full-size Codex tab |
-| Herdr | Command | `Cmd-Shift-g` | Create or focus the full-size Pi tab |
 | Herdr | Command | `Cmd-w` | Close the current pane |
 | Herdr | Command | `Cmd-t` | Create a tab in the current workspace |
 | Herdr | Command | `Cmd-Shift-u` | Enter keyboard copy mode |
@@ -305,10 +304,9 @@ than the physical display percentage, so adjust `mobile_width_threshold` in
 
 ### The agent tab
 
-`Cmd-g` creates or focuses a full-size Codex tab; `Cmd-Shift-g` does the
-same for Pi. Each starts in the current pane's directory. Repeating a shortcut
-focuses its agent instead of creating duplicates, or promotes an agent out of
-a split into its own tab.
+`Cmd-g` creates or focuses a full-size Codex tab in the current pane's
+directory. Repeating the shortcut focuses Codex instead of creating duplicates,
+or promotes it out of a split into its own tab.
 
 Before opening it, make sure the Neovim/shell pane belongs to the correct
 project. Give the agent paths and constraints explicitly. For dotfiles or Mac
@@ -873,30 +871,6 @@ A colocated repo may show a detached Git HEAD. Check `jj status` and
 GitHub, and `gh` remain available. LazyGit has been uninstalled; Neovim's Git
 picker remains.
 
-### Pi and Pi Desktop
-
-Pi uses the official `@earendil-works/pi-coding-agent` npm package. `mac-sync`
-installs version 0.87.1 when Pi is missing, through the shared Pi Desktop
-installer. Existing Pi installations keep their current version. On another
-Mac, run `mac-sync`, then use `pi` and `/login openai-codex` for the existing
-subscription. `~/.config/sync/pi-agent.json` tracks only portable
-settings: subscription provider, model, built-in read/bash/edit/write tools,
-Neovim as external editor, and quiet startup. `mac-sync` merges them if Pi is
-installed. Credentials, sessions, and the Herdr Pi integration stay local.
-Existing project `AGENTS.md` files provide instructions when relevant; Codex
-plugins and MCP servers were not copied into Pi.
-
-Herdr's native Pi integration reports agent state. `Cmd-Shift-g` creates or
-focuses its own Pi tab; `Cmd-g` remains Codex. Optional Pi Desktop uses the
-same Pi executable and session store for diffs, permissions, worktrees,
-changed files, tool calls, and session review. It asks before edits, stays
-closed at login, and leaves its council feature off. Neovim remains the editor.
-Pi Desktop is shared through `~/.config/mac-setup/apps.tsv`. Its tracked
-installer, `~/.config/mac-setup/direct/pi-desktop.sh`, verifies the SHA-256 of
-the FaqFirebase v0.1.9-alpha Apple Silicon archive before installing it in
-`/Applications`. Existing installations stay in place. The dotfiles repository
-shares app manifests and installers; each Mac installs its own app bundles.
-
 ### Codex
 
 The preferred entry point is `Cmd-g`, which creates or focuses the project
@@ -1019,6 +993,10 @@ formula/cask installations, appearance automation, and app-specific user data.
 It preserves PDF documents. macOS privacy restrictions may require granting
 Full Disk Access to the terminal running `mac-sync` to remove sandbox data.
 For administrator-owned app bundles, run `sudo -v` before `mac-sync`.
+
+Pi Desktop, the Pi coding agent, and Zed are retired on every Mac.
+`mac-sync` permanently removes their apps, Pi npm packages, settings, MCP
+configuration, credentials, extensions, sessions, logs, and app caches.
 
 `retired-apps.tsv` also records explicit removals. VS Code and
 ChatGPT are retired on each Mac; Neovim is installed from `packages.txt`.

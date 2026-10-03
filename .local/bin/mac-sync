@@ -458,7 +458,7 @@ retire_manifest() {
     # Dedicated PDF retirement handles permanent deletion and reports privacy
     # failures. Do not hide failures by moving remaining apps to Trash.
     case "$source:$identifier" in
-      cask:mupdf|cask:sioyek|direct:sioyek|formula:mupdf|mas:1498912833|mas:1378123825)
+      cask:mupdf|cask:sioyek|direct:sioyek|formula:mupdf|mas:1498912833|mas:1378123825|direct:pi-desktop|cask:zed)
         continue ;;
     esac
 
@@ -655,6 +655,7 @@ if grep -Fq $'direct\tsioyek\t' "$retired"; then
   installed_casks="$(brew list --cask 2>/dev/null || true)"
 fi
 retire_manifest
+"$setup/retire-pi-zed.sh" || failed=1
 
 
 # ---------------------------------------------------------------------------
@@ -737,31 +738,6 @@ install_manifest() {
 
 install_manifest "$shared"
 install_manifest "$local_apps"
-
-# Merge only portable Pi defaults. Credentials, sessions, and local extensions
-# stay in ~/.pi/agent and are never read into the dotfiles repository.
-if command -v pi >/dev/null 2>&1 &&
-   [[ -f "$HOME/.config/sync/pi-agent.json" ]]; then
-  python3 - "$HOME/.config/sync/pi-agent.json" "$HOME/.pi/agent/settings.json" <<'PYPI' || {
-import json
-import os
-import sys
-from pathlib import Path
-
-profile = json.loads(Path(sys.argv[1]).read_text())
-target = Path(sys.argv[2])
-current = json.loads(target.read_text()) if target.exists() else {}
-updated = {**current, **profile}
-if updated != current:
-    target.parent.mkdir(parents=True, exist_ok=True)
-    temporary = target.with_name(target.name + '.new')
-    temporary.write_text(json.dumps(updated, indent=2) + '\n')
-    os.chmod(temporary, 0o600)
-    temporary.replace(target)
-PYPI
-    echo "Warning: Pi defaults could not be applied; other Mac setup will continue." >&2
-  }
-fi
 
 # Retire old file associations after removing VS Code.
 python3 "$setup/remove-open-in-herdr.py" || failed=1

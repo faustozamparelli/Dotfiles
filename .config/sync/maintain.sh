@@ -31,7 +31,6 @@ python3 "$HOME/.config/sync/codex-technical.py" capture
   .config/sync/README.md \
   .config/sync/codex-technical.json \
   .config/sync/codex-technical.py \
-  .config/sync/pi-agent.json \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \
   .local/bin/mac-app \
