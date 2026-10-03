@@ -37,12 +37,15 @@ python3 "$HOME/.config/sync/app-preferences.py" capture
   .config/sync/vscode-disabled-extensions.txt \
   .config/sync/app-preferences.json \
   .config/sync/app-preferences.py \
+  .config/sync/install-vscode-local.py \
+  .config/sync/vscode-preview-pdf \
   .config/sync/install-agent.sh \
   .config/sync/maintain.sh \
   .local/bin/mac-app \
   .local/bin/mac-sync \
   "Library/Application Support/Code/User/settings.json" \
   "Library/Application Support/Code/User/keybindings.json" \
+  "Library/Application Support/Code/User/tasks.json" \
   README.md
 
 "${bare[@]}" status --short

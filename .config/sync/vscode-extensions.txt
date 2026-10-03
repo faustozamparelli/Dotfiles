@@ -10,3 +10,5 @@ subframe7536.custom-ui-style
 ms-toolsai.jupyter
 # Keep the C/C++ debugger; duplicate IntelliSense is disabled in settings.
 ms-vscode.cpptools
+ms-vscode-remote.remote-containers
+ms-python.debugpy

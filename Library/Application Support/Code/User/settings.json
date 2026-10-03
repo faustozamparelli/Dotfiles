@@ -83,7 +83,9 @@
   // Explorer opens rendered Markdown; Git diffs retain source text.
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor",
-    "*.markdown": "vscode.markdown.preview.editor"
+    "*.markdown": "vscode.markdown.preview.editor",
+    "*.pdf": "fausto.previewPdf",
+    "*.PDF": "fausto.previewPdf"
   },
   "workbench.diffEditorAssociations": {
     "*.md": "default",
@@ -150,6 +152,7 @@
   "python.analysis.indexing": false,
   // Keep the Microsoft debugger; clangd owns C/C++ language analysis.
   "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.path": "${userHome}/.config/mac-setup/amsc-clangd.sh",
   "clangd.arguments": [
     "--background-index=false",
     "-j=2"
@@ -189,6 +192,7 @@
   "ruff.configurationPreference": "filesystemFirst",
   "python.analysis.typeCheckingMode": "basic",
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+  "python.testing.autoTestDiscoverOnSaveEnabled": false,
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true

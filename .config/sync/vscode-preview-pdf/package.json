@@ -1,0 +1,21 @@
+{
+  "name": "preview-pdf",
+  "displayName": "Open PDFs in Preview",
+  "description": "Open clicked PDFs in the system default app, including the AMSC shared folder.",
+  "publisher": "fausto",
+  "version": "1.0.1",
+  "engines": { "vscode": "^1.90.0" },
+  "main": "./extension.js",
+  "extensionKind": ["ui"],
+  "activationEvents": ["onCustomEditor:fausto.previewPdf"],
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "fausto.previewPdf",
+        "displayName": "System PDF App",
+        "selector": [{ "filenamePattern": "*.pdf" }, { "filenamePattern": "*.PDF" }],
+        "priority": "default"
+      }
+    ]
+  }
+}

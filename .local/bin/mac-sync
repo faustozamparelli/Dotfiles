@@ -772,6 +772,8 @@ if [[ -f "$vscode_disabled" && -n "$vscode_cli" ]]; then
 fi
 
 python3 "$HOME/.config/sync/app-preferences.py" apply || failed=1
+python3 "$HOME/.config/sync/install-vscode-local.py" || failed=1
+python3 "$setup/vscode-amsc.py" || failed=1
 
 # Retire the former generated file opener.
 python3 "$setup/remove-open-in-herdr.py" || failed=1

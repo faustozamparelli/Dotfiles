@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "AMSC: connect to Rosetta debug server",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${input:amscProgram}",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/u/sw/toolchains/gcc-glibc/11.2.0/base/bin/gdb",
+      "miDebuggerServerAddress": "127.0.0.1:54329",
+      "stopAtEntry": true,
+      "externalConsole": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "amscProgram",
+      "type": "promptString",
+      "description": "Absolute Linux path of the executable started with ROSETTA_DEBUGSERVER_PORT=54329"
+    }
+  ]
+}

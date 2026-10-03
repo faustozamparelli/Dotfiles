@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "uv: sync project",
+      "type": "process",
+      "command": "uv",
+      "args": ["sync"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "uv: run current Python file",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "python", "${file}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "uv: pytest",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "pytest"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "uv: Ruff check",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "ruff", "check", "."],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ]
+}

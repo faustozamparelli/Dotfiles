@@ -924,6 +924,7 @@ Its last tracked configuration before retirement was restored from the parent
 of commit `bc45353`, including Vim navigation and the existing themes.
 The bare dotfiles repository tracks only
 `~/Library/Application Support/Code/User/settings.json`, `keybindings.json`,
+`tasks.json`,
 `~/.config/sync/vscode-extensions.txt`, and `vscode-disabled-extensions.txt`.
 `sync-maintain` stages these files;
 `mac-sync` installs missing listed extensions on each Mac. Extension binaries,
@@ -932,8 +933,8 @@ credentials, workspace storage, logs, and caches stay local.
 The extension list retains Vim, Python, Pylance, clangd, Ruff, Codex, and the
 current Custom UI Style window customization, plus Jupyter for notebooks and
 Microsoft C/C++ for its debugger. Microsoft IntelliSense is disabled because
-clangd owns C/C++ analysis. The Python extension may also
-install Debugpy; `vscode-disabled-extensions.txt` removes the optional Python
+clangd owns C/C++ analysis. Python Debugger and Dev Containers are explicitly
+tracked; `vscode-disabled-extensions.txt` removes the optional Python
 Environments extension after installation. Built-in AI is disabled,
 and Python uses the existing interpreter workflow instead of the experimental
 environments integration. Open a project folder with `code path/to/project`;
@@ -960,14 +961,84 @@ timeout. Added equivalents include `Space e` (Explorer), `Space a c` (Codex),
 Python defaults to the project `.venv` for newly opened workspaces; an already
 selected interpreter must be changed with **Python: Select Interpreter**.
 
-Remaining migration decisions: Oil's editable directory buffers and Herdr's
-persistent agent/worktree management have no exact built-in equivalents.
-VS Code's clangd currently runs locally; Neovim's `amsc-clangd.sh` also handles
-the course container's compiler and headers. Configure that project separately
-or attach through Dev Containers instead of applying the container wrapper
-globally. Lua language support is a useful optional extension for editing
-Neovim config; JavaScript/TypeScript already have built-in language support.
-Fish keeps `EDITOR`/`VISUAL` as Neovim until the VS Code trial is complete.
+VS Code's clangd now uses the same `amsc-clangd.sh` bridge as Neovim. Open
+`~/shared-folder` or one of its project subdirectories in its own VS Code
+window. For these folders the bridge runs Linux clangd in the running AMSC
+container, maps file paths, loads GCC 11.2 and queries its system headers.
+Outside this tree it uses native macOS clangd. If the container is stopped,
+the bridge reports how to start it rather than producing misleading Mac
+compiler diagnostics for Linux code. VS Code's two-worker/no-background-index
+arguments are forwarded; Neovim's existing defaults remain unchanged.
+
+For direct access to Linux headers, use **Dev Containers: Attach to Running
+Container... → amsc**. The tracked `~/.config/mac-setup/vscode-amsc.json` is
+merged into the local named-container configuration by `vscode-amsc.py` during
+sync. It opens `/shared-folder` as `ubuntu`, installs Linux clangd/C++/Vim
+extensions, uses the course Bash startup, and runs clangd with the same GCC
+module environment. Container state, server files and extension binaries stay
+local. OrbStack remains the required local Linux runtime; Dev Containers
+connects to it and does not replace it. A new container needs the helper
+restored with `mac-sync --no-pull` after it is started.
+
+The header discovery includes installed AMSC libraries, not the module state
+of an unrelated interactive shell. Run library-specific `module load` commands
+in the terminal before builds; use a project `compile_commands.json` for exact
+macros, compiler flags and include paths. For CMake, configure inside the
+container with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, then point the project
+clangd config at that build directory. Do not compile the Linux course library
+stack with macOS clang.
+
+On Apple Silicon, this Intel course image cannot use GDB's normal local
+`run` command. The verified alternative is Rosetta's remote debug server:
+
+```sh
+# In the AMSC terminal, after loading GCC and the project's library modules:
+ROSETTA_DEBUGSERVER_PORT=54329 /absolute/linux/path/to/executable
+```
+
+Build with `-g` for debug symbols. In the attached VS Code window, select
+**AMSC: connect to Rosetta debug server** in Run and Debug, and enter that same
+Linux executable path. The tracked launch template is also available at
+`~/.config/mac-setup/vscode-amsc-launch.json` for a project's `.vscode/launch.json`.
+Direct GDB failed with a register error; the remote connection successfully
+stopped at `main` and inspected `argc`. No runtime restart or security-setting
+changes were needed.
+
+For Python notebooks, use your uv project environment:
+
+```sh
+uv sync
+uv add --dev ipykernel
+```
+
+Select the project's `.venv/bin/python` as both Python interpreter and notebook
+kernel. The kernel selection is independent of the editor's interpreter. Use
+`uv add` for dependencies so `pyproject.toml` and `uv.lock` stay authoritative.
+**Tasks: Run Task** offers uv sync, run-current-file, pytest and Ruff check.
+These tasks only run when invoked; pytest/Ruff must be available in the project
+or command environment. Test discovery on save is disabled; configure the
+project's test framework when needed and run discovery/tests manually.
+
+PDF clicks open the macOS default app (currently Preview) through the tiny
+tracked local `fausto.preview-pdf` opener. It activates only for PDF files,
+opens the local file externally and closes its own temporary editor tab.
+For the attached AMSC window it maps `/shared-folder` to `~/shared-folder`.
+Other remote PDFs must be downloaded first. `install-vscode-local.py` packages
+and installs this extension during sync; it has no npm dependencies and its
+source is tracked under `~/.config/sync/vscode-preview-pdf`. Generated VSIX files
+and installed extension directories stay local. Reload the VS Code window
+after an update to this local extension if VS Code requests it.
+
+Useful built-in tools for reviewing generated code are notebook diffs, Variable
+Explorer/Data Viewer, the Problems panel, tests, debugger watches, selective Git
+staging and separate Git worktrees for concurrent agent changes. Extra Lua/TOML
+extensions are not priorities for the current Python/C++ workload. Oil's editable
+directory buffers and Herdr's agent/worktree management still have no exact
+built-in equivalents. Fish keeps `EDITOR`/`VISUAL` as Neovim during the trial.
+
+Documentation verified through Context7 `/microsoft/vscode-docs` and
+`/websites/astral_sh_uv`, plus [uv notebooks](https://docs.astral.sh/uv/guides/integration/jupyter/)
+and [OrbStack debugging](https://docs.orbstack.dev/machines/#debugging-with-gdb-lldb).
 
 To diagnose a recurring spike, run `code --status` while it happens and use
 **Developer: Open Process Explorer** to identify the busy process. If the
