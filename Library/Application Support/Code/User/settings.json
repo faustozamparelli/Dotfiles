@@ -3,7 +3,6 @@
   "window.openFoldersInNewWindow": "off",
   "window.openFilesInNewWindow": "off",
   "workbench.preferredDarkColorTheme": "Dark Modern",
-  "workbench.preferredLightColorTheme": "Light Modern",
   "workbench.colorTheme": "Dark Modern",
   "workbench.colorCustomizations": {
     "[Dark Modern]": {
@@ -104,9 +103,7 @@
   "editor.detectIndentation": true,
   "editor.minimap.enabled": false,
   "editor.stickyScroll.enabled": false,
-  "files.autoSave": "off",
-  // Keep background work bounded; search exclusions do not stop file watchers.
-  "chat.disableAIFeatures": true,
+  "files.autoSave": "onFocusChange",
   "python.useEnvironmentsExtension": false,
   "python.experiments.enabled": false,
   "git.autofetch": false,
@@ -458,5 +455,7 @@
   "workbench.browser.showInTitleBar": false,
   "workbench.layoutControl.enabled": false,
   "window.commandCenter": false,
-  "workbench.editor.enablePreviewFromQuickOpen": true
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.iconTheme": "vscode-modern-icons",
+  "chat.permissions.default": "autoApprove"
 }
