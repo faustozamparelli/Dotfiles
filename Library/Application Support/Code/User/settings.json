@@ -457,5 +457,7 @@
   "window.commandCenter": false,
   "workbench.editor.enablePreviewFromQuickOpen": true,
   "workbench.iconTheme": "vscode-modern-icons",
-  "chat.permissions.default": "autoApprove"
+  "chat.permissions.default": "autoApprove",
+  "editor.accessibilitySupport": "off",
+  "chat.viewSessions.orientation": "stacked"
 }
