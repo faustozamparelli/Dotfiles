@@ -97,6 +97,11 @@ fi
 # Dotfiles
 # ---------------------------------------------------------------------------
 
+failed=0
+# Capture local edits before any incoming configuration is applied. Shortcut
+# data has its own remote branch, independent of dirty/staged dotfiles.
+python3 "$HOME/.config/sync/app-shortcuts.py" || failed=1
+
 if $pull && [[ -d "$HOME/.config/git/dotfiles" ]]; then
   if "${bare[@]}" diff --quiet &&
      "${bare[@]}" diff --cached --quiet; then
@@ -163,8 +168,6 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 brew_prefix="$(brew --prefix)"
-
-failed=0
 
 # ---------------------------------------------------------------------------
 # Machine-specific skips
@@ -777,32 +780,6 @@ python3 "$setup/vscode-amsc.py" || failed=1
 
 # Retire the former generated file opener.
 python3 "$setup/remove-open-in-herdr.py" || failed=1
-
-
-# ---------------------------------------------------------------------------
-# Keyboard shortcuts
-# ---------------------------------------------------------------------------
-
-shortcuts_changed=false
-
-for shortcut_file in "$setup/keyboard/"*.plist; do
-  [[ -f "$shortcut_file" ]] || continue
-
-  domain="$(basename "$shortcut_file" .plist)"
-  current="$(defaults read "$domain" NSUserKeyEquivalents 2>/dev/null || true)"
-  wanted="$(cat "$shortcut_file")"
-
-  if [[ "$current" != "$wanted" ]]; then
-    if defaults write "$domain" NSUserKeyEquivalents "$wanted" 2>/dev/null; then
-      shortcuts_changed=true
-    else
-      log "macOS did not allow background shortcut changes for $domain; leaving them unchanged."
-    fi
-  fi
-done
-
-$shortcuts_changed &&
-  killall cfprefsd 2>/dev/null || true
 
 
 # ---------------------------------------------------------------------------

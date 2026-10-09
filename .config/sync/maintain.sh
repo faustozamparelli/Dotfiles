@@ -37,6 +37,9 @@ python3 "$HOME/.config/sync/app-preferences.py" capture
   .config/sync/vscode-disabled-extensions.txt \
   .config/sync/app-preferences.json \
   .config/sync/app-preferences.py \
+  .config/sync/app-shortcuts.py \
+  .config/sync/app-shortcuts-seed.json \
+  .config/sync/test-app-shortcuts.py \
   .config/sync/install-vscode-local.py \
   .config/sync/vscode-preview-pdf \
   .config/sync/install-agent.sh \

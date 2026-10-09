@@ -1135,6 +1135,7 @@ Use `Space f f` to locate the relevant configuration. After keymap changes run:
 ```fish
 keymap-docs
 keymap-docs --check
+python3 ~/.config/sync/test-app-shortcuts.py
 ```
 
 After Herdr changes press `Ctrl-Space Shift-r`. Restart Neovim after plugin or startup
@@ -1209,6 +1210,41 @@ Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
+
+### macOS App Shortcuts
+
+Edit shortcuts normally in System Settings > Keyboard > Keyboard Shortcuts >
+App Shortcuts, including All Applications. `mac-sync` captures additions,
+changes, and removals on either Mac at login and hourly. Run `mac-sync` on each
+Mac for an immediate exchange. An offline Mac keeps its edits for the next
+successful sync. Apps may need reopening to refresh their menu shortcuts;
+reopen System Settings if its list was already open during sync.
+
+`~/.config/sync/app-shortcuts.py` synchronizes only `NSUserKeyEquivalents` and
+the App Shortcuts application list. Other Keyboard Shortcuts categories,
+modifier keys, keyboard hardware settings, and Services remain local.
+The seed contains the existing Helium and Preview shortcuts and is used only
+when creating the shared data branch; subsequent removals are preserved.
+The old one-way Helium plist enforcement has been removed.
+
+Shortcut data is committed and pushed automatically to the separate
+`app-shortcuts` branch in the existing private Dotfiles repository. Its only
+file is `shortcuts.json`; this operation never stages or pushes the working
+dotfiles branch. `~/Library/Application Support/mac-sync/app-shortcuts/`
+holds a local baseline, pending edits, and an independent bare Git transport.
+Keep this local state: it distinguishes an intentional deletion from a Mac
+that has not received a shortcut yet. A newly enrolled Mac imports its local
+shortcuts, while existing shared entries and deletions take precedence.
+Creating a file named `paused` in that local directory pauses shortcut sync
+on that Mac; removing it resumes sync.
+
+Independent menu edits merge. For competing edits to the same application and
+menu title, the later captured edit wins (using timestamps and a stable device
+ID to break ties). Deletions remain recorded so a stale or newly enrolled Mac
+cannot bring them back. Concurrent pushes retry without force-pushing. Network
+failures retain pending edits and leave local shortcuts unchanged. The two
+Macs converge once each has completed a successful sync; this is hourly sync,
+not an immediate live connection.
 
 ### Portable app performance settings
 
@@ -1304,8 +1340,9 @@ Agents working on this setup must follow these rules:
    keep formulae local unless deliberately added to `packages.txt`.
 8. Only entries explicitly recorded in `retired-apps.tsv` may cause app
    removal during sync.
-9. `mac-app` may commit and push its own manifest targets; leave unrelated
-   commits and pushes manual.
+9. `mac-app` may commit and push its own manifest targets. App Shortcuts sync
+   may commit and push only its separate `app-shortcuts` data branch. Leave
+   unrelated commits and pushes manual.
 
 For every custom keybinding change:
 

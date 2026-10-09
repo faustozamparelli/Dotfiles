@@ -83,6 +83,11 @@ mac-sync
 The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
 readable generated table is in `~/.config/sync/README.md`.
 
+App Shortcuts edited in macOS System Settings > Keyboard > Keyboard Shortcuts
+are shared automatically by `mac-sync`, including additions and deletions on
+either Mac. They use a separate `app-shortcuts` Git branch; other macOS
+Keyboard Shortcuts categories remain local. See the sync manual for details.
+
 ## Dotfile maintenance
 
 `bcp` validates the app and keymap configuration, stages the maintained
