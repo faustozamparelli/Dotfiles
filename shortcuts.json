@@ -1,0 +1,83 @@
+{
+  "com.apple.Preview": {
+    "Use Dark Appearance for PDF": {
+      "value": "@t",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    }
+  },
+  "net.imput.helium": {
+    "Add Tab to New Split View": {
+      "value": "@b",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Back": {
+      "value": "@j",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Bookmark This Tab...": {
+      "value": "@$d",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Copy URL": {
+      "value": "^c",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Duplicate Tab": {
+      "value": "@d",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Forward": {
+      "value": "@k",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Open Location...": {
+      "value": "@;",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Print": {
+      "value": "@$p",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Select Next Tab": {
+      "value": "@l",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    },
+    "Select Previous Tab": {
+      "value": "@h",
+      "version": [
+        0,
+        "35862fee-885f-42a5-a5f5-84e73930d4b8"
+      ]
+    }
+  }
+}
