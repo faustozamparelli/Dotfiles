@@ -12,7 +12,6 @@ cask	gitbutler	GitButler
 cask	homerow	homerow
 cask	nikitabobko/tap/aerospace	AeroSpace
 cask	tor-browser	Tor Browser
-cask	t3-code	T3 Code (Alpha)
 mas	462062816	Microsoft PowerPoint
 formula	cmake	CMake
 formula	gcc	GCC
