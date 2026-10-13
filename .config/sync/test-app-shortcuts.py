@@ -161,6 +161,31 @@ class SyncTest(unittest.TestCase):
         prefs.apply({DOMAIN: {}}, {DOMAIN: {'Changed': '@z'}}, baseline, lambda: None)
         self.assertEqual(prefs.shortcuts(DOMAIN), {'During sync': '@d'})
 
+    def test_registry_order_does_not_require_protected_write(self):
+        class NativeFake(shortcuts.Preferences):
+            def __init__(self):
+                pass
+
+            def access(self, domain, key, value=None, write=False):
+                if write:
+                    raise AssertionError('Unnecessary protected preference write')
+                return [DOMAIN, 'NSGlobalDomain'] if key == shortcuts.REGISTRY else {'First': '@a'}
+
+        NativeFake().apply({DOMAIN: {'First': '@a'}}, {DOMAIN: {'First': '@a'}}, {}, lambda: None)
+
+    def test_registry_permission_failure_explains_recovery(self):
+        class NativeFake(shortcuts.Preferences):
+            def __init__(self):
+                pass
+
+            def access(self, domain, key, value=None, write=False):
+                if write:
+                    raise RuntimeError('macOS refused preference changes for com.apple.universalaccess')
+                return [] if key == shortcuts.REGISTRY else {'First': '@a'}
+
+        with self.assertRaisesRegex(RuntimeError, 'Full Disk Access'):
+            NativeFake().apply({DOMAIN: {'First': '@a'}}, {DOMAIN: {'First': '@a'}}, {}, lambda: None)
+
 
 if __name__ == '__main__':
     unittest.main()

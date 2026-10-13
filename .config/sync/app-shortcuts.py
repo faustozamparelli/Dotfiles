@@ -125,9 +125,19 @@ class Preferences:
         if edited_during_sync:
             return
         registry = sorted({'NSGlobalDomain'} | {domain for domain, entries in desired.items() if entries})
-        if self.access('com.apple.universalaccess', REGISTRY) != registry:
-            if self.access('com.apple.universalaccess', REGISTRY, registry, write=True) != registry:
-                raise RuntimeError('macOS refused the App Shortcuts list; terminal permissions may be needed')
+        if set(self.access('com.apple.universalaccess', REGISTRY) or []) != set(registry):
+            try:
+                actual = self.access('com.apple.universalaccess', REGISTRY, registry, write=True)
+                if set(actual or []) != set(registry):
+                    raise RuntimeError('App Shortcuts list verification failed')
+            except RuntimeError as error:
+                raise RuntimeError(
+                    'Cannot update the App Shortcuts application list (com.apple.universalaccess). '
+                    'In System Settings > Privacy & Security > Full Disk Access, enable the '
+                    'terminal app running bcp (for example Ghostty), quit and reopen that app, '
+                    'then rerun bcp. Shortcut values and local sync state have been retained. '
+                    f'Details: {error}'
+                ) from error
 
 
 def merge(*documents):

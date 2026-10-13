@@ -24,284 +24,284 @@
   },
   "codexbarProviders": [
     {
+      "id": "codex",
       "codexActiveSource": {
         "kind": "liveSystem"
       },
-      "enabled": true,
-      "id": "codex"
+      "enabled": true
     },
     {
-      "enabled": false,
-      "id": "openai"
+      "id": "openai",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "azureopenai"
+      "id": "azureopenai",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "claude"
+      "id": "claude",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "clinepass"
+      "id": "clinepass",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "cursor"
+      "id": "cursor",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "opencode"
+      "id": "opencode",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "opencodego"
+      "id": "opencodego",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "alibaba"
+      "id": "alibaba",
+      "enabled": false
     },
     {
-      "enabled": false,
       "id": "alibabatokenplan",
+      "enabled": false,
       "region": "intl"
     },
     {
-      "enabled": false,
-      "id": "qwencloud"
+      "id": "qwencloud",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "factory"
+      "id": "factory",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "fireworks"
+      "id": "fireworks",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "gemini"
+      "id": "gemini",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "antigravity"
+      "id": "antigravity",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "copilot"
+      "id": "copilot",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "devin"
+      "id": "devin",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "zai"
+      "id": "zai",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "minimax"
+      "id": "minimax",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "manus"
+      "id": "manus",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "kimi"
+      "id": "kimi",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "kilo"
+      "id": "kilo",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "kiro"
+      "id": "kiro",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "vertexai"
+      "id": "vertexai",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "augment"
+      "id": "augment",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "jetbrains"
+      "id": "jetbrains",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "moonshot"
+      "id": "moonshot",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "amp"
+      "id": "amp",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "t3chat"
+      "id": "t3chat",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "ollama"
+      "id": "ollama",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "synthetic"
+      "id": "synthetic",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "openrouter"
+      "id": "openrouter",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "elevenlabs"
+      "id": "elevenlabs",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "warp"
+      "id": "warp",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "windsurf"
+      "id": "windsurf",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "zed"
+      "id": "zed",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "perplexity"
+      "id": "perplexity",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "mimo"
+      "id": "mimo",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "doubao"
+      "id": "doubao",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "sakana"
+      "id": "sakana",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "abacus"
+      "id": "abacus",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "mistral"
+      "id": "mistral",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "deepseek"
+      "id": "deepseek",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "deepinfra"
+      "id": "deepinfra",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "codebuff"
+      "id": "codebuff",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "crof"
+      "id": "crof",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "venice"
+      "id": "venice",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "commandcode"
+      "id": "commandcode",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "qoder"
+      "id": "qoder",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "stepfun"
+      "id": "stepfun",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "bedrock"
+      "id": "bedrock",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "grok"
+      "id": "grok",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "groq"
+      "id": "groq",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "llmproxy"
+      "id": "llmproxy",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "litellm"
+      "id": "litellm",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "deepgram"
+      "id": "deepgram",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "poe"
+      "id": "poe",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "chutes"
+      "id": "chutes",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "neuralwatt"
+      "id": "neuralwatt",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "clawrouter"
+      "id": "clawrouter",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "longcat"
+      "id": "longcat",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "sub2api"
+      "id": "sub2api",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "wayfinder"
+      "id": "wayfinder",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "zenmux"
+      "id": "zenmux",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "aiand"
+      "id": "aiand",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "zoommate"
+      "id": "zoommate",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "xai"
+      "id": "xai",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "notion"
+      "id": "notion",
+      "enabled": false
     },
     {
-      "enabled": false,
-      "id": "ibmbob"
+      "id": "ibmbob",
+      "enabled": false
     }
   ]
 }

@@ -149,11 +149,7 @@
   "python.analysis.indexing": false,
   // Keep the Microsoft debugger; clangd owns C/C++ language analysis.
   "C_Cpp.intelliSenseEngine": "disabled",
-  "clangd.path": "${userHome}/.config/mac-setup/amsc-clangd.sh",
-  "clangd.arguments": [
-    "--background-index=false",
-    "-j=2"
-  ],
+  "clangd.path": "/opt/homebrew/opt/llvm/bin/clangd",
   "explorer.autoReveal": true,
   "explorer.decorations.badges": true,
   "git.autorefresh": true,
@@ -459,5 +455,8 @@
   "workbench.iconTheme": "vscode-modern-icons",
   "chat.permissions.default": "autoApprove",
   "editor.accessibilitySupport": "off",
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "chat.mcp.gallery.enabled": true,
+  "git.enableSmartCommit": true,
+  "workbench.preferredLightColorTheme": "Light Modern"
 }

@@ -1227,6 +1227,12 @@ The seed contains the existing Helium and Preview shortcuts and is used only
 when creating the shared data branch; subsequent removals are preserved.
 The old one-way Helium plist enforcement has been removed.
 
+If macOS refuses changes to `com.apple.universalaccess`, enable the terminal
+running `bcp` (for example Ghostty) in System Settings > Privacy & Security >
+Full Disk Access, quit and reopen the terminal, then rerun `bcp`. macOS protects
+the App Shortcuts application list separately from the shortcut values. The
+sync retains local state and reports failure until that list can be updated.
+
 Shortcut data is committed and pushed automatically to the separate
 `app-shortcuts` branch in the existing private Dotfiles repository. Its only
 file is `shortcuts.json`; this operation never stages or pushes the working

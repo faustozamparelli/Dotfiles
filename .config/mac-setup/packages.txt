@@ -18,6 +18,7 @@ just
 libqalculate
 lua
 lua-language-server
+llvm
 mas
 mole
 neovim
