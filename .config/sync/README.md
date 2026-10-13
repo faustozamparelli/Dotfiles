@@ -1152,6 +1152,24 @@ default; formulae are shared only when intentionally listed in
 mac-sync
 ```
 
+An existing app bundle in `/Applications` or `~/Applications` satisfies its
+manifest entry even when installed outside Homebrew. Sync leaves its ownership
+and built-in updater alone; it does not adopt or reinstall it just to create a
+cask record. Quitting an app is not needed for these installation checks.
+Formula checks use one installed Homebrew inventory, including aliases, and
+install only missing packages. Already protected packages are not rewritten.
+
+To see which part takes time on either Mac, run:
+
+```fish
+mac-sync --timing
+```
+
+This reports seconds for shortcuts/dotfiles, Homebrew, container configuration,
+retirement, apps, editor settings, and the total. `--quiet --timing` keeps these
+timings visible while suppressing routine progress. Downloads for genuinely
+missing software and network synchronization can still take time.
+
 Install an experimental formula normally with `brew install`; it remains local
 and temporary. Add only frequently used or current-project formulae to
 `packages.txt`. To remove every temporary top-level formula and any dependency
@@ -1380,6 +1398,7 @@ Use these after changing the setup:
 ```fish
 keymap-docs --check
 bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
+python3 ~/.config/sync/test-mac-sync.py
 jq empty ~/.config/karabiner/karabiner.json
 plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
 mac-sync --no-pull

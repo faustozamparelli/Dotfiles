@@ -12,6 +12,10 @@ bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 pull=true
 quiet=false
 prune_packages=false
+timing=false
+run_started=$SECONDS
+stage_started=$SECONDS
+stage_name="Dotfiles and shortcuts"
 
 for arg in "$@"; do
   case "$arg" in
@@ -21,16 +25,20 @@ for arg in "$@"; do
     --quiet)
       quiet=true
       ;;
+    --timing)
+      timing=true
+      ;;
     --nuke)
       prune_packages=true
       ;;
     -h|--help)
       cat <<'EOF'
-usage: mac-sync [--no-pull] [--quiet] [--nuke]
+usage: mac-sync [--no-pull] [--quiet] [--timing] [--nuke]
 
 Options:
   --no-pull          Do not automatically pull the dotfiles repository.
   --quiet            Suppress normal informational output.
+  --timing           Print elapsed seconds for each sync stage.
   --nuke             Make packages.txt authoritative for Homebrew formulae.
                      Extra top-level formulae are made eligible for autoremove,
                      then unused formulae and dependencies are removed.
@@ -46,6 +54,14 @@ done
 
 log() {
   $quiet || printf '%s\n' "$*"
+}
+
+next_stage() {
+  if $timing; then
+    printf 'mac-sync timing: %s: %ss\n' "$stage_name" "$((SECONDS - stage_started))" >&2
+  fi
+  stage_name="$1"
+  stage_started=$SECONDS
 }
 
 safe_host() {
@@ -162,6 +178,8 @@ fi
 # Homebrew
 # ---------------------------------------------------------------------------
 
+next_stage "Homebrew packages"
+
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is required. Follow the bootstrap section in ~/README.md." >&2
   exit 1
@@ -223,31 +241,68 @@ fi
 # Install / protect packages.txt
 # ---------------------------------------------------------------------------
 
-# Do this in ONE Homebrew invocation instead of checking every formula
-# separately.
-#
-# Already-installed formulae are left at their current versions.
-# Automatic cleanup is disabled here because mac-sync manages cleanup itself.
+# Query installed metadata once, including aliases such as python -> python@3.15.
+# Reuse it for retirement checks instead of starting Homebrew for each formula.
+formula_inventory="$lock/formula-inventory"
+refresh_formula_inventory() {
+  brew info --json=v2 --formula --installed > "$lock/formulae.json" || return 1
+  python3 - "$lock" "${wanted_packages[@]}" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+installed = {}
+for formula in json.loads((root / 'formulae.json').read_text())['formulae']:
+    if not formula['installed']:
+        continue
+    for name in [formula['name'], formula['full_name'], *formula.get('aliases', [])]:
+        installed[name] = formula
+missing = [name for name in sys.argv[2:] if name not in installed]
+protect = [name for name in sys.argv[2:] if name in installed and
+           not all(keg.get('installed_on_request', False) for keg in installed[name]['installed'])]
+for filename, names in [('formula-inventory', sorted(installed)),
+                        ('missing-packages', missing), ('protect-packages', protect)]:
+    (root / filename).write_text(''.join(name + '\n' for name in names))
+PY
+}
+
+formula_installed() {
+  grep -Fxq "$1" "$formula_inventory"
+}
 
 log "Checking shared Homebrew formulae..."
-
-brew_log="$lock/brew-install.log"
-
-if ! HOMEBREW_NO_INSTALL_UPGRADE=1 \
-     HOMEBREW_NO_INSTALL_CLEANUP=1 \
-     brew install "${wanted_packages[@]}" >"$brew_log" 2>&1; then
-
-  cat "$brew_log" >&2
-  failed=1
+if ! refresh_formula_inventory; then
+  echo "Could not inspect installed formulae; refusing to install or retire packages." >&2
+  exit 1
 fi
 
-# Everything in packages.txt is deliberate top-level user intent.
-# brew tab accepts multiple formulae, so mark all of them with one invocation.
+missing_packages=()
+while IFS= read -r package; do
+  missing_packages+=("$package")
+done < "$lock/missing-packages"
 
-if ((failed == 0)); then
-  brew tab \
+if ((${#missing_packages[@]})); then
+  log "Installing missing formulae: ${missing_packages[*]}"
+  brew_log="$lock/brew-install.log"
+  if ! HOMEBREW_NO_INSTALL_UPGRADE=1 \
+       HOMEBREW_NO_INSTALL_CLEANUP=1 \
+       brew install --formula "${missing_packages[@]}" >"$brew_log" 2>&1; then
+    cat "$brew_log" >&2
+    failed=1
+  fi
+  refresh_formula_inventory || exit 1
+fi
+
+# Only change receipts which are not already protected from autoremove.
+protect_packages=()
+while IFS= read -r package; do
+  protect_packages+=("$package")
+done < "$lock/protect-packages"
+if ((${#protect_packages[@]})); then
+  brew tab --formula \
     --installed-on-request \
-    "${wanted_packages[@]}" \
+    "${protect_packages[@]}" \
     >/dev/null || {
       echo "Could not mark shared formulae as explicitly installed." >&2
       failed=1
@@ -259,7 +314,7 @@ fi
 if ((failed == 0)) &&
    [[ " ${wanted_packages[*]} " == *" jupyterlab "* ]] &&
    [[ " ${wanted_packages[*]} " == *" jupytext "* ]]; then
-  lab_python="$(brew --prefix jupyterlab)/libexec/bin/python"
+  lab_python="$brew_prefix/opt/jupyterlab/libexec/bin/python"
   if [[ -x "$lab_python" ]] &&
      ! "$lab_python" -c 'import jupytext, jupyterlab_jupytext' >/dev/null 2>&1; then
     log "Connecting Jupytext to JupyterLab..."
@@ -384,6 +439,11 @@ if $prune_packages; then
   fi
 fi
 
+if $prune_packages; then
+  refresh_formula_inventory || exit 1
+fi
+
+next_stage "Toolchain and container configuration"
 
 # ---------------------------------------------------------------------------
 # pnpm
@@ -392,7 +452,7 @@ fi
 # pnpm keeps global executable shims here. Creating the directory during sync
 # ensures Fish can add it to PATH immediately on every managed Mac.
 
-if brew list --versions pnpm >/dev/null 2>&1; then
+if formula_installed pnpm; then
   mkdir -p "$HOME/Library/pnpm/bin"
 fi
 
@@ -437,7 +497,8 @@ fi
 # Retired applications
 # ---------------------------------------------------------------------------
 
-installed_casks="$(brew list --cask 2>/dev/null || true)"
+next_stage "Retired applications and cleanup"
+installed_casks="$(brew list --cask)" || exit 1
 
 retire_manifest() {
   local source
@@ -466,7 +527,7 @@ retire_manifest() {
     esac
 
     if [[ "$source" == "formula" ]]; then
-      if brew list --formula --versions "$identifier" >/dev/null 2>&1; then
+      if formula_installed "$identifier"; then
         retired_formulae+=("$identifier")
       fi
       continue
@@ -533,6 +594,7 @@ retire_manifest() {
     log "Removing retired formulae no longer required by shared packages..."
     if brew tab --no-installed-on-request "${retired_formulae[@]}"; then
       brew autoremove || failed=1
+      refresh_formula_inventory || exit 1
     else
       failed=1
     fi
@@ -551,16 +613,17 @@ retire_manifest() {
   fi
   if grep -Fq $'formula\tfaustozamparelli/local/lis\t' "$retired"; then
     # Homebrew's autoremove does not select formulae from a local, gitless tap.
-    if brew list --formula --versions lis >/dev/null 2>&1; then
+    if formula_installed faustozamparelli/local/lis; then
       brew uninstall --formula lis || failed=1
+      refresh_formula_inventory || exit 1
     fi
-    if ! brew list --formula --versions lis >/dev/null 2>&1 &&
+    if ! formula_installed lis &&
        [[ -f "$(brew --repository)/Library/Taps/faustozamparelli/homebrew-local/Formula/lis.rb" ]]; then
       brew untap faustozamparelli/local || failed=1
     fi
   fi
   if grep -Fq $'formula\topen-mpi\t' "$retired" &&
-     ! brew list --formula --versions pmix >/dev/null 2>&1 &&
+     ! formula_installed pmix &&
      [[ -f "$brew_prefix/etc/pmix-mca-params.conf" ]]; then
     "$trash_bin" "$brew_prefix/etc/pmix-mca-params.conf" || failed=1
   fi
@@ -594,13 +657,13 @@ retire_pdf_viewers() (
     remove_pdf_data "$agent"
   done
   for token in sioyek mupdf; do
-    if brew list --cask "$token" >/dev/null 2>&1; then
+    if grep -Fxq "$token" <<<"$installed_casks"; then
       brew uninstall --cask --zap "$token" || {
         brew uninstall --cask --force "$token" || failed=1
       }
     fi
   done
-  if brew list --formula --versions mupdf >/dev/null 2>&1; then
+  if formula_installed mupdf; then
     brew uninstall --formula mupdf || failed=1
   fi
   for app in Highlights Negative Sioyek sioyek MuPDF mupdf; do
@@ -649,13 +712,16 @@ retire_pdf_viewers() (
   cloud="$HOME/Library/Mobile Documents/iCloud~net~highlightsapp"
   rmdir "$cloud/Documents" 2>/dev/null || true
   if [[ -d "$cloud" ]]; then
-    rmdir "$cloud" 2>/dev/null || sudo -n /bin/rmdir "$cloud" 2>/dev/null || true
+    rmdir "$cloud" 2>/dev/null || true
   fi
   exit "$failed"
 )
 if grep -Fq $'direct\tsioyek\t' "$retired"; then
   retire_pdf_viewers || failed=1
-  installed_casks="$(brew list --cask 2>/dev/null || true)"
+  # The PDF cleanup runs in a subshell and may have removed a formula.
+  if formula_installed mupdf; then
+    refresh_formula_inventory || exit 1
+  fi
 fi
 retire_manifest
 "$setup/retire-pi-zed.sh" || failed=1
@@ -665,6 +731,9 @@ python3 "$setup/cleanup-orphan-app-data.py" --delete || failed=1
 # ---------------------------------------------------------------------------
 # Install applications
 # ---------------------------------------------------------------------------
+
+next_stage "Applications"
+installed_casks="$(brew list --cask)" || exit 1
 
 install_manifest() {
   local manifest="$1"
@@ -693,16 +762,21 @@ install_manifest() {
 
         if ! grep -Fxq "$token" <<<"$installed_casks"; then
 
-          if [[ "$token" == "protonvpn" &&
-                -d "/Applications/ProtonVPN.app" ]]; then
-
-            log "ProtonVPN is already installed outside Homebrew; leaving it in place."
+          # An existing app satisfies the manifest even if installed directly,
+          # renamed between casks, or updated by its own updater. Adoption can
+          # recursively change permissions and repeatedly request Touch ID.
+          if [[ -d "/Applications/$name.app" || -d "$HOME/Applications/$name.app" ]]; then
+            log "$name is already installed; leaving it in place."
             continue
           fi
 
           log "Installing $name from Homebrew..."
 
-          brew install --cask --adopt "$identifier" || failed=1
+          if brew install --cask "$identifier"; then
+            installed_casks+=$'\n'"$token"
+          else
+            failed=1
+          fi
         fi
         ;;
 
@@ -743,6 +817,7 @@ install_manifest() {
 install_manifest "$shared"
 install_manifest "$local_apps"
 
+next_stage "Editor extensions and app preferences"
 # VS Code stays small: install only the extensions listed in dotfiles.
 # Missing extensions are added; locally chosen extensions are left alone.
 vscode_extensions="$HOME/.config/sync/vscode-extensions.txt"
@@ -750,13 +825,21 @@ vscode_cli="$(command -v code || true)"
 if [[ -z "$vscode_cli" && -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]]; then
   vscode_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
 fi
-if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
+installed_vscode_extensions=""
+extensions_changed=false
+if [[ -n "$vscode_cli" && ( -f "$vscode_extensions" || -f "$HOME/.config/sync/vscode-disabled-extensions.txt" ) ]]; then
   installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+fi
+if [[ -f "$vscode_extensions" && -n "$vscode_cli" ]]; then
   while IFS= read -r extension; do
     [[ -z "$extension" || "$extension" == \#* ]] && continue
     if ! grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
       log "Installing VS Code extension $extension..."
-      "$vscode_cli" --install-extension "$extension" || failed=1
+      if "$vscode_cli" --install-extension "$extension"; then
+        extensions_changed=true
+      else
+        failed=1
+      fi
     fi
   done < "$vscode_extensions"
 fi
@@ -764,7 +847,10 @@ fi
 # Keep explicitly unwanted optional extensions off, including Python's pack extras.
 vscode_disabled="$HOME/.config/sync/vscode-disabled-extensions.txt"
 if [[ -f "$vscode_disabled" && -n "$vscode_cli" ]]; then
-  installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+  if $extensions_changed; then
+    # Extension packs may add an explicitly unwanted extension.
+    installed_vscode_extensions="$("$vscode_cli" --list-extensions 2>/dev/null || true)"
+  fi
   while IFS= read -r extension; do
     [[ -z "$extension" || "$extension" == \#* ]] && continue
     if grep -Fxiq "$extension" <<<"$installed_vscode_extensions"; then
@@ -786,6 +872,7 @@ python3 "$setup/remove-open-in-herdr.py" || failed=1
 # Keymap documentation
 # ---------------------------------------------------------------------------
 
+next_stage "Keymap documentation"
 if [[ -x "$HOME/.config/keymaps/keymap-docs" ]]; then
   "$HOME/.config/keymaps/keymap-docs" --check || failed=1
 fi
@@ -794,6 +881,11 @@ fi
 # ---------------------------------------------------------------------------
 # Finish
 # ---------------------------------------------------------------------------
+
+next_stage "Finished"
+if $timing; then
+  printf 'mac-sync timing: total: %ss\n' "$((SECONDS - run_started))" >&2
+fi
 
 if ((failed)); then
   echo "mac-sync finished with errors; rerun it after resolving the messages above." >&2
