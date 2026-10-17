@@ -1,33 +1,34 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
-cask	mupdf	MuPDF
-cask	sioyek	Sioyek
-direct	sioyek	Sioyek
-formula	mupdf	MuPDF
-mas	1498912833	Highlights
-mas	1378123825	Negative
 cask	chatgpt	ChatGPT
 cask	discord	Discord
 cask	gitbutler	GitButler
 cask	homerow	homerow
+cask	mupdf	MuPDF
 cask	nikitabobko/tap/aerospace	AeroSpace
+cask	notion	Notion
+cask	sioyek	Sioyek
 cask	tor-browser	Tor Browser
-mas	462062816	Microsoft PowerPoint
-formula	cmake	CMake
-formula	gcc	GCC
-formula	pkgconf	pkgconf
-formula	ninja	Ninja
-formula	eigen	Eigen
-formula	openblas	OpenBLAS
-formula	suite-sparse	SuiteSparse
-formula	superlu	SuperLU
-formula	pybind11	pybind11
-formula	open-mpi	Open MPI
-formula	faustozamparelli/local/lis	Lis
-formula	numpy	NumPy
-formula	scipy	SciPy
-formula	python-matplotlib	Matplotlib
-formula	pytorch	PyTorch
-formula	mpi4py	mpi4py
 cask	zed	zed
 direct	pi-desktop	Pi Desktop
+direct	sioyek	Sioyek
+formula	cmake	CMake
+formula	eigen	Eigen
+formula	faustozamparelli/local/lis	Lis
+formula	gcc	GCC
+formula	mpi4py	mpi4py
+formula	mupdf	MuPDF
+formula	ninja	Ninja
+formula	numpy	NumPy
+formula	open-mpi	Open MPI
+formula	openblas	OpenBLAS
+formula	pkgconf	pkgconf
+formula	pybind11	pybind11
+formula	python-matplotlib	Matplotlib
+formula	pytorch	PyTorch
+formula	scipy	SciPy
+formula	suite-sparse	SuiteSparse
+formula	superlu	SuperLU
+mas	1378123825	Negative
+mas	1498912833	Highlights
+mas	462062816	Microsoft PowerPoint
