@@ -10,6 +10,7 @@ cask	karabiner-elements	Karabiner-Elements
 cask	lihaoyun6/tap/quickrecorder	QuickRecorder
 cask	macwhisper	MacWhisper
 cask	microsoft-excel	Microsoft Excel
+cask	obsidian	obsidian
 cask	orbstack	OrbStack
 cask	protonvpn	ProtonVPN
 cask	raycast	Raycast
