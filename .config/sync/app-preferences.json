@@ -208,8 +208,8 @@
       "id": "codebuff"
     },
     {
-      "enabled": false,
-      "id": "crof"
+      "id": "crof",
+      "enabled": false
     },
     {
       "enabled": false,
