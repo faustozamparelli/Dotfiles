@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "name": "Discrod",
+      "url": "https://discord.com/channels/@me"
+    },
+    {
+      "name": "Gmail",
+      "url": "https://mail.google.com/mail/?usp=installed_webapp"
+    },
+    {
+      "name": "Slack",
+      "url": "https://app.slack.com/client/T019BHH329G"
+    },
+    {
+      "name": "WeBeep",
+      "url": "https://webeep.polimi.it/my/courses.php"
+    }
+  ]
+}

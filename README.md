@@ -62,6 +62,13 @@ at login and hourly. Direct downloads require a small reviewed installer under
 `~/.config/mac-setup/direct`; MagHue is the initial example and is pinned by
 SHA-256.
 
+Helium web-app names and URLs are shared through
+`~/.config/sync/helium-apps.json`. Install an app in Helium, then run `bcp` to
+capture and share it. At the end, `mac-sync` and `bcp` print
+`INSTALL {NAME} WEB APP` only for apps missing on that Mac. Install those
+manually in Helium; their reminders disappear on the next run. Keep the Python
+helper used by these commands. See the sync manual for the full workflow.
+
 Shared CLI tools live in `~/.config/mac-setup/packages.txt`. Ordinary
 `brew install` packages stay local and temporary unless intentionally added to
 that short list. Removing an entry never automatically uninstalls software.

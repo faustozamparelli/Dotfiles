@@ -1229,6 +1229,38 @@ Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 stages maintained dotfile paths. `bcp` then asks for a commit message and
 pushes.
 
+### Helium web apps
+
+`~/.config/sync/helium-apps.json` shares Helium web-app names and HTTPS launch
+URLs. It currently includes Gmail, Slack, WeBeep, and Discord (named `Discrod`
+in Helium). App bundles, browser registrations, and sign-ins stay local.
+
+Install web apps normally in Helium, then run `bcp` to capture, commit, and push
+their names and URLs. `sync-maintain` also captures and stages this list when
+run on its own. Capture adds apps and updates names; an app missing on one Mac
+never deletes it from the shared list.
+
+The other Mac receives the shared list through `mac-sync` at login and hourly,
+or when you run it manually. At the very end of `mac-sync` or `bcp`, each
+missing app gets a reminder in this exact format:
+
+```text
+INSTALL Gmail WEB APP
+```
+
+Open the app's URL from `helium-apps.json` in Helium and install it as a web
+app yourself. On the next run, its reminder disappears. Installed apps are
+matched by launch URL, so a different local app name does not cause a reminder.
+Apps installed in other browsers do not count as Helium apps. When nothing is
+missing, no web-app reminder is printed. Reminders remain visible with
+`mac-sync --quiet`; scheduled runs write them to `~/Library/Logs/mac-sync.log`.
+`sync-maintain` run directly also ends with these reminders; nested maintenance
+inside `bcp` defers them until after the commit and push to avoid duplicates.
+
+Keep `~/.config/sync/helium-apps.py`: maintenance uses `capture` and the final
+reminders use `report`. There is no setup step, configuration profile, automatic
+web-app installation, or automatic web-app removal.
+
 ### macOS App Shortcuts
 
 Edit shortcuts normally in System Settings > Keyboard > Keyboard Shortcuts >
@@ -1399,6 +1431,8 @@ Use these after changing the setup:
 keymap-docs --check
 bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
 python3 ~/.config/sync/test-mac-sync.py
+python3 ~/.config/sync/test-helium-apps.py
+python3 ~/.config/sync/helium-apps.py check
 jq empty ~/.config/karabiner/karabiner.json
 plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
 mac-sync --no-pull

@@ -5,7 +5,8 @@ bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
 python3 "$HOME/.config/sync/codex-technical.py" capture
 python3 "$HOME/.config/sync/app-preferences.py" capture
-"$HOME/.local/bin/mac-sync" --no-pull
+python3 "$HOME/.config/sync/helium-apps.py" capture
+MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs"
 "$HOME/.config/keymaps/keymap-docs" --check
 
@@ -41,6 +42,9 @@ python3 "$HOME/.config/sync/app-preferences.py" capture
   .config/sync/app-shortcuts-seed.json \
   .config/sync/test-app-shortcuts.py \
   .config/sync/test-mac-sync.py \
+  .config/sync/helium-apps.py \
+  .config/sync/helium-apps.json \
+  .config/sync/test-helium-apps.py \
   .config/sync/install-vscode-local.py \
   .config/sync/vscode-preview-pdf \
   .config/sync/install-agent.sh \
@@ -53,3 +57,7 @@ python3 "$HOME/.config/sync/app-preferences.py" capture
   README.md
 
 "${bare[@]}" status --short
+
+if [[ "${MAC_SYNC_DEFER_WEB_APP_REPORT:-0}" != 1 ]]; then
+  python3 "$HOME/.config/sync/helium-apps.py" report
+fi

@@ -5,6 +5,8 @@ check:
     ~/.config/keymaps/keymap-docs --check
     bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config/mac-setup/*.sh
     python3 ~/.config/sync/test-mac-sync.py
+    python3 ~/.config/sync/test-helium-apps.py
+    python3 ~/.config/sync/helium-apps.py check
     jq empty ~/.config/karabiner/karabiner.json
     plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist
     herdr config check

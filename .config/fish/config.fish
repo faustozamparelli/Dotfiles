@@ -79,6 +79,7 @@ if status is-interactive; and test "$TERM_PROGRAM" = ghostty; and not set -q HER
 end
 
 function bcp --description "Bare add -u, commit, and push (subject + optional description)"
+    set -lx MAC_SYNC_DEFER_WEB_APP_REPORT 1
     if type -q sync-maintain
         sync-maintain
     else
@@ -105,6 +106,13 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
         bare commit -m "$subject" -m "$description"
     end
     bare push
+    set -l push_status $status
+    python3 ~/.config/sync/helium-apps.py report
+    set -l report_status $status
+    if test $push_status -ne 0
+        return $push_status
+    end
+    return $report_status
 end
 
 # Added by OrbStack: command-line tools and integration

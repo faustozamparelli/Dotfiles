@@ -889,7 +889,13 @@ fi
 
 if ((failed)); then
   echo "mac-sync finished with errors; rerun it after resolving the messages above." >&2
-  exit 1
+else
+  log "mac-sync complete for $host"
 fi
 
-log "mac-sync complete for $host"
+# Maintenance/bcp defer reminders until their own final output.
+if [[ "${MAC_SYNC_DEFER_WEB_APP_REPORT:-0}" != 1 ]]; then
+  python3 "$HOME/.config/sync/helium-apps.py" report || failed=1
+fi
+
+exit "$failed"
