@@ -26,6 +26,33 @@ if type -q zoxide
         zoxide init fish | source
 end
 
+# Load Carapace completions in Ghostty, Herdr, and other interactive Fish shells.
+if status is-interactive; and type -q carapace
+    carapace _carapace fish | source
+end
+
+# Use the bundled fzf widgets, with colors inherited from the terminal palette.
+if status is-interactive; and type -q fzf
+    set -l picker_style (string join ' ' -- \
+        '--height=45% --min-height=8 --layout=reverse --border=rounded --padding=0,1' \
+        '--info=inline-right --pointer=▸ --marker=•' \
+        '--color=bg:-1,bg+:-1,fg:-1,fg+:5,hl:6,hl+:6,border:8,label:5,prompt:5,pointer:5,marker:6,info:8')
+    set -gx FZF_COMPLETION_OPTS "$picker_style --border-label=' Complete ' --prompt='complete › ' --no-multi"
+    set -gx FZF_CTRL_R_OPTS "$picker_style --border-label=' History ' --prompt='history › ' --no-multi --with-nth=3.. --nth=.."
+
+    # km:fish.history.search
+    fzf --fish | FZF_CTRL_T_COMMAND= FZF_ALT_C_COMMAND= source
+    # Older fzf builds still provide history search, but lack fzf_complete.
+    if functions -q fzf_complete
+        # km:fish.completion.search
+        bind tab fzf_complete
+        bind -M insert tab fzf_complete
+        # km:fish.completion.native
+        bind shift-tab complete-and-search
+        bind -M insert shift-tab complete-and-search
+    end
+end
+
 alias nb "jupyter lab"
 alias l "eza -a --git"
 alias ls l

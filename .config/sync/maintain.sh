@@ -31,24 +31,6 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .config/nvim \
-  .config/sync/README.md \
-  .config/sync/codex-technical.json \
-  .config/sync/codex-technical.py \
-  .config/sync/vscode-extensions.txt \
-  .config/sync/vscode-disabled-extensions.txt \
-  .config/sync/app-preferences.json \
-  .config/sync/app-preferences.py \
-  .config/sync/app-shortcuts.py \
-  .config/sync/app-shortcuts-seed.json \
-  .config/sync/test-app-shortcuts.py \
-  .config/sync/test-mac-sync.py \
-  .config/sync/helium-apps.py \
-  .config/sync/helium-apps.json \
-  .config/sync/test-helium-apps.py \
-  .config/sync/install-vscode-local.py \
-  .config/sync/vscode-preview-pdf \
-  .config/sync/install-agent.sh \
-  .config/sync/maintain.sh \
   .local/bin/mac-app \
   .local/bin/mac-sync \
   "Library/Application Support/Code/User/settings.json" \

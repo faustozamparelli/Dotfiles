@@ -2,6 +2,7 @@
 # Formulae here are shared and protected on every Mac. Everything else is temporary.
 bat
 btop
+carapace
 eza
 fd
 fish

@@ -6,6 +6,9 @@ karabiner.arrow.down	Karabiner	Fn	Fn-j	down-arrow	Move down with a physical arro
 karabiner.arrow.up	Karabiner	Fn	Fn-k	up-arrow	Move up with a physical arrow equivalent
 karabiner.arrow.right	Karabiner	Fn	Fn-l	right-arrow	Move right with a physical arrow equivalent
 ghostty.escape	Ghostty	Command	Cmd-a	escape	Leave the current editing mode
+fish.completion.search	Fish	Completion	Tab	fzf-complete	Search command completions with fzf and Carapace
+fish.completion.native	Fish	Completion	Shift-Tab	complete-and-search	Open the native Fish completion menu
+fish.history.search	Fish	Control	Ctrl-r	fzf-history	Search command history with fzf
 herdr.tab.previous	Herdr	Command	Cmd-h	previous-tab	Select the previous tab
 herdr.tab.next	Herdr	Command	Cmd-l	next-tab	Select the next tab
 herdr.tab.move-left	Herdr	Command	Cmd-Shift-h	move-tab-previous	Move the current tab left

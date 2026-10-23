@@ -184,7 +184,6 @@
   "terminal.integrated.scrollback": 10000,
   "ruff.configurationPreference": "filesystemFirst",
   "python.analysis.typeCheckingMode": "basic",
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
   "python.testing.autoTestDiscoverOnSaveEnabled": false,
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",

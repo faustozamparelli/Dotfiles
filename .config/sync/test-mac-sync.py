@@ -12,6 +12,7 @@ import unittest
 SCRIPT = Path.home() / '.local/bin/mac-sync'
 SOURCE = SCRIPT.read_text()
 PACKAGES = SOURCE[SOURCE.index('formula_inventory='):SOURCE.index('# Homebrew isolates JupyterLab')]
+NUKE = SOURCE[SOURCE.index('if $prune_packages; then'):SOURCE.index('next_stage "Toolchain and container configuration"')]
 APPS = SOURCE[SOURCE.index('install_manifest() {'):SOURCE.index('install_manifest "$shared"')]
 
 
@@ -51,6 +52,10 @@ elif args[:2] == ['install', '--formula']:
         data['formulae'].append({'name': name, 'full_name': name, 'aliases': [],
             'installed': [{'installed_on_request': True}]})
     fixture.write_text(json.dumps(data))
+elif args[0] == 'tab' and '--no-installed-on-request' in args and (root / 'fail-tab').exists():
+    sys.exit(1)
+elif args[0] == 'autoremove' and (root / 'fail-autoremove').exists():
+    sys.exit(1)
 elif args[:2] == ['install', '--cask'] and (root / 'fail-install').exists():
     sys.exit(1)
 ''')
@@ -105,6 +110,48 @@ log() {{ :; }}
         result = self.run_shell(PACKAGES, 'wanted_packages=(fish)')
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(any(call[0] in {'install', 'tab'} for call in self.brew_calls()))
+
+    def prune(self, wanted='fish', *, setup=''):
+        return self.run_shell(PACKAGES + NUKE + '\nexit "$failed"\n',
+                              f'wanted_packages=({wanted})\nprune_packages=true\n' + setup)
+
+    def test_nuke_resolves_shared_aliases_and_keeps_dependencies(self):
+        self.fixture.write_text(json.dumps({'formulae': [
+            formula('python@3.15', aliases=['python']),
+            formula('temporary'), formula('dependency', requested=False)]}))
+        result = self.prune('python')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual([call for call in self.brew_calls() if call[0] == 'tab'],
+                         [['tab', '--formula', '--no-installed-on-request', 'temporary']])
+        self.assertIn(['autoremove'], self.brew_calls())
+
+    def test_nuke_cleans_orphans_even_without_top_level_extras(self):
+        self.fixture.write_text(json.dumps({'formulae': [formula('fish')]}))
+        result = self.prune()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(['autoremove'], self.brew_calls())
+        self.assertFalse(any(call[0] == 'tab' for call in self.brew_calls()))
+
+    def test_nuke_refuses_removal_after_package_setup_failure(self):
+        self.fixture.write_text(json.dumps({'formulae': [formula('fish'), formula('temporary')]}))
+        result = self.prune(setup='failed=1')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(any(call[0] in {'tab', 'autoremove'} for call in self.brew_calls()))
+
+    def test_nuke_restores_protection_when_receipt_change_fails(self):
+        self.fixture.write_text(json.dumps({'formulae': [formula('fish'), formula('temporary')]}))
+        (self.root / 'fail-tab').touch()
+        result = self.prune()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn(['autoremove'], self.brew_calls())
+        self.assertIn(['tab', '--formula', '--installed-on-request', 'temporary'], self.brew_calls())
+
+    def test_nuke_restores_protection_when_autoremove_fails(self):
+        self.fixture.write_text(json.dumps({'formulae': [formula('fish'), formula('temporary')]}))
+        (self.root / 'fail-autoremove').touch()
+        result = self.prune()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(['tab', '--formula', '--installed-on-request', 'temporary'], self.brew_calls())
 
     def apps(self, rows, *, installed=''):
         manifest = self.root / 'apps.tsv'

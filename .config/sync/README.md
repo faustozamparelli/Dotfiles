@@ -170,6 +170,9 @@ update the registry and implementation together, then run `keymap-docs`.
 | Karabiner | Fn | `Fn-k` | Move up with a physical arrow equivalent |
 | Karabiner | Fn | `Fn-l` | Move right with a physical arrow equivalent |
 | Ghostty | Command | `Cmd-a` | Leave the current editing mode |
+| Fish | Completion | `Tab` | Search command completions with fzf and Carapace |
+| Fish | Completion | `Shift-Tab` | Open the native Fish completion menu |
+| Fish | Control | `Ctrl-r` | Search command history with fzf |
 | Herdr | Command | `Cmd-h` | Select the previous tab |
 | Herdr | Command | `Cmd-l` | Select the next tab |
 | Herdr | Command | `Cmd-Shift-h` | Move the current tab left |
@@ -639,6 +642,23 @@ Paths matter:
 Quote paths containing spaces: `n "My Notes/file.md"`. Press `Tab` for
 completion, `Up` for history, `Ctrl-r` for searchable history, `Ctrl-c` to
 interrupt a running command, and `Ctrl-d` to end an idle shell.
+
+Carapace supplies command completions in interactive Fish shells, including
+Ghostty/Herdr and VS Code terminals. It is installed through `packages.txt`
+and initialized by `~/.config/fish/config.fish`. Open a new shell after this
+configuration changes, or run `carapace _carapace fish | source` in an existing
+Fish shell to enable it immediately.
+
+`Tab` opens a compact fzf completion picker using Carapace's suggestions and
+descriptions. Type to filter, use the arrow keys to move, and press Enter to
+insert the selection; Escape cancels. `Shift-Tab` opens Fish's native completion
+menu. `Ctrl-r` opens a matching fzf history picker; Enter places the selected
+command on the prompt for review without running it. Both pickers use rounded
+borders and the terminal's purple/cyan palette, keeping the current background
+and foreground in dark and light terminals. No extra Fish plugin is required.
+
+After changing these widgets, open a new Fish pane, or run
+`source ~/.config/fish/config.fish` inside an existing Herdr/VS Code Fish shell.
 
 ### Navigation and inspection
 
@@ -1158,6 +1178,8 @@ and built-in updater alone; it does not adopt or reinstall it just to create a
 cask record. Quitting an app is not needed for these installation checks.
 Formula checks use one installed Homebrew inventory, including aliases, and
 install only missing packages. Already protected packages are not rewritten.
+The nuke step reuses that same inventory, preserves shared aliases, and also
+removes orphaned dependencies when there are no temporary top-level formulae.
 
 To see which part takes time on either Mac, run:
 
@@ -1172,8 +1194,13 @@ missing software and network synchronization can still take time.
 
 Install an experimental formula normally with `brew install`; it remains local
 and temporary. Add only frequently used or current-project formulae to
-`packages.txt`. To remove every temporary top-level formula and any dependency
-that is no longer needed, run:
+`packages.txt`, one formula name per line (for example, `carapace`, without
+`brew install`). Run `mac-sync --no-pull` to install it on this Mac, then use
+`bcp` to commit and push the manifest so the other Mac receives it at its next
+sync. A plain `brew install carapace` installs it only on the current Mac.
+
+To remove every temporary top-level formula and any dependency that is no
+longer needed, run:
 
 ```fish
 mac-sync --nuke
@@ -1226,8 +1253,10 @@ configuration, credentials, extensions, sessions, logs, and app caches.
 Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
-stages maintained dotfile paths. `bcp` then asks for a commit message and
-pushes.
+stages maintained dotfile paths. Tracked sync helpers are staged together with
+`git add -u`; new helper files require an explicit add so local scratch files
+stay local. The old empty inventory/state directory layout is no longer used.
+`bcp` then asks for a commit message and pushes.
 
 ### Helium web apps
 
@@ -1429,7 +1458,7 @@ Use these after changing the setup:
 
 ```fish
 keymap-docs --check
-bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh
+bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config/mac-setup/*.sh
 python3 ~/.config/sync/test-mac-sync.py
 python3 ~/.config/sync/test-helium-apps.py
 python3 ~/.config/sync/helium-apps.py check

@@ -46,6 +46,7 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
   [[ "$id" == \#* || -z "$id" ]] && continue
   case "$layer" in
     Ghostty) config="$HOME/.config/ghostty/config" ;;
+    Fish) config="$HOME/.config/fish/config.fish" ;;
     Herdr) config="$HOME/.config/herdr/config.toml" ;;
     Neovim) config="$HOME/.config/nvim/lua/fausto/keymaps.lua" ;;
     Karabiner) config="$HOME/.config/karabiner/karabiner.json" ;;

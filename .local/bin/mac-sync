@@ -259,10 +259,15 @@ for formula in json.loads((root / 'formulae.json').read_text())['formulae']:
     for name in [formula['name'], formula['full_name'], *formula.get('aliases', [])]:
         installed[name] = formula
 missing = [name for name in sys.argv[2:] if name not in installed]
+wanted = {installed[name]['name'] for name in sys.argv[2:] if name in installed}
+extra = sorted({formula['name'] for formula in installed.values()
+                if formula['name'] not in wanted and
+                any(keg.get('installed_on_request', False) for keg in formula['installed'])})
 protect = [name for name in sys.argv[2:] if name in installed and
            not all(keg.get('installed_on_request', False) for keg in installed[name]['installed'])]
 for filename, names in [('formula-inventory', sorted(installed)),
-                        ('missing-packages', missing), ('protect-packages', protect)]:
+                        ('missing-packages', missing), ('protect-packages', protect),
+                        ('extra-packages', extra)]:
     (root / filename).write_text(''.join(name + '\n' for name in names))
 PY
 }
@@ -326,121 +331,51 @@ if ((failed == 0)) &&
   fi
 fi
 
-
-
 # ---------------------------------------------------------------------------
 # --nuke
 # ---------------------------------------------------------------------------
 
 if $prune_packages; then
-  if ((failed)); then
-    echo "Skipping Homebrew nuke because package setup failed." >&2
+  if ((failed)) || [[ -s "$lock/missing-packages" ]]; then
+    echo "Skipping Homebrew nuke because package setup failed or shared formulae are missing." >&2
+    failed=1
   else
-    wanted_formulae="$lock/wanted-formulae"
-    wanted_prefixes="$lock/wanted-prefixes"
-    installed_formulae="$lock/installed-formulae"
-    extra_formulae="$lock/extra-formulae"
+    # Reuse the installed metadata and resolved aliases from the package check.
+    # Only temporary top-level formulae lose protection; Homebrew keeps any
+    # dependencies still needed by installed formulae or casks.
+    extra_packages=()
+    while IFS= read -r formula; do
+      extra_packages+=("$formula")
+    done < "$lock/extra-packages"
 
-    # Resolve ALL manifest aliases in one Homebrew invocation.
-    #
-    # For example:
-    #
-    #   python
-    #
-    # may resolve to:
-    #
-    #   /opt/homebrew/opt/python@3.14
-
-    if ! brew --prefix \
-         --installed \
-         "${wanted_packages[@]}" \
-         > "$wanted_prefixes"; then
-
-      echo "Could not resolve packages.txt formulae; refusing to nuke." >&2
-      failed=1
-    fi
-
-    if ((failed == 0)); then
-
-      while IFS= read -r prefix; do
-        [[ -z "$prefix" ]] && continue
-        basename "$prefix"
-      done < "$wanted_prefixes" |
-        LC_ALL=C sort -u \
-        > "$wanted_formulae"
-
-
-      # Get all explicitly requested formulae with ONE Homebrew invocation.
-
-      brew list \
-        --formula \
-        --installed-on-request |
-        LC_ALL=C sort -u \
-        > "$installed_formulae"
-
-
-      # installed-on-request MINUS packages.txt = temporary packages
-
-      LC_ALL=C comm \
-        -23 \
-        "$installed_formulae" \
-        "$wanted_formulae" \
-        > "$extra_formulae"
-
-
-      if [[ -s "$extra_formulae" ]]; then
-        log "Temporary Homebrew formulae not present in packages.txt:"
-
-        extra_packages=()
-
-        while IFS= read -r formula; do
-          [[ -z "$formula" ]] && continue
-
-          log "  $formula"
-          extra_packages+=("$formula")
-        done < "$extra_formulae"
-
-
-        # Mark ALL temporary packages dependency-only in ONE invocation.
-
-        log "Removing temporary Homebrew formulae..."
-
-        if brew tab \
-             --no-installed-on-request \
-             "${extra_packages[@]}" \
-             >/dev/null; then
-
-          # Homebrew decides which packages are actually safe to remove.
-          if ! brew autoremove; then
-            echo "Homebrew autoremove failed; protecting any temporary formulae that remain installed." >&2
-
-            remaining_packages=()
-            for formula in "${extra_packages[@]}"; do
-              if brew list --versions "$formula" >/dev/null 2>&1; then
-                remaining_packages+=("$formula")
-              fi
-            done
-
-            if ((${#remaining_packages[@]})); then
-              brew tab --installed-on-request "${remaining_packages[@]}" >/dev/null || true
-            fi
-            failed=1
-          fi
-
-        else
-          echo "Could not mark temporary formulae for removal." >&2
-          failed=1
-        fi
-
-      else
-        log "No temporary Homebrew formulae to remove."
+    prune_ready=true
+    if ((${#extra_packages[@]})); then
+      log "Temporary Homebrew formulae: ${extra_packages[*]}"
+      if ! brew tab --formula --no-installed-on-request "${extra_packages[@]}" >/dev/null; then
+        echo "Could not mark temporary formulae for removal; restoring their protection." >&2
+        brew tab --formula --installed-on-request "${extra_packages[@]}" >/dev/null || true
+        prune_ready=false
+        failed=1
       fi
     fi
-  fi
-fi
 
-if $prune_packages; then
-  refresh_formula_inventory || exit 1
+    # Run even with no top-level extras, to clear already orphaned dependencies.
+    if $prune_ready && ! brew autoremove; then
+      echo "Homebrew autoremove failed; protecting temporary formulae that remain installed." >&2
+      refresh_formula_inventory || exit 1
+      remaining_packages=()
+      for formula in "${extra_packages[@]}"; do
+        if formula_installed "$formula"; then
+          remaining_packages+=("$formula")
+        fi
+      done
+      if ((${#remaining_packages[@]})); then
+        brew tab --formula --installed-on-request "${remaining_packages[@]}" >/dev/null || true
+      fi
+      failed=1
+    fi
+    refresh_formula_inventory || exit 1
+  fi
 fi
 
 next_stage "Toolchain and container configuration"
@@ -490,8 +425,6 @@ if [[ -d "$HOME/shared-folder" ]] &&
     cp "$amsc_generated" "$amsc_config"
   fi
 fi
-
-
 
 # ---------------------------------------------------------------------------
 # Retired applications

@@ -1,5 +1,4 @@
 # source	identifier	application name
-cask	add	anki
 cask	anki	anki
 cask	beeper	Beeper Desktop
 cask	codex	Codex
