@@ -442,6 +442,34 @@
     {
       "enabled": false,
       "id": "parallel"
+    },
+    {
+      "enabled": false,
+      "id": "soniox"
+    },
+    {
+      "enabled": false,
+      "id": "futureagi"
+    },
+    {
+      "enabled": false,
+      "id": "claudeplatform"
+    },
+    {
+      "enabled": false,
+      "id": "munito"
+    },
+    {
+      "enabled": false,
+      "id": "traecn"
+    },
+    {
+      "enabled": false,
+      "id": "chatbox"
+    },
+    {
+      "enabled": false,
+      "id": "abliteration"
     }
   ]
 }

@@ -915,28 +915,6 @@ JupyterLab's Jupytext extension maintains explicitly paired files when saving
 in the UI. No project-wide pairing rule is set; existing notebooks stay as
 they are. `mac-sync` restores the extension after a JupyterLab upgrade.
 
-### Jujutsu with Git
-
-`jj` is available for local changes; Git and `gh` remain installed. In a clean,
-chosen Git repository, `jj git init --git-repo=.` adds a colocated `.jj`
-without converting any other repository. Try the practice repo in
-`/private/tmp/jj-practice-*` first:
-
-```fish
-jj status                 # working copy status
-jj diff                   # current change, shown with delta
-jj log                    # change graph
-jj describe -m "message"  # name the current change
-jj new                    # start a fresh change
-jj undo                   # undo the last jj operation
-jj redo                   # redo a just-undone operation
-```
-
-A colocated repo may show a detached Git HEAD. Check `jj status` and
-`git status` before mixing mutations from both tools. Git branches, remotes,
-GitHub, and `gh` remain available. LazyGit has been uninstalled; Neovim's Git
-picker remains.
-
 ### VS Code
 
 VS Code is shared through `apps.tsv` alongside the terminal workspace.
@@ -1070,8 +1048,7 @@ The terminal tools do not each need their own editor extension:
 | just | Invoke project recipes in the terminal or define an explicit project task |
 | btop | Keep system monitoring in the terminal |
 
-Two optional extensions add distinct functionality, but neither is installed
-by the shared manifest:
+This optional extension is not installed by the shared manifest:
 
 - [Jupytext Sync](https://marketplace.visualstudio.com/items?itemName=caenrigen.jupytext-sync)
   (`caenrigen.jupytext-sync`) keeps explicitly paired notebooks and `.py`
@@ -1079,13 +1056,6 @@ by the shared manifest:
   while the notebook UI shows outputs. It needs Jupytext in the Python
   environment it selects. The existing CLI workflow remains sufficient for
   manual sync; the Jupyter extension already runs `# %%` Python cells.
-- [JJ View](https://marketplace.visualstudio.com/items?itemName=jj-view.jj-view)
-  (`jj-view.jj-view`) adds a Jujutsu graph and change management in the editor.
-  Consider it only for repositories actively using `jj`. Its defaults include
-  polling and recursive repository detection. If adopted, use
-  `jj-view.fileWatcherMode: "watch"` and
-  `jj-view.autoRepositoryDetection: false` to prefer native events and workspace
-  roots; the watcher may still fall back to polling.
 
 Documentation verified through Context7 `/microsoft/vscode-docs` and
 `/websites/astral_sh_uv`, plus [uv notebooks](https://docs.astral.sh/uv/guides/integration/jupyter/)
@@ -1238,6 +1208,56 @@ the removal there; its scheduled sync may apply it sooner. Ordinary manifest
 edits do not uninstall software. Sharing or locally installing a retired app
 again clears its retirement entry.
 
+### Engineering apps and reviewing Mac differences
+
+Keep the engineering tools on the MacBook Pro using its local app manifest:
+
+```fish
+mac-app local paraview ParaView
+# After installing Fusion manually with the verified Polimi education account:
+mac-app local autodesk-fusion "Autodesk Fusion"
+```
+
+Fusion's existing app bundle satisfies that entry without Homebrew adoption.
+OpenFOAM is deferred until its distribution and version are chosen; verify
+`snappyHexMesh` in that installation before recording it.
+
+Review `~/.config/mac-setup/machines/*.tsv` and `*.skip` for intentional app
+differences. These describe intended installations, not a live inventory of
+the other Mac. `brew list --formula --installed-on-request` lists explicitly
+installed formulae to compare with `packages.txt`; resolve aliases such as
+`python` with `brew info` and retain dependencies still required by shared
+tools. Use `brew uses --installed <formula>` to inspect dependents. Review
+unlisted cask receipts with `brew list --cask`; a renamed or self-updated app
+can satisfy a manifest while retaining an older cask token. Ordinary sync
+does not remove these extras. Existing uncommitted dotfile edits prevent
+automatic pulls, so local manifest edits are not evidence of the Air's setup.
+
+The 2026-10-30 review kept Affinity, Autodesk Fusion, DaVinci Resolve, UTM,
+and ParaView local to the Pro; the Air's local list was empty. Fusion
+2706.1.17 was installed manually and its installer moved to Trash. CodexBar
+was repaired to 0.82.0, launched successfully, and its interrupted upgrade
+backup removed while retaining settings. Unused `libomp` and the older
+`t3-code` receipt were removed, keeping T3 Nightly. `python@3.14` remains a
+Jupytext dependency, not an explicit installation.
+
+ParaView's first transfer was slow. A manual resume overlapped with hourly
+sync, so the uncontended prefix was recovered and the transfer restarted in
+`~/Library/Caches/ParaView-6.2.0-arm64.dmg.partial`, outside Homebrew's cache.
+For future manual resumes, keep incomplete downloads outside that cache and
+add the app manifest entry only after download and checksum verification;
+otherwise scheduled sync may start a competing writer. Progress and final
+verification are logged to `~/Library/Logs/paraview-install.log`.
+The recovered download matched Homebrew's SHA-256 and installed ParaView
+6.2.0 for arm64. Its bundled `pvpython --no-mpi` processed a Wavelet source
+(9,261 points, 8,000 cells) and exposed `OpenFOAMReader`; no OpenFOAM solver
+was installed. All 24 sync tests and the remaining `just check` validations
+passed, and maintenance completed successfully with Homebrew Python.
+
+The removed `jj` configuration and custom skills are no longer required by
+the maintenance staging script. Maintenance now sets the same Homebrew-first
+PATH as `mac-sync`, avoiding Apple's older Python for helpers using `tomllib`.
+
 MuPDF, Highlights, Negative, and Sioyek are retired on every Mac. The
 idempotent cleanup built into `mac-sync` removes their app bundles,
 formula/cask installations, appearance automation, and app-specific user data.
@@ -1361,8 +1381,6 @@ locally for review instead of permanently deleting it.
 
 ### Codex technical setup
 
-Custom skills under `~/.codex/skills/context7-docs`, `grill-me`, and
-`spam-senders`, plus `~/.agents/skills/context7-mcp`, are tracked in dotfiles.
 `~/.config/sync/codex-technical.json` records installed plugin IDs and
 explicit enabled/disabled choices from Codex config, including remote
 integrations the CLI plugin list may omit, plus the public HTTPS addresses of

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH"
+
 bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
 python3 "$HOME/.config/sync/codex-technical.py" capture
@@ -13,10 +15,6 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "${bare[@]}" add -u -- .config/sync
 "${bare[@]}" add \
   .gitconfig \
-  .agents/skills/context7-mcp \
-  .codex/skills/context7-docs \
-  .codex/skills/grill-me \
-  .codex/skills/spam-senders \
   .config/duti/defaults.duti \
   .config/fish/config.fish \
   .config/fish/fish_plugins \
@@ -27,7 +25,6 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/herdr \
   .config/karabiner/karabiner.json \
   .config/keymaps \
-  .config/jj/config.toml \
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .config/nvim \

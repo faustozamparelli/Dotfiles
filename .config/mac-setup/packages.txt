@@ -12,7 +12,6 @@ gh
 git
 git-delta
 herdr
-jj
 jupyterlab
 jupytext
 just
