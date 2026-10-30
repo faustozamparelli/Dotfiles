@@ -1214,13 +1214,70 @@ Keep the engineering tools on the MacBook Pro using its local app manifest:
 
 ```fish
 mac-app local paraview ParaView
-# After installing Fusion manually with the verified Polimi education account:
-mac-app local autodesk-fusion "Autodesk Fusion"
+mac-app local blender Blender
+mac-app local qgis QGIS
+brew tap tangency-labs/tap
+brew trust --cask tangency-labs/tap/solidcraft
+mac-app local tangency-labs/tap/solidcraft SolidCraft
+mac-app local --direct openfoam2306 "OpenFOAM v2306"
 ```
 
-Fusion's existing app bundle satisfies that entry without Homebrew adoption.
-OpenFOAM is deferred until its distribution and version are chosen; verify
-`snappyHexMesh` in that installation before recording it.
+Blender, QGIS, OpenCFD OpenFOAM, and SolidCraft are free and open source;
+none requires a Polimi account or a student licence. SolidCraft's official
+tap needs trust for that cask only. All four entries belong exclusively to
+`machines/fausto-s-macbook-pro.tsv`, never `apps.tsv` or the Air's manifest.
+
+OpenFOAM uses the existing OrbStack engine, not a Homebrew formula. Its
+reviewed `direct/openfoam2306.sh` installer creates `~/.local/bin/openfoam2306`
+and pins the official `opencfd/openfoam-default` Linux arm64 image to
+`sha256:7df8c49ff2f966deb0d8afba54a5deb19befc93ea4346e974f0f13869572c289`.
+The launcher starts OrbStack when needed, mounts the current directory at
+`/home/openfoam`, and runs as the current Mac UID/GID so results remain owned
+by the user. Containers are disposable; case files stay in that directory.
+Hourly sync restores the launcher and checks the image when Docker is running;
+it does not start a stopped engine. First use pulls the pinned image if absent.
+The official entrypoint runs under Bash to preserve its profile's temporary
+arguments; Ubuntu's `/bin/sh` otherwise executes `bash -c` commands twice,
+including once before all solver libraries are configured.
+
+Run `openfoam2306` for an interactive shell, `openfoam2306 -build-info` for
+the exact release, or `openfoam2306 snappyHexMesh -help`. A small solver check
+in a new case directory is reproducible with:
+
+```fish
+mkdir -p ~/Documents/OpenFOAM/cavity-check
+cd ~/Documents/OpenFOAM/cavity-check
+openfoam2306 -c 'cp -r "$FOAM_TUTORIALS/incompressible/icoFoam/cavity/cavity/." . && blockMesh && icoFoam && checkMesh'
+```
+
+The 2026-10-30 installation verified OpenCFD API 2306, patch 0, build
+`_fbf00d6b-20230626`, `snappyHexMesh`, and the 400-cell cavity through time
+0.5 with `Mesh OK`. A case path containing spaces, user-owned persistent
+output, piped stdin, and propagation of exit status 37 also passed. These are
+installation checks, not validation of a project simulation. Blender 5.2.3 LTS
+loaded its default eight-vertex cube in background mode; SolidCraft's official
+tap installed 0.27.1 (newer than the website's displayed 0.22.0).
+One retry immediately after deleting and recreating the same bind directory
+failed during file copying; the final solver check used a fresh directory.
+QGIS 4.2.3 opened, created a valid EPSG:4326 memory layer, and transformed
+(9, 45) to UTM 32N (500000, 4982950.4002). Bare bundled CLI/Python calls warn
+about PROJ data before QGIS initialization; for CLI use, prefix the command
+with `PROJ_DATA=/Applications/QGIS-final-4_2_3.app/Contents/Resources/qgis/proj`.
+The initialized QGIS transform passed without that override. Its DMG matched
+Homebrew's SHA-256 after the slow selected mirror was replaced by `dl1.qgis.org`.
+All 24 existing sync tests and the other `just check` validations passed;
+`mac-sync --no-pull --timing` completed in seven seconds with all four entries.
+
+Fusion was subsequently removed with its supplied `Remove Autodesk Fusion`
+app in normal uninstall mode (`--silent --quiet`); `--purge-incomplete` only
+cleans partial installs and does not remove a complete installation. Remaining
+Autodesk support files, preferences, caches, HTTP/WebKit data, temporary IPC
+files, and the `AdskIdentityManager` keychain key were removed separately.
+macOS retained six empty `com.apple.WebKit.*+com.autodesk.*` directories in
+the user's temporary directory: their `sunlnk` flags prevented removal even
+with administrator privileges. Fusion's entry is removed from the Pro's app
+manifest so sync cannot reinstall it. Browser website sessions and online
+Autodesk account data are separate from the removed application.
 
 Review `~/.config/mac-setup/machines/*.tsv` and `*.skip` for intentional app
 differences. These describe intended installations, not a live inventory of

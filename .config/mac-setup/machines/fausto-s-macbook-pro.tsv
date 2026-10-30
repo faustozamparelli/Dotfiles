@@ -1,6 +1,9 @@
 # Apps used only on this Mac. Same format as apps.tsv.
 cask	affinity	Affinity
-cask	autodesk-fusion	Autodesk Fusion
+cask	blender	Blender
 cask	paraview	ParaView
+cask	qgis	QGIS
+cask	tangency-labs/tap/solidcraft	SolidCraft
+direct	openfoam2306	OpenFOAM v2306
 mas	1538878817	UTM
 mas	571213070	DaVinci Resolve
