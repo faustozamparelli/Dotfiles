@@ -433,6 +433,74 @@ fi
 next_stage "Retired applications and cleanup"
 installed_casks="$(brew list --cask)" || exit 1
 
+cleanup_retired_desktop_tool() {
+  local token="$1"
+  local label=""
+  local helper_plist=""
+  local helper_binary=""
+
+  case "$token" in
+    vorssaint) label="com.vorssaint.utils.fan-control" ;;
+    maghue)
+      label="com.kamenlevi.maghue.helper"
+      helper_plist="/Library/LaunchDaemons/$label.plist"
+      helper_binary="/Library/PrivilegedHelperTools/$label"
+      ;;
+  esac
+
+  if [[ -n "$label" ]] &&
+     { launchctl print "system/$label" >/dev/null 2>&1 ||
+       [[ -n "$helper_plist" && -e "$helper_plist" ]] ||
+       [[ -n "$helper_binary" && -e "$helper_binary" ]] ||
+       { [[ "$token" == "maghue" ]] &&
+         { [[ -e "/Library/Application Support/MagHue" ]] || [[ -e "/Library/Logs/MagHue" ]]; }; }; }; then
+    # Scheduled sync never opens an administrator password prompt.
+    if ! sudo -n /bin/launchctl disable "system/$label"; then
+      echo "Cannot remove $token's system helper. Run sudo -v, then mac-sync." >&2
+      return 1
+    fi
+    if launchctl print "system/$label" >/dev/null 2>&1; then
+      sudo -n /bin/launchctl bootout "system/$label" || return 1
+    fi
+    if [[ "$token" == "maghue" ]]; then
+      sudo -n /bin/rm -f -- "$helper_plist" "$helper_binary" || return 1
+      sudo -n /bin/rm -rf -- "/Library/Application Support/MagHue" "/Library/Logs/MagHue" || return 1
+    fi
+  fi
+
+  case "$token" in
+    obsidian)
+      # Vaults are user documents, separate from Obsidian's application state.
+      rm -rf -- "$HOME/Library/Application Support/obsidian" \
+        "$HOME/Library/Caches/md.obsidian" "$HOME/Library/Caches/md.obsidian.ShipIt" \
+        "$HOME/Library/HTTPStorages/md.obsidian" "$HOME/Library/Logs/Obsidian" \
+        "$HOME/Library/Preferences/md.obsidian.plist" \
+        "$HOME/Library/Saved Application State/md.obsidian.savedState" || return 1
+      ;;
+    spotify)
+      rm -rf -- "$HOME/Library/Application Support/Spotify" \
+        "$HOME/Library/Caches/com.spotify.client" "$HOME/Library/Caches/com.spotify.client.helper" \
+        "$HOME/Library/HTTPStorages/com.spotify.client" "$HOME/Library/HTTPStorages/com.spotify.client.helper" \
+        "$HOME/Library/WebKit/com.spotify.client" "$HOME/Library/Logs/Spotify" \
+        "$HOME/Library/Preferences/com.spotify.client.plist" \
+        "$HOME/Library/Preferences/com.spotify.client.helper.plist" \
+        "$HOME/Library/Saved Application State/com.spotify.client.savedState" || return 1
+      ;;
+    vorssaint)
+      rm -rf -- "$HOME/Library/Application Support/com.vorssaint.utils" \
+        "$HOME/Library/Caches/com.vorssaint.utils" "$HOME/Library/HTTPStorages/com.vorssaint.utils" \
+        "$HOME/Library/Logs/Vorssaint" "$HOME/Library/Preferences/com.vorssaint.utils.plist" \
+        "$HOME/Library/Saved Application State/com.vorssaint.utils.savedState" || return 1
+      ;;
+    maghue)
+      rm -rf -- "$HOME/Library/Caches/com.kamenlevi.MagHue" \
+        "$HOME/Library/HTTPStorages/com.kamenlevi.MagHue" \
+        "$HOME/Library/Logs/MagHue" "$HOME/Library/Preferences/com.kamenlevi.MagHue.plist" || return 1
+      ;;
+  esac
+  return 0
+}
+
 retire_manifest() {
   local source
   local identifier
@@ -495,6 +563,17 @@ retire_manifest() {
         failed=1
       fi
     fi
+
+    case "$token" in
+      obsidian|spotify|vorssaint|maghue)
+        if [[ -d "$app_path" || -d "$HOME/Applications/$name.app" ]]; then
+          echo "Cannot clean $name's data while its app bundle remains installed." >&2
+          failed=1
+          continue
+        fi
+        cleanup_retired_desktop_tool "$token" || failed=1
+        ;;
+    esac
 
     # The cask may already be gone while user caches remain.
     case "$token" in

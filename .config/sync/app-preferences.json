@@ -1,19 +1,5 @@
 {
   "preferences": {
-    "com.vorssaint.utils": {
-      "application": "Vorssaint.app",
-      "settings": {
-        "monitorIntervalSeconds": 5,
-        "featureAvailable.monitorNetwork": false,
-        "menuBarNetwork": false,
-        "monitorGraphNetwork": false,
-        "monitorShowNetwork": false,
-        "monitorNetApps": false,
-        "monitorNetTotals": false,
-        "monitorNetSpeed": false,
-        "monitorNetTest": false
-      }
-    },
     "com.steipete.codexbar": {
       "application": "CodexBar.app",
       "settings": {

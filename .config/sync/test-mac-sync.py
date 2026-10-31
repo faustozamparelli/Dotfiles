@@ -14,6 +14,7 @@ SOURCE = SCRIPT.read_text()
 PACKAGES = SOURCE[SOURCE.index('formula_inventory='):SOURCE.index('# Homebrew isolates JupyterLab')]
 NUKE = SOURCE[SOURCE.index('if $prune_packages; then'):SOURCE.index('next_stage "Toolchain and container configuration"')]
 APPS = SOURCE[SOURCE.index('install_manifest() {'):SOURCE.index('install_manifest "$shared"')]
+DESKTOP_CLEANUP = SOURCE[SOURCE.index('cleanup_retired_desktop_tool() {'):SOURCE.index('retire_manifest() {')]
 
 
 def formula(name, *, aliases=(), requested=True):
@@ -74,6 +75,7 @@ log() {{ :; }}
 '''
         # App lookup stays inside the fixture; no real apps or user files change.
         code = code.replace('"/Applications/', '"$lock/applications/')
+        code = code.replace('"/Library/', '"$lock/library/')
         code = code.replace('$HOME', '$test_home')
         return subprocess.run(['/bin/bash', '-c', prelude + code], env=environment,
                               text=True, capture_output=True)
@@ -188,6 +190,51 @@ is_skipped() {{ return 1; }}
         (self.root / 'fail-install').touch()
         result = self.apps('cask\tfixture-app\tMissing Fixture\n')
         self.assertNotEqual(result.returncode, 0)
+
+    def test_obsidian_cleanup_preserves_vaults_and_other_app_data(self):
+        state = self.root / 'home/Library/Application Support/obsidian'
+        vault = self.root / 'home/Documents/Vault/notes.md'
+        other = self.root / 'home/Library/Application Support/Other/notes.md'
+        state.mkdir(parents=True)
+        for path in (vault, other):
+            path.parent.mkdir(parents=True)
+            path.write_text('keep my notes')
+        result = self.run_shell(DESKTOP_CLEANUP + '\ncleanup_retired_desktop_tool obsidian\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(state.exists())
+        self.assertEqual(vault.read_text(), 'keep my notes')
+        self.assertEqual(other.read_text(), 'keep my notes')
+
+    def test_spotify_cleanup_is_idempotent_and_preserves_browser_data(self):
+        cache = self.root / 'home/Library/Caches/com.spotify.client'
+        browser = self.root / 'home/Library/Application Support/Helium/profile'
+        cache.mkdir(parents=True)
+        browser.parent.mkdir(parents=True)
+        browser.write_text('keep signed-in browser')
+        result = self.run_shell(DESKTOP_CLEANUP + '''
+cleanup_retired_desktop_tool spotify || exit 1
+cleanup_retired_desktop_tool spotify
+''')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(cache.exists())
+        self.assertEqual(browser.read_text(), 'keep signed-in browser')
+
+    def test_helper_authorization_failure_preserves_data_and_reports_failure(self):
+        helper = self.root / 'library/LaunchDaemons/com.kamenlevi.maghue.helper.plist'
+        helper.parent.mkdir(parents=True)
+        helper.write_text('system helper')
+        prefs = self.root / 'home/Library/Preferences/com.kamenlevi.MagHue.plist'
+        prefs.parent.mkdir(parents=True)
+        prefs.write_text('keep until helper can be stopped')
+        for name in ('sudo', 'launchctl'):
+            command = self.bin / name
+            command.write_text('#!/bin/sh\nexit 1\n')
+            command.chmod(0o755)
+        result = self.run_shell(DESKTOP_CLEANUP + '\ncleanup_retired_desktop_tool maghue\n')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('sudo -v', result.stderr)
+        self.assertTrue(helper.exists())
+        self.assertTrue(prefs.exists())
 
 
 if __name__ == '__main__':

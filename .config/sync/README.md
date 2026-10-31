@@ -1417,8 +1417,13 @@ changes made in the apps can be staged. Full application plists stay local.
 The portable Qalculate numeric/formatting preferences in
 `~/.config/qalculate/qalc.cfg` are tracked; calculation histories stay local.
 
-Vorssaint keeps temperature readings with a supported five-second refresh;
-unused network monitoring is disabled. CodexBar uses adaptive refresh and
+Spotify, Vorssaint, and MagHue are retired on every synced Mac. Their named
+application data and caches are removed during sync; privileged helpers need
+administrator authorization (`sudo -v` before `mac-sync`). Scheduled sync
+reports missing authorization without opening a password prompt. Obsidian
+retirement removes app state only; note vaults remain user documents.
+
+CodexBar uses adaptive refresh and
 follows system Low Power Mode. Its provider IDs, enabled choices and selected
 source are shared through the whitelist, merged into
 `~/.config/codexbar/config.json` while preserving local credentials. The old
