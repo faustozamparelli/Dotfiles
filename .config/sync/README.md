@@ -1423,8 +1423,9 @@ changes made in the apps can be staged. Publish those changes with `bcp` from
 any Mac; the other Macs apply them during their next sync. There is no master
 Mac. Unpublished changes do not automatically propagate.
 Run `bcp` after changing a shared preference: hourly sync reapplies the
-published values. The six new profiles are initially off so Fausto chooses
-which apps participate; CodexBar keeps its existing enabled profile.
+published values. Fausto selected Raycast, T3 and Tailscale (Dock visibility
+only); CodexBar keeps its existing enabled profile. QuickRecorder, MacWhisper
+and OrbStack preference sharing remain off.
 
 Choose portable preference sharing per app, independently of its installation:
 
@@ -1442,7 +1443,7 @@ preferences. T3 interface settings are merged only while T3 is closed; an open
 app defers them until a later sync. Browser connections and other local fields
 in its settings file are retained.
 
-The 23 published shared app entries were reviewed on 2026-11-01:
+The 24 published shared app entries were reviewed on 2026-11-01:
 
 | Shared app | Settings route and current coverage |
 | --- | --- |
@@ -1463,6 +1464,7 @@ The 23 published shared app entries were reviewed on 2026-11-01:
 | MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
 | GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |
 | SF Mono | Shared font installation; no separate application preferences. |
+| OmniWM | Shared installation, selected by Fausto after the initial trial; no new preference profile selected. |
 
 The Air uses the common shared app list and currently has no local extras.
 The Pro's eight engineering/creative entries remain in its machine manifest;
@@ -1517,7 +1519,10 @@ remote MCP servers. `sync-maintain` captures
 these choices and stages them for review; after commit and push, `mac-sync`
 merges them into `~/.codex/config.toml` on the other Mac at login or hourly.
 Existing local MCP headers, credentials, and machine-specific servers remain
-untouched. Plugin files and caches are installed by Codex, not copied through
+untouched. A same-named local stdio server keeps its command/arguments instead
+of receiving a conflicting URL. A URL inserted into such a server by the
+older merge is removed only when it matches the shared snapshot.
+Plugin files and caches are installed by Codex, not copied through
 Git. To install missing plugins on the other Mac, run
 `python3 ~/.config/sync/codex-technical.py restore-plugins` there after sync;
 it uses the Codex plugin installer and may need account authorization. API

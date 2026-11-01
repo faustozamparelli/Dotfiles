@@ -9,6 +9,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import tomllib
 import unittest
 from unittest.mock import patch
 
@@ -307,6 +308,34 @@ cleanup_retired_desktop_tool spotify
         self.assertFalse((self.root / 'home' / paths[0]).exists())
         for relative in paths[1:]:
             self.assertEqual((self.root / 'home' / relative / 'local-state').read_text(), 'keep local state')
+
+
+class CodexTechnicalTests(unittest.TestCase):
+    def test_remote_snapshot_preserves_local_stdio_servers_and_repairs_old_overlay(self):
+        source = Path.home() / '.config/sync/codex-technical.py'
+        spec = importlib.util.spec_from_file_location('codex_technical_test', source)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory(prefix='codex-technical-test-') as directory:
+            root = Path(directory)
+            module.CONFIG = root / 'config.toml'
+            module.SNAPSHOT = root / 'snapshot.json'
+            module.OLD_PREFERENCE_MARKER = root / 'old-marker'
+            module.SNAPSHOT.write_text(json.dumps({'plugins': {}, 'mcp_servers': {
+                'context7': {'url': 'https://mcp.context7.com/mcp'},
+                'remote': {'url': 'https://example.test/mcp'}}}))
+            for overlay in ('', 'url = "https://mcp.context7.com/mcp"\n'):
+                module.CONFIG.write_text('[mcp_servers.context7]\ncommand = "npx"\n'
+                                         'args = ["local-server"]\n' + overlay +
+                                         '[mcp_servers.context7.env]\nTOKEN = "local-only"\n'
+                                         '[mcp_servers.remote.http_headers]\nAuthorization = "local-only"\n')
+                module.apply()
+                servers = tomllib.loads(module.CONFIG.read_text())['mcp_servers']
+                self.assertNotIn('url', servers['context7'])
+                self.assertEqual(servers['context7']['command'], 'npx')
+                self.assertEqual(servers['context7']['env'], {'TOKEN': 'local-only'})
+                self.assertEqual(servers['remote']['url'], 'https://example.test/mcp')
+                self.assertEqual(servers['remote']['http_headers'], {'Authorization': 'local-only'})
 
 
 class MacAppTests(unittest.TestCase):

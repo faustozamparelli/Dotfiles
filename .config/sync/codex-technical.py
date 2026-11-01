@@ -100,6 +100,10 @@ def update_section(lines, section, changes):
             if key in changes:
                 existing[key] = i
     for key, value in changes.items():
+        if value is None:
+            if key in existing:
+                lines[existing[key]] = ""
+            continue
         new_line = f"{key} = {json.dumps(value, ensure_ascii=False)}\n"
         if key in existing:
             lines[existing[key]] = new_line
@@ -128,10 +132,20 @@ def apply():
         return
     snapshot = json.loads(SNAPSHOT.read_text())
     validate(snapshot)
-    lines = CONFIG.read_text().splitlines(keepends=True)
+    original = CONFIG.read_text()
+    current = tomllib.loads(original)
+    lines = original.splitlines(keepends=True)
     for name, enabled in snapshot["plugins"].items():
         update_section(lines, f"plugins.{json.dumps(name)}", {"enabled": enabled})
     for name, settings in snapshot["mcp_servers"].items():
+        local = current.get("mcp_servers", {}).get(name, {})
+        if local.get("command") or local.get("type") == "stdio":
+            # Repair only the URL added by the older merge; keep local commands,
+            # arguments and credentials instead of mixing MCP transports.
+            if local.get("url") == settings["url"]:
+                update_section(lines, f"mcp_servers.{name}", {"url": None})
+            print(f"Kept local stdio MCP server: {name}")
+            continue
         update_section(lines, f"mcp_servers.{name}", settings)
     candidate = "".join(lines)
     tomllib.loads(candidate)

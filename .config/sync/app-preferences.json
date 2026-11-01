@@ -2,10 +2,7 @@
   "disabledApplications": [
     "MacWhisper.app",
     "OrbStack.app",
-    "QuickRecorder.app",
-    "Raycast.app",
-    "T3 Code (Nightly).app",
-    "Tailscale.app"
+    "QuickRecorder.app"
   ],
   "preferences": {
     "com.lihaoyun6.QuickRecorder": {
