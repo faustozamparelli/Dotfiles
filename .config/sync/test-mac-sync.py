@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Exercise sync installation decisions with isolated Homebrew/app fixtures."""
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -9,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SCRIPT = Path.home() / '.local/bin/mac-sync'
 SOURCE = SCRIPT.read_text()
@@ -16,6 +18,7 @@ PACKAGES = SOURCE[SOURCE.index('formula_inventory='):SOURCE.index('# Homebrew is
 NUKE = SOURCE[SOURCE.index('if $prune_packages; then'):SOURCE.index('next_stage "Toolchain and container configuration"')]
 APPS = SOURCE[SOURCE.index('install_manifest() {'):SOURCE.index('install_manifest "$shared"')]
 DESKTOP_CLEANUP = SOURCE[SOURCE.index('cleanup_retired_desktop_tool() {'):SOURCE.index('retire_manifest() {')]
+RETIRE = SOURCE[SOURCE.index('retire_manifest() {'):SOURCE.index('# Permanent, idempotent PDF retirement.')]
 
 
 def formula(name, *, aliases=(), requested=True):
@@ -285,6 +288,177 @@ cleanup_retired_desktop_tool spotify
         self.assertIn('sudo -v', result.stderr)
         self.assertTrue(helper.exists())
         self.assertTrue(prefs.exists())
+
+
+    def test_chatgpt_retirement_preserves_codex_and_computer_use_data(self):
+        paths = ['Library/Application Support/com.openai.chat',
+                 'Library/Application Support/com.openai.codex',
+                 'Library/HTTPStorages/com.openai.sky.CUAService']
+        for relative in paths:
+            path = self.root / 'home' / relative
+            path.mkdir(parents=True)
+            (path / 'local-state').write_text('keep local state')
+        (self.root / 'retired.tsv').write_text('cask\tchatgpt\tChatGPT\n')
+        result = self.run_shell(RETIRE + '\nretire_manifest\nexit "$failed"',
+                                'retired="$lock/retired.tsv"\ninstalled_casks=chatgpt\nbrew_prefix="$lock/brew"')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(['uninstall', '--cask', 'chatgpt'], self.brew_calls())
+        self.assertFalse(any('--zap' in call for call in self.brew_calls()))
+        self.assertFalse((self.root / 'home' / paths[0]).exists())
+        for relative in paths[1:]:
+            self.assertEqual((self.root / 'home' / relative / 'local-state').read_text(), 'keep local state')
+
+
+class MacAppTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix='mac-app-test-')
+        self.addCleanup(temporary.cleanup)
+        self.home = Path(temporary.name)
+        self.setup = self.home / '.config/mac-setup'
+        (self.setup / 'machines').mkdir(parents=True)
+        (self.setup / 'apps.tsv').write_text('# shared apps\n')
+        self.bin = self.home / 'bin'
+        self.bin.mkdir()
+        (self.bin / 'scutil').write_text('#!/bin/sh\nprintf "%s\\n" "$MAC_APP_TEST_COMPUTER"\n')
+        (self.bin / 'git').write_text(f'#!{sys.executable}\n' + '''
+import sys
+sys.exit(1 if 'diff' in sys.argv else 0)
+''')
+        sync = self.home / '.local/bin/mac-sync'
+        sync.parent.mkdir(parents=True)
+        sync.write_text('#!/bin/sh\nexit 0\n')
+        for path in [self.bin / 'scutil', self.bin / 'git', sync]:
+            path.chmod(0o755)
+
+    def run_app(self, *arguments, computer='Mac Studio'):
+        environment = dict(os.environ, HOME=str(self.home),
+                           PATH=f'{self.bin}:' + os.environ['PATH'],
+                           MAC_APP_TEST_COMPUTER=computer)
+        return subprocess.run(['/bin/bash', str(Path.home() / '.local/bin/mac-app'), *arguments],
+                              env=environment, text=True, capture_output=True)
+
+    def test_air_local_installs_join_the_common_set(self):
+        result = self.run_app('local', 'firefox', computer="Fausto's MacBook Air")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('cask\tfirefox\tfirefox', (self.setup / 'apps.tsv').read_text())
+        self.assertFalse((self.setup / 'machines/fausto-s-macbook-air.tsv').exists())
+
+    def test_sharing_a_local_app_preserves_other_apps_and_removes_duplicates(self):
+        for host in ('fausto-s-macbook-pro', 'mac-studio'):
+            (self.setup / f'machines/{host}.tsv').write_text('cask\tqgis\tQGIS\ncask\tblender\tBlender\n')
+        result = self.run_app('share', 'qgis', 'QGIS')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('cask\tqgis\tQGIS', (self.setup / 'apps.tsv').read_text())
+        for host in ('fausto-s-macbook-pro', 'mac-studio'):
+            self.assertEqual((self.setup / f'machines/{host}.tsv').read_text(), 'cask\tblender\tBlender\n')
+
+    def test_local_refuses_an_app_already_in_the_common_set(self):
+        (self.setup / 'apps.tsv').write_text('cask\traycast\tRaycast\n')
+        result = self.run_app('local', 'raycast')
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn('already shared', result.stderr)
+        self.assertFalse((self.setup / 'machines/mac-studio.tsv').exists())
+
+
+class AppPreferencesTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix='app-preferences-test-')
+        self.addCleanup(temporary.cleanup)
+        self.home = Path(temporary.name)
+        source = Path.home() / '.config/sync/app-preferences.py'
+        spec = importlib.util.spec_from_file_location('app_preferences_test', source)
+        self.module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.module)
+        self.module.HOME = self.home
+        self.module.APPLICATIONS = (self.home / 'Applications',)
+        self.module.PROFILE = self.home / 'profile.json'
+        self.manifest = self.home / '.config/mac-setup/apps.tsv'
+        self.manifest.parent.mkdir(parents=True)
+        self.manifest.write_text('cask\tdemo\tDemo\n')
+        (self.home / 'Applications/Demo.app').mkdir(parents=True)
+        self.preferences = self.home / 'Library/Preferences/example.demo.plist'
+        self.preferences.parent.mkdir(parents=True)
+        self.profile = {'preferences': {'example.demo': {
+            'application': 'Demo.app', 'settings': {'showMenubar': True}}}}
+
+    def run_profile(self, action, *, process_running=False, application=None):
+        self.module.PROFILE.write_text(json.dumps(self.profile))
+        arguments = ['app-preferences.py', action] + ([application] if application else [])
+        with patch.object(sys, 'argv', arguments), \
+             patch.object(self.module.subprocess, 'run') as run:
+            run.return_value.returncode = 0 if process_running else 1
+            self.module.main()
+        return run
+
+    def test_per_app_disable_keeps_local_settings_and_stops_application(self):
+        self.preferences.write_bytes(plistlib.dumps({'showMenubar': False}))
+        original = self.preferences.read_bytes()
+        self.run_profile('disable', application='Demo').assert_not_called()
+        self.profile = json.loads(self.module.PROFILE.read_text())
+        self.assertEqual(self.profile['disabledApplications'], ['Demo.app'])
+        self.run_profile('apply').assert_not_called()
+        self.assertEqual(self.preferences.read_bytes(), original)
+        self.run_profile('enable', application='Demo.app').assert_not_called()
+        self.assertEqual(json.loads(self.module.PROFILE.read_text())['disabledApplications'], [])
+
+    def test_unshared_or_uninstalled_apps_are_untouched(self):
+        self.preferences.write_bytes(plistlib.dumps({'showMenubar': False, 'apiKey': 'local-only'}))
+        for shared, installed in [(False, True), (True, False)]:
+            self.manifest.write_text('cask\tdemo\tDemo\n' if shared else 'cask\tother\tOther\n')
+            app = self.home / 'Applications/Demo.app'
+            if not installed:
+                app.rmdir()
+            for action in ('apply', 'capture'):
+                with self.subTest(shared=shared, installed=installed, action=action):
+                    run = self.run_profile(action)
+                    run.assert_not_called()
+                    self.assertEqual(json.loads(self.module.PROFILE.read_text()), self.profile)
+
+    def test_apply_writes_only_the_allowlisted_key(self):
+        self.preferences.write_bytes(plistlib.dumps({'showMenubar': False, 'apiKey': 'local-only'}))
+        run = self.run_profile('apply')
+        run.assert_called_once_with(['defaults', 'write', 'example.demo', 'showMenubar', '-bool', 'true'], check=True)
+
+    def test_capture_excludes_credentials_and_wrong_types(self):
+        for value in (False, 'wrong-type'):
+            self.preferences.write_bytes(plistlib.dumps({'showMenubar': value, 'apiKey': 'local-only'}))
+            run = self.run_profile('capture')
+            run.assert_not_called()
+            captured = json.loads(self.module.PROFILE.read_text())
+            expected = value if type(value) is bool else True
+            self.assertEqual(captured['preferences']['example.demo']['settings'], {'showMenubar': expected})
+
+    def test_codexbar_merges_local_credentials_without_exporting_them(self):
+        (self.home / 'Applications/CodexBar.app').mkdir()
+        self.manifest.write_text('cask\tcodexbar\tCodexBar\n')
+        config = self.home / '.config/codexbar/config.json'
+        config.parent.mkdir(parents=True)
+        config.write_text(json.dumps({'version': 1, 'providers': [
+            {'id': 'codex', 'enabled': False, 'apiKey': 'local-only'}]}))
+        self.profile = {'preferences': {}, 'codexbarProviders': [{'id': 'codex', 'enabled': True}]}
+        self.run_profile('apply').assert_not_called()
+        self.assertEqual(json.loads(config.read_text())['providers'], [
+            {'id': 'codex', 'enabled': True, 'apiKey': 'local-only'}])
+        self.run_profile('capture').assert_not_called()
+        self.assertEqual(json.loads(self.module.PROFILE.read_text())['codexbarProviders'], [
+            {'id': 'codex', 'enabled': True}])
+
+    def test_t3_settings_preserve_local_connections_and_wait_while_running(self):
+        (self.home / 'Applications/T3 Code (Nightly).app').mkdir()
+        self.manifest.write_text('cask\tt3-code@nightly\tT3 Code (Nightly)\n')
+        config = self.home / '.t3/userdata/client-settings.json'
+        config.parent.mkdir(parents=True)
+        local = {'wordWrap': False, 'browserProfiles': [{'id': 'device-only'}]}
+        config.write_text(json.dumps(local))
+        self.profile = {'preferences': {}, 't3ClientSettings': {'wordWrap': True}}
+        self.run_profile('apply', process_running=True)
+        self.assertEqual(json.loads(config.read_text()), local)
+        self.run_profile('apply')
+        self.assertEqual(json.loads(config.read_text()), dict(local, wordWrap=True))
+        local['wordWrap'] = False
+        config.write_text(json.dumps(local))
+        self.run_profile('capture').assert_not_called()
+        self.assertEqual(json.loads(self.module.PROFILE.read_text())['t3ClientSettings'], {'wordWrap': False})
 
 
 if __name__ == '__main__':

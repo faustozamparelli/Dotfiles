@@ -19,14 +19,14 @@ Share an app (default; Homebrew cask):
   mac-app share --mas <app-store-id> <application name>
   mac-app share --direct <installer-name> <application name>
 
-Keep an app only on this Mac:
+Keep an extra app only on this Mac (the Air always shares managed installs):
   mac-app local <cask>
   mac-app local --mas <app-store-id> <application name>
 
 Install without recording it (temporary):
   mac-app temporary <cask>
 
-Remove a shared app from both Macs (run mac-sync on the other Mac):
+Remove a shared app from all synced Macs:
   mac-app remove <cask>
   mac-app remove --mas <app-store-id>
   mac-app remove --direct <installer-name>
@@ -62,6 +62,16 @@ shift
 name="${*:-$identifier}"
 host="$(safe_host)"
 mkdir -p "$setup/machines"
+if [[ "$host" == "fausto-s-macbook-air" &&
+      ( "$action" == "local" || "$action" == "temporary" ) ]]; then
+  echo "Apps installed on the Air belong to the common set; sharing this app."
+  action="share"
+fi
+if [[ "$action" == "local" ]] &&
+   awk -F '\t' -v s="$source" -v i="$identifier" '$1 == s && $2 == i { found=1 } END { exit !found }' "$shared"; then
+  echo "$identifier is already shared. Local is for extra apps; use skip to exclude a shared app on this Mac." >&2
+  exit 2
+fi
 
 if [[ "$action" == "remove" ]]; then
   if (($#)); then
@@ -126,6 +136,17 @@ else
 fi
 
 targets=("${target#"$HOME/"}")
+if [[ "$action" == "share" ]]; then
+  # Promoting an app to the common set must not leave duplicate local rows.
+  for local_manifest in "$setup/machines/"*.tsv; do
+    [[ -f "$local_manifest" ]] || continue
+    if awk -F '\t' -v s="$source" -v i="$identifier" '$1 == s && $2 == i { found=1 } END { exit !found }' "$local_manifest"; then
+      awk -F '\t' -v s="$source" -v i="$identifier" '!($1 == s && $2 == i)' "$local_manifest" > "$tmp"
+      cat "$tmp" > "$local_manifest"
+      targets+=("${local_manifest#"$HOME/"}")
+    fi
+  done
+fi
 if [[ "$action" == "share" || "$action" == "local" ]] && [[ -f "$retired" ]] &&
    awk -F '\t' -v s="$source" -v i="$identifier" '$1 == s && $2 == i { found=1 } END { exit !found }' "$retired"; then
   tmp_retired="$(mktemp)"

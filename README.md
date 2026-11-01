@@ -61,6 +61,13 @@ on the other Mac to apply the removal there. A LaunchAgent also runs `mac-sync`
 at login and hourly. Direct downloads require a small reviewed installer under
 `~/.config/mac-setup/direct` with a pinned checksum.
 
+Managed installs on the MacBook Air always join the common shared set. Use
+`local` for extra Pro/Studio apps; `share` promotes an app into the common set
+and removes duplicate local rows. The Studio and Pro can keep different extras.
+The sync manual lists portable settings support for all shared apps. Select
+reviewed preference profiles with `app-preferences.py enable/disable`, then
+publish with `bcp`; new profiles are opt-in.
+
 Helium web-app names and URLs are shared through
 `~/.config/sync/helium-apps.json`. Install an app in Helium, then run `bcp` to
 capture and share it. At the end, `mac-sync` and `bcp` print

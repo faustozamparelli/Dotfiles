@@ -1413,12 +1413,69 @@ failures retain pending edits and leave local shortcuts unchanged. The two
 Macs converge once each has completed a successful sync; this is hourly sync,
 not an immediate live connection.
 
-### Portable app performance settings
+### Portable app settings
 
-`~/.config/sync/app-preferences.json` shares a reviewed whitelist of performance
-preferences for installed apps. `app-preferences.py apply` runs during
+`~/.config/sync/app-preferences.json` shares a reviewed whitelist of interface,
+behavior, and performance preferences for installed apps in the shared app
+manifest. Local-only apps are excluded. `app-preferences.py apply` runs during
 `mac-sync`; `capture` runs before reconciliation during `sync-maintain` so
-changes made in the apps can be staged. Full application plists stay local.
+changes made in the apps can be staged. Publish those changes with `bcp` from
+any Mac; the other Macs apply them during their next sync. There is no master
+Mac. Unpublished changes do not automatically propagate.
+Run `bcp` after changing a shared preference: hourly sync reapplies the
+published values. The six new profiles are initially off so Fausto chooses
+which apps participate; CodexBar keeps its existing enabled profile.
+
+Choose portable preference sharing per app, independently of its installation:
+
+```sh
+python3 ~/.config/sync/app-preferences.py list
+python3 ~/.config/sync/app-preferences.py enable Raycast
+python3 ~/.config/sync/app-preferences.py disable Raycast
+bcp
+```
+
+Disabling leaves each Mac's current settings intact. These controls apply to
+the reviewed preference profiles below; existing tracked configuration files
+continue to use the dotfiles workflow. Apps may need reopening to load changed
+preferences. T3 interface settings are merged only while T3 is closed; an open
+app defers them until a later sync. Browser connections and other local fields
+in its settings file are retained.
+
+The 23 published shared app entries were reviewed on 2026-11-01:
+
+| Shared app | Settings route and current coverage |
+| --- | --- |
+| Ghostty, Karabiner-Elements, Visual Studio Code | Existing tracked configuration; VS Code's selected extensions are installed during sync. |
+| Codex | Existing reviewed plugin choices and public MCP endpoints; account connections stay local. |
+| CodexBar | Portable refresh/power settings and selected provider fields; credentials retained locally. |
+| QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
+| MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
+| Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
+| T3 Code (Nightly) | Selected interface, notification, confirmation, diff and sidebar preferences. Conversations, projects, connections, browser profiles, models and credentials stay local. |
+| OrbStack | Menu-bar visibility. VM/container data, CPU/RAM limits, networking and device-specific settings stay local. |
+| Tailscale | Dock visibility only. Device identity, routes, exit nodes and connections stay local. |
+| Helium | Existing menu-shortcut sharing and web-app reminders. Browser profiles, sessions and history are not copied. |
+| Wispr Flow | Its [account sync](https://docs.wisprflow.ai/articles/5284722493-sync-flow-across-your-devices) handles supported dictionary, snippet, language and style preferences. Shortcuts, microphones and sounds are per-device. |
+| Anki | Use [AnkiWeb](https://docs.ankiweb.net/manual/syncing) for collections. This is not a full application-preferences sync; local databases are not copied. |
+| Beeper Desktop | Sign in on each device; no portable settings export was verified. Messaging/account databases are excluded. |
+| Microsoft Excel, ProtonVPN | No reviewed portable settings profile yet. Sandboxed/account data and VPN state are excluded. |
+| MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
+| GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |
+| SF Mono | Shared font installation; no separate application preferences. |
+
+The Air uses the common shared app list and currently has no local extras.
+The Pro's eight engineering/creative entries remain in its machine manifest;
+Studio extras remain independent. Choose `mac-app share` or `mac-app local`
+from the Mac where an app is being added. Managed installs on the Air always
+join the common set, including requests for local/temporary installs. Sharing
+a formerly local app removes its duplicate rows from machine manifests.
+`local` is for extra apps and refuses an already shared app; `skip` excludes a
+shared app on one Mac. Do not promote heavy tools into the common list merely
+to match the Studio to the Pro. Apps installed outside `mac-app` are not
+automatically enrolled.
+
+Full application plists and databases stay local.
 The portable Qalculate numeric/formatting preferences in
 `~/.config/qalculate/qalc.cfg` are tracked; calculation histories stay local.
 
@@ -1427,6 +1484,11 @@ application data and caches are removed during sync; privileged helpers need
 administrator authorization (`sudo -v` before `mac-sync`). Scheduled sync
 reports missing authorization without opening a password prompt. Obsidian
 retirement removes app state only; note vaults remain user documents.
+
+ChatGPT retirement uses normal cask uninstall plus named ChatGPT paths, never
+Homebrew's broad zap list, which includes Codex/CUAService data. During Studio
+enrollment the older rule moved 12 such objects to Trash; all 12 were restored
+in place without overwriting files, and a regression test now preserves them.
 
 CodexBar uses adaptive refresh and
 follows system Low Power Mode. Its provider IDs, enabled choices and selected

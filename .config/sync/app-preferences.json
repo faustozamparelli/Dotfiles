@@ -1,5 +1,62 @@
 {
+  "disabledApplications": [
+    "MacWhisper.app",
+    "OrbStack.app",
+    "QuickRecorder.app",
+    "Raycast.app",
+    "T3 Code (Nightly).app",
+    "Tailscale.app"
+  ],
   "preferences": {
+    "com.lihaoyun6.QuickRecorder": {
+      "application": "QuickRecorder.app",
+      "settings": {
+        "recordHDR": false,
+        "recordMic": false,
+        "encoder": "h265",
+        "background": "wallpaper",
+        "recordWinSound": false,
+        "miniStatusBar": false,
+        "showMenubar": true,
+        "showOnDock": false,
+        "showMouse": false
+      }
+    },
+    "com.goodsnooze.MacWhisper": {
+      "application": "MacWhisper.app",
+      "settings": {
+        "playSoundOnCompleteTranscription": true,
+        "appVisibilityMode": "dockOnly",
+        "defaultVideoplayerState": "floating"
+      }
+    },
+    "com.raycast.macos": {
+      "application": "Raycast.app",
+      "settings": {
+        "raycastShouldFollowSystemAppearance": true,
+        "raycastAlternativeEscape": false,
+        "raycastUI_preferredTextSize": "large",
+        "raycastPreferredWindowMode": "default",
+        "popToRootTimeout": 90,
+        "showFavoritesInCompactMode": true,
+        "raycastWindowPresentationMode": 0,
+        "raycastWindowEscapeKeyBehavior": 0,
+        "navigationCommandStyleIdentifierKey": "macos",
+        "keepWindowVisibleOnResignKey": false
+      }
+    },
+    "dev.kdrag0n.MacVirt": {
+      "application": "OrbStack.app",
+      "settings": {
+        "global_showMenubarExtra": true
+      }
+    },
+    "io.tailscale.ipn.macsys": {
+      "application": "Tailscale.app",
+      "settings": {
+        "HideDockIcon": true
+      }
+    },
     "com.steipete.codexbar": {
       "application": "CodexBar.app",
       "settings": {
@@ -7,6 +64,33 @@
         "backgroundWorkLowPowerModePreference": "automatic"
       }
     }
+  },
+  "t3ClientSettings": {
+    "notificationMode": "notifications-and-sound",
+    "inAppNotificationsEnabled": true,
+    "chatWidth": "comfortable",
+    "confirmQuit": "hold",
+    "confirmThreadArchive": false,
+    "confirmThreadDelete": true,
+    "confirmThreadUnpin": false,
+    "diffFilesCollapsed": true,
+    "diffIgnoreWhitespace": true,
+    "diffLayout": "stacked",
+    "persistComposerContextStrip": false,
+    "contextWindowMeterEnabled": false,
+    "composerCollapseOnScroll": true,
+    "composerRichTextEnabled": true,
+    "followUpBehavior": "queue",
+    "proactivePanelsEnabled": false,
+    "showSkillsInSlashMenu": true,
+    "legacySidebarEnabled": false,
+    "sidebarWorkingShelfEnabled": false,
+    "sidebarProjectGroupingMode": "repository",
+    "sidebarProjectSortOrder": "updated_at",
+    "sidebarThreadSortOrder": "updated_at",
+    "sidebarThreadPreviewCount": 6,
+    "timestampFormat": "locale",
+    "wordWrap": true
   },
   "codexbarProviders": [
     {
