@@ -1547,9 +1547,11 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | SF Mono | Shared font installation; no separate application preferences. |
 | OmniWM | Shared stable configuration, Super key shortcuts and full/half-width layout command; local display/workspace state retained on updates. |
 
-The Air uses the common shared app list and currently has no local extras.
-The Pro's eight engineering/creative entries remain in its machine manifest;
-Studio extras remain independent. Choose `mac-app share` or `mac-app local`
+The Air is the minimal Mac: it uses the common shared app list without local
+extras. Every explicit shared-app uninstall from the Pro or Studio must reach
+the Air through retired-apps.tsv and mac-sync, including MagHue. Retirement
+entries remain published so later syncs cannot reinstall removed apps. The Pro
+and Studio keep their independent machine-specific extras. Choose `mac-app share` or `mac-app local`
 from the Mac where an app is being added. Managed installs on the Air always
 join the common set, including requests for local/temporary installs. Sharing
 a formerly local app removes its duplicate rows from machine manifests.
