@@ -5,6 +5,29 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "km:karabiner.omniwm.fullscreen — Super-M toggles all Niri windows between full and half width",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command",
+                                            "control",
+                                            "option"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/python3 \"$HOME/.config/omniwm/fullscreen-toggle.py\""
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         "description": "Minimal setup",
                         "manipulators": [
                             {

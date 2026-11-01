@@ -140,6 +140,61 @@ The last command changes to the directory containing the current file. Avoid
 Neovim's `autochdir`: silently changing scope when switching buffers makes
 project search and agent behavior unpredictable.
 
+## OmniWM Windows and Spaces
+
+Super is Right Command (Control + Option + Command), supplied by Karabiner.
+Super-H/J/K/L focuses left/down/up/right; adding Shift moves the window.
+Super-1..9 selects an existing workspace, and Super-Shift-1..9 sends a window
+there. Only workspaces 1-3 are currently configured. Super-A/D selects the
+previous/next workspace; adding Shift sends a window there. Super-Tab returns
+to the last active workspace (replaces the previous last-monitor shortcut).
+
+Super-M switches all Niri workspaces between one full-width window across
+the screen and two half-width windows side by side. Moving focus keeps the
+mode, and new windows inherit it. This replaces the earlier per-window M
+behavior. Super-F, Super-Space, and comma/period width cycling are unassigned.
+Super-B balances sizes in the current mode. Super-plus/minus grows/shrinks
+the current column by 10 percentage points (plus uses =/+ without Shift);
+the next Super-M resets all columns to the selected mode's equal widths.
+
+Karabiner invokes ~/.config/omniwm/fullscreen-toggle.py. It changes Niri's
+visibleContainerCount and defaultContainerPrimarySpan in settings.toml,
+then uses OmniWM IPC (enabled) to clear old per-window fullscreen states
+and balance populated Niri workspaces, restoring the original focus.
+Single Window Fit uses the container span so a lone window also follows
+the selected width. Native macOS fullscreen must be exited before tiling.
+
+The shared setup is published in ~/.config/omniwm/shared-settings.toml and
+fullscreen-toggle.py. mac-sync runs ~/.config/sync/omniwm-settings.py before
+validating keymaps. New Macs receive the complete stable 0.7.6 configuration;
+existing Macs receive its hotkeys, selected general/bar settings, and Niri
+settings while retaining their workspaces, monitor overrides, and other
+preferences. Each published profile revision is applied once, with a local
+settings.toml.before-sync backup. A revision stamp under ~/.local/state/omniwm
+keeps hourly sync from resetting subsequent local M/+/- layout changes.
+The live settings.toml, recovery copies, and runtime state are not tracked.
+The Karabiner command resolves $HOME on the destination Mac. After editing
+shared-settings.toml, publish it with the usual reviewed commit/push workflow;
+mac-sync applies the new revision at login/hourly or on demand.
+
+Six isolated deployment tests cover first setup, profile updates, local mode
+preservation, retained workspace/display settings, and rejection of malformed
+or incompatible existing configs. The full just check validation also passes.
+
+Configured against stable OmniWM 0.7.6. The user chose to keep stable and its
+hardcoded bottom-bar logo; no canary was installed. Original configurations
+and scripts are backed up under ~/.config/omniwm/backup-*.
+
+Verification (2026-11-01): all five tiled windows measured 2056 px wide in
+full-width mode and 1028 px in half-width mode while individually focused.
+An old per-window fullscreen flag was cleared successfully. Both modes also
+passed across two populated workspaces, with the original focus restored.
+The first cross-workspace check exposed asynchronous focus changes; the
+command now waits for the destination window before balancing. Earlier checks
+passed H/L focus and A/D workspace switching. Karabiner's native linter
+accepted the M rule, its service reloaded it, and keymap-docs --check passes.
+Screenshot capture was unavailable; geometry was verified through IPC.
+
 ## Keyboard Layers
 
 The configuration assigns each modifier a stable job:
@@ -315,6 +370,25 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Space | `Space b k` | Close the active editor like Neovim |
 | VS Code | Direct | `cm (Normal)` | Toggle comment on the current line |
 | VS Code | Direct | `cm (Visual)` | Toggle comment on selected lines |
+| OmniWM | Super | `Super-h` | Focus the window left |
+| OmniWM | Super | `Super-Shift-h` | Move the window left |
+| OmniWM | Super | `Super-j` | Focus the window down |
+| OmniWM | Super | `Super-Shift-j` | Move the window down |
+| OmniWM | Super | `Super-k` | Focus the window up |
+| OmniWM | Super | `Super-Shift-k` | Move the window up |
+| OmniWM | Super | `Super-l` | Focus the window right |
+| OmniWM | Super | `Super-Shift-l` | Move the window right |
+| OmniWM | Super | `Super-1..9` | Switch directly to an existing workspace (currently 1-3) |
+| OmniWM | Super | `Super-Shift-1..9` | Send the focused window to an existing workspace |
+| OmniWM | Super | `Super-a` | Switch to the previous workspace |
+| OmniWM | Super | `Super-d` | Switch to the next workspace |
+| OmniWM | Super | `Super-Shift-a` | Send the focused window to the previous workspace |
+| OmniWM | Super | `Super-Shift-d` | Send the focused window to the next workspace |
+| OmniWM | Super | `Super-tab` | Return to the last active workspace |
+| OmniWM | Super | `Super-b` | Balance window and column sizes |
+| OmniWM | Super | `Super-+ (=/+ key, no Shift)` | Grow the Niri column width by 10 percentage points |
+| OmniWM | Super | `Super--` | Shrink the Niri column width by 10 percentage points |
+| Karabiner | Super | `Super-m` | Toggle all Niri windows between full and half width |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -1471,7 +1545,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
 | GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |
 | SF Mono | Shared font installation; no separate application preferences. |
-| OmniWM | Shared installation, selected by Fausto after the initial trial; no new preference profile selected. |
+| OmniWM | Shared stable configuration, Super key shortcuts and full/half-width layout command; local display/workspace state retained on updates. |
 
 The Air uses the common shared app list and currently has no local extras.
 The Pro's eight engineering/creative entries remain in its machine manifest;
@@ -1626,6 +1700,7 @@ Use these after changing the setup:
 keymap-docs --check
 bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config/mac-setup/*.sh
 python3 ~/.config/sync/test-mac-sync.py
+python3 ~/.config/sync/test-omniwm-settings.py
 python3 ~/.config/sync/test-helium-apps.py
 python3 ~/.config/sync/helium-apps.py check
 jq empty ~/.config/karabiner/karabiner.json

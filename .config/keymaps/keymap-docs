@@ -45,6 +45,7 @@ awk -F '\t' '
 while IFS=$'\t' read -r id layer _category _key _action _description; do
   [[ "$id" == \#* || -z "$id" ]] && continue
   case "$layer" in
+    OmniWM) config="$HOME/.config/omniwm/settings.toml" ;;
     Ghostty) config="$HOME/.config/ghostty/config" ;;
     Fish) config="$HOME/.config/fish/config.fish" ;;
     Herdr) config="$HOME/.config/herdr/config.toml" ;;
@@ -55,7 +56,16 @@ while IFS=$'\t' read -r id layer _category _key _action _description; do
   esac
   marker="km:$id"
   [[ "$layer" == "Neovim" ]] && marker="'$id'"
-  if [[ "$layer" == "VS Code" ]]; then
+  if [[ "$layer" == "OmniWM" ]]; then
+    # OmniWM rewrites TOML without comments; validate its native action ID.
+    python3 - "$config" "$_action" <<'PYCONFIG'
+import sys, tomllib
+with open(sys.argv[1], "rb") as source:
+    hotkeys = tomllib.load(source)["hotkeys"]
+if not any(h["id"] == sys.argv[2] and h["binding"] != "Unassigned" for h in hotkeys):
+    raise SystemExit("OmniWM binding missing or unassigned: " + sys.argv[2])
+PYCONFIG
+  elif [[ "$layer" == "VS Code" ]]; then
     if ! grep -Fq "$marker" "$config" &&
        ! grep -Fq "$marker" "$HOME/Library/Application Support/Code/User/settings.json"; then
       printf 'binding missing from VS Code settings: %s\n' "$id" >&2

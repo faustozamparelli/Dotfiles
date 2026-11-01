@@ -56,3 +56,8 @@ Thumbs.db
 # Python bytecode and generated caches
 __pycache__/
 *.pyc
+
+# OmniWM live settings, temporary files and local recovery copies
+.config/omniwm/settings.toml
+.config/omniwm/settings.toml.*
+.config/omniwm/backup-*/

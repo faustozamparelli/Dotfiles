@@ -25,6 +25,8 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/herdr \
   .config/karabiner/karabiner.json \
   .config/keymaps \
+  .config/omniwm/shared-settings.toml \
+  .config/omniwm/fullscreen-toggle.py \
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .config/nvim \

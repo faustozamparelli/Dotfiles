@@ -151,3 +151,22 @@ vscode.language.python-source	VS Code	Space	Space l p	python-source	Open the sym
 vscode.buffer.delete	VS Code	Space	Space b k	delete-buffer	Close the active editor like Neovim
 vscode.edit.comment	VS Code	Direct	cm (Normal)	comment-line	Toggle comment on the current line
 vscode.visual.comment	VS Code	Direct	cm (Visual)	comment-selection	Toggle comment on selected lines
+omniwm.focus.left	OmniWM	Super	Super-h	focus.left	Focus the window left
+omniwm.move.left	OmniWM	Super	Super-Shift-h	move.left	Move the window left
+omniwm.focus.down	OmniWM	Super	Super-j	focus.down	Focus the window down
+omniwm.move.down	OmniWM	Super	Super-Shift-j	move.down	Move the window down
+omniwm.focus.up	OmniWM	Super	Super-k	focus.up	Focus the window up
+omniwm.move.up	OmniWM	Super	Super-Shift-k	move.up	Move the window up
+omniwm.focus.right	OmniWM	Super	Super-l	focus.right	Focus the window right
+omniwm.move.right	OmniWM	Super	Super-Shift-l	move.right	Move the window right
+omniwm.workspace.switch	OmniWM	Super	Super-1..9	switchWorkspace.0	Switch directly to an existing workspace (currently 1-3)
+omniwm.workspace.move	OmniWM	Super	Super-Shift-1..9	moveToWorkspace.0	Send the focused window to an existing workspace
+omniwm.workspace.previous	OmniWM	Super	Super-a	switchWorkspace.previous	Switch to the previous workspace
+omniwm.workspace.next	OmniWM	Super	Super-d	switchWorkspace.next	Switch to the next workspace
+omniwm.workspace.move-previous	OmniWM	Super	Super-Shift-a	moveWindowToWorkspaceUp	Send the focused window to the previous workspace
+omniwm.workspace.move-next	OmniWM	Super	Super-Shift-d	moveWindowToWorkspaceDown	Send the focused window to the next workspace
+omniwm.workspace.last	OmniWM	Super	Super-tab	workspaceBackAndForth	Return to the last active workspace
+omniwm.width.balance	OmniWM	Super	Super-b	balanceSizes	Balance window and column sizes
+omniwm.width.next	OmniWM	Super	Super-+ (=/+ key, no Shift)	setContainerPrimarySpan.increase10Percent	Grow the Niri column width by 10 percentage points
+omniwm.width.previous	OmniWM	Super	Super--	setContainerPrimarySpan.decrease10Percent	Shrink the Niri column width by 10 percentage points
+karabiner.omniwm.fullscreen	Karabiner	Super	Super-m	fullscreen-half	Toggle all Niri windows between full and half width
