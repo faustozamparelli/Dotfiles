@@ -245,6 +245,56 @@ is_skipped() {{ return 1; }}
         result = self.apps('cask\tfixture-app\tMissing Fixture\n')
         self.assertNotEqual(result.returncode, 0)
 
+    def configure_app_store(self, *, desktop):
+        launchctl = self.bin / 'launchctl'
+        launchctl.write_text(f'#!/bin/sh\nexit {0 if desktop else 1}\n')
+        launchctl.chmod(0o755)
+        mas = self.bin / 'mas'
+        mas.write_text('#!/bin/sh\nprintf "%s\\n" "$*" > "$SYNC_TEST_ROOT/mas-called"\n')
+        mas.chmod(0o755)
+
+    def test_headless_app_store_install_reports_requirement_without_starting_mas(self):
+        self.configure_app_store(desktop=False)
+        result = self.apps('mas\t123456\tFixture Store App\n')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('without a desktop login', result.stderr)
+        self.assertFalse((self.root / 'mas-called').exists())
+
+    def test_existing_app_store_app_needs_no_desktop_session(self):
+        self.configure_app_store(desktop=False)
+        (self.root / 'applications/Fixture Store App.app').mkdir(parents=True)
+        result = self.apps('mas\t123456\tFixture Store App\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.root / 'mas-called').exists())
+
+    def test_app_store_install_still_runs_with_a_desktop_session(self):
+        self.configure_app_store(desktop=True)
+        result = self.apps('mas\t123456\tFixture Store App\n')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / 'mas-called').read_text(), 'install 123456\n')
+
+    def test_headless_retirement_moves_bundle_intact_without_finder(self):
+        self.configure_app_store(desktop=False)
+        bundle = self.root / 'applications/Retired Fixture.app'
+        bundle.mkdir(parents=True)
+        (bundle / 'contents').write_text('intact application')
+        other = self.root / 'applications/Keep.app'
+        other.mkdir()
+        trash = self.root / 'brew/opt/trash/bin/trash'
+        trash.parent.mkdir(parents=True)
+        trash.write_text('#!/bin/sh\ntouch "$SYNC_TEST_ROOT/trash-called"\nexit 99\n')
+        trash.chmod(0o755)
+        (self.root / 'retired.tsv').write_text('mas\t123456\tRetired Fixture\n')
+        result = self.run_shell(RETIRE + '\nretire_manifest\nexit "$failed"',
+                                'retired="$lock/retired.tsv"\ninstalled_casks=""\nbrew_prefix="$lock/brew"')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(bundle.exists())
+        self.assertTrue(other.exists())
+        moved = list((self.root / 'home/.Trash').glob('mac-sync-retired.*/Retired Fixture.app/contents'))
+        self.assertEqual(len(moved), 1)
+        self.assertEqual(moved[0].read_text(), 'intact application')
+        self.assertFalse((self.root / 'trash-called').exists())
+
     def test_obsidian_cleanup_preserves_vaults_and_other_app_data(self):
         state = self.root / 'home/Library/Application Support/obsidian'
         vault = self.root / 'home/Documents/Vault/notes.md'

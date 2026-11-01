@@ -508,6 +508,7 @@ retire_manifest() {
   local token
   local app_path
   local trash_bin
+  local trash_folder
   local tool
   local link
   local -a retired_formulae=()
@@ -558,7 +559,24 @@ retire_manifest() {
     if [[ -d "$app_path" ]]; then
       log "Moving retired app $name to Trash..."
 
-      if [[ -x "$trash_bin" ]]; then
+      if ! launchctl print "gui/$UID" >/dev/null 2>&1; then
+        # Finder cannot authorize or finish trash operations in an SSH-only
+        # session. Keep the complete bundle in a unique recoverable folder.
+        if mkdir -p "$HOME/.Trash" &&
+           trash_folder="$(mktemp -d "$HOME/.Trash/mac-sync-retired.XXXXXX")"; then
+          if /bin/mv "$app_path" "$trash_folder/" 2>/dev/null ||
+             sudo -n /bin/mv "$app_path" "$trash_folder/"; then
+            log "Retired $name is recoverable at $trash_folder/$name.app"
+          else
+            rmdir "$trash_folder" 2>/dev/null || true
+            echo "Cannot retire $name. Run sudo -v, then mac-sync; check $trash_folder for any partial copy." >&2
+            failed=1
+          fi
+        else
+          echo "Cannot prepare a Trash folder for $name." >&2
+          failed=1
+        fi
+      elif [[ -x "$trash_bin" ]]; then
         "$trash_bin" "$app_path" || failed=1
       else
         echo "Cannot retire $name: no trash command is available." >&2
@@ -796,6 +814,12 @@ install_manifest() {
 
       mas)
         if [[ ! -d "/Applications/$name.app" ]]; then
+
+          if ! launchctl print "gui/$UID" >/dev/null 2>&1; then
+            echo "Cannot install $name from the App Store without a desktop login. Log in to macOS and the App Store on this Mac, then rerun mac-sync." >&2
+            failed=1
+            continue
+          fi
 
           if command -v mas >/dev/null 2>&1; then
             log "Installing $name from the App Store..."

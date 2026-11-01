@@ -1146,6 +1146,13 @@ mac-sync
 a desktop login. It loads the hourly agent in the background user domain when
 no GUI domain exists. Initial sync errors are reported without disabling the
 agent; administrator authorization or App Store sign-in may still be needed.
+Missing App Store apps are reported immediately when no desktop session is
+logged in, rather than launching `mas` and waiting indefinitely. Log in to the
+Mac's desktop and App Store, then rerun `mac-sync` to finish those installs.
+App retirement over SSH moves intact bundles into unique
+`~/.Trash/mac-sync-retired.*` folders without Finder. If permissions require
+administrator rights it uses only cached authorization (`sudo -v` beforehand);
+scheduled runs never prompt. The log reports the recovery path.
 
 An existing app bundle in `/Applications` or `~/Applications` satisfies its
 manifest entry even when installed outside Homebrew. Sync leaves its ownership
