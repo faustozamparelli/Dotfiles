@@ -50,17 +50,16 @@ mac-app firefox                         # shared Homebrew cask (default)
 mac-app share --mas 497799835 Xcode    # shared Mac App Store app
 mac-app local transmission             # only this Mac
 mac-app temporary handbrake            # install without tracking
-mac-app skip spotify                    # exclude a shared app on this Mac
-mac-app unskip spotify
-mac-app remove spotify                  # remove here; run mac-sync on the other Mac
+mac-app skip firefox                    # exclude a shared app on this Mac
+mac-app unskip firefox
+mac-app remove firefox                  # remove here; run mac-sync on the other Mac
 ```
 
 The command records the app change, commits it, and pushes it. `mac-app remove`
 also removes the shared app locally and records its retirement; run `mac-sync`
 on the other Mac to apply the removal there. A LaunchAgent also runs `mac-sync`
 at login and hourly. Direct downloads require a small reviewed installer under
-`~/.config/mac-setup/direct`; MagHue is the initial example and is pinned by
-SHA-256.
+`~/.config/mac-setup/direct` with a pinned checksum.
 
 Helium web-app names and URLs are shared through
 `~/.config/sync/helium-apps.json`. Install an app in Helium, then run `bcp` to

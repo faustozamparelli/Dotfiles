@@ -26,8 +26,8 @@ mac-app firefox
 mac-app share --mas 497799835 Xcode
 mac-app local transmission
 mac-app temporary handbrake
-mac-app skip spotify
-mac-app remove spotify
+mac-app skip firefox
+mac-app remove firefox
 ```
 
 Homebrew casks are the default source. App Store apps use their numeric ID,
@@ -1192,9 +1192,9 @@ Install and share an app with one command. Homebrew casks are the default:
 mac-app firefox
 mac-app share --mas 497799835 Xcode
 mac-app local transmission
-mac-app skip spotify
-mac-app unskip spotify
-mac-app remove spotify
+mac-app skip firefox
+mac-app unskip firefox
+mac-app remove firefox
 mac-app remove --mas 497799835
 ```
 
@@ -1417,7 +1417,7 @@ changes made in the apps can be staged. Full application plists stay local.
 The portable Qalculate numeric/formatting preferences in
 `~/.config/qalculate/qalc.cfg` are tracked; calculation histories stay local.
 
-Spotify, Vorssaint, and MagHue are retired on every synced Mac. Their named
+Obsidian, Spotify, Vorssaint, and MagHue are retired on every synced Mac. Their named
 application data and caches are removed during sync; privileged helpers need
 administrator authorization (`sudo -v` before `mac-sync`). Scheduled sync
 reports missing authorization without opening a password prompt. Obsidian
