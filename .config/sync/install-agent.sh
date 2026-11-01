@@ -20,11 +20,23 @@ chmod +x \
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
 agent="$HOME/Library/LaunchAgents/com.fausto.mac-sync.plist"
 sed "s|__HOME__|$HOME|g" "$HOME/.config/mac-setup/com.fausto.mac-sync.plist" > "$agent"
-launchctl bootout "gui/$UID/com.fausto.mac-sync" 2>/dev/null || true
+domain="user/$UID"
+if launchctl print "gui/$UID" >/dev/null 2>&1; then
+  domain="gui/$UID"
+fi
+for previous_domain in "gui/$UID" "user/$UID"; do
+  launchctl bootout "$previous_domain/com.fausto.mac-sync" 2>/dev/null || true
+done
 
-"$HOME/.local/bin/mac-sync" --no-pull
+sync_status=0
+"$HOME/.local/bin/mac-sync" --no-pull || sync_status=$?
 
-launchctl bootstrap "gui/$UID" "$agent"
+launchctl enable "$domain/com.fausto.mac-sync"
+launchctl bootstrap "$domain" "$agent"
 
-echo "Mac setup is installed. Shared apps now sync at login and once per hour."
+echo "Automatic sync is installed in $domain. Shared apps sync at login and once per hour."
 echo "Some apps still require one-time macOS privacy, helper, or App Store approval."
+if ((sync_status)); then
+  echo "Initial sync had errors; automatic sync remains enabled. Resolve the messages above and rerun mac-sync." >&2
+fi
+exit "$sync_status"

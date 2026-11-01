@@ -3,6 +3,7 @@
 import json
 import os
 from pathlib import Path
+import plistlib
 import shlex
 import subprocess
 import sys
@@ -82,6 +83,55 @@ log() {{ :; }}
 
     def brew_calls(self):
         return [json.loads(line) for line in self.calls.read_text().splitlines()] if self.calls.exists() else []
+
+    def test_installer_keeps_sync_enabled_after_partial_setup_in_either_session(self):
+        installer = Path.home() / '.config/sync/install-agent.sh'
+        template = (Path.home() / '.config/mac-setup/com.fausto.mac-sync.plist').read_text()
+        launchctl = self.bin / 'launchctl'
+        launchctl.write_text(f'#!{sys.executable}\n' + '''
+import json, os, sys
+from pathlib import Path
+args = sys.argv[1:]
+with Path(os.environ['INSTALL_TEST_CALLS']).open('a') as stream:
+    stream.write(json.dumps(args) + '\\n')
+if args[0] == 'print' and os.environ['INSTALL_TEST_GUI'] == '0':
+    sys.exit(1)
+''')
+        launchctl.chmod(0o755)
+        for gui in (False, True):
+            for sync_status in (0, 1):
+                with self.subTest(gui=gui, sync_status=sync_status):
+                    home = self.root / f'install-{gui}-{sync_status}'
+                    (home / '.config/git/dotfiles').mkdir(parents=True)
+                    files = {
+                        '.local/bin/mac-app': '',
+                        '.local/bin/mac-sync': f'#!/bin/sh\nexit {sync_status}\n',
+                        '.config/mac-setup/apps.tsv': '',
+                        '.config/mac-setup/direct/fixture.sh': '',
+                        '.config/mac-setup/com.fausto.mac-sync.plist': template,
+                        '.config/keymaps/keymap-docs': '',
+                        '.config/sync/maintain.sh': '',
+                    }
+                    for name, content in files.items():
+                        path = home / name
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                        path.write_text(content)
+                    calls_path = home / 'launchctl-calls.jsonl'
+                    environment = dict(os.environ, HOME=str(home),
+                                       PATH=f'{self.bin}:' + os.environ['PATH'],
+                                       INSTALL_TEST_CALLS=str(calls_path),
+                                       INSTALL_TEST_GUI=str(int(gui)))
+                    result = subprocess.run(['/bin/bash', str(installer)], env=environment,
+                                            text=True, capture_output=True)
+                    self.assertEqual(result.returncode, sync_status, result.stderr)
+                    domain = f'{"gui" if gui else "user"}/{os.getuid()}'
+                    agent = home / 'Library/LaunchAgents/com.fausto.mac-sync.plist'
+                    calls = [json.loads(line) for line in calls_path.read_text().splitlines()]
+                    self.assertIn(['bootstrap', domain, str(agent)], calls)
+                    self.assertIn(['enable', domain + '/com.fausto.mac-sync'], calls)
+                    configuration = plistlib.loads(agent.read_bytes())
+                    self.assertEqual(configuration['ProgramArguments'][0], str(home / '.local/bin/mac-sync'))
+                    self.assertIn('Background' if not gui else 'Aqua', configuration['LimitLoadToSessionType'])
 
     def test_existing_aliases_need_no_install_or_receipt_changes(self):
         self.fixture.write_text(json.dumps({'formulae': [

@@ -1134,13 +1134,18 @@ is the reliable option.
 
 ## Mac Synchronization
 
-The MacBook Air and MacBook Pro use one shared app manifest. Apps are shared by
-default; formulae are shared only when intentionally listed in
+The MacBook Air, MacBook Pro, and Mac Studio use one shared app manifest. Apps
+are shared by default; formulae are shared only when intentionally listed in
 `~/.config/mac-setup/packages.txt`. Run an immediate reconciliation with:
 
 ```fish
 mac-sync
 ```
+
+`~/.config/sync/install-agent.sh` also supports installation over SSH without
+a desktop login. It loads the hourly agent in the background user domain when
+no GUI domain exists. Initial sync errors are reported without disabling the
+agent; administrator authorization or App Store sign-in may still be needed.
 
 An existing app bundle in `/Applications` or `~/Applications` satisfies its
 manifest entry even when installed outside Homebrew. Sync leaves its ownership
