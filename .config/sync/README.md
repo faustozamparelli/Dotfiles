@@ -1495,8 +1495,11 @@ in place without overwriting files, and a regression test now preserves them.
 CodexBar uses adaptive refresh and
 follows system Low Power Mode. Its provider IDs, enabled choices and selected
 source are shared through the whitelist, merged into
-`~/.config/codexbar/config.json` while preserving local credentials. The old
-tracked `~/.codexbar/config.json` was an inactive duplicate and has been removed.
+`~/.config/codexbar/config.json` while preserving local credentials. Provider
+catalog order is retained during capture; unknown providers and
+machine-local file/account source references are not automatically enrolled.
+The former tracked `~/.codexbar/config.json` was an inactive duplicate and has
+been removed.
 
 Ghostty uses a non-blinking default cursor and keeps vsync enabled. Neovim
 checks macOS appearance every thirty seconds and when regaining focus instead

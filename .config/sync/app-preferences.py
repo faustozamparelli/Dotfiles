@@ -100,10 +100,16 @@ def main():
         source = target if target.exists() else legacy
         runtime = json.loads(source.read_text()) if source.exists() else {'version': 1, 'providers': []}
         if action == 'capture':
-            profile['codexbarProviders'] = [
-                {key: value for key, value in provider.items() if key in PROVIDER_KEYS}
-                for provider in runtime.get('providers', [])
-            ]
+            providers = {provider['id']: provider for provider in runtime.get('providers', [])}
+            for provider in profile.get('codexbarProviders', []):
+                current = providers.get(provider['id'], {})
+                for key, wanted in provider.items():
+                    if key == 'id' or key not in PROVIDER_KEYS or key not in current:
+                        continue
+                    if key == 'codexActiveSource' and current[key] != {'kind': 'liveSystem'}:
+                        continue  # File/account references are machine-local.
+                    if type(current[key]) is type(wanted):
+                        provider[key] = current[key]
         else:
             providers = {provider['id']: provider for provider in runtime.get('providers', [])}
             for provider in profile.get('codexbarProviders', []):

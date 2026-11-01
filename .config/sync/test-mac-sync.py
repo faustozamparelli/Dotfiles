@@ -467,11 +467,13 @@ class AppPreferencesTests(unittest.TestCase):
         config = self.home / '.config/codexbar/config.json'
         config.parent.mkdir(parents=True)
         config.write_text(json.dumps({'version': 1, 'providers': [
-            {'id': 'codex', 'enabled': False, 'apiKey': 'local-only'}]}))
+            {'id': 'codex', 'enabled': False, 'apiKey': 'local-only'},
+            {'id': 'unreviewed-local-provider', 'enabled': True}]}))
         self.profile = {'preferences': {}, 'codexbarProviders': [{'id': 'codex', 'enabled': True}]}
         self.run_profile('apply').assert_not_called()
         self.assertEqual(json.loads(config.read_text())['providers'], [
-            {'id': 'codex', 'enabled': True, 'apiKey': 'local-only'}])
+            {'id': 'codex', 'enabled': True, 'apiKey': 'local-only'},
+            {'id': 'unreviewed-local-provider', 'enabled': True}])
         self.run_profile('capture').assert_not_called()
         self.assertEqual(json.loads(self.module.PROFILE.read_text())['codexbarProviders'], [
             {'id': 'codex', 'enabled': True}])
