@@ -336,6 +336,10 @@ class CodexTechnicalTests(unittest.TestCase):
                 self.assertEqual(servers['context7']['env'], {'TOKEN': 'local-only'})
                 self.assertEqual(servers['remote']['url'], 'https://example.test/mcp')
                 self.assertEqual(servers['remote']['http_headers'], {'Authorization': 'local-only'})
+                with patch.object(module, 'installed_plugins', return_value={}):
+                    captured = module.snapshot_from_config()
+                self.assertEqual(captured['mcp_servers']['context7'], {'url': 'https://mcp.context7.com/mcp'})
+                self.assertNotIn('env', captured['mcp_servers']['context7'])
 
 
 class MacAppTests(unittest.TestCase):

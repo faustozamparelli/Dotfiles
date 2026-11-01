@@ -1522,6 +1522,8 @@ Existing local MCP headers, credentials, and machine-specific servers remain
 untouched. A same-named local stdio server keeps its command/arguments instead
 of receiving a conflicting URL. A URL inserted into such a server by the
 older merge is removed only when it matches the shared snapshot.
+Capturing on a Mac with a local stdio override retains the existing shared
+endpoint rather than interpreting the override as a global removal.
 Plugin files and caches are installed by Codex, not copied through
 Git. To install missing plugins on the other Mac, run
 `python3 ~/.config/sync/codex-technical.py restore-plugins` there after sync;

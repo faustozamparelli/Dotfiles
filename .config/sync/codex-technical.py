@@ -44,6 +44,13 @@ def snapshot_from_config():
         for name, settings in sorted(config.get("mcp_servers", {}).items())
         if isinstance(settings, dict) and safe_url(settings.get("url"))
     }
+    # A machine-local stdio override is not a request to remove the shared
+    # endpoint when this Mac next publishes its other technical choices.
+    if SNAPSHOT.exists():
+        previous = json.loads(SNAPSHOT.read_text())
+        for name, settings in previous.get("mcp_servers", {}).items():
+            if config.get("mcp_servers", {}).get(name, {}).get("command"):
+                servers.setdefault(name, settings)
     return {"plugins": plugins, "mcp_servers": servers}
 
 
