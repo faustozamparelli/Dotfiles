@@ -542,13 +542,15 @@ retire_manifest() {
 
       log "Removing retired app $name from Homebrew..."
 
-      if [[ "$token" == "chatgpt" || "$token" == "visual-studio-code" ]]; then
+      if [[ "$token" == "visual-studio-code" ]]; then
         # Zap can fail on macOS privacy-protected files. Force removal clears
         # the cask record, then the named per-user data is cleaned below.
         if ! brew uninstall --cask --zap "$token"; then
           brew uninstall --cask --force "$token" || failed=1
         fi
       else
+        # ChatGPT's Homebrew zap list also names Codex and CUAService data.
+        # Retire the bundle here, then clean only its named data below.
         brew uninstall --cask "$token" || failed=1
       fi
     fi
