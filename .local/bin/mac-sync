@@ -501,6 +501,12 @@ cleanup_retired_desktop_tool() {
   return 0
 }
 
+is_safari_web_app() {
+  local bundle_id
+  bundle_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$1/Contents/Info.plist" 2>/dev/null)" || return 1
+  [[ "$bundle_id" == com.apple.Safari.WebApp.* ]]
+}
+
 retire_manifest() {
   local source
   local identifier
@@ -556,7 +562,7 @@ retire_manifest() {
       fi
     fi
 
-    if [[ -d "$app_path" ]]; then
+    if [[ -d "$app_path" ]] && ! is_safari_web_app "$app_path"; then
       log "Moving retired app $name to Trash..."
 
       if ! launchctl print "gui/$UID" >/dev/null 2>&1; then
@@ -586,7 +592,8 @@ retire_manifest() {
 
     case "$token" in
       obsidian|spotify|vorssaint|maghue)
-        if [[ -d "$app_path" || -d "$HOME/Applications/$name.app" ]]; then
+        if { [[ -d "$app_path" ]] && ! is_safari_web_app "$app_path"; } ||
+           { [[ -d "$HOME/Applications/$name.app" ]] && ! is_safari_web_app "$HOME/Applications/$name.app"; }; then
           echo "Cannot clean $name's data while its app bundle remains installed." >&2
           failed=1
           continue

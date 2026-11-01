@@ -19,7 +19,7 @@ PACKAGES = SOURCE[SOURCE.index('formula_inventory='):SOURCE.index('# Homebrew is
 NUKE = SOURCE[SOURCE.index('if $prune_packages; then'):SOURCE.index('next_stage "Toolchain and container configuration"')]
 APPS = SOURCE[SOURCE.index('install_manifest() {'):SOURCE.index('install_manifest "$shared"')]
 DESKTOP_CLEANUP = SOURCE[SOURCE.index('cleanup_retired_desktop_tool() {'):SOURCE.index('retire_manifest() {')]
-RETIRE = SOURCE[SOURCE.index('retire_manifest() {'):SOURCE.index('# Permanent, idempotent PDF retirement.')]
+RETIRE = SOURCE[SOURCE.index('is_safari_web_app() {'):SOURCE.index('# Permanent, idempotent PDF retirement.')]
 
 
 def formula(name, *, aliases=(), requested=True):
@@ -294,6 +294,22 @@ is_skipped() {{ return 1; }}
         self.assertEqual(len(moved), 1)
         self.assertEqual(moved[0].read_text(), 'intact application')
         self.assertFalse((self.root / 'trash-called').exists())
+
+    def test_native_retirement_preserves_same_named_safari_web_apps(self):
+        for location in ('applications', 'home/Applications'):
+            bundle = self.root / location / 'Spotify.app/Contents'
+            bundle.mkdir(parents=True)
+            (bundle / 'Info.plist').write_bytes(plistlib.dumps({
+                'CFBundleIdentifier': 'com.apple.Safari.WebApp.fixture'}))
+        cache = self.root / 'home/Library/Caches/com.spotify.client'
+        cache.mkdir(parents=True)
+        (self.root / 'retired.tsv').write_text('cask\tspotify\tSpotify\n')
+        result = self.run_shell(DESKTOP_CLEANUP + RETIRE + '\nretire_manifest\nexit "$failed"',
+                                'retired="$lock/retired.tsv"\ninstalled_casks=""\nbrew_prefix="$lock/brew"')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(cache.exists())
+        for location in ('applications', 'home/Applications'):
+            self.assertTrue((self.root / location / 'Spotify.app/Contents/Info.plist').exists())
 
     def test_obsidian_cleanup_preserves_vaults_and_other_app_data(self):
         state = self.root / 'home/Library/Application Support/obsidian'

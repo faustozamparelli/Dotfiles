@@ -1493,6 +1493,8 @@ application data and caches are removed during sync; privileged helpers need
 administrator authorization (`sudo -v` before `mac-sync`). Scheduled sync
 reports missing authorization without opening a password prompt. Obsidian
 retirement removes app state only; note vaults remain user documents.
+Same-named Safari web apps are preserved and do not block native-app data
+cleanup; Spotify's Safari wrapper is a separate lightweight installation.
 
 ChatGPT retirement uses normal cask uninstall plus named ChatGPT paths, never
 Homebrew's broad zap list, which includes Codex/CUAService data. During Studio
