@@ -1,4 +1,7 @@
 {
+  "workbench.editor.limit.enabled": false,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.showTabs": "multiple",
   "window.autoDetectColorScheme": true,
   "window.openFoldersInNewWindow": "off",
   "window.openFilesInNewWindow": "off",
@@ -450,7 +453,7 @@
   "workbench.browser.showInTitleBar": false,
   "workbench.layoutControl.enabled": false,
   "window.commandCenter": false,
-  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
   "workbench.iconTheme": "vscode-modern-icons",
   "chat.permissions.default": "autoApprove",
   "editor.accessibilitySupport": "off",
