@@ -7,9 +7,6 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 if [[ "${1:-}" == --run ]]; then
   shift
-  if ! docker info >/dev/null 2>&1; then
-    orb start
-  fi
   # Bash preserves the entrypoint's temporary positional arguments while it
   # sources profile.rc. Ubuntu's /bin/sh can execute `bash -c` commands twice.
   args=(run --rm -i --platform linux/arm64 --entrypoint /bin/bash --user "$(id -u):$(id -g)")
@@ -26,10 +23,6 @@ if [[ "$(uname -m)" != arm64 ]]; then
   echo "This pinned OpenFOAM installer requires Apple silicon." >&2
   exit 1
 fi
-if ! command -v docker >/dev/null || ! command -v orb >/dev/null; then
-  echo "OpenFOAM v2306 requires the managed OrbStack installation." >&2
-  exit 1
-fi
 
 launcher="$HOME/.local/bin/openfoam2306"
 mkdir -p "$HOME/.local/bin"
@@ -44,12 +37,3 @@ cat > "$launcher" <<'LAUNCHER'
 exec "$HOME/.config/mac-setup/direct/openfoam2306.sh" --run "$@"
 LAUNCHER
 chmod +x "$launcher"
-
-# Ordinary hourly sync must not start a stopped Linux engine.
-if docker info >/dev/null 2>&1; then
-  if ! docker image inspect "$image" >/dev/null 2>&1; then
-    docker pull --platform linux/arm64 "$image"
-  fi
-else
-  echo "OpenFOAM launcher ready; openfoam2306 starts OrbStack and pulls the pinned image if needed."
-fi

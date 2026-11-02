@@ -1317,11 +1317,12 @@ OpenFOAM uses the existing OrbStack engine, not a Homebrew formula. Its
 reviewed `direct/openfoam2306.sh` installer creates `~/.local/bin/openfoam2306`
 and pins the official `opencfd/openfoam-default` Linux arm64 image to
 `sha256:7df8c49ff2f966deb0d8afba54a5deb19befc93ea4346e974f0f13869572c289`.
-The launcher starts OrbStack when needed, mounts the current directory at
+Start OrbStack manually before using the launcher. It mounts the current directory at
 `/home/openfoam`, and runs as the current Mac UID/GID so results remain owned
 by the user. Containers are disposable; case files stay in that directory.
-Hourly sync restores the launcher and checks the image when Docker is running;
-it does not start a stopped engine. First use pulls the pinned image if absent.
+Maintenance only restores the launcher; it never probes OrbStack or checks or
+pulls container images. Running the launcher uses Docker directly, which pulls
+the pinned image if absent and reports an error if the engine is stopped.
 The official entrypoint runs under Bash to preserve its profile's temporary
 arguments; Ubuntu's `/bin/sh` otherwise executes `bash -c` commands twice,
 including once before all solver libraries are configured.
