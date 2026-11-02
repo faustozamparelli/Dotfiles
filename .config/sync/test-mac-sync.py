@@ -562,5 +562,90 @@ class AppPreferencesTests(unittest.TestCase):
         self.assertEqual(json.loads(self.module.PROFILE.read_text())['t3ClientSettings'], {'wordWrap': False})
 
 
+class TailscalePolicyTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='tailscale-policy-test-')
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.test_home = self.root / 'home with spaces'
+        self.bin = self.root / 'bin'
+        self.bin.mkdir()
+        self.calls = self.root / 'calls.jsonl'
+        launchctl = self.bin / 'launchctl'
+        launchctl.write_text(f'#!{sys.executable}\n' + '''
+import json, os, sys
+from pathlib import Path
+root = Path(os.environ['TAILSCALE_POLICY_TEST_ROOT'])
+args = sys.argv[1:]
+with (root / 'calls.jsonl').open('a') as stream:
+    stream.write(json.dumps(args) + '\\n')
+loaded = root / 'loaded'
+if args[0] == 'print':
+    sys.exit(0 if loaded.exists() else 1)
+if args[0] == 'bootout':
+    if (root / 'stop-fails').exists():
+        sys.exit(1)
+    loaded.unlink(missing_ok=True)
+''')
+        launchctl.chmod(0o755)
+        self.legacy = [self.test_home / name for name in (
+            'Library/LaunchAgents/com.fausto.tailscale-power.plist',
+            '.local/bin/tailscale-power', '.local/libexec/tailscale-power.swift')]
+
+    def seed_watcher(self):
+        (self.root / 'loaded').touch()
+        for path in self.legacy:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(path.name)
+
+    def run_retirement(self):
+        script = (Path.home() / '.config/mac-setup/retire-tailscale-power.sh').read_text()
+        script = script.replace('$HOME', '$test_home')
+        environment = dict(os.environ, TAILSCALE_POLICY_TEST_ROOT=str(self.root),
+                           PATH=f'{self.bin}:' + os.environ['PATH'])
+        return subprocess.run(['/bin/bash', '-c',
+                               f'test_home={shlex.quote(str(self.test_home))}\n' + script],
+                              env=environment, capture_output=True, text=True)
+
+    def test_clean_mac_has_no_new_files_or_vpn_changes(self):
+        result = self.run_retirement()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(self.test_home.exists())
+        self.assertTrue(all(json.loads(line)[0] == 'print'
+                            for line in self.calls.read_text().splitlines()))
+
+    def test_old_watcher_is_unloaded_and_archived(self):
+        self.seed_watcher()
+        result = self.run_retirement()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.root / 'loaded').exists())
+        self.assertTrue(all(not path.exists() for path in self.legacy))
+        backups = list((self.test_home / '.local/state/air-power').glob('retired-autoconnect.*'))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual({path.name for path in backups[0].iterdir()},
+                         {path.name for path in self.legacy})
+
+    def test_repeated_cleanup_preserves_manual_session_state_and_backup(self):
+        self.seed_watcher()
+        session = self.test_home / 'manual-vpn-session'
+        session.write_text('connected by user')
+        for _ in range(2):
+            result = self.run_retirement()
+            self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(session.read_text(), 'connected by user')
+        self.assertEqual(len(list((self.test_home / '.local/state/air-power')
+                                 .glob('retired-autoconnect.*'))), 1)
+        calls = [json.loads(line) for line in self.calls.read_text().splitlines()]
+        self.assertEqual(sum(call[0] == 'bootout' for call in calls), 1)
+
+    def test_failed_stop_preserves_running_watcher_files(self):
+        self.seed_watcher()
+        (self.root / 'stop-fails').touch()
+        self.assertNotEqual(self.run_retirement().returncode, 0)
+        self.assertTrue((self.root / 'loaded').exists())
+        self.assertTrue(all(path.exists() for path in self.legacy))
+        self.assertFalse((self.test_home / '.local/state/air-power').exists())
+
+
 if __name__ == '__main__':
     unittest.main()

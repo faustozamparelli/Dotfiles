@@ -1,0 +1,14 @@
+#!/bin/sh
+# Apply the supported low-drain sleep policy on air. Run with sudo on air.
+set -eu
+if [ "$(/usr/bin/id -u)" != 0 ]; then
+    echo "Run: sudo /Users/faustozamparelli/.local/bin/air-power-setup" >&2
+    exit 1
+fi
+if [ "$(/usr/sbin/sysctl -n hw.model)" != "Mac17,3" ]; then
+    echo "This setup is for air (Mac17,3); refusing another model." >&2
+    exit 1
+fi
+/usr/bin/pmset -b sleep 1 standby 1 powernap 0 tcpkeepalive 0 womp 0 ttyskeepawake 0
+/usr/bin/pmset -c sleep 1 standby 1 powernap 0 tcpkeepalive 1 womp 1 ttyskeepawake 1
+/usr/bin/pmset -g custom

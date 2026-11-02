@@ -4,6 +4,8 @@ check:
     fish --no-execute ~/.config/fish/config.fish
     ~/.config/keymaps/keymap-docs --check
     bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config/mac-setup/*.sh
+    bash -n ~/.local/bin/air-power-setup
+    bash -n ~/.config/mac-setup/retire-tailscale-power.sh
     python3 ~/.config/sync/test-mac-sync.py
     python3 ~/.config/sync/test-omniwm-settings.py
     python3 ~/.config/sync/test-helium-apps.py

@@ -907,6 +907,9 @@ fi
 
 python3 "$HOME/.config/sync/app-preferences.py" apply || failed=1
 python3 "$HOME/.config/sync/omniwm-settings.py" || failed=1
+if [[ -f "$setup/retire-tailscale-power.sh" ]]; then
+  bash "$setup/retire-tailscale-power.sh" || failed=1
+fi
 python3 "$HOME/.config/sync/install-vscode-local.py" || failed=1
 python3 "$setup/vscode-amsc.py" || failed=1
 
