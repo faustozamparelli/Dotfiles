@@ -12,9 +12,6 @@
     "github": {
       "url": "https://api.githubcopilot.com/mcp/"
     },
-    "notion": {
-      "url": "https://mcp.notion.com/mcp"
-    },
     "supabase": {
       "url": "https://mcp.supabase.com/mcp"
     },
