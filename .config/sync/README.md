@@ -1621,6 +1621,22 @@ This never removes project or document directories. macOS Full Disk Access may
 be needed for protected folders. Without `--delete`, the script archives data
 locally for review instead of permanently deleting it.
 
+Closed-app background policy (2026-11-02): preserve normal background work
+while an app is open, including CodexBar polling and Wispr dictation. Their
+startup behavior stays unchanged. The same cleanup script, already called by
+hourly/login `mac-sync`, now sends SIGTERM to reviewed orphaned Beeper Contacts
+and crash-report helpers, Wispr's native companion/crash reporter, and Helium
+or VS Code crash reporters only after their main app is absent. It checks the
+current user, exact executable, parent PID 1 and app state again before acting.
+No new watcher runs; leftovers can remain until the next sync. App data is
+preserved and live-app helpers are skipped. Five isolated safety tests cover
+ownership, active apps, process reuse, relaunch, dry runs and inspection failure.
+Pro's stale Vorssaint login item was removed; Beeper's login launch is retained.
+Three dry-run measurements of `cleanup_closed_app_helpers(dry_run=True)` on
+Pro took 24–29 ms wall time and 24–28 ms Python/child CPU time. This adds no
+timer, resident process, sleep assertion or scheduled wake. Battery impact
+has not been measured directly; the existing sync schedule is unchanged.
+
 ### Codex technical setup
 
 `~/.config/sync/codex-technical.json` records installed plugin IDs and
@@ -1727,6 +1743,7 @@ bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config
 python3 ~/.config/sync/test-mac-sync.py
 python3 ~/.config/sync/test-bcp.py
 python3 ~/.config/sync/test-vscode-local.py
+python3 ~/.config/sync/test-background-cleanup.py
 python3 ~/.config/sync/test-omniwm-settings.py
 python3 ~/.config/sync/test-helium-apps.py
 python3 ~/.config/sync/helium-apps.py check

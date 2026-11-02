@@ -2,6 +2,8 @@
 """Archive reviewed app data only when the corresponding app/tool is absent."""
 import datetime
 import json
+import os
+import signal
 import shutil
 import subprocess
 import sys
@@ -39,9 +41,63 @@ TARGETS = [
 ]
 
 
+def cleanup_closed_app_helpers(dry_run=False):
+    """Stop reviewed, reparented helpers only after their owning app closes."""
+    crashpad = 'Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler'
+    reviewed = {
+        'Beeper Desktop': [crashpad, 'Resources/app.asar.unpacked/build/ContactsServer'],
+        'Wispr Flow': [crashpad,
+                      'Resources/swift-helper-app-dist/Wispr Flow.app/Contents/MacOS/Wispr Flow'],
+        'Visual Studio Code': [crashpad],
+    }
+    # Helium's helper moves with its bundled Chromium version.
+    helium = Path('/Applications/Helium.app/Contents')
+    reviewed['Helium'] = [str(path.relative_to(helium)) for path in helium.glob(
+        'Frameworks/Helium Framework.framework/Versions/*/Helpers/chrome_crashpad_handler')]
+    helpers = {f'/Applications/{app}.app/Contents/{relative}':
+               f'/Applications/{app}.app/Contents/MacOS/'
+               for app, paths in reviewed.items() for relative in paths}
+
+    def snapshot():
+        rows = subprocess.check_output(
+            ['ps', '-axo', 'pid=,ppid=,uid=,comm='], text=True).splitlines()
+        return {int(pid): (int(parent), int(uid), executable)
+                for pid, parent, uid, executable in
+                (row.strip().split(None, 3) for row in rows if row.strip())}
+
+    def app_open(processes, main):
+        return any(uid == os.getuid() and executable.startswith(main)
+                   for parent, uid, executable in processes.values())
+
+    processes = snapshot()
+    for pid, record in processes.items():
+        parent, uid, executable = record
+        if parent != 1 or uid != os.getuid() or executable not in helpers:
+            continue
+        main = helpers[executable]
+        if app_open(processes, main):
+            continue
+        # Recheck identity and app state before signalling; never force-kill.
+        current = snapshot()
+        if app_open(current, main):
+            continue
+        if current.get(pid) != record:
+            continue
+        if dry_run:
+            print(f'Would stop closed-app helper {pid}: {executable}')
+        else:
+            try:
+                os.kill(pid, signal.SIGTERM)
+                print(f'Stopped closed-app helper {pid}: {executable}')
+            except ProcessLookupError:
+                pass
+
+
 def main():
     dry_run = '--dry-run' in sys.argv[1:]
     delete = '--delete' in sys.argv[1:]
+    if delete:
+        cleanup_closed_app_helpers(dry_run)
     retired = {row.split('\t')[1] for row in RETIRED.read_text().splitlines()
                if row and not row.startswith('#')}
     # Fail closed if process inspection is unavailable.
