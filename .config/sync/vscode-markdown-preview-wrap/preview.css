@@ -1,0 +1,24 @@
+/* Keep Markdown previews readable in narrow panes and at larger zoom levels. */
+body {
+  overflow-wrap: anywhere;
+}
+
+pre,
+pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+pre code {
+  max-width: 100%;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+th,
+td {
+  overflow-wrap: anywhere;
+}

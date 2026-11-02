@@ -7,6 +7,8 @@ check:
     bash -n ~/.local/bin/air-power-setup
     bash -n ~/.config/mac-setup/retire-tailscale-power.sh
     python3 ~/.config/sync/test-mac-sync.py
+    python3 ~/.config/sync/test-bcp.py
+    python3 ~/.config/sync/test-vscode-local.py
     python3 ~/.config/sync/test-omniwm-settings.py
     python3 ~/.config/sync/test-helium-apps.py
     python3 ~/.config/sync/helium-apps.py check

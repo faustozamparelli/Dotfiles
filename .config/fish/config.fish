@@ -119,18 +119,32 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
         return $sync_status
     end
 
-    bare add -u
+    bare add -u; or return $status
 
-    read -P "Subject (default: 'changes'): " subject
-    if test -z "$subject"
-        set subject "changes"
+    # A clean tree may still contain commits from a previous failed push.
+    bare diff --cached --quiet
+    set -l diff_status $status
+    if test $diff_status -gt 1
+        return $diff_status
     end
-    read -P "Description (optional, press enter to skip): " description
 
-    if test -z "$description"
-        bare commit -m "$subject"
-    else
-        bare commit -m "$subject" -m "$description"
+    if test $diff_status -eq 1
+        read -P "Subject (default: 'changes'): " subject
+        if test -z "$subject"
+            set subject "changes"
+        end
+        read -P "Description (optional, press enter to skip): " description
+
+        if test -z "$description"
+            bare commit -m "$subject"
+        else
+            bare commit -m "$subject" -m "$description"
+        end
+        set -l commit_status $status
+        if test $commit_status -ne 0
+            echo "Commit failed; bcp stopped before push." >&2
+            return $commit_status
+        end
     end
     bare push
     set -l push_status $status

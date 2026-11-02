@@ -15,6 +15,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "${bare[@]}" add -u -- .config/sync
 "${bare[@]}" add -u -- .codex/AGENTS.md .ssh/config .local/bin/air-power-setup
 "${bare[@]}" add \
+  .config/sync/vscode-markdown-preview-wrap \
   .gitconfig \
   .config/duti/defaults.duti \
   .config/fish/config.fish \

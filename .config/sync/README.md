@@ -1021,7 +1021,15 @@ completion, and the restored keybindings remain available.
 
 Markdown files (`.md` and `.markdown`) open as the built-in rendered preview
 from Explorer. Use **View: Reopen Editor With... → Text Editor** to edit the
-source. Git diffs keep the source text. This uses no extra preview extension.
+source. Git diffs keep the source text. The tracked CSS-only local extension
+`fausto.markdown-preview-wrap` makes preview code blocks, long tokens and tables
+wrap as the pane narrows or window zoom increases. Its source lives under
+`~/.config/sync/vscode-markdown-preview-wrap`; `install-vscode-local.py`
+packages and installs it on each Mac during `mac-sync`. Reload an open VS Code
+window after first installation. This uses the preview's supported extension
+style contribution so the stylesheet is within its allowed resource roots;
+a user stylesheet outside the workspace is blocked. Generated VSIX files and
+installed extension folders remain local.
 
 The Fish login terminal uses the existing prompt, aliases and toolchain PATH;
 Herdr only starts automatically in Ghostty, so it does not nest inside VS Code.
@@ -1420,7 +1428,21 @@ Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
 stages maintained dotfile paths. Tracked sync helpers are staged together with
 `git add -u`; new helper files require an explicit add so local scratch files
 stay local. The old empty inventory/state directory layout is no longer used.
-`bcp` then asks for a commit message and pushes.
+The Markdown preview extension source is explicitly included in maintenance
+staging. `bcp` then asks for a commit message when changes are staged and pushes.
+It stops on maintenance, staging, diff or commit failures; a clean tree skips
+the commit prompt and still retries a previously failed push. Push/report
+failures return a nonzero status. `bcp` is manual; only `mac-sync` runs at login
+and hourly. The latter pulls only when tracked/staged dotfiles are clean and
+then applies the local configuration, so unpublished edits prevent incoming
+updates until reviewed and committed. Run `source ~/.config/fish/config.fish`
+in existing Fish shells to load updated function definitions.
+
+Verification on Pro (2026-11-02): `just --justfile ~/.config/mac-setup/justfile
+check` passed 62 tests plus configuration checks, and `sync-maintain` completed.
+The new tests use temporary Git history to cover bcp failures and clean-tree
+push retries, and verify VSIX contents, unchanged-install skips, CSS updates
+and install failure propagation. Remote deployment remains unverified.
 
 ### Helium web apps
 
@@ -1703,6 +1725,8 @@ Use these after changing the setup:
 keymap-docs --check
 bash -n ~/.local/bin/mac-app ~/.local/bin/mac-sync ~/.config/sync/*.sh ~/.config/mac-setup/*.sh
 python3 ~/.config/sync/test-mac-sync.py
+python3 ~/.config/sync/test-bcp.py
+python3 ~/.config/sync/test-vscode-local.py
 python3 ~/.config/sync/test-omniwm-settings.py
 python3 ~/.config/sync/test-helium-apps.py
 python3 ~/.config/sync/helium-apps.py check

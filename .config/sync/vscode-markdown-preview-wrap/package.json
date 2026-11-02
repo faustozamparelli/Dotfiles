@@ -1,0 +1,21 @@
+{
+  "name": "markdown-preview-wrap",
+  "displayName": "Markdown Preview Wrap",
+  "publisher": "fausto",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "description": "Wrap Markdown preview code and tables to the available width.",
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "markdown.previewStyles": [
+      "./preview.css"
+    ]
+  },
+  "extensionKind": [
+    "ui"
+  ]
+}
