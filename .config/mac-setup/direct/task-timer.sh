@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Shared Task Timer release. Update the version, URL and checksum together.
-version="1.0.0"
-url="https://github.com/faustozamparelli/TaskTimer/releases/download/v1.0.0/TaskTimer-1.0.0-macos-arm64.zip"
-sha256="4d1ed955b375a14876621a73bdc95356c58f8f21755eca2f1774bdcca5e266bb"
+version="1.0.1"
+url="https://github.com/faustozamparelli/TaskTimer/releases/download/v1.0.1/TaskTimer-1.0.1-macos-arm64.zip"
+sha256="1c4cf087191fd7aa48ff917de28d3988f4895a54be2dbf40eaad67b7a16d6bf3"
 destination="/Applications/Task Timer.app"
 binary="$destination/Contents/MacOS/TaskTimer"
 
