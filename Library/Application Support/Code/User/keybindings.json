@@ -26,8 +26,6 @@
   { "key": "cmd+t", "command": "workbench.action.openPreviousRecentlyUsedEditorInGroup", "when": "terminalEditorFocus" },
   // km:vscode.terminal.side
   { "key": "cmd+shift+t", "command": "workbench.action.createTerminalEditorSide" },
-  // km:vscode.escape
-  { "key": "cmd+a", "command": "extension.vim_escape", "when": "editorTextFocus && vim.active && vim.mode != 'Normal'" },
   // km:vscode.pane.left
   { "key": "alt+h", "command": "workbench.action.navigateLeft", "when": "!terminalFocus" },
   // km:vscode.pane.down

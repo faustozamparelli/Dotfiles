@@ -53,7 +53,7 @@ move_tab_next = ["cmd+shift+l", "prefix+alt+right"] # km:herdr.tab.move-right km
 switch_tab = "prefix+1..9" # km:herdr.admin.switch-tab
 close_tab = "prefix+shift+x" # km:herdr.admin.close-tab
 
-# Panes. Alt navigation is implemented below so it can cross Neovim splits.
+# Panes. Alt navigation moves between Herdr panes.
 split_vertical = ["cmd+b", "prefix+v"] # km:herdr.pane.split-right km:herdr.admin.split-right
 split_horizontal = ["cmd+n", "prefix+minus"] # km:herdr.pane.split-down km:herdr.admin.split-down
 close_pane = ["cmd+w", "prefix+x"] # km:herdr.pane.close km:herdr.admin.close-pane
@@ -88,26 +88,26 @@ description = "create or focus the full-size Codex tab"
 [[keys.command]]
 key = "alt+h" # km:herdr.pane.left
 type = "shell"
-command = "~/.config/herdr/smart-pane-nav left h"
-description = "focus left, or move left inside Neovim"
+command = "~/.config/herdr/smart-pane-nav left"
+description = "focus left"
 
 [[keys.command]]
 key = "alt+j" # km:herdr.pane.down
 type = "shell"
-command = "~/.config/herdr/smart-pane-nav down j"
-description = "focus down, or move down inside Neovim"
+command = "~/.config/herdr/smart-pane-nav down"
+description = "focus down"
 
 [[keys.command]]
 key = "alt+k" # km:herdr.pane.up
 type = "shell"
-command = "~/.config/herdr/smart-pane-nav up k"
-description = "focus up, or move up inside Neovim"
+command = "~/.config/herdr/smart-pane-nav up"
+description = "focus up"
 
 [[keys.command]]
 key = "alt+l" # km:herdr.pane.right
 type = "shell"
-command = "~/.config/herdr/smart-pane-nav right l"
-description = "focus right, or move right inside Neovim"
+command = "~/.config/herdr/smart-pane-nav right"
+description = "focus right"
 
 [ui]
 sidebar_width = 22

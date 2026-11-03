@@ -77,34 +77,6 @@ herdr.admin.notification	Herdr	Ctrl-Space	o	open-notification	Open the current n
 herdr.admin.detach	Herdr	Ctrl-Space	d	detach	Detach the Herdr client
 herdr.admin.reload	Herdr	Ctrl-Space	Shift-r	reload	Reload Herdr configuration
 herdr.admin.help	Herdr	Ctrl-Space	?	keymap-help	Open searchable keymap help
-nvim.file.save	Neovim	Space	Space Space	save	Save the current file
-nvim.file.oil	Neovim	Space	Space e	oil	Open Oil file browser
-nvim.file.parent	Neovim	Direct	-	oil-parent	Open the parent directory in Oil
-nvim.find.files	Neovim	Space	Space f f	find-files	Find files
-nvim.find.anywhere	Neovim	Space	Space f a	find-anywhere	Find files or projects across working roots
-nvim.find.buffers	Neovim	Space	Space f b	find-buffers	Find open buffers
-nvim.find.recent	Neovim	Space	Space f r	recent-files	Find recent files
-nvim.find.help	Neovim	Space	Space f h	help-tags	Search Neovim help
-nvim.git.status	Neovim	Space	Space g s	git-status	Open Git status picker
-nvim.git.blame	Neovim	Space	Space g b	git-blame	Show line blame
-nvim.git.diff	Neovim	Space	Space g d	git-diff	Diff the current file
-nvim.git.next-hunk	Neovim	Space	Space g n	next-hunk	Go to next Git hunk
-nvim.git.prev-hunk	Neovim	Space	Space g p	previous-hunk	Go to previous Git hunk
-nvim.language.rename	Neovim	Space	Space l r	rename	Rename symbol
-nvim.language.action	Neovim	Space	Space l a	code-action	Open code actions
-nvim.language.diagnostics	Neovim	Space	Space l d	diagnostics	Search workspace diagnostics
-nvim.language.format	Neovim	Space	Space l f	format	Format the current buffer
-nvim.buffer.next	Neovim	Space	Space b l	next-buffer	Select next buffer
-nvim.buffer.previous	Neovim	Space	Space b h	previous-buffer	Select previous buffer
-nvim.buffer.delete	Neovim	Space	Space b d	delete-buffer	Delete current buffer
-nvim.quit.buffer	Neovim	Space	Space q q	quit	Close the current window
-nvim.quit.all	Neovim	Space	Space q a	quit-all	Quit Neovim
-nvim.help.keys	Neovim	Space	Space ?	keymap-help	Open keymap help
-nvim.motion.line-start	Neovim	Direct	H	line-start	Move to first nonblank character
-nvim.motion.line-end	Neovim	Direct	L	line-end	Move to end of line
-nvim.edit.redo	Neovim	Direct	U	redo	Redo the last change
-nvim.visual.move-down	Neovim	Direct	J	move-selection-down	Move selected lines down
-nvim.visual.move-up	Neovim	Direct	K	move-selection-up	Move selected lines up
 vscode.tab.previous	VS Code	Command	Cmd-h	previous-editor	Select the previous editor tab
 vscode.tab.next	VS Code	Command	Cmd-l	next-editor	Select the next editor tab
 vscode.tab.move-left	VS Code	Command	Cmd-Shift-h	move-editor-left	Move the current editor tab left
@@ -116,41 +88,10 @@ vscode.terminal.toggle	VS Code	Command	Cmd-t	focus-terminal	Show the terminal in
 vscode.terminal.side	VS Code	Command	Cmd-Shift-t	terminal-side	Open a terminal beside the editor
 vscode.view.explorer	VS Code	Command	Cmd-e	toggle-explorer	Show or hide the file explorer
 vscode.view.git	VS Code	Command	Cmd-g	toggle-git	Show or hide Source Control
-vscode.escape	VS Code	Command	Cmd-a	escape	Return to Vim Normal mode
 vscode.pane.left	VS Code	Alt	Alt-h	focus-left	Focus the pane to the left
 vscode.pane.down	VS Code	Alt	Alt-j	focus-down	Focus the pane below
 vscode.pane.up	VS Code	Alt	Alt-k	focus-up	Focus the pane above
 vscode.pane.right	VS Code	Alt	Alt-l	focus-right	Focus the pane to the right
-vscode.file.save	VS Code	Space	Space Space	save-file	Save the current file
-vscode.find.files	VS Code	Space	Space f f	find-files	Find files in the current project
-vscode.find.grep	VS Code	Space	Space f g	find-text	Search text across project files
-vscode.find.buffers	VS Code	Space	Space f b	find-editors	Find open editors
-vscode.find.recent	VS Code	Space	Space f r	find-recent	Open a recent file or project
-vscode.git.diff	VS Code	Space	Space g d	git-diff	Diff the current file
-vscode.git.next-hunk	VS Code	Space	Space g n	next-change	Jump to the next changed block
-vscode.git.previous-hunk	VS Code	Space	Space g p	previous-change	Jump to the previous changed block
-vscode.language.rename	VS Code	Space	Space l r	rename-symbol	Rename the symbol
-vscode.language.action	VS Code	Space	Space l a	code-action	Show available code actions
-vscode.language.format	VS Code	Space	Space l f	format-file	Format the current file
-vscode.language.diagnostics	VS Code	Space	Space l d	show-problems	Show workspace problems
-vscode.buffer.next	VS Code	Space	Space b l	next-buffer	Select the next editor tab
-vscode.buffer.previous	VS Code	Space	Space b h	previous-buffer	Select the previous editor tab
-vscode.buffer.close	VS Code	Space	Space b d	close-buffer	Close the active editor tab
-vscode.help.keys	VS Code	Space	Space ?	keybinding-help	Open VS Code keyboard shortcuts
-vscode.motion.line-start	VS Code	Direct	H	line-start	Move to the first nonblank character
-vscode.motion.line-end	VS Code	Direct	L	line-end	Move to the end of the line
-vscode.edit.redo	VS Code	Direct	U	redo	Redo the last change
-vscode.visual.move-down	VS Code	Direct	J	move-selection-down	Move selected lines down
-vscode.visual.move-up	VS Code	Direct	K	move-selection-up	Move selected lines up
-vscode.file.explorer	VS Code	Space	Space e	open-explorer	Open the project file explorer
-vscode.ai.codex	VS Code	Space	Space a c	open-codex	Open the Codex sidebar
-vscode.markdown.preview	VS Code	Space	Space m p	preview-markdown	Open rendered Markdown
-vscode.find.finder	VS Code	Space	Space f F	reveal-finder	Reveal the current file in Finder
-vscode.language.workspace-symbols	VS Code	Space	Space l s	workspace-symbols	Search workspace symbols in available indexes
-vscode.language.python-source	VS Code	Space	Space l p	python-source	Open the symbol definition or Python source
-vscode.buffer.delete	VS Code	Space	Space b k	delete-buffer	Close the active editor like Neovim
-vscode.edit.comment	VS Code	Direct	cm (Normal)	comment-line	Toggle comment on the current line
-vscode.visual.comment	VS Code	Direct	cm (Visual)	comment-selection	Toggle comment on selected lines
 omniwm.focus.left	OmniWM	Super	Super-h	focus.left	Focus the window left
 omniwm.move.left	OmniWM	Super	Super-Shift-h	move.left	Move the window left
 omniwm.focus.down	OmniWM	Super	Super-j	focus.down	Focus the window down

@@ -47,7 +47,6 @@
   },
   "extensions": [
     "llvm-vs-code-extensions.vscode-clangd",
-    "ms-vscode.cpptools",
-    "vscodevim.vim"
+    "ms-vscode.cpptools"
   ]
 }

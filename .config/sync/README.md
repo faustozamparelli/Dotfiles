@@ -4,17 +4,7 @@ This is the single human and agent manual for this dotfiles setup. It explains
 the working model, the custom keymaps, the terminal tools already installed,
 and the rules for safely changing or synchronizing the configuration.
 
-The primary workspace is Ghostty with Herdr and Neovim:
-
-```text
-Ghostty
-└── Herdr
-    ├── Neovim
-    ├── fish
-    └── Codex agent tabs
-```
-
-Open a project in Neovim with `nvim .` (or `n .` in fish).
+The primary workspace is VS Code for editing and Ghostty with Herdr for terminal sessions.
 
 ## App Sync
 
@@ -38,43 +28,11 @@ local. `mac-sync --nuke` removes temporary formulae while retaining dependencies
 still needed by the curated set. The sync removes apps only when they are
 explicitly recorded for retirement.
 
-## Neovim Workspace
-
-Open Ghostty and let fish attach to the persistent Herdr session. Start
-Neovim from a project root with `nvim .`. The tracked configuration lives
-in `~/.config/nvim`, and `packages.txt` installs Neovim on each Mac.
-The keymap reference below describes the editor bindings.
-
 ## Ghostty and Herdr Terminal Workspace
 
-Ghostty, Herdr, and Neovim form the main terminal workspace.
-
-Open Ghostty. Its fish configuration automatically attaches to the persistent
-Herdr session. Work survives accidental terminal-window closes.
-
-Finder opens text and source files with the configured macOS default apps.
-The tracked choices are in `~/.config/duti/defaults.duti`.
-
-The essential loop is:
-
-1. Use `z <project-name>` to jump to a known project.
-2. Run `nvim .` to open that directory in Neovim.
-3. Use `Space e` or `-` to browse with Oil.
-4. Use `Space f f` to find a file and `Space f b` to switch buffers.
-5. Use `Space f a` to jump to a file or project outside the current project.
-6. Press `Cmd-g` when an agent is useful.
-7. Use `Cmd-b` or `Cmd-n` only when another shell pane is genuinely needed.
-8. Press `Ctrl-Space ?` for searchable custom-keymap help.
-
-An example:
-
-```fish
-z my-project
-nvim .
-```
-
-Inside Neovim, `:pwd` shows the directory used by file search, text search,
-Git commands, and newly opened terminal processes.
+Open Ghostty to attach fish to the persistent Herdr session. Open a project
+with `code path/to/project`; shell and Git use `/usr/bin/nano` when they need
+an editor. Herdr keeps terminal work and Codex sessions available.
 
 ## The Mental Model
 
@@ -93,11 +51,11 @@ contains panes:
 session: default
 ├── workspace: project-a
 │   └── tab 1: editor
-│   ├── pane: Neovim
+│   ├── pane: shell
 │   └── pane: Codex
 └── workspace: project-b
     └── tab 1: editor
-    ├── pane: Neovim
+    ├── pane: shell
     └── pane: shell
 ```
 
@@ -105,40 +63,7 @@ Use one Herdr workspace per project and tabs for independent layouts within
 that project. A pane is a temporary view, not a substitute for a project. New
 panes, tabs, and workspaces inherit the current pane's directory.
 
-### Neovim owns editing
-
-Neovim has several different containers:
-
-- A buffer is an open file or terminal. A buffer can exist without being shown.
-- A window is a viewport displaying one buffer.
-- A tab page is a collection of Neovim windows, not a file tab.
-- The argument list is the set of files supplied when Neovim started.
-
-Do not create a split for every file. Open files into the current window and
-switch among buffers with `Space f b`. Use a split only when two things must be
-visible simultaneously.
-
-### The working directory defines project scope
-
-The current working directory controls relative paths and the default scope of
-fzf-lua, Git, and terminal commands. Start Neovim from the project root:
-
-```fish
-z project-name
-nvim .
-```
-
-Useful checks and corrections inside Neovim:
-
-```vim
-:pwd
-:cd /absolute/project/path
-:cd %:p:h
-```
-
-The last command changes to the directory containing the current file. Avoid
-Neovim's `autochdir`: silently changing scope when switching buffers makes
-project search and agent behavior unpredictable.
+The shell working directory defines the scope of terminal commands.
 
 ## OmniWM Windows and Spaces
 
@@ -203,7 +128,6 @@ The configuration assigns each modifier a stable job:
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
-- `Space`: discoverable Neovim operations.
 - `Ctrl-Space`: Herdr administration and infrequent operations.
 - Other `Ctrl` keys retain conventional terminal and editor behavior.
 
@@ -296,34 +220,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | Herdr | Ctrl-Space | `d` | Detach the Herdr client |
 | Herdr | Ctrl-Space | `Shift-r` | Reload Herdr configuration |
 | Herdr | Ctrl-Space | `?` | Open searchable keymap help |
-| Neovim | Space | `Space Space` | Save the current file |
-| Neovim | Space | `Space e` | Open Oil file browser |
-| Neovim | Direct | `-` | Open the parent directory in Oil |
-| Neovim | Space | `Space f f` | Find files |
-| Neovim | Space | `Space f a` | Find files or projects across working roots |
-| Neovim | Space | `Space f b` | Find open buffers |
-| Neovim | Space | `Space f r` | Find recent files |
-| Neovim | Space | `Space f h` | Search Neovim help |
-| Neovim | Space | `Space g s` | Open Git status picker |
-| Neovim | Space | `Space g b` | Show line blame |
-| Neovim | Space | `Space g d` | Diff the current file |
-| Neovim | Space | `Space g n` | Go to next Git hunk |
-| Neovim | Space | `Space g p` | Go to previous Git hunk |
-| Neovim | Space | `Space l r` | Rename symbol |
-| Neovim | Space | `Space l a` | Open code actions |
-| Neovim | Space | `Space l d` | Search workspace diagnostics |
-| Neovim | Space | `Space l f` | Format the current buffer |
-| Neovim | Space | `Space b l` | Select next buffer |
-| Neovim | Space | `Space b h` | Select previous buffer |
-| Neovim | Space | `Space b d` | Delete current buffer |
-| Neovim | Space | `Space q q` | Close the current window |
-| Neovim | Space | `Space q a` | Quit Neovim |
-| Neovim | Space | `Space ?` | Open keymap help |
-| Neovim | Direct | `H` | Move to first nonblank character |
-| Neovim | Direct | `L` | Move to end of line |
-| Neovim | Direct | `U` | Redo the last change |
-| Neovim | Direct | `J` | Move selected lines down |
-| Neovim | Direct | `K` | Move selected lines up |
 | VS Code | Command | `Cmd-h` | Select the previous editor tab |
 | VS Code | Command | `Cmd-l` | Select the next editor tab |
 | VS Code | Command | `Cmd-Shift-h` | Move the current editor tab left |
@@ -335,41 +231,10 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
 | VS Code | Command | `Cmd-e` | Show or hide the file explorer |
 | VS Code | Command | `Cmd-g` | Show or hide Source Control |
-| VS Code | Command | `Cmd-a` | Return to Vim Normal mode |
 | VS Code | Alt | `Alt-h` | Focus the pane to the left |
 | VS Code | Alt | `Alt-j` | Focus the pane below |
 | VS Code | Alt | `Alt-k` | Focus the pane above |
 | VS Code | Alt | `Alt-l` | Focus the pane to the right |
-| VS Code | Space | `Space Space` | Save the current file |
-| VS Code | Space | `Space f f` | Find files in the current project |
-| VS Code | Space | `Space f g` | Search text across project files |
-| VS Code | Space | `Space f b` | Find open editors |
-| VS Code | Space | `Space f r` | Open a recent file or project |
-| VS Code | Space | `Space g d` | Diff the current file |
-| VS Code | Space | `Space g n` | Jump to the next changed block |
-| VS Code | Space | `Space g p` | Jump to the previous changed block |
-| VS Code | Space | `Space l r` | Rename the symbol |
-| VS Code | Space | `Space l a` | Show available code actions |
-| VS Code | Space | `Space l f` | Format the current file |
-| VS Code | Space | `Space l d` | Show workspace problems |
-| VS Code | Space | `Space b l` | Select the next editor tab |
-| VS Code | Space | `Space b h` | Select the previous editor tab |
-| VS Code | Space | `Space b d` | Close the active editor tab |
-| VS Code | Space | `Space ?` | Open VS Code keyboard shortcuts |
-| VS Code | Direct | `H` | Move to the first nonblank character |
-| VS Code | Direct | `L` | Move to the end of the line |
-| VS Code | Direct | `U` | Redo the last change |
-| VS Code | Direct | `J` | Move selected lines down |
-| VS Code | Direct | `K` | Move selected lines up |
-| VS Code | Space | `Space e` | Open the project file explorer |
-| VS Code | Space | `Space a c` | Open the Codex sidebar |
-| VS Code | Space | `Space m p` | Open rendered Markdown |
-| VS Code | Space | `Space f F` | Reveal the current file in Finder |
-| VS Code | Space | `Space l s` | Search workspace symbols in available indexes |
-| VS Code | Space | `Space l p` | Open the symbol definition or Python source |
-| VS Code | Space | `Space b k` | Close the active editor like Neovim |
-| VS Code | Direct | `cm (Normal)` | Toggle comment on the current line |
-| VS Code | Direct | `cm (Visual)` | Toggle comment on selected lines |
 | OmniWM | Super | `Super-h` | Focus the window left |
 | OmniWM | Super | `Super-Shift-h` | Move the window left |
 | OmniWM | Super | `Super-j` | Focus the window down |
@@ -431,7 +296,7 @@ than the physical display percentage, so adjust `mobile_width_threshold` in
 directory. Repeating the shortcut focuses Codex instead of creating duplicates,
 or promotes it out of a split into its own tab.
 
-Before opening it, make sure the Neovim/shell pane belongs to the correct
+Before opening it, make sure the shell pane belongs to the correct
 project. Give the agent paths and constraints explicitly. For dotfiles or Mac
 setup work, say:
 
@@ -491,209 +356,6 @@ Then exercise the interface:
 Use `Cmd-w` to remove the disposable panes and `Ctrl-Space Shift-d` to close the
 `herdr-tour` workspace when finished. CLI discovery is always available with
 `herdr --help` and, for example, `herdr pane --help`.
-
-## Neovim in Practice
-
-### Modes and escape
-
-- Normal mode performs commands and movement.
-- Insert mode enters text; press `i`, `a`, `o`, or `O` to enter it.
-- Visual mode selects text; press `v`, `V`, or `Ctrl-v`.
-- Command-line mode begins with `:`.
-- Terminal mode sends keys to a process.
-
-Press `Esc` to return toward Normal mode. `Cmd-a` sends Escape through
-Ghostty, and in Neovim it also clears active `/` search highlighting.
-
-### Movement worth learning
-
-```text
-h j k l       left, down, up, right
-w / b         next / previous word
-e             end of word
-0             physical start of line
-H / L         first nonblank / end of line (custom)
-gg / G        first / last line
-{ / }         previous / next paragraph
-%             matching bracket
-Ctrl-d/u      half-page down / up
-zz            center current line
-f<char>       next character on line
-t<char>       just before next character
-; / ,         repeat character motion forward / backward
-```
-
-Prefix a motion with a count: `5j`, `3w`, or `2}`. Relative line numbers make
-counted vertical movement easy.
-
-### Operators compose with motions
-
-Vim editing is a small language:
-
-```text
-d + motion    delete
-c + motion    change, then enter Insert mode
-y + motion    yank (copy)
-> / <         indent / unindent
-```
-
-Examples:
-
-```text
-dw            delete to the next word
-ciw           change inside word
-ci"           change inside quotes
-di(           delete inside parentheses
-yap           yank a paragraph
-dd / yy       delete / yank a line
-p / P         paste after / before
-.             repeat the last change
-u / U         undo / redo (U is custom)
-```
-
-Learn text objects such as `iw`, `aw`, `i"`, `a(`, `it`, and `ap`; they remove
-much of the need for precise visual selection.
-
-### Search and replace
-
-```text
-/pattern      search forward
-?pattern      search backward
-n / N         next / previous match
-* / #         search current word forward / backward
-:noh          remove search highlighting
-```
-
-Common replacements:
-
-```vim
-:s/old/new/g
-:%s/old/new/gc
-:'<,'>s/old/new/g
-```
-
-The second replaces throughout the file and asks for confirmation. The third
-operates on the current visual selection.
-
-### Files with Oil
-
-`Space e` opens Oil for the current directory. `-` opens the parent directory.
-Oil behaves like an editable directory buffer:
-
-- `Enter` opens the selected file or directory.
-- `Ctrl-s` opens in a vertical split.
-- `Ctrl-h` opens in a horizontal split.
-- `Ctrl-t` opens in a Neovim tab page.
-- `-` moves to the parent directory.
-- `_` opens Neovim's current working directory.
-- `g.` toggles hidden files.
-- `gs` changes sorting.
-- `g?` displays Oil help.
-
-Rename, move, create, or delete filesystem entries by editing their lines as
-text, then write with `Space Space`. Oil previews the operations before applying
-them. Deleted items go to Trash in this configuration.
-
-### Finding instead of browsing
-
-Prefer fuzzy finding when the destination is roughly known:
-
-- `Space f f`: files under the working directory.
-- `Space f a`: files and directories across the main working roots.
-- `Space f b`: currently open buffers.
-- `Space f r`: recently opened files.
-- `Space f h`: Neovim help topics.
-
-Inside an fzf-lua file picker, `Enter` opens normally, `Ctrl-s` opens a
-horizontal split, `Ctrl-v` opens a vertical split, and `Ctrl-t` opens a tab.
-Typing narrows results; `Esc` cancels.
-
-### Searching across working roots
-
-`Space f a` is the fast path when the destination is outside the current
-project. It searches these locations in one picker:
-
-- `~/Library/Mobile Documents/com~apple~CloudDocs/Documents/ShortTerm`
-- `~/Library/Mobile Documents/com~apple~CloudDocs/Documents/LongTerm`
-- `~/Developer`
-- `~/.config`
-- immediate children of `~`
-
-The first four roots are recursive. Home is deliberately limited to its first
-level so the picker does not walk all of `~/Library` or duplicate the other
-roots. Generated and dependency directories such as `.git`, `node_modules`,
-`.venv`, `build`, `dist`, and `target` are excluded.
-
-The selected path determines the action:
-
-- A directory becomes Neovim's working directory, is added to zoxide, and
-  opens in Oil. From then on, project search, Git, terminals, and agent panes
-  use that directory as project scope.
-- A text or structured-data file opens as a normal Neovim buffer without
-  changing the current project.
-- A PDF, image, office document, archive, or other non-text file opens with
-  the default macOS application.
-
-Use `Space f f` after switching to a directory when only that project should be
-searched. Use `Space f a` again when crossing project boundaries.
-
-### Buffers, windows, and tabs
-
-- `Space f b` is the normal buffer switcher.
-- `Space b h/l` moves to the previous/next buffer.
-- `Space b d` deletes the current buffer.
-- `Ctrl-w h/j/k/l` moves among Neovim windows.
-- `Ctrl-w v` and `Ctrl-w s` create vertical/horizontal splits.
-- `Ctrl-w =` equalizes split sizes.
-- `:tabnew`, `gt`, and `gT` create and move among tab pages.
-
-Use Herdr panes for independent processes and Neovim windows for simultaneous
-views of editor buffers. Avoid nesting layouts without a reason.
-
-### Git inside Neovim
-
-- `Space g s` opens the repository status picker.
-- `Space g b` shows blame for the current line.
-- `Space g d` diffs the current file.
-- `Space g n/p` moves to the next/previous changed hunk.
-
-Gitsigns marks added, changed, and removed lines in the sign column. Use the
-shell for commits until a dedicated Neovim commit workflow is intentionally
-added.
-
-### Language intelligence
-
-Python uses Pyright and Ruff; C and C++ use macOS `clangd`. These files format
-before save.
-
-- `Space l r`: rename a symbol across the project.
-- `Space l a`: available code actions.
-- `Space l d`: workspace diagnostics.
-- `Space l f`: format now.
-- `K`: language documentation in Normal mode, except in Visual mode where the
-  custom mapping moves selected lines upward.
-- `gd`: go to definition when provided by the active LSP.
-
-Use `:LspInfo` and `:checkhealth vim.lsp` when language features are absent.
-
-### Built-in help and diagnosis
-
-Neovim's help is searchable with `Space f h`. Useful topics:
-
-```vim
-:help motion.txt
-:help operator
-:help text-objects
-:help windows
-:help buffers
-:help :terminal
-:help lua-guide
-:checkhealth
-:messages
-```
-
-In help, place the cursor on a `|tag|` and press `Ctrl-]`; press `Ctrl-o` to go
-back.
 
 ## fish and Terminal Fundamentals
 
@@ -804,7 +466,6 @@ termination has failed and data loss is acceptable.
 ### Friendly aliases
 
 ```text
-n          Neovim
 l / ls     eza -a --git
 b          bat
 o          open
@@ -914,44 +575,6 @@ work uses the professor's container rather than shared Mac packages.
 
 Use a project's declared dependencies instead of installing packages globally.
 
-### AMSC container with Mac Neovim
-
-The `amsc` Fish alias starts the professor's container and opens Bash in
-`/shared-folder`. That directory is `~/shared-folder` on the Mac, so edit there
-with Neovim outside Docker and run builds inside Docker:
-
-```fish
-amsc
-module load gcc-glibc/11.2.0
-module load lis/2.0.30
-gcc myprogram.c -I"$mkLisInc" -L"$mkLisLib" -llis -o myprogram
-```
-
-For files under `~/shared-folder`, Neovim starts `clangd` inside the running
-container. The wrapper maps Mac file paths to `/shared-folder` and loads the
-GCC toolchain. While the container is running, `mac-sync --no-pull` discovers
-its installed library headers and writes `~/shared-folder/.clangd`. This gives
-Neovim completion, diagnostics, and formatting for the container's C/C++
-libraries without installing them on macOS. Start `amsc` before opening a
-shared-folder project in Neovim; run `mac-sync --no-pull` again if the
-container's library set changes. Container-only header files cannot be opened
-directly on the Mac. Other C/C++ files use macOS's built-in `clangd`.
-
-The current container has Ubuntu `clangd` installed. A newly created AMSC
-container needs it once; after starting that container, run on the Mac:
-
-```sh
-docker exec -u root amsc apt-get update
-docker exec -u root amsc env DEBIAN_FRONTEND=noninteractive apt-get install -y clangd
-mac-sync --no-pull
-```
-
-For a project needing module-specific macros or compiler options, generate its
-[`compile_commands.json`](https://clangd.llvm.org/installation.html#compile_commandsjson)
-inside the container so its commands and paths name the Linux compiler and
-headers. `clangd` reads that database through the shared folder. Build and run
-course code only inside the container after loading the modules it needs.
-
 ### just: project commands
 
 `just` is a global command runner. A project `justfile` should wrap its existing
@@ -983,7 +606,7 @@ jupytext --paired-paths notebook.ipynb
 jupytext --sync notebook.py
 ```
 
-Edit the `.py` file in Neovim or VS Code and use Ruff, Pyright, ripgrep, Git diff, or
+Edit the `.py` file in VS Code and use Ruff, Pyright, ripgrep, Git diff, or
 coding agents on it. Run `jupytext --sync notebook.py` after script edits.
 JupyterLab's Jupytext extension maintains explicitly paired files when saving
 in the UI. No project-wide pairing rule is set; existing notebooks stay as
@@ -993,7 +616,7 @@ they are. `mac-sync` restores the extension after a JupyterLab upgrade.
 
 VS Code is shared through `apps.tsv` alongside the terminal workspace.
 Its last tracked configuration before retirement was restored from the parent
-of commit `bc45353`, including Vim navigation and the existing themes.
+of commit `bc45353`, including the existing themes.
 The bare dotfiles repository tracks only
 `~/Library/Application Support/Code/User/settings.json`, `keybindings.json`,
 `tasks.json`,
@@ -1002,7 +625,7 @@ The bare dotfiles repository tracks only
 `mac-sync` installs missing listed extensions on each Mac. Extension binaries,
 credentials, workspace storage, logs, and caches stay local.
 
-The extension list retains Vim, Python, Pylance, clangd, Ruff, Codex, and the
+The extension list retains Python, Pylance, clangd, Ruff, Codex, and the
 current Custom UI Style window customization, plus Jupyter for notebooks and
 Microsoft C/C++ for its debugger. Microsoft IntelliSense is disabled because
 clangd owns C/C++ analysis. Python Debugger and Dev Containers are explicitly
@@ -1034,26 +657,23 @@ installed extension folders remain local.
 The Fish login terminal uses the existing prompt, aliases and toolchain PATH;
 Herdr only starts automatically in Ghostty, so it does not nest inside VS Code.
 Terminal splits inherit the current directory and persistent sessions are
-explicitly enabled. Vim uses smart-case searching and Neovim's 400 ms mapping
-timeout. Added equivalents include `Space e` (Explorer), `Space a c` (Codex),
-`Space m p` (Markdown preview), `Space f F` (Finder), `Space l s` (symbols),
-`Space l p` (definition/Python source), `Space b k` (close), and `cm` (comments).
+explicitly enabled. VS Code uses standard editing motions without Vim emulation.
 Python defaults to the project `.venv` for newly opened workspaces; an already
 selected interpreter must be changed with **Python: Select Interpreter**.
 
-VS Code's clangd now uses the same `amsc-clangd.sh` bridge as Neovim. Open
+VS Code's clangd uses the `amsc-clangd.sh` bridge. Open
 `~/shared-folder` or one of its project subdirectories in its own VS Code
 window. For these folders the bridge runs Linux clangd in the running AMSC
 container, maps file paths, loads GCC 11.2 and queries its system headers.
 Outside this tree it uses native macOS clangd. If the container is stopped,
 the bridge reports how to start it rather than producing misleading Mac
 compiler diagnostics for Linux code. VS Code's two-worker/no-background-index
-arguments are forwarded; Neovim's existing defaults remain unchanged.
+arguments are forwarded.
 
 For direct access to Linux headers, use **Dev Containers: Attach to Running
 Container... → amsc**. The tracked `~/.config/mac-setup/vscode-amsc.json` is
 merged into the local named-container configuration by `vscode-amsc.py` during
-sync. It opens `/shared-folder` as `ubuntu`, installs Linux clangd/C++/Vim
+sync. It opens `/shared-folder` as `ubuntu`, installs Linux clangd/C++
 extensions, uses the course Bash startup, and runs clangd with the same GCC
 module environment. Container state, server files and extension binaries stay
 local. OrbStack remains the required local Linux runtime; Dev Containers
@@ -1109,9 +729,7 @@ VS Code if asked after extension changes.
 Useful built-in tools for reviewing generated code are notebook diffs, Variable
 Explorer/Data Viewer, the Problems panel, tests, debugger watches, selective Git
 staging and separate Git worktrees for concurrent agent changes. Extra Lua/TOML
-extensions are not priorities for the current Python/C++ workload. Oil's editable
-directory buffers and Herdr's agent/worktree management still have no exact
-built-in equivalents. Fish keeps `EDITOR`/`VISUAL` as Neovim during the trial.
+extensions are not priorities for the current Python/C++ workload. Herdr's agent/worktree management remains available in the terminal.
 
 #### Terminal tools and optional editor companions
 
@@ -1162,19 +780,10 @@ yet understood.
 ```fish
 z project-name
 git status
-nvim .
+code .
 ```
 
-Then use `Space f f` and `Space f b`. Press `Cmd-g` if the task
-benefits from an agent.
-
-### Work on two projects
-
-1. Open the first project and Neovim.
-2. Press `Ctrl-Space Shift-n` to create another Herdr workspace inheriting the current
-   path.
-3. Use `z other-project`, then `nvim .`.
-4. Switch projects with `Ctrl-h` and `Ctrl-l`.
+Use `Cmd-g` in Herdr to open the agent tab when useful.
 
 ### Inspect a change before committing
 
@@ -1195,21 +804,9 @@ resumes supported agent conversations when integrations are available.
 
 ### Edit this setup
 
-```fish
-nvim ~/.config
-```
-
-Use `Space f f` to locate the relevant configuration. After keymap changes run:
-
-```fish
-keymap-docs
-keymap-docs --check
-python3 ~/.config/sync/test-app-shortcuts.py
-```
-
-After Herdr changes press `Ctrl-Space Shift-r`. Restart Neovim after plugin or startup
-changes. Ghostty reload behavior depends on the setting changed; reopening it
-is the reliable option.
+Use `code ~/.config` and run `keymap-docs` and `keymap-docs --check` after
+keymap changes. Reload Herdr with `Ctrl-Space Shift-r` after its configuration
+changes.
 
 ## Mac Synchronization
 
@@ -1419,7 +1016,9 @@ Pi Desktop, the Pi coding agent, and Zed are retired on every Mac.
 configuration, credentials, extensions, sessions, logs, and app caches.
 
 `retired-apps.tsv` also records explicit removals. ChatGPT is retired on each
-Mac; VS Code is shared again and Neovim is installed from `packages.txt`.
+Mac; VS Code is shared. Neovim, VS Code Vim, the Lua language server and
+Tree-sitter CLI were retired on 2026-11-03. The retirement manifest removes
+the formulae on sync; installed Neovim plugins and caches can be moved to Trash.
 
 `sync-maintain` runs the same convergence check, regenerates keymap docs, and
 stages maintained dotfile paths. Tracked sync helpers are staged together with
@@ -1606,9 +1205,7 @@ machine-local file/account source references are not automatically enrolled.
 The former tracked `~/.codexbar/config.json` was an inactive duplicate and has
 been removed.
 
-Ghostty uses a non-blinking default cursor and keeps vsync enabled. Neovim
-checks macOS appearance every thirty seconds and when regaining focus instead
-of launching `defaults` every two seconds.
+Ghostty uses a non-blinking default cursor and keeps vsync enabled.
 
 `python3 ~/.config/mac-setup/cleanup-orphan-app-data.py --delete` removes only a reviewed,
 explicitly approved list of obsolete app-data folders after checking app bundles,
@@ -1690,10 +1287,9 @@ been removed.
 Agents working on this setup must follow these rules:
 
 1. Read this entire file before changing dotfiles, Mac synchronization,
-   Ghostty, Herdr, Neovim, fish, or keymaps.
+   Ghostty, Herdr, VS Code, fish, or keymaps.
 2. Use the bare dotfiles repository; do not recreate tracked configuration.
-3. Use Ghostty, Herdr, and Neovim for the primary workspace. Keep the
-   tracked Neovim configuration current.
+3. Use VS Code for editing and Ghostty and Herdr for terminal work.
 4. Keep this as the only Markdown file under `~/.config`. Update it instead of
    adding repository-specific agent or README files.
 5. Do not sync secrets, tokens, browser profiles, histories, caches, keychains,
@@ -1710,9 +1306,8 @@ Agents working on this setup must follow these rules:
 For every custom keybinding change:
 
 1. Update `~/.config/keymaps/registry.tsv`, preserving unique IDs.
-2. Update the relevant VS Code, Karabiner, Ghostty, Herdr, or Neovim
-   configuration and include its `km:<id>` marker (Neovim uses the ID in its
-   mapping helper).
+2. Update the relevant VS Code, Karabiner, Ghostty, or Herdr
+   configuration and include its `km:<id>` marker.
 3. Keep modifier roles consistent with the Keyboard Layers section.
 4. Run `~/.config/keymaps/keymap-docs` to regenerate the table in this file.
 5. Run `~/.config/keymaps/keymap-docs --check` and relevant configuration tests.

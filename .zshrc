@@ -6,8 +6,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # Keep terminal applications such as Codex in color mode.
 unset NO_COLOR
 
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="/usr/bin/nano"
+export VISUAL="/usr/bin/nano"
 
 # zoxide
 if command -v zoxide >/dev/null; then
@@ -24,7 +24,6 @@ alias ls='l'
 alias o='open'
 
 alias py='python3'
-alias n='nvim'
 
 alias b='bat'
 alias cl='clear'

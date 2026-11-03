@@ -16,8 +16,8 @@ test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
 set -gx THEME dark
-set -gx EDITOR nvim
-set -gx VISUAL nvim
+set -gx EDITOR /usr/bin/nano
+set -gx VISUAL /usr/bin/nano
 set fish_greeting ""
 set -g pure_enable_git true
 
@@ -61,7 +61,6 @@ alias py python
 alias b bat
 alias cl clear
 alias sv "source .venv/bin/activate.fish"
-alias n "nvim"
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 
 # amsc container

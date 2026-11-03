@@ -91,7 +91,6 @@ mac-sync
 
 - Right Command is the global Super key, implemented by Karabiner.
 - Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
-- Space controls Neovim commands.
 
 The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
 readable generated table is in `~/.config/sync/README.md`.

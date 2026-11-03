@@ -1,5 +1,4 @@
 # Editing, languages, Codex, and the current window customization.
-vscodevim.vim
 ms-python.python
 ms-python.vscode-pylance
 llvm-vs-code-extensions.vscode-clangd

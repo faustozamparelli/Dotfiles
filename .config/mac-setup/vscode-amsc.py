@@ -25,7 +25,9 @@ def main():
         if key == 'settings':
             current.setdefault(key, {}).update(value)
         elif key == 'extensions':
-            current[key] = list(dict.fromkeys(current.get(key, []) + value))
+            current[key] = list(dict.fromkeys(
+                ext for ext in current.get(key, []) + value
+                if ext.lower() != 'vscodevim.vim'))
         else:
             current[key] = value
     updated = json.dumps(current, indent=2) + '\n'

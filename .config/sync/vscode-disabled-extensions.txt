@@ -3,3 +3,6 @@ ms-python.vscode-python-envs
 
 # Retired external PDF opener.
 fausto.preview-pdf
+
+# Retired Vim emulation.
+vscodevim.vim

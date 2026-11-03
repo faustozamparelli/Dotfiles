@@ -17,11 +17,9 @@ jupytext
 just
 libqalculate
 lua
-lua-language-server
 llvm
 mas
 mole
-neovim
 node
 pnpm
 python
@@ -31,7 +29,6 @@ ruff
 tlrc
 trash
 tree
-tree-sitter-cli
 typescript
 uv
 vtsls

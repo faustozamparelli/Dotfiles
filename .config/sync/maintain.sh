@@ -31,7 +31,6 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/omniwm/fullscreen-toggle.py \
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
-  .config/nvim \
   .local/bin/mac-app \
   .local/bin/mac-sync \
   "Library/Application Support/Code/User/settings.json" \

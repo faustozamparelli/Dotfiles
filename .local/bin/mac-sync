@@ -402,7 +402,7 @@ elif [[ -x "$python_bin" ]]; then
   ln -sfn "$python_bin" "$toolchain_bin/python"
 fi
 
-# Supply the container's installed library headers to Neovim without
+# Supply the container's installed library headers to clangd without
 # installing course libraries on macOS. A regular file is needed because the
 # container cannot follow a symlink to the host's dotfiles checkout.
 if [[ -d "$HOME/shared-folder" ]] &&

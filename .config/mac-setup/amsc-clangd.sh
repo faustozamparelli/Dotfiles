@@ -4,13 +4,13 @@ set -euo pipefail
 shared="$HOME/shared-folder"
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.orbstack/bin:$PATH"
 
-# Editors may supply their own indexing/worker policy. Keep Neovim's defaults
+# Editors may supply their own indexing/worker policy. Keep the defaults
 # only when no arguments were supplied, and forward VS Code's lean arguments.
 if [[ $# -eq 0 ]]; then
   set -- --background-index --clang-tidy
 fi
 
-# Neovim starts clangd in the project root. Files under the bind mount must be
+# Editors start clangd in the project root. Files under the bind mount must be
 # analyzed on Linux so module headers and the container compiler are visible.
 if [[ "$PWD" == "$shared" || "$PWD" == "$shared/"* ]]; then
   if ! command -v docker >/dev/null 2>&1 ||

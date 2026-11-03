@@ -36,3 +36,6 @@ formula	superlu	SuperLU
 mas	1378123825	Negative
 mas	1498912833	Highlights
 mas	462062816	Microsoft PowerPoint
+formula	neovim	Neovim
+formula	lua-language-server	Lua language server
+formula	tree-sitter-cli	Tree-sitter CLI
