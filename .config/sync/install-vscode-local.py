@@ -54,7 +54,7 @@ def main():
     cli = Path('/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code')
     if not cli.exists():
         return
-    for name in ('vscode-preview-pdf', 'vscode-markdown-preview-wrap'):
+    for name in ('vscode-markdown-preview-wrap',):
         install(Path(__file__).with_name(name), cli)
 
 

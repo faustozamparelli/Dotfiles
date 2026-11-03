@@ -1099,15 +1099,12 @@ These tasks only run when invoked; pytest/Ruff must be available in the project
 or command environment. Test discovery on save is disabled; configure the
 project's test framework when needed and run discovery/tests manually.
 
-PDF clicks open the macOS default app (currently Preview) through the tiny
-tracked local `fausto.preview-pdf` opener. It activates only for PDF files,
-opens the local file externally and closes its own temporary editor tab.
-For the attached AMSC window it maps `/shared-folder` to `~/shared-folder`.
-Other remote PDFs must be downloaded first. `install-vscode-local.py` packages
-and installs this extension during sync; it has no npm dependencies and its
-source is tracked under `~/.config/sync/vscode-preview-pdf`. Generated VSIX files
-and installed extension directories stay local. Reload the VS Code window
-after an update to this local extension if VS Code requests it.
+PDF files open inside VS Code using the Marketplace extension PDF Preview Dark.
+Its default colour scheme follows the VS Code theme, which follows macOS
+appearance. The toolbar can restore original colours when needed; dark rendering
+also changes embedded images. Remote PDFs are supported. Sync installs the
+viewer and removes the retired `fausto.preview-pdf` external opener. Reload
+VS Code if asked after extension changes.
 
 Useful built-in tools for reviewing generated code are notebook diffs, Variable
 Explorer/Data Viewer, the Problems panel, tests, debugger watches, selective Git

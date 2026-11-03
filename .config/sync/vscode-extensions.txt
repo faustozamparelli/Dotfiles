@@ -12,3 +12,6 @@ ms-toolsai.jupyter
 ms-vscode.cpptools
 ms-vscode-remote.remote-containers
 ms-python.debugpy
+
+# PDF viewer follows the VS Code theme.
+hcui91.pdf-preview-dark
