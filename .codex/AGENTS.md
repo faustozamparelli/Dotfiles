@@ -11,7 +11,7 @@
 
 - Understand substantial or ambiguous tasks and explain important design choices before implementation. Use native Plan mode when available and appropriate; divide large work into verifiable milestones.
 - Minimize files and words while preserving technical depth and evidence. Reuse existing documents; create extra documentation only when requested or required by repository conventions. Keep Markdown compact; avoid redundant planning, architecture, decision, progress or tracking files.
-- Treat the user as the technical decision-maker. Explain architecture, algorithms and information flow rather than code line by line. Use `research-handoff` for substantive implementation, architecture, research, benchmarking, codebase explanations and milestone handoffs. Scale detail to significance; answer routine actions directly. Use tables or diagrams only when helpful.
+- Treat the user as the technical decision-maker. Explain architecture, algorithms and information flow rather than code line by line. Scale detail to significance; answer routine actions directly. Use tables or diagrams only when helpful.
 
 ## Research integrity
 

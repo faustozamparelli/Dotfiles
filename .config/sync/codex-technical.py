@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import tomllib
 from pathlib import Path
@@ -163,6 +164,13 @@ def apply():
         temporary.replace(CONFIG)
         print("Applied Codex plugin choices and remote MCP endpoints")
     OLD_PREFERENCE_MARKER.unlink(missing_ok=True)
+    # Retire the custom handoff skill on each Mac.
+    handoff = HOME / ".codex/skills/research-handoff"
+    if handoff.is_symlink():
+        handoff.unlink()
+    elif handoff.exists():
+        shutil.rmtree(handoff)
+
 
 
 def restore_plugins():
@@ -171,7 +179,9 @@ def restore_plugins():
     validate(snapshot)
     installed = installed_plugins()
     failures = []
-    for name in snapshot["plugins"]:
+    for name, enabled in snapshot["plugins"].items():
+        if not enabled:
+            continue
         if name in installed:
             continue
         try:

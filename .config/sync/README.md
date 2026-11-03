@@ -1757,3 +1757,7 @@ fish --no-execute ~/.config/fish/config.fish
 Some health output is informational. Report exact failures instead of hiding
 them. Keep the setup small: add a plugin or tool only when it removes recurring
 friction that existing tools cannot solve clearly.
+
+The custom `research-handoff` skill is retired on all Macs. After `bare pull`,
+run `python3 ~/.config/sync/codex-technical.py apply` to remove the local copy.
+The OpenAI-provided PDF plugin remains enabled.
