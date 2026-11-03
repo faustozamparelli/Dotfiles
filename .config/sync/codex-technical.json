@@ -1,43 +1,115 @@
 {
+  "apps": {
+    "_default": false
+  },
+  "machines": {
+    "air": {
+      "apps": {},
+      "mcp_servers": {},
+      "plugins": {}
+    },
+    "pro": {
+      "apps": {},
+      "mcp_servers": {
+        "qgis": {
+          "args": [],
+          "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
+          "enabled": true
+        }
+      },
+      "plugins": {}
+    },
+    "studio": {
+      "apps": {},
+      "mcp_servers": {
+        "docling": {
+          "enabled": false
+        }
+      },
+      "plugins": {}
+    }
+  },
   "mcp_servers": {
     "cloudflare": {
+      "enabled": false,
       "url": "https://mcp.cloudflare.com/mcp"
     },
     "context7": {
+      "enabled": true,
       "url": "https://mcp.context7.com/mcp"
     },
-    "exa": {
-      "url": "https://mcp.exa.ai/mcp"
-    },
     "github": {
+      "enabled": false,
       "url": "https://api.githubcopilot.com/mcp/"
     },
+    "notion": {
+      "enabled": false,
+      "url": "https://mcp.notion.com/mcp"
+    },
     "supabase": {
+      "enabled": false,
       "url": "https://mcp.supabase.com/mcp"
     },
     "vercel": {
+      "enabled": false,
       "url": "https://mcp.vercel.com"
     }
   },
+  "plugin_apps": {
+    "github@openai-curated-remote": [
+      "connector_76869538009648d5b282a4bb21c3d157"
+    ],
+    "gmail@openai-curated-remote": [
+      "connector_2128aebfecb84f64a069897515042a44"
+    ],
+    "google-calendar@openai-curated-remote": [
+      "connector_947e0d954944416db111db556030eea6"
+    ],
+    "notion@openai-curated-remote": [
+      "asdk_app_69c18c28f1188191bf5b8445c4ab0a2e"
+    ],
+    "openai-templates@openai-curated-remote": [
+      "connector_openai_default_templates"
+    ],
+    "plugin-management@openai-curated-remote": [
+      "connector_openai_plugin_management"
+    ],
+    "sites@openai-curated-remote": [
+      "connector_20205bf7d4e99a89d7154bb849718324"
+    ],
+    "work-pets@openai-curated-remote": [
+      "connector_openai_chatgpt_pets"
+    ]
+  },
   "plugins": {
-    "browser@openai-bundled": true,
-    "codex-app-tools@openai-bundled": true,
-    "computer-use@openai-bundled": true,
+    "browser@openai-bundled": false,
+    "chrome@openai-bundled": false,
+    "codex-app-tools@openai-bundled": false,
+    "computer-use@openai-bundled": false,
     "documents@openai-primary-runtime": true,
-    "github@openai-curated": true,
-    "github@openai-curated-remote": true,
-    "gmail@openai-curated-remote": true,
-    "google-calendar@openai-curated-remote": true,
-    "notion@openai-curated-remote": true,
-    "openai-templates@openai-curated-remote": true,
+    "github@openai-curated": false,
+    "github@openai-curated-remote": false,
+    "gmail@openai-curated-remote": false,
+    "google-calendar@openai-curated-remote": false,
+    "notion@openai-curated-remote": false,
+    "openai-templates@openai-curated-remote": false,
     "pdf@openai-primary-runtime": true,
     "plugin-management@openai-curated-remote": true,
     "presentations@openai-primary-runtime": true,
-    "sites@openai-curated-remote": true,
+    "sites@openai-curated-remote": false,
     "spreadsheets@openai-primary-runtime": true,
-    "template-creator@openai-primary-runtime": true,
-    "unified-computer-use@openai-bundled": true,
+    "template-creator@openai-primary-runtime": false,
+    "unified-computer-use@openai-bundled": false,
     "visualize@openai-bundled": true,
-    "work-pets@openai-curated-remote": true
+    "work-pets@openai-curated-remote": false
+  },
+  "remove_mcp_servers": [
+    "exa",
+    "node_repl",
+    "computer-use",
+    "autodesk_fusion"
+  ],
+  "settings": {
+    "model_reasoning_effort": "high"
   }
 }

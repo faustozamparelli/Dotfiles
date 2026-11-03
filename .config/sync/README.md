@@ -765,9 +765,9 @@ the actual project before concluding that a previous CPU issue is resolved.
 
 ### Codex
 
-The preferred entry point is `Cmd-g`, which creates or focuses the project
-agent pane. From a shell, `codex` starts it directly. Agents inherit their
-starting directory, so project selection comes before agent startup.
+The current entry point is T3 Code. Select the project and workspace there
+before starting a Codex thread. The terminal CLI remains installed as T3's
+provider backend and for configuration diagnostics.
 
 Provide concrete requests: desired outcome, relevant files, constraints, and
 verification. Ask the agent to inspect before editing when the problem is not
@@ -1233,29 +1233,64 @@ has not been measured directly; the existing sync schedule is unchanged.
 
 ### Codex technical setup
 
-`~/.config/sync/codex-technical.json` records installed plugin IDs and
-explicit enabled/disabled choices from Codex config, including remote
-integrations the CLI plugin list may omit, plus the public HTTPS addresses of
-remote MCP servers. `sync-maintain` captures
-these choices and stages them for review; after commit and push, `mac-sync`
-merges them into `~/.codex/config.toml` on the other Mac at login or hourly.
-Existing local MCP headers, credentials, and machine-specific servers remain
-untouched. A same-named local stdio server keeps its command/arguments instead
-of receiving a conflicting URL. A URL inserted into such a server by the
-older merge is removed only when it matches the shared snapshot.
-Capturing on a Mac with a local stdio override retains the existing shared
-endpoint rather than interpreting the override as a global removal.
-Plugin files and caches are installed by Codex, not copied through
-Git. To install missing plugins on the other Mac, run
-`python3 ~/.config/sync/codex-technical.py restore-plugins` there after sync;
-it uses the Codex plugin installer and may need account authorization. API
-keys and account connections must be set up locally.
+Codex is used through T3 Code. `~/.config/sync/codex-technical.json` tracks
+shared plugin/app choices, public MCP endpoints, the default `high` reasoning
+effort, and `air`/`pro`/`studio` overrides. It never contains credentials.
+`mac-sync` applies this profile; `sync-maintain` captures local on/off changes
+into that Mac's override instead of changing every Mac's defaults.
 
-Model, theme, fonts, desktop appearance, Dock and update preferences are local
-choices and are not captured. Neither the full Codex config nor conversations,
-trusted project paths, plugin caches, MCP secrets, or app state are tracked.
-The technical snapshot is a selected list: a new custom skill or local MCP
-server needs deliberate review before it is added to dotfiles.
+PDF, documents, spreadsheets, presentations, visualization and plugin management
+remain enabled. ChatGPT email/Calendar, unused app plugins and rare cloud MCPs
+are disabled in Codex without disconnecting their ChatGPT.com accounts.
+Account-managed plugins can still appear enabled in the inventory: the
+profile also applies Codex per-app `enabled` controls, derived from reviewed
+public `.app.json` connector IDs. Local plugin toggles update these controls
+without changing account installation or authorization. App tools default
+to off, with plugin management enabled. See the [Codex app configuration
+reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+Context7 is enabled by default on all three Macs. Credentials remain machine-local.
+Pro alone has a tracked QGIS server definition. App-specific servers are never
+installed on other Macs by a toggle; missing executables are disabled. The
+retired Exa and ChatGPT-desktop browser/computer-use MCP definitions are removed.
+T3's native browser tools are independent of those retired definitions.
+
+Change a managed tool on just the current Mac, then review/publish the profile
+with the usual dotfiles workflow:
+
+```sh
+python3 ~/.config/sync/codex-technical.py set-mcp context7 on
+python3 ~/.config/sync/codex-technical.py set-plugin gmail@openai-curated-remote off
+python3 ~/.config/sync/codex-technical.py apply
+```
+
+Edit the shared entries in the JSON deliberately when changing defaults for
+all Macs. Local MCP headers, OAuth state, other settings and unreviewed local
+server definitions remain local. API keys and account connections are never
+copied between Macs or committed. Disabled tools retain their local credentials.
+A local stdio server remains authoritative over a same-named shared remote
+endpoint. New local command definitions require explicit review before tracking.
+
+Artifact skills such as PDF are installed and updated by their Codex plugins,
+not copied through Git; Codex can load them when a matching task needs them.
+
+Run `python3 ~/.config/sync/codex-technical.py restore-plugins` only when
+missing enabled plugins need installation; disabled plugins are skipped.
+Caches, conversations, full Codex configuration, account state and trusted
+project paths remain untracked. Models and existing T3 thread selections stay
+local; the shared reasoning effort is a default, not an override of an
+explicit thread choice. The new profile tests cover isolated toggles,
+credential preservation, retired definitions, missing app executables and
+idempotent application; all 41 sync tests passed on Air on 2026-11-02.
+QGIS MCP 0.15.2 initialized, listed 125 tools and read a blank EPSG:4326
+project with zero layers while QGIS was open on Pro. Calls with its GUI
+bridge closed failed with connection refused; that is an app prerequisite,
+not missing Codex authentication. No project edits were made.
+Final checks also passed 41 sync tests on Pro and 37 on Studio; their older
+repository baselines contain different test populations. Studio's Codex CLI
+was upgraded from 0.147.0 to the same 0.166.0 used on Air and Pro. The old
+CLI lacked `--print-startup-config`; effective settings were verified through
+`config/read` under strict configuration validation before the upgrade.
+The shared profile was verified across all three Macs; the custom handoff skill is retired.
 
 ### New Mac
 

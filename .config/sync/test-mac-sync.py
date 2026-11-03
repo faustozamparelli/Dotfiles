@@ -377,6 +377,112 @@ cleanup_retired_desktop_tool spotify
 
 
 class CodexTechnicalTests(unittest.TestCase):
+    def load_module(self, root):
+        source = Path.home() / '.config/sync/codex-technical.py'
+        spec = importlib.util.spec_from_file_location('codex_technical_profile_test', source)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        module.CONFIG = root / 'config.toml'
+        module.SNAPSHOT = root / 'snapshot.json'
+        module.OLD_PREFERENCE_MARKER = root / 'old-marker'
+        return module
+
+    def test_account_plugin_inventory_cannot_reenable_codex_connectors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            snapshot = {'plugins': {'mail@test': False, 'manager@test': True},
+                        'mcp_servers': {}, 'apps': {'_default': False},
+                        'plugin_apps': {'mail@test': ['connector_mail'], 'manager@test': ['connector_manager']},
+                        'machines': {'air': {}}}
+            module.SNAPSHOT.write_text(json.dumps(snapshot))
+            module.CONFIG.write_text('[apps._default]\nenabled = true\n'
+                                     '[apps.connector_mail]\nenabled = true\n'
+                                     'default_tools_approval_mode = "prompt"\n')
+            with patch.object(module, 'machine_name', return_value='air'), \
+                 patch.object(module, 'installed_plugins', return_value={'mail@test': True}):
+                module.apply()
+                config = tomllib.loads(module.CONFIG.read_text())
+                self.assertFalse(config['apps']['_default']['enabled'])
+                self.assertFalse(config['apps']['connector_mail']['enabled'])
+                self.assertTrue(config['apps']['connector_manager']['enabled'])
+                self.assertEqual(config['apps']['connector_mail']['default_tools_approval_mode'], 'prompt')
+                captured = module.snapshot_from_config()
+                self.assertFalse(captured['plugins']['mail@test'])
+                self.assertNotIn('mail@test', captured['machines']['air']['plugins'])
+                self.assertEqual(captured['machines']['air']['apps'], {})
+                snapshot['apps']['connector_manager'] = False
+                self.assertFalse(module.effective_snapshot(snapshot)['apps']['connector_manager'])
+                snapshot['machines']['air']['apps'] = {'connector_mail': True}
+                self.assertTrue(module.effective_snapshot(snapshot)['apps']['connector_mail'])
+
+    def test_machine_toggles_do_not_change_shared_defaults_or_export_credentials(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            snapshot = {'plugins': {'mail@test': False},
+                        'mcp_servers': {'docs': {'url': 'https://example.test/mcp', 'enabled': False}},
+                        'machines': {'air': {'mcp_servers': {'localapp': {'enabled': False}}}, 'pro': {}}}
+            module.SNAPSHOT.write_text(json.dumps(snapshot))
+            module.CONFIG.write_text('[plugins."mail@test"]\nenabled = true\n'
+                                     '[mcp_servers.docs]\nurl = "https://example.test/mcp"\nenabled = true\n'
+                                     '[mcp_servers.docs.http_headers]\nAuthorization = "private"\n'
+                                     '[mcp_servers.private]\ncommand = "/private/server"\nargs = ["secret"]\n')
+            with module.CONFIG.open('a') as stream:
+                stream.write('[mcp_servers.localapp]\ncommand = "/local/server"\nenabled = false\n')
+            with patch.object(module, 'machine_name', return_value='air'):
+                captured = module.snapshot_from_config()
+            module.validate(captured)
+            self.assertFalse(captured['plugins']['mail@test'])
+            self.assertFalse(captured['mcp_servers']['docs']['enabled'])
+            self.assertTrue(captured['machines']['air']['plugins']['mail@test'])
+            self.assertTrue(captured['machines']['air']['mcp_servers']['docs']['enabled'])
+            self.assertEqual(captured['machines']['pro'], {})
+            self.assertEqual(captured['machines']['air']['mcp_servers']['localapp'], {'enabled': False})
+            self.assertNotIn('private', json.dumps(captured))
+
+    def test_apply_preserves_auth_and_local_settings_and_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            snapshot = {'plugins': {'mail@test': False}, 'settings': {'model_reasoning_effort': 'high'},
+                        'mcp_servers': {'cloud': {'url': 'https://example.test/mcp', 'enabled': False}},
+                        'machines': {'air': {}, 'pro': {'mcp_servers': {'qgis': {
+                            'command': '/not-installed/qgis', 'args': [], 'enabled': True}}}},
+                        'remove_mcp_servers': ['node_repl']}
+            module.SNAPSHOT.write_text(json.dumps(snapshot))
+            module.CONFIG.write_text('model_reasoning_effort = "xhigh"\nmodel = "keep-model"\n'
+                                     'notify = ["/old/SkyComputerUseClient", "turn-ended"]\n'
+                                     '[mcp_servers.cloud.http_headers]\nAuthorization = "private"\n'
+                                     '[mcp_servers.node_repl]\ncommand = "/missing"\n'
+                                     '[mcp_servers.node_repl.env]\nEXAMPLE = "old"\n'
+                                     '[projects."/keep"]\ntrust_level = "trusted"\n')
+            with patch.object(module, 'machine_name', return_value='air'):
+                module.apply()
+                first = module.CONFIG.read_text()
+                module.apply()
+                self.assertEqual(first, module.CONFIG.read_text())
+            config = tomllib.loads(first)
+            self.assertEqual(config['model_reasoning_effort'], 'high')
+            self.assertEqual(config['model'], 'keep-model')
+            self.assertNotIn('notify', config)
+            self.assertEqual(config['mcp_servers']['cloud']['http_headers']['Authorization'], 'private')
+            self.assertFalse(config['mcp_servers']['cloud']['enabled'])
+            self.assertNotIn('node_repl', config['mcp_servers'])
+            self.assertNotIn('qgis', config['mcp_servers'])
+            self.assertEqual(config['projects']['/keep']['trust_level'], 'trusted')
+            with patch.object(module, 'machine_name', return_value='pro'):
+                module.apply()
+            self.assertFalse(tomllib.loads(module.CONFIG.read_text())['mcp_servers']['qgis']['enabled'])
+
+    def test_profiles_reject_secrets_and_insecure_urls(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            for entry in ({'env': {'TOKEN': 'private'}},
+                          {'url': 'https://example.test/mcp?token=private'},
+                          {'url': 'https://example.test/mcp', 'command': '/server'}):
+                snapshot = {'plugins': {}, 'mcp_servers': {}, 'machines': {
+                    'air': {'mcp_servers': {'bad': entry}}}}
+                with self.subTest(entry=entry), self.assertRaises(ValueError):
+                    module.validate(snapshot)
+
     def test_remote_snapshot_preserves_local_stdio_servers_and_repairs_old_overlay(self):
         source = Path.home() / '.config/sync/codex-technical.py'
         spec = importlib.util.spec_from_file_location('codex_technical_test', source)
