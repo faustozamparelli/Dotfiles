@@ -229,12 +229,9 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-w` | Close the active editor tab |
 | VS Code | Command | `Cmd-t` | Show the terminal in an editor tab or return to the previous file |
 | VS Code | Command | `Cmd-Shift-t` | Open a terminal beside the editor |
-| VS Code | Command | `Cmd-e` | Show or hide the file explorer |
-| VS Code | Command | `Cmd-g` | Show or hide Source Control |
-| VS Code | Alt | `Alt-h` | Focus the pane to the left |
-| VS Code | Alt | `Alt-j` | Focus the pane below |
-| VS Code | Alt | `Alt-k` | Focus the pane above |
-| VS Code | Alt | `Alt-l` | Focus the pane to the right |
+| VS Code | Command | `Cmd-j` | Show or hide the file explorer |
+| VS Code | Command | `Cmd-Shift-j` | Show or hide the secondary sidebar |
+| VS Code | Command | `Cmd-k` | Show or hide Source Control |
 | OmniWM | Super | `Super-h` | Focus the window left |
 | OmniWM | Super | `Super-Shift-h` | Move the window left |
 | OmniWM | Super | `Super-j` | Focus the window down |

@@ -86,12 +86,9 @@ vscode.pane.split-down	VS Code	Command	Cmd-n	split-editor-down	Split the editor 
 vscode.tab.close	VS Code	Command	Cmd-w	close-editor	Close the active editor tab
 vscode.terminal.toggle	VS Code	Command	Cmd-t	focus-terminal	Show the terminal in an editor tab or return to the previous file
 vscode.terminal.side	VS Code	Command	Cmd-Shift-t	terminal-side	Open a terminal beside the editor
-vscode.view.explorer	VS Code	Command	Cmd-e	toggle-explorer	Show or hide the file explorer
-vscode.view.git	VS Code	Command	Cmd-g	toggle-git	Show or hide Source Control
-vscode.pane.left	VS Code	Alt	Alt-h	focus-left	Focus the pane to the left
-vscode.pane.down	VS Code	Alt	Alt-j	focus-down	Focus the pane below
-vscode.pane.up	VS Code	Alt	Alt-k	focus-up	Focus the pane above
-vscode.pane.right	VS Code	Alt	Alt-l	focus-right	Focus the pane to the right
+vscode.view.explorer	VS Code	Command	Cmd-j	toggle-explorer	Show or hide the file explorer
+vscode.view.secondary-sidebar	VS Code	Command	Cmd-Shift-j	toggle-secondary-sidebar	Show or hide the secondary sidebar
+vscode.view.git	VS Code	Command	Cmd-k	toggle-git	Show or hide Source Control
 omniwm.focus.left	OmniWM	Super	Super-h	focus.left	Focus the window left
 omniwm.move.left	OmniWM	Super	Super-Shift-h	move.left	Move the window left
 omniwm.focus.down	OmniWM	Super	Super-j	focus.down	Focus the window down

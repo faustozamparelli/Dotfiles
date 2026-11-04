@@ -109,7 +109,7 @@
   "files.autoSave": "onFocusChange",
   "python.useEnvironmentsExtension": false,
   "python.experiments.enabled": false,
-  "git.autofetch": false,
+  "git.autofetch": true,
   "extensions.ignoreRecommendations": true,
   "editor.largeFileOptimizations": true,
   "editor.cursorBlinking": "solid",
