@@ -92,23 +92,40 @@ the selected width. Native macOS fullscreen must be exited before tiling.
 The shared setup is published in ~/.config/omniwm/shared-settings.toml and
 fullscreen-toggle.py. mac-sync runs ~/.config/sync/omniwm-settings.py before
 validating keymaps. New Macs receive the complete stable 0.7.6 configuration;
-existing Macs receive its hotkeys, selected general/bar settings, and Niri
-settings while retaining their workspaces, monitor overrides, and other
-preferences. Each published profile revision is applied once, with a local
+existing Macs receive its portable preferences, hotkeys and app rules while
+retaining their workspace identities, display overrides and routing arrangements.
+This includes appearance, borders, animations, gestures, gaps, Niri/Dwindle,
+overview, clipboard preferences, scratchpad labels and the Quake Terminal.
+Each published profile revision is applied once, with a local
 settings.toml.before-sync backup. A revision stamp under ~/.local/state/omniwm
 keeps hourly sync from resetting subsequent local M/+/- layout changes.
 The live settings.toml, recovery copies, and runtime state are not tracked.
-The Karabiner command resolves $HOME on the destination Mac. After editing
-shared-settings.toml, publish it with the usual reviewed commit/push workflow;
+The Karabiner command resolves $HOME on the destination Mac. `sync-maintain`
+(also called by `bcp`) captures current portable OmniWM preferences into the
+tracked shared-settings.toml before reconciliation. Changes made in OmniWM's
+Settings window therefore appear in the normal dotfiles review. Capture waits
+for initial enrollment and refuses to overwrite an unapplied profile revision;
+run `python3 ~/.config/sync/omniwm-settings.py apply` before capturing when a
+new profile is pending. After changing preferences, publish them with the
+usual reviewed commit/push workflow;
 mac-sync applies the new revision at login/hourly or on demand.
 
-Six isolated deployment tests cover first setup, profile updates, local mode
-preservation, retained workspace/display settings, and rejection of malformed
-or incompatible existing configs. The full just check validation also passes.
+Twelve isolated deployment tests cover first setup, profile updates, capture
+and cross-device application, local mode preservation, retained display/workspace
+state, empty rule lists, removed bindings, and rejection of malformed,
+incompatible or unapplied configurations.
 
-Configured against stable OmniWM 0.7.6. The user chose to keep stable and its
-hardcoded bottom-bar logo; no canary was installed. Original configurations
+Configured against stable OmniWM 0.7.6. Borders and the workspace bar are off;
+animations are enabled at speed 1.0 for Super-H/L transitions (2026-11-05).
+The remaining shared preferences were captured from Air's current config.
+No canary was installed. Original configurations
 and scripts are backed up under ~/.config/omniwm/backup-*.
+
+Verification (2026-11-05): `just --justfile ~/.config/mac-setup/justfile check`
+passed all 77 tests and configuration checks on Air. IPC confirmed the bar
+disabled/hidden and animation ticks during directional focus changes; tiled
+windows retained full display width with borders disabled. Screen capture was
+unavailable, so these checks do not establish visual transition quality.
 
 Verification (2026-11-01): all five tiled windows measured 2056 px wide in
 full-width mode and 1028 px in half-width mode while individually focused.

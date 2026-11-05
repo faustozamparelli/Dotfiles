@@ -55,7 +55,7 @@ top = 0.0
 
 [general]
 animationSpeed = 1.0
-animationsEnabled = false
+animationsEnabled = true
 defaultLayoutType = "niri"
 hotkeysEnabled = true
 hyperKeyModifiers = "Control+Option+Shift+Command"
@@ -105,6 +105,7 @@ singleWindowFit = "container_primary_span"
 visibleContainerCount = 1
 
 defaultContainerPrimarySpan = 1.0
+
 [overview]
 enabled = true
 invertScrollDirection = false
@@ -143,7 +144,7 @@ animationDuration = 0.2
 autoHide = false
 backgroundBlurRadius = 0
 backgroundEffect = "standardBlur"
-enabled = false
+enabled = true
 heightPercent = 50.0
 monitorMode = "focusedWindow"
 opacity = 1.0
@@ -170,7 +171,7 @@ autoHideHideDelayMilliseconds = 0.0
 autoHideRevealDelayMilliseconds = 0.0
 backgroundOpacity = 0.0
 deduplicateAppIcons = false
-enabled = true
+enabled = false
 excludedBundleIDs = []
 height = 40.0
 hideEmptyWorkspaces = false
@@ -897,11 +898,13 @@ binding = "Control+Option+R"
 id = "resetWindowSecondarySpan"
 
 # km:omniwm.width.previous
+
 [[hotkeys]]
 binding = "Control+Option+Command+Minus"
 id = "setContainerPrimarySpan.decrease10Percent"
 
 # km:omniwm.width.next
+
 [[hotkeys]]
 binding = "Control+Option+Command+Equal"
 id = "setContainerPrimarySpan.increase10Percent"
