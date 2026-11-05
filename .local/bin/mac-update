@@ -1,0 +1,208 @@
+#!/usr/bin/python3
+"""Daily, noninteractive Homebrew updates during an unlocked desktop session."""
+import argparse
+import datetime
+import fcntl
+import json
+import os
+from pathlib import Path
+import plistlib
+import re
+import shutil
+import subprocess
+import sys
+
+HOME = Path.home()
+STATE = HOME / '.local/state/app-updates'
+LABEL = 'com.fausto.app-updates'
+ENV = dict(os.environ, PATH='/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
+           HOMEBREW_NO_AUTO_UPDATE='1', HOMEBREW_NO_ASK='1', HOMEBREW_NO_SUDO='1',
+           HOMEBREW_NO_INSTALL_CLEANUP='1', NONINTERACTIVE='1')
+
+
+def command(args, timeout=300):
+    result = subprocess.run(args, env=ENV, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            text=True, timeout=timeout)
+    if result.stderr:
+        print(result.stderr.rstrip(), flush=True)
+    if result.returncode:
+        raise RuntimeError(f'{args!r} exited {result.returncode}: {result.stdout.strip()}')
+    return result.stdout
+
+
+def active_session():
+    if Path('/dev/console').stat().st_uid != os.getuid():
+        return False
+    registry = plistlib.loads(subprocess.check_output(['/usr/sbin/ioreg', '-n', 'Root', '-d1', '-a']))
+    root = registry[0] if isinstance(registry, list) else registry
+    sessions = root.get('IOConsoleUsers', [])
+    if root.get('IOConsoleLocked', True) or not any(s.get('kCGSSessionOnConsoleKey')
+               and s.get('kCGSSessionUserIDKey') == os.getuid()
+               for s in sessions):
+        return False
+    idle = subprocess.check_output(['/usr/sbin/ioreg', '-c', 'IOHIDSystem', '-d', '4'], text=True)
+    match = re.search(r'"HIDIdleTime"\s*=\s*(\d+)', idle)
+    return bool(match and int(match[1]) < 600 * 10**9)
+
+
+def cask_deferral(cask, processes):
+    artifacts = cask.get('artifacts', [])
+    # Installers and lifecycle scripts can stop helpers, services or VPNs.
+    if any(any(k in a for k in ('pkg', 'installer', 'preflight', 'postflight',
+                                'uninstall_preflight', 'uninstall_postflight')) for a in artifacts):
+        return 'installer/helper needs its own updater or an interactive brew upgrade'
+    for artifact in artifacts:
+        uninstall = artifact.get('uninstall', [])
+        if any(any(k != 'quit' for k in entry) for entry in uninstall):
+            return 'service/helper lifecycle needs its own updater or an interactive brew upgrade'
+        for key in ('app', 'binary'):
+            for value in artifact.get(key, []):
+                if not isinstance(value, str):
+                    continue
+                # Match the bundle name even when installed in ~/Applications.
+                marker = value.split('.app')[0].split('/')[-1] + '.app/' if '.app' in value else value
+                if marker in processes:
+                    return 'application or executable is running'
+    return None
+
+
+def native_preferences():
+    """Use bundled Sparkle only; never modify application bundles or update feeds."""
+    mau = Path('/Library/Application Support/Microsoft/MAU2.0/Microsoft AutoUpdate.app')
+    if mau.exists():
+        command(['/usr/bin/defaults', 'write', 'com.microsoft.autoupdate2',
+                 'HowToCheck', '-string', 'AutomaticDownload'])
+        print('Enabled Microsoft AutoUpdate automatic download/install.', flush=True)
+    for directory in (Path('/Applications'), HOME / 'Applications'):
+        for app in directory.glob('*.app'):
+            info = app / 'Contents/Info.plist'
+            try:
+                data = plistlib.loads(info.read_bytes())
+            except (OSError, plistlib.InvalidFileException):
+                continue
+            if not (app / 'Contents/Frameworks/Sparkle.framework').exists():
+                continue
+            domain = data.get('SUDefaultsDomain', data.get('CFBundleIdentifier'))
+            if not domain:
+                continue
+            try:
+                for key, kind, value in (('SUEnableAutomaticChecks', '-bool', 'true'),
+                                         ('SUAutomaticallyUpdate', '-bool', 'true'),
+                                         ('SUScheduledCheckInterval', '-int', '86400')):
+                    command(['/usr/bin/defaults', 'write', domain, key, kind, value])
+                print(f'Enabled native daily updates: {app.name}', flush=True)
+            except RuntimeError as error:
+                print(f'Enable updates in {app.name} settings: {error}', flush=True)
+
+
+def install():
+    STATE.mkdir(parents=True, exist_ok=True)
+    try:
+        native_preferences()
+    except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+        print(f'Native updater configuration needs attention: {error}', flush=True)
+    agent = HOME / 'Library/LaunchAgents' / (LABEL + '.plist')
+    agent.parent.mkdir(parents=True, exist_ok=True)
+    (HOME / 'Library/Logs').mkdir(parents=True, exist_ok=True)
+    config = dict(Label=LABEL, LimitLoadToSessionType=['Aqua'],
+                  ProgramArguments=['/usr/bin/python3', str(Path(__file__).resolve())],
+                  RunAtLoad=True, StartInterval=1800, ProcessType='Background',
+                  LowPriorityIO=True, Nice=10,
+                  StandardOutPath=str(HOME / 'Library/Logs/mac-update.log'),
+                  StandardErrorPath=str(HOME / 'Library/Logs/mac-update.log'))
+    agent.write_bytes(plistlib.dumps(config))
+    domain = f'gui/{os.getuid()}'
+    subprocess.run(['/bin/launchctl', 'bootout', domain + '/' + LABEL], capture_output=True)
+    command(['/bin/launchctl', 'enable', domain + '/' + LABEL])
+    command(['/bin/launchctl', 'bootstrap', domain, str(agent)])
+    print('Installed daily updates (checks eligibility every 30 minutes while awake).')
+    print('App Store automatic updates:', command(['/usr/bin/defaults', 'read',
+          '/Library/Preferences/com.apple.commerce', 'AutoUpdate']).strip())
+
+
+def update(dry_run=False, now=False):
+    STATE.mkdir(parents=True, exist_ok=True)
+    with (STATE / 'lock').open('w') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return
+        today = datetime.date.today().isoformat()
+        stamp = STATE / 'last-run.json'
+        previous = json.loads(stamp.read_text()) if stamp.exists() else {}
+        if not dry_run and not now and (previous.get('date') == today or not active_session()):
+            return
+        brew = shutil.which('brew', path=ENV['PATH'])
+        if not brew:
+            raise RuntimeError('Homebrew is unavailable')
+        print(f'[{datetime.datetime.now().isoformat(timespec="seconds")}] Daily update pass', flush=True)
+        # Failed metadata refresh (e.g. offline) is retried at the next active check.
+        if not dry_run:
+            print(command([brew, 'update']), flush=True)
+        outdated = json.loads(command([brew, 'outdated', '--json=v2', '--greedy-auto-updates']))
+        installed = json.loads(command([brew, 'info', '--json=v2', '--cask', '--installed']))
+        casks = {c['token']: c for c in installed['casks']}
+        failures, deferred = [], []
+        if not dry_run:
+            # Once per local calendar day, including partial failures, across reboots.
+            temporary = stamp.with_suffix('.tmp')
+            temporary.write_text(json.dumps(dict(date=today, failures=[], deferred=[], status='started')))
+            temporary.replace(stamp)
+        if outdated['formulae']:
+            print('Upgrading unpinned Homebrew formulae', flush=True)
+            if not dry_run:
+                try:
+                    print(command([brew, 'upgrade', '--formula'], timeout=3600), flush=True)
+                except (RuntimeError, subprocess.TimeoutExpired) as error:
+                    failures.append(str(error))
+        for entry in outdated['casks']:
+            name = entry['name']
+            if entry.get('pinned'):
+                continue
+            processes = command(['/bin/ps', '-axo', 'command='])
+            cask = casks.get(name.rsplit('/', 1)[-1])
+            reason = cask_deferral(cask, processes) if cask else 'cask metadata unavailable'
+            if reason:
+                deferred.append(f'{name}: {reason}')
+                print(f'Deferred {name}: {reason}', flush=True)
+                continue
+            print(f'Upgrading cask: {name}', flush=True)
+            if not dry_run:
+                try:
+                    print(command([brew, 'upgrade', '--cask', '--greedy-auto-updates', name], timeout=1800), flush=True)
+                except (RuntimeError, subprocess.TimeoutExpired) as error:
+                    failures.append(str(error))
+        if not dry_run:
+            temporary = stamp.with_suffix('.tmp')
+            temporary.write_text(json.dumps(dict(date=today, status='finished', failures=failures, deferred=deferred), indent=2) + '\n')
+            temporary.replace(stamp)
+        for error in failures:
+            print(error, flush=True)
+        print(f'Finished: {len(failures)} failures; {len(deferred)} deferred.', flush=True)
+        return bool(failures)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--install', action='store_true', help='enable native updates and install the login agent')
+    group.add_argument('--status', action='store_true', help='show the last daily pass')
+    group.add_argument('--dry-run', action='store_true', help='inspect cached updates without changing apps or daily state')
+    group.add_argument('--now', action='store_true', help='run now even if already run today or desktop is idle')
+    args = parser.parse_args()
+    if args.install:
+        install()
+    elif args.status:
+        stamp = STATE / 'last-run.json'
+        print(stamp.read_text() if stamp.exists() else 'No update pass recorded yet.')
+    else:
+        return update(args.dry_run, args.now)
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
+        print(f'mac-update: {error}', file=sys.stderr, flush=True)
+        sys.exit(1)

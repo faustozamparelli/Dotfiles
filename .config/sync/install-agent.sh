@@ -34,6 +34,10 @@ sync_status=0
 launchctl enable "$domain/com.fausto.mac-sync"
 launchctl bootstrap "$domain" "$agent"
 
+if [[ "$domain" == gui/* && -f "$HOME/.local/bin/mac-update" ]]; then
+  /usr/bin/python3 "$HOME/.local/bin/mac-update" --install || sync_status=1
+fi
+
 echo "Automatic sync is installed in $domain. Shared apps sync at login and once per hour."
 echo "Some apps still require one-time macOS privacy, helper, or App Store approval."
 if ((sync_status)); then

@@ -8,6 +8,47 @@ The primary workspace is VS Code for editing and Ghostty with Herdr for terminal
 
 ## App Sync
 
+On Air and Pro, `mac-update` checks eligibility every 30 minutes while awake
+and starts one Homebrew update pass per local calendar day when the desktop
+is unlocked and keyboard/mouse activity occurred within ten minutes. It does
+not wake the Mac or prevent sleep. `brew update` refreshes metadata, then
+unpinned formulae and outdated casks (including self-updating casks) upgrade.
+Running apps/executables and casks with installers or service lifecycle hooks
+are deferred; no apps are forcibly quit and sudo is disabled for this job.
+Offline metadata refreshes retry at the next eligible check; partial upgrade
+failures and deferred apps wait for the next day. Pins and direct installers
+(Task Timer and OpenFOAM v2306) keep their reviewed versions. Formula upgrades
+can still affect live command-line environments; no service restart is requested.
+
+`mac-update --install` installs the Aqua-only login agent and enables bundled
+Sparkle automatic checks/downloads with a daily interval, including apps
+installed directly. Native updaters apply their own authorization and restart
+rules ([Sparkle settings](https://sparkle-project.org/documentation/customization/)).
+Where Microsoft AutoUpdate is installed (Pro), setup enables its automatic
+download/install mode ([Microsoft preferences](https://learn.microsoft.com/en-us/microsoft-365-apps/mac/mau-preferences)).
+App Store updates use Apple's separate Automatic Updates setting; Air already
+has it enabled, while Pro needs it enabled in App Store > Settings (or with
+`sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true`).
+The daily job does not run privileged `mas update`, macOS upgrades, or arbitrary
+package-manager self-updates. Safari web apps update with their websites.
+
+Inspect with `mac-update --status`, `mac-update --dry-run`, and
+`tail -100 ~/Library/Logs/mac-update.log`. Use `mac-update --now` to request
+an extra pass; it retains the running-app and installer safeguards. State is
+machine-local in `~/.local/state/app-updates/`. Reinstall with
+`mac-update --install`; remove the schedule with
+`launchctl bootout gui/$(id -u)/com.fausto.app-updates` and remove
+`~/Library/LaunchAgents/com.fausto.app-updates.plist`. Native updater preferences
+are separate and can be changed in each app. Verification commands:
+`/usr/bin/python3 ~/.config/sync/test-app-updates.py` and `mac-update --dry-run`.
+Validation (2026-11-05): seven isolated updater tests passed on each laptop,
+42 existing sync tests passed on Air, both generated plists passed lint and
+both agents loaded. Air's first real pass refreshed Homebrew and started the
+Copilot CLI upgrade. macOS denied writing Air's sandboxed ProtonVPN preferences;
+enable its updater inside the app. Air also lacks Microsoft AutoUpdate, so
+Excel needs an interactive installer update. These are pending local actions;
+neither all apps being current nor future scheduled runs are claimed verified.
+
 Use `mac-app` for applications so they are installed on this Mac now and on
 the other Mac automatically at login or within an hour:
 

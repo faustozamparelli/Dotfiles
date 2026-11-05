@@ -32,6 +32,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/mac-setup \
   .local/bin/mac-app \
   .local/bin/mac-sync \
+  .local/bin/mac-update \
   "Library/Application Support/Code/User/settings.json" \
   "Library/Application Support/Code/User/keybindings.json" \
   "Library/Application Support/Code/User/tasks.json" \
