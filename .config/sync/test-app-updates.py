@@ -30,9 +30,19 @@ class UpdatesTests(unittest.TestCase):
         session = dict(kCGSSessionOnConsoleKey=True, kCGSSessionUserIDKey=os.getuid())
         for locked, idle, expected in ((False, 1, True), (True, 1, False), (False, 601, False)):
             registry = plistlib.dumps(dict(IOConsoleLocked=locked, IOConsoleUsers=[session]))
-            with self.subTest(locked=locked, idle=idle), patch.object(updater.subprocess, 'check_output',
-                    side_effect=[registry, f'"HIDIdleTime" = {idle * 10**9}']):
-                self.assertEqual(updater.active_session(), expected)
+            with self.subTest(locked=locked, idle=idle):
+                with patch.object(updater.Path, 'stat') as console_stat, patch.object(
+                        updater.subprocess, 'check_output',
+                        side_effect=[registry, f'"HIDIdleTime" = {idle * 10**9}']):
+                    console_stat.return_value.st_uid = os.getuid()
+                    self.assertEqual(updater.active_session(), expected)
+
+    def test_other_console_user_is_inactive(self):
+        with patch.object(updater.Path, 'stat') as console_stat:
+            console_stat.return_value.st_uid = os.getuid() + 1
+            with patch.object(updater.subprocess, 'check_output') as check_output:
+                self.assertFalse(updater.active_session())
+                check_output.assert_not_called()
 
     def test_running_app_and_binary_are_deferred(self):
         for artifact, process in (({'app': ['Example.app']}, '/Applications/Example.app/Contents/MacOS/Example'),
