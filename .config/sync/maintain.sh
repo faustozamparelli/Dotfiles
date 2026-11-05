@@ -8,7 +8,6 @@ bare=(git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 python3 "$HOME/.config/sync/codex-technical.py" capture
 python3 "$HOME/.config/sync/app-preferences.py" capture
 python3 "$HOME/.config/sync/helium-apps.py" capture
-python3 "$HOME/.config/sync/omniwm-settings.py" capture
 MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs"
 "$HOME/.config/keymaps/keymap-docs" --check
@@ -24,12 +23,11 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/fish/functions/sync-maintain.fish \
   .config/gh/config.yml \
   .config/ghostty \
+  .hammerspoon/init.lua \
   .config/git/.gitignore \
   .config/herdr \
   .config/karabiner/karabiner.json \
   .config/keymaps \
-  .config/omniwm/shared-settings.toml \
-  .config/omniwm/fullscreen-toggle.py \
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .local/bin/mac-app \

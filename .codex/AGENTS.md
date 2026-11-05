@@ -26,6 +26,12 @@
 - Run relevant checks and important failure cases where possible; inspect numerical/visual outputs. Broaden checks only when changes, failures or unresolved risks justify it. Never claim unverified behavior works; separate actual results from expectations and report regressions, failures and unrun checks.
 - Preserve authoritative requirements unless changes are authorized. Follow existing documentation conventions: record meaningful implementation changes, decisions, evidence, failures, limitations and useful study pointers in living documentation; keep its structure and change log concise. Maintain reproducible commands and outputs in existing reproduction documentation.
 
+## Dotfiles publication
+
+- Standing authorization (2026-11-05): when requested Mac work changes portable configuration, manifests, shortcuts, setup scripts or related documentation, track the completed changes in the bare dotfiles repository, run relevant checks, commit and push automatically before reporting completion. Do not ask separately for permission to publish those changes. Keep secrets, credentials, caches and machine-local runtime state out of Git; preserve unrelated or unfinished work from other sessions.
+- A globally retired app must also lose its obsolete tracked configuration, app-specific helpers/tests, keybindings and sync/capture hooks. Keep its explicit retirement entry so later sync cannot reinstall it. Include those deletions in the same publication; do not leave unused app configuration tracked. A missing app on one Mac, an offline Mac, or a temporary uninstall does not establish global retirement.
+- Reconcile and verify the published changes on reachable Macs, preserving their independent edits. Report any failed push, unreachable Mac, or required local permission instead of silently leaving completed work unpublished or claiming all devices are current.
+
 ## Personal Macs and remote access
 
 - Use the names `studio`, `air`, and `pro`; prefer `studio` for remote work. The user authorizes SSH commands, file edits/transfers, and available desktop automation on these Macs as needed for the requested task. Handle routine work independently and keep consequential changes within scope.

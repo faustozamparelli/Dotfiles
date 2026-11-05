@@ -65,83 +65,60 @@ panes, tabs, and workspaces inherit the current pane's directory.
 
 The shell working directory defines the scope of terminal commands.
 
-## OmniWM Windows and Spaces
+## Windows on One Desktop
+
+OmniWM was retired on 2026-11-05. Its config, capture helpers and bindings
+are removed; retired-apps.tsv prevents reinstall and mac-sync cleans its data.
+
+The com.fausto.window-workflow LaunchAgent runs Hammerspoon 1.1.1
+with ~/.hammerspoon/init.lua at login. Normal resizable
+windows maximize when shown or focused, except the active split pair. Dialogs,
+launchers and fixed-size utility windows keep their native size. Command-Tab
+retains normal macOS behavior. No fullscreen Spaces are created.
 
 Super is Right Command (Control + Option + Command), supplied by Karabiner.
-Super-H/J/K/L focuses left/down/up/right; adding Shift moves the window.
-Super-1..9 selects an existing workspace, and Super-Shift-1..9 sends a window
-there. Only workspaces 1-3 are currently configured. Super-A/D selects the
-previous/next workspace; adding Shift sends a window there. Super-Tab returns
-to the last active workspace (replaces the previous last-monitor shortcut).
+Super-M puts the current app on the left and the most recently focused other
+app on the right. Press it again to maximize both. Super-F also exits the split
+and maximizes the focused window. Super-minus/plus moves the split boundary
+left/right by five percentage points (plus is = without Shift). Dragging the
+inner edge also resizes its neighbor. The boundary is limited to 25-75 percent;
+application minimum sizes still apply. Closing, minimizing or hiding either
+member maximizes the survivor. Other apps stay maximized when switched to.
 
-Super-M switches all Niri workspaces between one full-width window across
-the screen and two half-width windows side by side. Moving focus keeps the
-mode, and new windows inherit it. This replaces the earlier per-window M
-behavior. Super-F, Super-Space, and comma/period width cycling are unassigned.
-Super-B balances sizes in the current mode. Super-plus/minus grows/shrinks
-the current column by 10 percentage points (plus uses =/+ without Shift);
-the next Super-M resets all columns to the selected mode's equal widths.
+Window frame changes have zero animation duration. window-defaults.sh disables
+window/Dock animations, disables Stage Manager and tile
+margins, and sets title-bar double-click to Fill. Some apps read these defaults
+only at next launch. Reduce Motion is left unchanged at the user's request.
+macOS/app-controlled transitions may still occur.
 
-Karabiner invokes ~/.config/omniwm/fullscreen-toggle.py. It changes Niri's
-visibleContainerCount and defaultContainerPrimarySpan in settings.toml,
-then uses OmniWM IPC (enabled) to clear old per-window fullscreen states
-and balance populated Niri workspaces, restoring the original focus.
-Single Window Fit uses the container span so a lone window also follows
-the selected width. Native macOS fullscreen must be exited before tiling.
+Accessibility permission for Hammerspoon is machine-local and must be granted
+in System Settings > Privacy & Security > Accessibility on each Mac. The
+configuration does not alter privacy databases. Studio has no logged-in desktop
+at setup time, so desktop behavior there requires a console login to verify.
 
-The shared setup is published in ~/.config/omniwm/shared-settings.toml and
-fullscreen-toggle.py. mac-sync runs ~/.config/sync/omniwm-settings.py before
-validating keymaps. New Macs receive the complete stable 0.7.6 configuration;
-existing Macs receive its portable preferences, hotkeys and app rules while
-retaining their workspace identities, display overrides and routing arrangements.
-This includes appearance, borders, animations, gestures, gaps, Niri/Dwindle,
-overview, clipboard preferences, scratchpad labels and the Quake Terminal.
-Each published profile revision is applied once, with a local
-settings.toml.before-sync backup. A revision stamp under ~/.local/state/omniwm
-keeps hourly sync from resetting subsequent local M/+/- layout changes.
-The live settings.toml, recovery copies, and runtime state are not tracked.
-The Karabiner command resolves $HOME on the destination Mac. `sync-maintain`
-(also called by `bcp`) captures current portable OmniWM preferences into the
-tracked shared-settings.toml before reconciliation. Changes made in OmniWM's
-Settings window therefore appear in the normal dotfiles review. Capture waits
-for initial enrollment and refuses to overwrite an unapplied profile revision;
-run `python3 ~/.config/sync/omniwm-settings.py apply` before capturing when a
-new profile is pending. After changing preferences, publish them with the
-usual reviewed commit/push workflow;
-mac-sync applies the new revision at login/hourly or on demand.
+Verification (2026-11-05): Air passed 13 live assertions for maximize, current/
+last-used app selection, equal split, keyboard resize, AX resize notifications,
+paired edges, switching away/back, 25-75 percent bounds and return to maximize.
+The resize notification check simulates a border resize through AX; physical
+pointer dragging was not tested. Initial checks caught reversed focus ordering
+and the filter's 0.5-second resize debounce; focus ordering now uses newest-first,
+and the pair observes native resize notifications directly. The regular checks
+passed; the OmniWM retirement test also verifies idempotence and preservation of
+Karabiner settings. Pro passed 12 matching live checks after authorization and
+relaunch; the third-app check was omitted because only two normal windows were
+open. Air and Pro each reported one desktop. Studio has no console
+login; its nine old desktops are scheduled for consolidation after login and
+Accessibility authorization. Consolidation there remains unverified.
 
-Twelve isolated deployment tests cover first setup, profile updates, capture
-and cross-device application, local mode preservation, retained display/workspace
-state, empty rule lists, removed bindings, and rejection of malformed,
-incompatible or unapplied configurations.
-
-Configured against stable OmniWM 0.7.6. Borders and the workspace bar are off;
-animations are enabled at speed 1.0 for Super-H/L transitions (2026-11-05).
-The remaining shared preferences were captured from Air's current config.
-No canary was installed. Original configurations
-and scripts are backed up under ~/.config/omniwm/backup-*.
-
-Verification (2026-11-05): `just --justfile ~/.config/mac-setup/justfile check`
-passed all 77 tests and configuration checks on Air. IPC confirmed the bar
-disabled/hidden and animation ticks during directional focus changes; tiled
-windows retained full display width with borders disabled. Screen capture was
-unavailable, so these checks do not establish visual transition quality.
-
-Verification (2026-11-01): all five tiled windows measured 2056 px wide in
-full-width mode and 1028 px in half-width mode while individually focused.
-An old per-window fullscreen flag was cleared successfully. Both modes also
-passed across two populated workspaces, with the original focus restored.
-The first cross-workspace check exposed asynchronous focus changes; the
-command now waits for the destination window before balancing. Earlier checks
-passed H/L focus and A/D workspace switching. Karabiner's native linter
-accepted the M rule, its service reloaded it, and keymap-docs --check passes.
-Screenshot capture was unavailable; geometry was verified through IPC.
+Inspect with `hs -c 'print(hs.accessibilityState()); print(hs.inspect(hs.spaces.allSpaces()))'`.
+Exercise the layout with `hs -c 'windowWorkflow.toggle()'`,
+`hs -c 'windowWorkflow.resize(0.05)'` and `hs -c 'windowWorkflow.finish()'`.
 
 ## Keyboard Layers
 
 The configuration assigns each modifier a stable job:
 
-- `Right Cmd` (`Super`): global macOS windows, workspaces, and app launchers.
+- `Right Cmd` (`Super`): global macOS maximize/split controls.
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
@@ -249,25 +226,10 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-j` | Show or hide the file explorer |
 | VS Code | Command | `Cmd-Shift-j` | Show or hide the secondary sidebar |
 | VS Code | Command | `Cmd-k` | Show or hide Source Control |
-| OmniWM | Super | `Super-h` | Focus the window left |
-| OmniWM | Super | `Super-Shift-h` | Move the window left |
-| OmniWM | Super | `Super-j` | Focus the window down |
-| OmniWM | Super | `Super-Shift-j` | Move the window down |
-| OmniWM | Super | `Super-k` | Focus the window up |
-| OmniWM | Super | `Super-Shift-k` | Move the window up |
-| OmniWM | Super | `Super-l` | Focus the window right |
-| OmniWM | Super | `Super-Shift-l` | Move the window right |
-| OmniWM | Super | `Super-1..9` | Switch directly to an existing workspace (currently 1-3) |
-| OmniWM | Super | `Super-Shift-1..9` | Send the focused window to an existing workspace |
-| OmniWM | Super | `Super-a` | Switch to the previous workspace |
-| OmniWM | Super | `Super-d` | Switch to the next workspace |
-| OmniWM | Super | `Super-Shift-a` | Send the focused window to the previous workspace |
-| OmniWM | Super | `Super-Shift-d` | Send the focused window to the next workspace |
-| OmniWM | Super | `Super-tab` | Return to the last active workspace |
-| OmniWM | Super | `Super-b` | Balance window and column sizes |
-| OmniWM | Super | `Super-+ (=/+ key, no Shift)` | Grow the Niri column width by 10 percentage points |
-| OmniWM | Super | `Super--` | Shrink the Niri column width by 10 percentage points |
-| Karabiner | Super | `Super-m` | Toggle all Niri windows between full and half width |
+| Hammerspoon | Super | `Super-m` | Toggle current and last-used app between split and maximized |
+| Hammerspoon | Super | `Super-f` | Maximize and leave the current split |
+| Hammerspoon | Super | `Super--` | Move the split boundary left by five percentage points |
+| Hammerspoon | Super | `Super-+ (=/+ key, no Shift)` | Move the split boundary right by five percentage points |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
@@ -1178,7 +1140,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
 | GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |
 | SF Mono | Shared font installation; no separate application preferences. |
-| OmniWM | Shared stable configuration, Super key shortcuts and full/half-width layout command; local display/workspace state retained on updates. |
+| Hammerspoon | Tracked one-desktop maximize/split configuration; Accessibility authorization stays local. |
 
 The Air is the minimal Mac: it uses the common shared app list without local
 extras. Every explicit shared-app uninstall from the Pro or Studio must reach
@@ -1348,9 +1310,16 @@ Agents working on this setup must follow these rules:
    keep formulae local unless deliberately added to `packages.txt`.
 8. Only entries explicitly recorded in `retired-apps.tsv` may cause app
    removal during sync.
-9. `mac-app` may commit and push its own manifest targets. App Shortcuts sync
-   may commit and push only its separate `app-shortcuts` data branch. Leave
-   unrelated commits and pushes manual.
+9. Publish completed agent-made Mac changes automatically after relevant checks:
+   stage the task's portable configuration, manifests, scripts and documentation,
+   commit, and push the bare dotfiles repository without asking again. Preserve
+   unrelated or unfinished edits and exclude secrets and machine-local state.
+   `mac-app` publishes its manifest targets; App Shortcuts sync publishes only
+   its separate `app-shortcuts` data branch.
+10. Global app retirement also removes its unused tracked configuration,
+    app-specific helpers/tests, keybindings and sync/capture hooks. Publish these
+    deletions with the retirement entry, which prevents later reinstall. Missing
+    software on one Mac or an offline Mac does not establish global retirement.
 
 For every custom keybinding change:
 
@@ -1369,7 +1338,11 @@ For periodic sync maintenance:
 1. Run `sync-maintain`.
 2. Inspect `bare status` and relevant diffs.
 3. Report installations and any one-time permissions still needed.
-4. Ask before running `bcp`.
+4. Commit and push the completed changes automatically after checks. For a
+   scoped agent task, use explicit paths and a descriptive message so unrelated
+   concurrent edits stay intact; `bcp` remains available for interactive use.
+5. Reconcile reachable Macs with the published version and report any network,
+   permission or push failure. Never silently leave completed changes unpublished.
 
 For a new Mac, verify `bare pull --ff-only` and `bare status`, run the installer
 and maintenance script, then report missing manual sign-ins and permissions.
@@ -1385,7 +1358,6 @@ python3 ~/.config/sync/test-mac-sync.py
 python3 ~/.config/sync/test-bcp.py
 python3 ~/.config/sync/test-vscode-local.py
 python3 ~/.config/sync/test-background-cleanup.py
-python3 ~/.config/sync/test-omniwm-settings.py
 python3 ~/.config/sync/test-helium-apps.py
 python3 ~/.config/sync/helium-apps.py check
 jq empty ~/.config/karabiner/karabiner.json

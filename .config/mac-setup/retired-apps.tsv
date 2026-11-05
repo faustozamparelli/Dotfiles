@@ -39,3 +39,4 @@ mas	462062816	Microsoft PowerPoint
 formula	neovim	Neovim
 formula	lua-language-server	Lua language server
 formula	tree-sitter-cli	Tree-sitter CLI
+cask	omniwm	OmniWM

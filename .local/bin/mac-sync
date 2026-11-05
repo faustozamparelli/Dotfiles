@@ -469,6 +469,20 @@ cleanup_retired_desktop_tool() {
   fi
 
   case "$token" in
+    omniwm)
+      pkill -x OmniWM 2>/dev/null || true
+      rm -f -- "$HOME/.config/sync/__pycache__"/omniwm-settings.*.pyc || return 1
+      rm -rf -- "$HOME/.config/omniwm" "$HOME/.local/state/omniwm" \
+        "$HOME/Library/Application Support/com.barut.OmniWM" \
+        "$HOME/Library/Caches/com.barut.OmniWM" \
+        "$HOME/Library/HTTPStorages/com.barut.OmniWM" \
+        "$HOME/Library/HTTPStorages/com.barut.OmniWM.binarycookies" \
+        "$HOME/Library/Logs/OmniWM" \
+        "$HOME/Library/Saved Application State/com.barut.OmniWM.savedState" || return 1
+      if defaults read com.barut.OmniWM >/dev/null 2>&1; then
+        defaults delete com.barut.OmniWM || return 1
+      fi
+      ;;
     obsidian)
       # Vaults are user documents, separate from Obsidian's application state.
       rm -rf -- "$HOME/Library/Application Support/obsidian" \
@@ -591,7 +605,7 @@ retire_manifest() {
     fi
 
     case "$token" in
-      obsidian|spotify|vorssaint|maghue)
+      omniwm|obsidian|spotify|vorssaint|maghue)
         if { [[ -d "$app_path" ]] && ! is_safari_web_app "$app_path"; } ||
            { [[ -d "$HOME/Applications/$name.app" ]] && ! is_safari_web_app "$HOME/Applications/$name.app"; }; then
           echo "Cannot clean $name's data while its app bundle remains installed." >&2
@@ -906,7 +920,7 @@ if [[ -f "$vscode_disabled" && -n "$vscode_cli" ]]; then
 fi
 
 python3 "$HOME/.config/sync/app-preferences.py" apply || failed=1
-python3 "$HOME/.config/sync/omniwm-settings.py" || failed=1
+bash "$setup/window-defaults.sh" || failed=1
 if [[ -f "$setup/retire-tailscale-power.sh" ]]; then
   bash "$setup/retire-tailscale-power.sh" || failed=1
 fi

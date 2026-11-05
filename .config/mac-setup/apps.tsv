@@ -7,11 +7,11 @@ cask	copilot-cli	copilot-cli
 cask	font-sf-mono	SF Mono
 cask	ghostty	Ghostty
 cask	helium-browser	Helium
+cask	hammerspoon	Hammerspoon
 cask	karabiner-elements	Karabiner-Elements
 cask	lihaoyun6/tap/quickrecorder	QuickRecorder
 cask	macwhisper	MacWhisper
 cask	microsoft-excel	Microsoft Excel
-cask	omniwm	omniwm
 cask	orbstack	OrbStack
 cask	protonvpn	ProtonVPN
 cask	raycast	Raycast

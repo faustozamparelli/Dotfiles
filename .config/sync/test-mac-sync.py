@@ -325,6 +325,23 @@ is_skipped() {{ return 1; }}
         self.assertEqual(vault.read_text(), 'keep my notes')
         self.assertEqual(other.read_text(), 'keep my notes')
 
+    def test_omniwm_cleanup_is_idempotent_and_preserves_other_configuration(self):
+        paths = ['.config/omniwm', '.local/state/omniwm',
+                 'Library/Application Support/com.barut.OmniWM',
+                 'Library/Caches/com.barut.OmniWM']
+        for relative in paths:
+            (self.root / 'home' / relative).mkdir(parents=True)
+        keyboard = self.root / 'home/.config/karabiner/karabiner.json'
+        keyboard.parent.mkdir(parents=True)
+        keyboard.write_text('keep keyboard settings')
+        result = self.run_shell(DESKTOP_CLEANUP + '''
+cleanup_retired_desktop_tool omniwm || exit 1
+cleanup_retired_desktop_tool omniwm
+''', 'pkill() { :; }\ndefaults() { :; }')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(all(not (self.root / 'home' / p).exists() for p in paths))
+        self.assertEqual(keyboard.read_text(), 'keep keyboard settings')
+
     def test_spotify_cleanup_is_idempotent_and_preserves_browser_data(self):
         cache = self.root / 'home/Library/Caches/com.spotify.client'
         browser = self.root / 'home/Library/Application Support/Helium/profile'
