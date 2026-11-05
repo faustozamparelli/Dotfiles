@@ -9,7 +9,9 @@ packages="$setup/packages.txt"
 retired="$setup/retired-apps.tsv"
 bare=(git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME")
 
-pull=true
+pull=false
+check=false
+scheduled=false
 quiet=false
 prune_packages=false
 timing=false
@@ -19,6 +21,16 @@ stage_name="Dotfiles and shortcuts"
 
 for arg in "$@"; do
   case "$arg" in
+    --check)
+      check=true
+      ;;
+    --scheduled)
+      check=true
+      scheduled=true
+      ;;
+    --pull)
+      pull=true
+      ;;
     --no-pull)
       pull=false
       ;;
@@ -33,9 +45,12 @@ for arg in "$@"; do
       ;;
     -h|--help)
       cat <<'EOF'
-usage: mac-sync [--no-pull] [--quiet] [--timing] [--nuke]
+usage: mac-sync [--check | --scheduled] [--pull] [--no-pull] [--quiet] [--timing] [--nuke]
 
 Options:
+  --check            Report local manifest drift without applying configuration.
+  --scheduled        Exchange menu-shortcut data, then check local manifests.
+  --pull             Explicitly fetch/apply incoming dotfiles before manual sync.
   --no-pull          Do not automatically pull the dotfiles repository.
   --quiet            Suppress normal informational output.
   --timing           Print elapsed seconds for each sync stage.
@@ -51,6 +66,17 @@ EOF
       ;;
   esac
 done
+
+if $check; then
+  if $pull || $prune_packages; then
+    echo "--check cannot be combined with --pull or --nuke" >&2
+    exit 2
+  fi
+  if $scheduled; then
+    /opt/homebrew/bin/python3 "$HOME/.config/sync/app-shortcuts.py" || exit 1
+  fi
+  exec /usr/bin/python3 "$HOME/.config/sync/mac-sync-check.py" "$@"
+fi
 
 log() {
   $quiet || printf '%s\n' "$*"
@@ -837,8 +863,7 @@ install_manifest() {
         if [[ ! -d "/Applications/$name.app" ]]; then
 
           if ! launchctl print "gui/$UID" >/dev/null 2>&1; then
-            echo "Cannot install $name from the App Store without a desktop login. Log in to macOS and the App Store on this Mac, then rerun mac-sync." >&2
-            failed=1
+            echo "Deferred $name: App Store installation requires a desktop login. Log in to macOS and the App Store on this Mac, then rerun mac-sync." >&2
             continue
           fi
 

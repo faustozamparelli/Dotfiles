@@ -38,7 +38,7 @@ if [[ "$domain" == gui/* && -f "$HOME/.local/bin/mac-update" ]]; then
   /usr/bin/python3 "$HOME/.local/bin/mac-update" --install || sync_status=1
 fi
 
-echo "Automatic sync is installed in $domain. Shared apps sync at login and once per hour."
+echo "Scheduled shortcut-data sync and manifest checks are installed in $domain (login/hourly). Run mac-sync to apply reviewed setup changes."
 echo "Some apps still require one-time macOS privacy, helper, or App Store approval."
 if ((sync_status)); then
   echo "Initial sync had errors; automatic sync remains enabled. Resolve the messages above and rerun mac-sync." >&2

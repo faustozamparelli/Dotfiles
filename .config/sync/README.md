@@ -49,8 +49,8 @@ enable its updater inside the app. Air also lacks Microsoft AutoUpdate, so
 Excel needs an interactive installer update. These are pending local actions;
 neither all apps being current nor future scheduled runs are claimed verified.
 
-Use `mac-app` for applications so they are installed on this Mac now and on
-the other Mac automatically at login or within an hour:
+Use `mac-app` to install and publish application choices on this Mac. On
+other Macs, review incoming dotfiles, then run `mac-sync --pull` to apply them:
 
 ```sh
 mac-app firefox
@@ -839,8 +839,8 @@ mac-sync
 a desktop login. It loads the hourly agent in the background user domain when
 no GUI domain exists. Initial sync errors are reported without disabling the
 agent; administrator authorization or App Store sign-in may still be needed.
-Missing App Store apps are reported immediately when no desktop session is
-logged in, rather than launching `mas` and waiting indefinitely. Log in to the
+Missing App Store apps are deferred without failing the manual sync when no
+desktop session is logged in, rather than launching `mas` and waiting indefinitely. Log in to the
 Mac's desktop and App Store, then rerun `mac-sync` to finish those installs.
 App retirement over SSH moves intact bundles into unique
 `~/.Trash/mac-sync-retired.*` folders without Finder. If permissions require
@@ -903,13 +903,14 @@ mac-app remove firefox
 mac-app remove --mas 497799835
 ```
 
-`mac-app` records, commits, and pushes app changes. A LaunchAgent pulls and
-reconciles at login and hourly. Per-Mac app lists and skip lists live under
+`mac-app` records, commits, and pushes app changes. A LaunchAgent exchanges
+menu-shortcut data and checks local manifests at login and hourly; it never
+pulls executable configuration, installs software, or removes retired data. Per-Mac app lists and skip lists live under
 `~/.config/mac-setup/machines/`. Direct downloads require a checksum-pinned
 installer under `direct/`. `mac-app remove` takes a shared app identifier,
 removes its row from `apps.tsv`, records the exact row in `retired-apps.tsv`,
 and runs `mac-sync` locally. Run `mac-sync` manually on the other Mac to apply
-the removal there; its scheduled sync may apply it sooner. Ordinary manifest
+the removal there. Scheduled checks do not apply retirements. Ordinary manifest
 edits do not uninstall software. Sharing or locally installing a retired app
 again clears its retirement entry.
 
@@ -1046,9 +1047,9 @@ staging. `bcp` then asks for a commit message when changes are staged and pushes
 It stops on maintenance, staging, diff or commit failures; a clean tree skips
 the commit prompt and still retries a previously failed push. Push/report
 failures return a nonzero status. `bcp` is manual; only `mac-sync` runs at login
-and hourly. The latter pulls only when tracked/staged dotfiles are clean and
-then applies the local configuration, so unpublished edits prevent incoming
-updates until reviewed and committed. Run `source ~/.config/fish/config.fish`
+and hourly. Scheduled runs exchange only menu-shortcut data and check local
+application/package drift; incoming code and setup changes require manual
+`mac-sync --pull`. A plain `mac-sync` applies the current local checkout. Run `source ~/.config/fish/config.fish`
 in existing Fish shells to load updated function definitions.
 
 Verification on Pro (2026-11-02): `just --justfile ~/.config/mac-setup/justfile
@@ -1068,8 +1069,8 @@ their names and URLs. `sync-maintain` also captures and stages this list when
 run on its own. Capture adds apps and updates names; an app missing on one Mac
 never deletes it from the shared list.
 
-The other Mac receives the shared list through `mac-sync` at login and hourly,
-or when you run it manually. At the very end of `mac-sync` or `bcp`, each
+The other Mac receives the shared list after a reviewed manual
+`mac-sync --pull`. At the very end of `mac-sync` or `bcp`, each
 missing app gets a reminder in this exact format:
 
 ```text
@@ -1139,8 +1140,8 @@ manifest. Local-only apps are excluded. `app-preferences.py apply` runs during
 changes made in the apps can be staged. Publish those changes with `bcp` from
 any Mac; the other Macs apply them during their next sync. There is no master
 Mac. Unpublished changes do not automatically propagate.
-Run `bcp` after changing a shared preference: hourly sync reapplies the
-published values. Fausto selected Raycast, T3 and Tailscale (Dock visibility
+Run `bcp` after changing a shared preference; apply reviewed incoming values
+on other Macs with `mac-sync --pull`. Fausto selected Raycast, T3 and Tailscale (Dock visibility
 only); CodexBar keeps its existing enabled profile. QuickRecorder, MacWhisper
 and OrbStack preference sharing remain off.
 
@@ -1201,9 +1202,9 @@ The portable Qalculate numeric/formatting preferences in
 `~/.config/qalculate/qalc.cfg` are tracked; calculation histories stay local.
 
 Obsidian, Spotify, Vorssaint, and MagHue are retired on every synced Mac. Their named
-application data and caches are removed during sync; privileged helpers need
-administrator authorization (`sudo -v` before `mac-sync`). Scheduled sync
-reports missing authorization without opening a password prompt. Obsidian
+application data and caches are removed during manual sync; privileged helpers need
+administrator authorization (`sudo -v` before `mac-sync`). Scheduled checks
+never remove apps or invoke privileged helpers. Obsidian
 retirement removes app state only; note vaults remain user documents.
 Same-named Safari web apps are preserved and do not block native-app data
 cleanup; Spotify's Safari wrapper is a separate lightweight installation.
@@ -1234,8 +1235,8 @@ locally for review instead of permanently deleting it.
 
 Closed-app background policy (2026-11-02): preserve normal background work
 while an app is open, including CodexBar polling and Wispr dictation. Their
-startup behavior stays unchanged. The same cleanup script, already called by
-hourly/login `mac-sync`, now sends SIGTERM to reviewed orphaned Beeper Contacts
+startup behavior stays unchanged. The same cleanup script, called by
+manual `mac-sync`, sends SIGTERM to reviewed orphaned Beeper Contacts
 and crash-report helpers, Wispr's native companion/crash reporter, and Helium
 or VS Code crash reporters only after their main app is absent. It checks the
 current user, exact executable, parent PID 1 and app state again before acting.
@@ -1415,3 +1416,31 @@ friction that existing tools cannot solve clearly.
 The custom `research-handoff` skill is retired on all Macs. After `bare pull`,
 run `python3 ~/.config/sync/codex-technical.py apply` to remove the local copy.
 The OpenAI-provided PDF plugin remains enabled.
+
+## Security baseline (2026-11-05)
+
+The login/hourly job runs `mac-sync --scheduled --quiet`: the existing reviewed
+shortcut helper exchanges JSON data on its separate Git branch, then a local
+manifest check reports missing applications/packages. It does not fetch or
+execute incoming dotfiles, install apps/extensions, rewrite app preferences,
+or delete retired data. Diagnostic state in `~/.local/state/mac-sync/check.json`
+suppresses repeated unchanged reports. `mac-sync --check` checks without even
+exchanging shortcut data. Exit 1 means manifest drift; exit 2 means an error.
+A plain `mac-sync` applies the current checkout without pulling; `--pull` is
+explicit and still refuses incoming changes while tracked/staged work is dirty.
+The separate approved `mac-update` app updater retains its existing policy.
+
+`python3 ~/.config/mac-setup/security-baseline.py user` restricts T3 userdata
+to 0700 and known credential files to 0600. Its explicit `system` mode requires
+sudo, validates/removes the obsolete Vorssaint sudo rule, protects Studio's
+existing daemon directory without restarting Tailscale, enables the firewall
+with SSH/Tailscale/T3 exceptions, and removes the dormant Public Folder SMB
+share and guest access. It installs no daemon or passwordless sudo permission.
+The archived sudo rule is root-only in `/var/db/com.fausto.mac-security/`.
+FileVault enrollment/recovery is machine-local; no keys or credentials belong
+in this repository. Fausto explicitly declined Time Machine and additional cross-Mac copies.
+GitHub/iCloud remain the selected recovery routes; loss of local-only work
+is accepted. Only committed and pushed content is recoverable from GitHub.
+
+Verify with `python3 ~/.config/sync/test-sync-check.py`, the existing sync
+tests, `mac-sync --check`, `fdesetup status`, and the firewall/ownership checks.

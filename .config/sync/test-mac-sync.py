@@ -253,11 +253,11 @@ is_skipped() {{ return 1; }}
         mas.write_text('#!/bin/sh\nprintf "%s\\n" "$*" > "$SYNC_TEST_ROOT/mas-called"\n')
         mas.chmod(0o755)
 
-    def test_headless_app_store_install_reports_requirement_without_starting_mas(self):
+    def test_headless_app_store_install_defers_without_starting_mas(self):
         self.configure_app_store(desktop=False)
         result = self.apps('mas\t123456\tFixture Store App\n')
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('without a desktop login', result.stderr)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('requires a desktop login', result.stderr)
         self.assertFalse((self.root / 'mas-called').exists())
 
     def test_existing_app_store_app_needs_no_desktop_session(self):

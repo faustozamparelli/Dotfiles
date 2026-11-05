@@ -12,6 +12,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>__HOME__/.local/bin/mac-sync</string>
+    <string>--scheduled</string>
     <string>--quiet</string>
   </array>
   <key>RunAtLoad</key>
