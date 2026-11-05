@@ -66,7 +66,8 @@ def main():
         json.dump(findings, stream, indent=2)
         stream.write('\n')
     temporary.replace(record)
-    return bool(findings)
+    # Expected drift is diagnostic for the hourly job, not an execution error.
+    return bool(findings) and '--scheduled' not in sys.argv[1:]
 
 
 if __name__ == '__main__':

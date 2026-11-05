@@ -1425,7 +1425,8 @@ manifest check reports missing applications/packages. It does not fetch or
 execute incoming dotfiles, install apps/extensions, rewrite app preferences,
 or delete retired data. Diagnostic state in `~/.local/state/mac-sync/check.json`
 suppresses repeated unchanged reports. `mac-sync --check` checks without even
-exchanging shortcut data. Exit 1 means manifest drift; exit 2 means an error.
+exchanging shortcut data. Manual checks return 1 for manifest drift; scheduled
+checks report drift without failing the job. Exit 2 means an execution error.
 A plain `mac-sync` applies the current checkout without pulling; `--pull` is
 explicit and still refuses incoming changes while tracked/staged work is dirty.
 The separate approved `mac-update` app updater retains its existing policy.

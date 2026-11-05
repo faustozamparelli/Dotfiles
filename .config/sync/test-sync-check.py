@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location('check', Path.home() / '.config/sync/mac-sync-check.py')
 CHECK = importlib.util.module_from_spec(SPEC)
@@ -41,6 +42,16 @@ class CheckTests(unittest.TestCase):
         (self.setup / 'apps.tsv').unlink()
         with self.assertRaises(ValueError):
             self.inspect()
+
+    def test_scheduled_drift_is_reported_without_failing_the_job(self):
+        with patch.object(CHECK.Path, 'home', return_value=self.home), \
+             patch.object(CHECK.subprocess, 'check_output', return_value='Test'), \
+             patch.object(CHECK, 'inspect', return_value=['Missing Store App']), \
+             patch.object(CHECK.sys, 'argv', ['check', '--scheduled', '--quiet']):
+            self.assertEqual(CHECK.main(), 0)
+            record = self.home / '.local/state/mac-sync/check.json'
+            self.assertIn('Missing Store App', record.read_text())
+            self.assertEqual(record.stat().st_mode & 0o777, 0o600)
 
     def test_check_rejects_mutating_options_before_execution(self):
         script = Path.home() / '.local/bin/mac-sync'
