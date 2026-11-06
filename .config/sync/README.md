@@ -12,17 +12,29 @@ On Air and Pro, `mac-update` checks eligibility every 30 minutes while awake
 and starts one Homebrew update pass per local calendar day when the desktop
 is unlocked and keyboard/mouse activity occurred within ten minutes. It does
 not wake the Mac or prevent sleep. `brew update` refreshes metadata, then
-unpinned formulae and outdated casks (including self-updating casks) upgrade.
-Running apps/executables and casks with installers or service lifecycle hooks
-are deferred; no apps are forcibly quit and sudo is disabled for this job.
-Offline metadata refreshes retry at the next eligible check; partial upgrade
-failures and deferred apps wait for the next day. Pins and direct installers
+unpinned formulae upgrade and outdated cask archives download, including for
+open apps. Downloads use `brew fetch --cask`, which does not quit or replace
+the installed app. Closed apps then upgrade; open apps remain in a persistent
+pending queue. Subsequent active checks (up to 30 minutes after closing an app)
+finish queued installs without another metadata refresh, formula upgrade or
+download pass that day. If another tool changes the target version, the queue
+waits for the next daily download. Native updaters may also finish on app exit.
+Processes are checked again after downloading; Homebrew receives `--no-quit`
+as well. The user-approved policy (2026-11-06) is to download while working and
+finish after closing, without automatically quitting or restarting apps.
+Installer/service casks still download but require their native updater or
+interactive approval to install. Login-item stanzas (preserved by Homebrew on
+upgrade) and app-only ShipIt updater helpers are allowed for closed apps.
+VPNs, other services and arbitrary lifecycle scripts remain deferred; sudo
+is disabled for this job. Offline metadata refreshes retry at the next eligible
+check; failed downloads or installs retry on the next daily pass. Pins and direct installers
 (Task Timer and OpenFOAM v2306) keep their reviewed versions. Formula upgrades
 can still affect live command-line environments; no service restart is requested.
 
-`mac-update --install` installs the Aqua-only login agent and enables bundled
-Sparkle automatic checks/downloads with a daily interval, including apps
-installed directly. Native updaters apply their own authorization and restart
+`mac-update --install` installs the Aqua-only login agent. Setup and each fresh
+daily pass enable bundled Sparkle automatic checks/downloads with a daily
+interval, including apps installed directly and nested frameworks such as
+Helium's. Native updaters apply their own authorization and restart
 rules ([Sparkle settings](https://sparkle-project.org/documentation/customization/)).
 Where Microsoft AutoUpdate is installed (Pro), setup enables its automatic
 download/install mode ([Microsoft preferences](https://learn.microsoft.com/en-us/microsoft-365-apps/mac/mau-preferences)).
@@ -34,7 +46,8 @@ package-manager self-updates. Safari web apps update with their websites.
 
 Inspect with `mac-update --status`, `mac-update --dry-run`, and
 `tail -100 ~/Library/Logs/mac-update.log`. Use `mac-update --now` to request
-an extra pass; it retains the running-app and installer safeguards. State is
+an extra download pass; it retains the running-app and installer safeguards.
+The `pending` field in `--status` lists cached versions awaiting installation. State is
 machine-local in `~/.local/state/app-updates/`. Reinstall with
 `mac-update --install`; remove the schedule with
 `launchctl bootout gui/$(id -u)/com.fausto.app-updates` and remove
@@ -48,6 +61,11 @@ Copilot CLI upgrade. macOS denied writing Air's sandboxed ProtonVPN preferences;
 enable its updater inside the app. Air also lacks Microsoft AutoUpdate, so
 Excel needs an interactive installer update. These are pending local actions;
 neither all apps being current nor future scheduled runs are claimed verified.
+Validation (2026-11-06): the updated isolated tests cover open-app downloads,
+installation after closing without a second daily fetch, an app opening during
+download, native-updater completion, metadata changes, failed downloads, nested
+Sparkle discovery, and preserved login items/ShipIt helpers. Studio retains
+the previously requested one-time update scope; no schedule is installed there.
 
 Use `mac-app` to install and publish application choices on this Mac. On
 other Macs, review incoming dotfiles, then run `mac-sync --pull` to apply them:

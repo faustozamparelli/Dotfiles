@@ -50,12 +50,19 @@ def cask_deferral(cask, processes):
     artifacts = cask.get('artifacts', [])
     # Installers and lifecycle scripts can stop helpers, services or VPNs.
     if any(any(k in a for k in ('pkg', 'installer', 'preflight', 'postflight',
+                                'preflight_steps', 'postflight_steps',
                                 'uninstall_preflight', 'uninstall_postflight')) for a in artifacts):
         return 'installer/helper needs its own updater or an interactive brew upgrade'
     for artifact in artifacts:
         uninstall = artifact.get('uninstall', [])
-        if any(any(k != 'quit' for k in entry) for entry in uninstall):
-            return 'service/helper lifecycle needs its own updater or an interactive brew upgrade'
+        for entry in uninstall:
+            # Homebrew preserves login items on upgrade. ShipIt is the app's
+            # updater, rather than an independently running service or VPN.
+            services = entry.get('launchctl', [])
+            services = [services] if isinstance(services, str) else services
+            if any(k not in ('quit', 'login_item', 'launchctl') for k in entry) or any(
+                    not service.endswith('.ShipIt') for service in services):
+                return 'service/helper lifecycle needs its own updater or an interactive brew upgrade'
         for key in ('app', 'binary'):
             for value in artifact.get(key, []):
                 if not isinstance(value, str):
@@ -81,7 +88,7 @@ def native_preferences():
                 data = plistlib.loads(info.read_bytes())
             except (OSError, plistlib.InvalidFileException):
                 continue
-            if not (app / 'Contents/Frameworks/Sparkle.framework').exists():
+            if not any((app / 'Contents/Frameworks').glob('**/Sparkle.framework')):
                 continue
             domain = data.get('SUDefaultsDomain', data.get('CFBundleIdentifier'))
             if not domain:
@@ -131,26 +138,48 @@ def update(dry_run=False, now=False):
         today = datetime.date.today().isoformat()
         stamp = STATE / 'last-run.json'
         previous = json.loads(stamp.read_text()) if stamp.exists() else {}
-        if not dry_run and not now and (previous.get('date') == today or not active_session()):
+        finishing = not dry_run and not now and previous.get('date') == today
+        if not dry_run and not now and ((finishing and not previous.get('pending')) or
+                                       not active_session()):
             return
         brew = shutil.which('brew', path=ENV['PATH'])
         if not brew:
             raise RuntimeError('Homebrew is unavailable')
-        print(f'[{datetime.datetime.now().isoformat(timespec="seconds")}] Daily update pass', flush=True)
+        label = 'Finishing downloaded app updates' if finishing else 'Daily update pass'
+        print(f'[{datetime.datetime.now().isoformat(timespec="seconds")}] {label}', flush=True)
         # Failed metadata refresh (e.g. offline) is retried at the next active check.
-        if not dry_run:
+        if not dry_run and not finishing:
+            try:
+                native_preferences()
+            except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+                print(f'Native updater configuration needs attention: {error}', flush=True)
             print(command([brew, 'update']), flush=True)
         outdated = json.loads(command([brew, 'outdated', '--json=v2', '--greedy-auto-updates']))
         installed = json.loads(command([brew, 'info', '--json=v2', '--cask', '--installed']))
         casks = {c['token']: c for c in installed['casks']}
-        failures, deferred = [], []
-        if not dry_run:
-            # Once per local calendar day, including partial failures, across reboots.
+        failures = list(previous.get('failures', [])) if finishing else []
+        deferred = []
+        pending = dict(previous.get('pending', {}))
+        if finishing:
+            outdated['formulae'] = []
+            outdated['casks'] = [c for c in outdated['casks'] if c['name'] in pending]
+        eligible = {c['name'] for c in outdated['casks'] if not c.get('pinned')}
+        pending = {name: version for name, version in pending.items() if name in eligible}
+
+        def save(status):
+            if dry_run:
+                return
             temporary = stamp.with_suffix('.tmp')
-            temporary.write_text(json.dumps(dict(date=today, failures=[], deferred=[], status='started')))
+            temporary.write_text(json.dumps(dict(date=today, status=status, failures=failures,
+                                                  deferred=deferred, pending=pending), indent=2) + '\n')
             temporary.replace(stamp)
+
+        if not dry_run:
+            # Persist today's scan; later checks may finish its queued installs.
+            save('started')
         if outdated['formulae']:
-            print('Upgrading unpinned Homebrew formulae', flush=True)
+            print('Would upgrade unpinned Homebrew formulae' if dry_run else
+                  'Upgrading unpinned Homebrew formulae', flush=True)
             if not dry_run:
                 try:
                     print(command([brew, 'upgrade', '--formula'], timeout=3600), flush=True)
@@ -160,23 +189,41 @@ def update(dry_run=False, now=False):
             name = entry['name']
             if entry.get('pinned'):
                 continue
+            if finishing and pending[name] != entry.get('current_version'):
+                deferred.append(f'{name}: newer metadata awaits the next daily download pass')
+                continue
+            # Fetch first, then check processes again: an app may have opened
+            # during a long download. Fetch never quits or replaces the app.
+            if not finishing:
+                print(f'{"Would download" if dry_run else "Downloading"} app update: {name}', flush=True)
+                if not dry_run:
+                    pending.pop(name, None)
+                    try:
+                        print(command([brew, 'fetch', '--cask', name], timeout=1800), flush=True)
+                        pending[name] = entry.get('current_version')
+                        save('started')
+                    except (RuntimeError, subprocess.TimeoutExpired) as error:
+                        failures.append(str(error))
+                        save('started')
+                        continue
             processes = command(['/bin/ps', '-axo', 'command='])
             cask = casks.get(name.rsplit('/', 1)[-1])
             reason = cask_deferral(cask, processes) if cask else 'cask metadata unavailable'
             if reason:
                 deferred.append(f'{name}: {reason}')
                 print(f'Deferred {name}: {reason}', flush=True)
+                save('started')
                 continue
-            print(f'Upgrading cask: {name}', flush=True)
+            print(f'{"Would upgrade" if dry_run else "Upgrading"} cask: {name}', flush=True)
             if not dry_run:
                 try:
-                    print(command([brew, 'upgrade', '--cask', '--greedy-auto-updates', name], timeout=1800), flush=True)
+                    print(command([brew, 'upgrade', '--cask', '--greedy-auto-updates', '--no-quit', name], timeout=1800), flush=True)
+                    pending.pop(name, None)
                 except (RuntimeError, subprocess.TimeoutExpired) as error:
                     failures.append(str(error))
-        if not dry_run:
-            temporary = stamp.with_suffix('.tmp')
-            temporary.write_text(json.dumps(dict(date=today, status='finished', failures=failures, deferred=deferred), indent=2) + '\n')
-            temporary.replace(stamp)
+                    pending.pop(name, None)
+            save('started')
+        save('finished')
         for error in failures:
             print(error, flush=True)
         print(f'Finished: {len(failures)} failures; {len(deferred)} deferred.', flush=True)

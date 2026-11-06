@@ -25,6 +25,9 @@ class UpdatesTests(unittest.TestCase):
         self.patch = patch.object(updater, 'STATE', self.state)
         self.patch.start()
         self.addCleanup(self.patch.stop)
+        self.native = patch.object(updater, 'native_preferences')
+        self.native.start()
+        self.addCleanup(self.native.stop)
 
     def test_active_session_needs_unlocked_console_and_recent_input(self):
         session = dict(kCGSSessionOnConsoleKey=True, kCGSSessionUserIDKey=os.getuid())
@@ -56,6 +59,12 @@ class UpdatesTests(unittest.TestCase):
                          {'uninstall': [{'script': 'uninstall.sh'}]}):
             self.assertIsNotNone(updater.cask_deferral({'artifacts': [artifact]}, ''))
 
+    def test_closed_app_updater_and_login_items_can_upgrade(self):
+        cask = dict(artifacts=[dict(app=['Example.app']), dict(uninstall=[
+            dict(quit='example.app', login_item='Example', launchctl='example.app.ShipIt')])])
+        self.assertIsNone(updater.cask_deferral(cask, '/bin/fish'))
+        self.assertIsNotNone(updater.cask_deferral(cask, '/Applications/Example.app/Contents/MacOS/Example'))
+
     def test_daily_stamp_and_inactive_desktop_prevent_work(self):
         stamp = self.state / 'last-run.json'
         stamp.write_text(json.dumps(dict(date=datetime.date.today().isoformat())))
@@ -69,7 +78,7 @@ class UpdatesTests(unittest.TestCase):
 
     def fake_command(self, args, **kwargs):
         if 'outdated' in args:
-            return json.dumps(dict(formulae=[], casks=[dict(name='example', pinned=False)]))
+            return json.dumps(dict(formulae=[], casks=[dict(name='example', pinned=False, current_version='2.0')]))
         if 'info' in args:
             return json.dumps(dict(casks=[dict(token='example', artifacts=[dict(app=['Example.app'])])]))
         if 'ps' in args[0]:
@@ -80,7 +89,9 @@ class UpdatesTests(unittest.TestCase):
         with patch.object(updater, 'command', side_effect=self.fake_command) as command:
             updater.update(dry_run=True)
         self.assertFalse((self.state / 'last-run.json').exists())
-        self.assertFalse(any('update' in c.args[0] or 'upgrade' in c.args[0] for c in command.call_args_list))
+        self.assertFalse(any(any(action in c.args[0] for action in ('update', 'upgrade', 'fetch'))
+                             for c in command.call_args_list))
+        updater.native_preferences.assert_not_called()
 
     def test_failure_does_not_prevent_other_casks_and_is_recorded(self):
         def fail_upgrade(args, **kwargs):
@@ -98,6 +109,94 @@ class UpdatesTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 updater.update()
         self.assertFalse((self.state / 'last-run.json').exists())
+
+    def test_running_app_downloads_once_then_installs_after_close_without_refresh(self):
+        running = True
+
+        def command(args, **kwargs):
+            if args[:2] == ['/bin/ps', '-axo']:
+                return '/Applications/Example.app/Contents/MacOS/Example' if running else '/bin/fish'
+            return self.fake_command(args, **kwargs)
+
+        with patch.object(updater, 'command', side_effect=command) as calls, patch.object(updater, 'active_session', return_value=True):
+            updater.update(now=True)
+            self.assertFalse(any('upgrade' in c.args[0] for c in calls.call_args_list))
+            state = json.loads((self.state / 'last-run.json').read_text())
+            self.assertEqual(state['pending'], {'example': '2.0'})
+            calls.reset_mock()
+            updater.update()
+            self.assertFalse(any('fetch' in c.args[0] or 'update' in c.args[0] or 'upgrade' in c.args[0]
+                                 for c in calls.call_args_list))
+            running = False
+            calls.reset_mock()
+            updater.update()
+            upgrades = [c.args[0] for c in calls.call_args_list if 'upgrade' in c.args[0]]
+            self.assertEqual(len(upgrades), 1)
+            self.assertIn('--no-quit', upgrades[0])
+            self.assertFalse(any('fetch' in c.args[0] or 'update' in c.args[0] for c in calls.call_args_list))
+            self.assertEqual(json.loads((self.state / 'last-run.json').read_text())['pending'], {})
+
+    def test_app_opened_during_download_is_not_replaced(self):
+        opened = False
+
+        def command(args, **kwargs):
+            nonlocal opened
+            if 'fetch' in args:
+                opened = True
+            if args[0] == '/bin/ps':
+                return '/Applications/Example.app/Contents/MacOS/Example' if opened else ''
+            return self.fake_command(args, **kwargs)
+
+        with patch.object(updater, 'command', side_effect=command) as calls:
+            updater.update(now=True)
+        self.assertFalse(any('upgrade' in c.args[0] for c in calls.call_args_list))
+
+    def test_native_updater_completes_pending_update_without_homebrew_reinstall(self):
+        stamp = self.state / 'last-run.json'
+        stamp.write_text(json.dumps(dict(date=datetime.date.today().isoformat(), pending={'example': '2.0'})))
+
+        def command(args, **kwargs):
+            if 'outdated' in args:
+                return json.dumps(dict(formulae=[], casks=[]))
+            return self.fake_command(args, **kwargs)
+
+        with patch.object(updater, 'command', side_effect=command) as calls, patch.object(updater, 'active_session', return_value=True):
+            updater.update()
+        self.assertFalse(any('upgrade' in c.args[0] for c in calls.call_args_list))
+        self.assertEqual(json.loads(stamp.read_text())['pending'], {})
+
+    def test_failed_fetch_leaves_installed_app_untouched(self):
+        (self.state / 'last-run.json').write_text(json.dumps(dict(
+            date=datetime.date.today().isoformat(), pending={'example': '2.0'})))
+
+        def command(args, **kwargs):
+            if 'fetch' in args:
+                raise RuntimeError('fixture download failed')
+            return self.fake_command(args, **kwargs)
+
+        with patch.object(updater, 'command', side_effect=command) as calls:
+            self.assertTrue(updater.update(now=True))
+        self.assertFalse(any('upgrade' in c.args[0] for c in calls.call_args_list))
+        self.assertEqual(json.loads((self.state / 'last-run.json').read_text())['pending'], {})
+
+    def test_changed_metadata_waits_for_next_daily_download(self):
+        stamp = self.state / 'last-run.json'
+        stamp.write_text(json.dumps(dict(date=datetime.date.today().isoformat(), pending={'example': '1.0'})))
+        with patch.object(updater, 'command', side_effect=self.fake_command) as calls, patch.object(updater, 'active_session', return_value=True):
+            updater.update()
+        self.assertFalse(any('upgrade' in c.args[0] or 'fetch' in c.args[0] for c in calls.call_args_list))
+        self.assertEqual(json.loads(stamp.read_text())['pending'], {'example': '1.0'})
+
+    def test_native_preferences_include_nested_sparkle_framework(self):
+        home = self.state / 'home'
+        app = home / 'Applications/Fixture.app'
+        (app / 'Contents/Frameworks/Fixture.framework/Frameworks/Sparkle.framework').mkdir(parents=True)
+        (app / 'Contents/Info.plist').write_bytes(plistlib.dumps(dict(CFBundleIdentifier='test.fixture.updater')))
+        self.native.stop()
+        with patch.object(updater, 'HOME', home), patch.object(updater, 'command') as calls:
+            updater.native_preferences()
+        expected = ['/usr/bin/defaults', 'write', 'test.fixture.updater', 'SUAutomaticallyUpdate', '-bool', 'true']
+        self.assertIn(expected, [c.args[0] for c in calls.call_args_list])
 
 
 if __name__ == '__main__':
