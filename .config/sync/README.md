@@ -15,7 +15,7 @@ not wake the Mac or prevent sleep. `brew update` refreshes metadata, then
 unpinned formulae upgrade and outdated cask archives download, including for
 open apps. Downloads use `brew fetch --cask`, which does not quit or replace
 the installed app. Closed apps then upgrade; open apps remain in a persistent
-pending queue. Subsequent active checks (up to 30 minutes after closing an app)
+pending queue. Subsequent active checks (every 30 minutes while the Mac is in use)
 finish queued installs without another metadata refresh, formula upgrade or
 download pass that day. If another tool changes the target version, the queue
 waits for the next daily download. Native updaters may also finish on app exit.
@@ -61,11 +61,16 @@ Copilot CLI upgrade. macOS denied writing Air's sandboxed ProtonVPN preferences;
 enable its updater inside the app. Air also lacks Microsoft AutoUpdate, so
 Excel needs an interactive installer update. These are pending local actions;
 neither all apps being current nor future scheduled runs are claimed verified.
-Validation (2026-11-06): the updated isolated tests cover open-app downloads,
+Validation (2026-11-06): 15 updater tests passed on Air and Studio; 42 existing
+sync tests passed on Air. Coverage includes open-app downloads,
 installation after closing without a second daily fetch, an app opening during
 download, native-updater completion, metadata changes, failed downloads, nested
 Sparkle discovery, and preserved login items/ShipIt helpers. Studio retains
 the previously requested one-time update scope; no schedule is installed there.
+A live Air run cached updates for running Codex and Helium without closing
+them. Post-close installation is covered by the isolated tests; a real user
+quit event has not yet been observed. Pro was unreachable over Tailscale and
+its LAN hostname did not resolve, so deployment there remains pending.
 
 Use `mac-app` to install and publish application choices on this Mac. On
 other Macs, review incoming dotfiles, then run `mac-sync --pull` to apply them:
