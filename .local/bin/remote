@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Explicit, AC-only remote sessions. Native Python/launchd; no login automation."""
+"""Timed AC-only awake/remote sessions sharing one sleep recovery record."""
 import argparse
 import contextlib
 import fcntl
@@ -26,6 +26,17 @@ APP = "/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
 class ModeError(Exception):
     pass
+
+
+def mode_name(state):
+    return "Awake" if state.get("local_only", False) else "Remote"
+
+
+def check_mode(state, local_only):
+    if state.get("local_only", False) != local_only:
+        active = mode_name(state).lower()
+        raise ModeError("A " + active + " session already owns the sleep settings. Run "
+                        + active + " stop before switching modes.")
 
 
 def run(args, timeout=20, check=True):
@@ -91,7 +102,8 @@ def result(ok, message):
 
 def notify(state, message):
     try:
-        script = 'display notification ' + json.dumps(message) + ' with title "Remote failed"'
+        script = ('display notification ' + json.dumps(message) + ' with title '
+                  + json.dumps(mode_name(state) + " failed"))
         as_user(state, ["/usr/bin/osascript", "-e", script], timeout=5, check=False)
     except ModeError:
         pass
@@ -291,7 +303,7 @@ def watch():
                 state["phase"] = "restoring"
                 state["end_reason"] = reason
                 save(state)
-                print("Restoring remote mode: " + reason, flush=True)
+                print("Restoring " + mode_name(state).lower() + " mode: " + reason, flush=True)
                 try:
                     timed = state.get("sleep_on_expiry", False) and reason == "session expired"
                     restore(state, remove=not timed)
@@ -302,7 +314,7 @@ def watch():
                             sleep_failure(state, "Native sleep request failed: " + str(error))
                             return
                         continue
-                    result(True, "Remote OFF: " + reason + ". Previous settings restored.")
+                    result(True, mode_name(state) + " OFF: " + reason + ". Previous settings restored.")
                     print("Previous sleep/VPN state restored.", flush=True)
                     return
                 except ModeError as error:
@@ -311,24 +323,29 @@ def watch():
         time.sleep(2)
 
 
-def root_start(uid, seconds):
+def root_start(uid, seconds, local_only=False):
+    name = "Awake" if local_only else "Remote"
     if uid == 0:
         raise ModeError("Start as your normal account; the command will use sudo as needed.")
     pwd.getpwuid(uid)
     with locked():
         existing = load()
         if existing is not None:
+            check_mode(existing, local_only)
             if existing["phase"] != "active" or existing["uid"] != uid or existing["boot"] != boot_id():
-                raise ModeError("A cleanup or sleep request is pending. Run remote status, then remote stop.")
-            if not on_ac() or vpn_state(existing) != "Running":
-                raise ModeError("Cannot renew: connect power and Tailscale first, or run remote stop.")
+                raise ModeError("A cleanup or sleep request is pending. Run " + name.lower()
+                                + " status, then " + name.lower() + " stop.")
+            if not on_ac():
+                raise ModeError("Cannot renew: connect the power adapter first.")
+            if not local_only and vpn_state(existing) != "Running":
+                raise ModeError("Cannot renew: connect Tailscale first, or run remote stop.")
             try:
                 install_watchdog()
                 set_sleep(1)
                 existing.update(deadline=time.time() + seconds, sleep_on_expiry=True)
                 existing.pop("last_error", None)
                 save(existing)
-                result(True, "Remote session renewed.")
+                result(True, name + " session renewed.")
             except (ModeError, OSError, ValueError, KeyError) as original:
                 existing["phase"] = "restoring"
                 save(existing)
@@ -339,22 +356,24 @@ def root_start(uid, seconds):
                     raise ModeError(existing["last_error"]) from original
                 result(False, "Renewal failed; previous settings restored: " + str(original))
                 raise
-            print("Remote ON until " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(existing["deadline"]))
-                  + "; then native system sleep. Stop early: remote stop")
+            print(name + " ON until " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(existing["deadline"]))
+                  + "; then native system sleep. Stop early: " + name.lower() + " stop")
             return
         if not on_ac():
-            raise ModeError("Connect the power adapter before starting remote mode.")
-        cli, gui = select_cli()
+            raise ModeError("Connect the power adapter before starting " + name.lower() + " mode.")
+        cli, gui = (None, True) if local_only else select_cli()
         if gui and os.stat("/dev/console").st_uid != uid:
-            raise ModeError("Log in to this Mac's desktop before using its Tailscale app.")
+            raise ModeError("Log in to this Mac's desktop before starting " + name.lower() + " mode.")
         state = {"uid": uid, "gui": gui, "cli": cli, "boot": boot_id(),
+                 "local_only": local_only,
                  "sleep_before": sleep_disabled(), "deadline": time.time() + seconds, "sleep_on_expiry": True,
                  "phase": "starting", "connected_by_mode": False, "opened_by_mode": False}
-        before = vpn_state(state)
-        if before not in ("Running", "Stopped"):
-            raise ModeError("Tailscale is " + before + "; sign in/connect manually first.")
-        state["connected_by_mode"] = before == "Stopped"
-        state["opened_by_mode"] = gui and not app_running(uid)
+        if not local_only:
+            before = vpn_state(state)
+            if before not in ("Running", "Stopped"):
+                raise ModeError("Tailscale is " + before + "; sign in/connect manually first.")
+            state["connected_by_mode"] = before == "Stopped"
+            state["opened_by_mode"] = gui and not app_running(uid)
         save(state)
         try:
             # Recovery must exist before any VPN or persistent power change.
@@ -364,7 +383,7 @@ def root_start(uid, seconds):
             if state["connected_by_mode"]:
                 # No CLI flags: retain existing route/DNS/exit-node preferences.
                 as_user(state, [cli, "up"], timeout=30)
-            if vpn_state(state) != "Running":
+            if not local_only and vpn_state(state) != "Running":
                 raise ModeError("Tailscale is not connected.")
             if not on_ac():
                 raise ModeError("Power was disconnected during startup.")
@@ -372,7 +391,7 @@ def root_start(uid, seconds):
             state["phase"] = "active"
             state["deadline"] = time.time() + seconds
             save(state)
-            result(True, "Remote session started.")
+            result(True, name + " session started.")
         except (ModeError, OSError, ValueError, KeyError) as original:
             state["phase"] = "restoring"
             save(state)
@@ -383,17 +402,20 @@ def root_start(uid, seconds):
                 raise ModeError(state["last_error"]) from original
             result(False, "Start failed; previous settings restored: " + str(original))
             raise
-    print("Remote ON until " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(state["deadline"]))
-          + "; then native system sleep. Stop early: remote stop")
+    print(name + " ON until " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(state["deadline"]))
+          + "; then native system sleep. Stop early: " + name.lower() + " stop")
 
 
-def root_stop():
+def root_stop(local_only=False):
+    name = "Awake" if local_only else "Remote"
     with locked():
         state = load()
         if state is None:
-            print("Remote is already OFF.")
+            print(name + " is already OFF.")
             return
-        print("Stopping remote; SSH may disconnect if this session started Tailscale.", flush=True)
+        check_mode(state, local_only)
+        print("Stopping awake." if local_only else
+              "Stopping remote; SSH may disconnect if this session started Tailscale.", flush=True)
         state["stop"] = True
         state["phase"] = "restoring"
         save(state)
@@ -404,28 +426,35 @@ def root_stop():
         except ModeError as error:
             failure(state, "Stop failed; cleanup is pending: " + str(error))
             raise
-        result(True, "Remote OFF. Previous sleep/VPN state restored.")
-    print("Remote OFF. Previous sleep/VPN state restored.")
+        message = name + " OFF. Previous " + ("sleep" if local_only else "sleep/VPN") + " state restored."
+        result(True, message)
+    print(message)
 
 
-def status():
+def status(local_only=False):
     state = load()
     errors = []
     if state is None:
-        print("Remote OFF. No active remote session or polling watchdog is needed.")
+        name = "Awake" if local_only else "Remote"
+        print(name + " OFF. No active awake/remote session or polling watchdog is needed.")
         if RESULT.exists():
             previous = json.loads(RESULT.read_text())
             print("Last result: " + previous["message"])
             if not previous["ok"]:
                 errors.append(previous["message"])
     else:
-        print("Remote: " + state["phase"] + (" (stop requested)" if state.get("stop") else ""))
+        name = mode_name(state)
+        local_only = state.get("local_only", False)
+        print(name + ": " + state["phase"] + (" (stop requested)" if state.get("stop") else ""))
         print("Expires: " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(state["deadline"]))
               + ("; then native system sleep" if state.get("sleep_on_expiry") else "; restore previous settings"))
-        print("Tailscale will be " + ("disconnected" if state["connected_by_mode"] else "preserved") + " on stop.")
+        if local_only:
+            print("Local work only; Tailscale and SSH are not managed or required.")
+        else:
+            print("Tailscale will be " + ("disconnected" if state["connected_by_mode"] else "preserved") + " on stop.")
         service = run(["/bin/launchctl", "print", "system/" + LABEL], check=False)
         if service.returncode or not re.search(r"(?m)^\s*pid = \d+", service.stdout):
-            errors.append("Recovery watchdog is not running. Run remote stop to restore settings.")
+            errors.append("Recovery watchdog is not running. Run " + name.lower() + " stop to restore settings.")
         if state.get("last_error"):
             errors.append(state["last_error"])
         if state["phase"] == "active":
@@ -435,22 +464,24 @@ def status():
                 errors.append("Power disconnected; cleanup has not completed.")
             if sleep_disabled() != 1:
                 errors.append("Sleep override is missing; lid-closed access is not protected.")
-            try:
-                vpn = (vpn_state(state) if os.getuid() == 0 else
-                       json.loads(run([state["cli"], "status", "--json"]).stdout)["BackendState"])
-                if vpn != "Running":
-                    errors.append("Tailscale is " + vpn + ".")
-            except (ModeError, ValueError, KeyError) as error:
-                errors.append("Cannot check Tailscale: " + str(error))
+            if not local_only:
+                try:
+                    vpn = (vpn_state(state) if os.getuid() == 0 else
+                           json.loads(run([state["cli"], "status", "--json"]).stdout)["BackendState"])
+                    if vpn != "Running":
+                        errors.append("Tailscale is " + vpn + ".")
+                except (ModeError, ValueError, KeyError) as error:
+                    errors.append("Cannot check Tailscale: " + str(error))
     print("Power: " + ("AC" if on_ac() else "battery"))
     print("SleepDisabled: " + str(sleep_disabled()))
-    try:
-        with socket.create_connection(("127.0.0.1", 22), timeout=2):
-            print("SSH: listening locally (peer access still needs a network test).")
-    except OSError:
-        print("SSH: not listening on localhost:22; enable Remote Login for SSH access.")
-        if state and state["phase"] == "active":
-            errors.append("SSH is not listening on localhost:22.")
+    if not local_only:
+        try:
+            with socket.create_connection(("127.0.0.1", 22), timeout=2):
+                print("SSH: listening locally (peer access still needs a network test).")
+        except OSError:
+            print("SSH: not listening on localhost:22; enable Remote Login for SSH access.")
+            if state and state["phase"] == "active":
+                errors.append("SSH is not listening on localhost:22.")
     for error in errors:
         print("ERROR: " + error, file=sys.stderr)
     return 1 if errors else 0
@@ -461,42 +492,55 @@ def main():
         if os.getuid() != 0:
             raise ModeError("Internal recovery operations require root.")
         internal = sys.argv[1:]
+        local_only = internal[-1:] == ["local"]
+        if local_only:
+            internal = internal[:-1]
         if internal == ["_watch"]:
+            if local_only:
+                raise ModeError("Invalid internal operation")
             watch()
         elif internal == ["_root", "stop"]:
-            root_stop()
+            root_stop(local_only=local_only)
         elif len(internal) == 4 and internal[:2] == ["_root", "start"]:
             seconds = int(internal[3])
             if not 1 <= seconds <= 7 * 86400:
                 raise ModeError("Duration must be between 1 second and 7 days.")
-            root_start(int(internal[2]), seconds)
+            root_start(int(internal[2]), seconds, local_only=local_only)
         else:
             raise ModeError("Invalid internal operation")
         return
+    local_only = Path(sys.argv[0]).name == "awake"
+    name = "awake" if local_only else "remote"
+    default_seconds = 12600 if local_only else 12 * 3600
+    default_duration = "3h30m" if local_only else "12h"
     parser = argparse.ArgumentParser(
-        description="Temporary AC-only, lid-closed remote access over Tailscale.",
-        usage="remote {start [duration],stop,status}",
-        epilog="Examples: remote start; remote start 30m; remote start 2h; remote start 1h30m. "
-               "Default: 12h; range: 1s–7d. Starting again resets the timer. Expiry restores settings "
+        description=("Keep this Mac awake on AC for local work, without managing Tailscale or SSH."
+                     if local_only else "Temporary AC-only, lid-closed remote access over Tailscale."),
+        usage=name + " {start [duration],stop,status}",
+        epilog="Examples: " + name + " start; " + name + " start 30m; " + name + " start 2h. "
+               "Default: " + default_duration + "; range: 1s–7d. Starting again resets the timer. Expiry restores settings "
                "and requests native system sleep. Standby/hibernation settings stay unchanged. "
                "Stop restores settings without forcing sleep. Nothing auto-starts on AC. "
-               "Errors are printed and return a nonzero status; automatic failures appear in remote status.")
+               "Only one awake/remote session can run at a time. "
+               "Errors return a nonzero status; automatic failures appear in " + name + " status.")
     parser.add_argument("action", choices=("start", "stop", "status"))
     parser.add_argument("arguments", nargs="*")
     args = parser.parse_args()
     if args.action == "status" and not args.arguments:
-        return status()
+        return status(local_only=local_only)
     elif args.action in ("start", "stop"):
         command = ["/usr/bin/sudo", "/usr/bin/python3", "-I", str(Path(__file__).resolve()), "_root", args.action]
         if args.action == "start":
             if len(args.arguments) > 1:
-                parser.error("Usage: remote start [duration], e.g. remote start 30m")
-            seconds = duration(args.arguments[0]) if args.arguments else 12 * 3600
+                parser.error("Usage: " + name + " start [duration], e.g. " + name + " start 30m")
+            seconds = duration(args.arguments[0]) if args.arguments else default_seconds
             if not on_ac():
-                raise ModeError("Connect the power adapter before starting remote mode.")
+                raise ModeError("Connect the power adapter before starting " + name + " mode.")
             command += [str(int(os.environ.get("SUDO_UID", os.getuid()))), str(seconds)]
         elif args.arguments:
-            parser.error("Usage: remote stop")
+            parser.error("Usage: " + name + " stop")
+        if local_only:
+            command.append("local")
         os.execv(command[0], command)
     else:
         parser.error("Unexpected arguments")
@@ -506,5 +550,5 @@ if __name__ == "__main__":
     try:
         sys.exit(main() or 0)
     except (ModeError, OSError, ValueError, KeyError) as error:
-        print("remote: ERROR: " + str(error), file=sys.stderr)
+        print(Path(sys.argv[0]).name + ": ERROR: " + str(error), file=sys.stderr)
         sys.exit(1)

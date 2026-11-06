@@ -10,6 +10,7 @@ check:
     /usr/bin/python3 ~/.config/sync/test-sync-check.py
     /usr/bin/python3 ~/.config/sync/test-app-updates.py
     python3 ~/.config/sync/test-bcp.py
+    /usr/bin/python3 ~/.config/sync/test-remote-mode.py
     python3 ~/.config/sync/test-vscode-local.py
     python3 ~/.config/sync/test-background-cleanup.py
     python3 ~/.config/sync/test-helium-apps.py

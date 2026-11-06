@@ -57,8 +57,9 @@ mac-app remove firefox                  # remove here; run mac-sync on the other
 
 The command records the app change, commits it, and pushes it. `mac-app remove`
 also removes the shared app locally and records its retirement; run `mac-sync`
-on the other Mac to apply the removal there. A LaunchAgent also runs `mac-sync`
-at login and hourly. Direct downloads require a small reviewed installer under
+on the other Mac to apply the removal there. At login and hourly a LaunchAgent
+exchanges menu-shortcut data and checks manifests; it does not install apps or
+pull executable configuration. Direct downloads require a small reviewed installer under
 `~/.config/mac-setup/direct` with a pinned checksum.
 
 Managed installs on the MacBook Air always join the common shared set. Use
@@ -87,10 +88,93 @@ Run a sync immediately with:
 mac-sync
 ```
 
-## Keyboard model
+## Keep work running on this Mac
+
+For T3 Code/Codex waiting for a usage-limit reset, start a local awake session
+long enough to cover the wait **and** the work after it:
+
+```sh
+awake start         # 3h30m; does not open, connect, or require Tailscale
+awake status
+awake start 5h      # optional duration; replaces the deadline, keeps the snapshot
+awake stop          # restore previous sleep settings early
+```
+
+Leave T3 Code running with its resume/retry feature enabled and keep internet
+available. `awake` only prevents this Mac from sleeping; it does not schedule
+T3 retries, reset Codex limits, or move work to another Mac. The display may
+turn off and the screen may lock without ending the session. Do not log out
+or quit T3 while waiting.
+
+For access from another machine, use the existing VPN-aware command instead:
+
+```sh
+remote start 2h     # connects Tailscale if needed; preserves an existing session
+remote status
+remote stop        # restores sleep and only the VPN state remote created
+```
+
+Both modes require AC power and normal administrator authorization at start/
+stop. `awake` defaults to 3h30m; `remote` keeps its 12h default. Explicit
+durations include `30m`, `2h`, `1h30m`, up to 7d. Only one mode can run at a
+time: stop it before switching. Unplugging, logout, reboot or interrupted
+startup restores the saved settings. **At timed expiry, the helper requests
+native macOS sleep**; stopping early restores settings without forcing sleep.
+Nothing starts automatically when plugged in. Existing VPN sessions are
+untouched by `awake`; it does not disable Remote Login.
+
+For closed-lid work while plugged in, `awake` uses the same system sleep
+override as `remote`, without its VPN dependency. Headless closed-lid operation
+on Air still needs a physical test; the implementation and logic tests do not
+prove it. Apple's documented closed-display setup uses external displays,
+power, and an external keyboard/mouse or trackpad
+([Apple requirements](https://support.apple.com/en-us/117373)). Start while
+awake; this is not a wake-from-sleep or power-on service.
+
+## Updates and math PDFs
+
+On Air and Pro, `mac-update` checks every 30 minutes while awake. Once a day,
+when you are actively using the unlocked Mac, it updates Homebrew formulae
+and downloads app updates even for open apps. It installs queued app updates
+after those apps close, without automatically quitting them. Native updaters,
+App Store updates, and installers needing approval follow their own rules.
+Studio has no recurring update schedule.
+
+```sh
+mac-update --status    # inspect pending versions
+mac-update --dry-run  # inspect eligibility and planned work
+mac-update --now      # request an extra pass with the same safeguards
+```
+
+Tectonic and Pandoc provide lightweight math PDFs without a full TeX install:
+
+```sh
+tectonic --keep-logs document.tex
+pandoc document.md --pdf-engine=tectonic -o document.pdf
+tectonic --only-cached document.tex  # offline after required files are cached
+```
+
+Tectonic downloads support files on first use. AMS math, theorem environments,
+TikZ/PGFPlots and BibTeX are covered by `~/.config/mac-setup/latex-smoke.tex`.
+LuaLaTeX, minted/Pygments and Biber may need additional tooling. Pro's math
+tool rollout remains pending until it is reachable.
+
+## Keyboard and window controls
 
 - Right Command is the global Super key, implemented by Karabiner.
 - Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
+- Super-M splits the current app and the last other app; press again to maximize.
+- Super-F maximizes; Super-minus/plus moves the split boundary.
+
+Hammerspoon manages windows on one desktop and needs Accessibility permission
+on each Mac. Normal windows maximize when focused unless they belong to the
+active split. Ghostty attaches to persistent Herdr terminal sessions; VS Code
+is the editor. Codex runs through T3 Code; the terminal CLI is also available.
+
+Fish keeps `amsc`, `sv`, `gcp`, `bcp`, `py`, `l`/`ls`, `cl`, and `keymap-docs`.
+`gcp` stages, commits and pushes the current repository; `bcp` maintains the
+bare dotfiles repository. The unused `nb`, `b`, `o`, and Codex stealth wrapper
+were removed; use `jupyter lab`, `bat`, `open`, and the normal `codex` command.
 
 The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
 readable generated table is in `~/.config/sync/README.md`.

@@ -13,7 +13,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs" --check
 
 "${bare[@]}" add -u -- .config/sync
-"${bare[@]}" add -u -- .codex/AGENTS.md .ssh/config .local/bin/air-power-setup
+"${bare[@]}" add -u -- .codex/AGENTS.md .ssh/config .local/bin/air-power-setup .local/bin/remote
 "${bare[@]}" add \
   .config/sync/vscode-markdown-preview-wrap \
   .gitconfig \
@@ -33,6 +33,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .local/bin/mac-app \
   .local/bin/mac-sync \
   .local/bin/mac-update \
+  .local/bin/awake \
   "Library/Application Support/Code/User/settings.json" \
   "Library/Application Support/Code/User/keybindings.json" \
   "Library/Application Support/Code/User/tasks.json" \

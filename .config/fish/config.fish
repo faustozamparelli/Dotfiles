@@ -1,7 +1,7 @@
 set -gx HOMEBREW_PREFIX /opt/homebrew
 set -gx PNPM_HOME $HOME/Library/pnpm
 
-# Keep one deterministic toolchain path on both Macs. fish_add_path normalizes
+# Keep one deterministic toolchain path on all Macs. fish_add_path normalizes
 # paths and prevents the duplicate Homebrew entries produced by editing PATH.
 set -g fish_user_paths
 fish_add_path -g \
@@ -11,7 +11,6 @@ fish_add_path -g \
     $HOMEBREW_PREFIX/bin \
     $HOMEBREW_PREFIX/sbin
 
-# mac-sync maintains a stable Homebrew Python command for editor integrations.
 test -f ~/.config/fish/secrets.fish; and source ~/.config/fish/secrets.fish
 alias bare "/opt/homebrew/bin/git --git-dir=$HOME/.config/git/dotfiles --work-tree=$HOME"
 
@@ -19,11 +18,10 @@ set -gx THEME dark
 set -gx EDITOR /usr/bin/nano
 set -gx VISUAL /usr/bin/nano
 set fish_greeting ""
-set -g pure_enable_git true
 
-#zoxide setup
-if type -q zoxide
-        zoxide init fish | source
+# Interactive navigation and completions.
+if status is-interactive; and type -q zoxide
+    zoxide init fish | source
 end
 
 # Load Carapace completions in Ghostty, Herdr, and other interactive Fish shells.
@@ -53,12 +51,9 @@ if status is-interactive; and type -q fzf
     end
 end
 
-alias nb "jupyter lab"
 alias l "eza -a --git"
 alias ls l
-alias o open
 alias py python
-alias b bat
 alias cl clear
 alias sv "source .venv/bin/activate.fish"
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
@@ -66,22 +61,6 @@ alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
 # amsc container
 alias amsc='docker start amsc >/dev/null && docker exec -it -w /shared-folder amsc /bin/bash --rcfile /u/sw/etc/bash.bashrc -i'
 
-# Route only the stealth profile through the monochrome presentation wrapper.
-# Every other Codex invocation keeps the normal full-color TUI.
-function codex
-    set -l previous ""
-    for arg in $argv
-        if test "$arg" = "--profile=stealth"; or test "$previous:$arg" = "--profile:stealth"
-            "$HOME/.codex/bin/codex-stealth" $argv
-            return $status
-        end
-        set previous "$arg"
-    end
-    /opt/homebrew/bin/codex $argv
-end
-
-
-#if pressed just enter the message will be 'changes'
 function gcp --description "Commit all changes and push (subject + optional description)"
     read -P "Subject (default: 'changes'): " subject
     if test -z "$subject"
@@ -156,5 +135,6 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
 end
 
 # Added by OrbStack: command-line tools and integration
-# This won't be added again if you remove it.
-source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+if test -f ~/.orbstack/shell/init2.fish
+    source ~/.orbstack/shell/init2.fish
+end
