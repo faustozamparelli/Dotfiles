@@ -21,6 +21,7 @@ llvm
 mas
 mole
 node
+pandoc
 pnpm
 python
 pyright
@@ -37,3 +38,6 @@ zoxide
 
 # Raycast screenshot OCR extension
 tesseract
+
+# On-demand LaTeX engine (no full TeX Live installation)
+tectonic

@@ -66,3 +66,9 @@
 
 - On 2026-11-01, `studio` answered the Screen Sharing/VNC handshake on port 5900 but had no logged-in console user; `air` refused port 5900. `/usr/sbin/screencapture` failed on both with `could not create image from display`. Agent desktop control is not yet verified.
 - Human desktop access: `open 'vnc://studio.tailed8082.ts.net'`. For `air`, first enable Screen Sharing in System Settings > General > Sharing for the user's account. Agent computer use also needs a logged-in desktop, a remote-capable control tool, and applicable Screen Recording, Accessibility, and Automation permissions for its actual process. Once granted, verify a harmless screenshot/UI read; use `/usr/sbin/screencapture` and `/usr/bin/osascript` where permitted. Report login/permission blockers; working SSH or VNC alone does not establish desktop automation. Preserve supported authentication and do not edit TCC databases or expose VNC publicly.
+
+## Math PDFs
+
+- Shared lightweight tools: Homebrew `tectonic` and `pandoc`, maintained in `~/.config/mac-setup/packages.txt`. Compile LaTeX with `tectonic --keep-logs document.tex`; compile Markdown math with `pandoc document.md --pdf-engine=tectonic -o document.pdf`. No full MacTeX/TeX Live installation is required.
+- Tectonic downloads support files on demand into a machine-local cache. First use of new packages needs network access; use `tectonic --only-cached document.tex` to verify offline compilation after warming the cache. Do not sync caches. AMS math, theorem environments, TikZ/PGFPlots and BibTeX have a shared smoke fixture at `~/.config/mac-setup/latex-smoke.tex`; compile it into a temporary output directory, then repeat with `--only-cached`.
+- This is an XeTeX-based workflow. Documents requiring LuaLaTeX, external shell tools, minted/Pygments or Biber may need additional tooling; inspect project requirements before adding it. Inspect compile warnings and the rendered PDF before delivering.
