@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Timed AC-only awake/remote sessions sharing one sleep recovery record."""
+"""Timed awake/AC-only remote sessions sharing one sleep recovery record."""
 import argparse
 import contextlib
 import fcntl
@@ -272,7 +272,7 @@ def end_reason(state, now, ac, boot, console_uid):
         return "interrupted start"
     if now >= state["deadline"]:
         return "session expired"
-    if not ac:
+    if not ac and not state.get("local_only", False):
         return "power disconnected"
     if state["gui"] and console_uid != state["uid"]:
         return "user logged out or switched"
@@ -335,7 +335,7 @@ def root_start(uid, seconds, local_only=False):
             if existing["phase"] != "active" or existing["uid"] != uid or existing["boot"] != boot_id():
                 raise ModeError("A cleanup or sleep request is pending. Run " + name.lower()
                                 + " status, then " + name.lower() + " stop.")
-            if not on_ac():
+            if not local_only and not on_ac():
                 raise ModeError("Cannot renew: connect the power adapter first.")
             if not local_only and vpn_state(existing) != "Running":
                 raise ModeError("Cannot renew: connect Tailscale first, or run remote stop.")
@@ -359,7 +359,7 @@ def root_start(uid, seconds, local_only=False):
             print(name + " ON until " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(existing["deadline"]))
                   + "; then native system sleep. Stop early: " + name.lower() + " stop")
             return
-        if not on_ac():
+        if not local_only and not on_ac():
             raise ModeError("Connect the power adapter before starting " + name.lower() + " mode.")
         cli, gui = (None, True) if local_only else select_cli()
         if gui and os.stat("/dev/console").st_uid != uid:
@@ -385,7 +385,7 @@ def root_start(uid, seconds, local_only=False):
                 as_user(state, [cli, "up"], timeout=30)
             if not local_only and vpn_state(state) != "Running":
                 raise ModeError("Tailscale is not connected.")
-            if not on_ac():
+            if not local_only and not on_ac():
                 raise ModeError("Power was disconnected during startup.")
             set_sleep(1)
             state["phase"] = "active"
@@ -460,7 +460,7 @@ def status(local_only=False):
         if state["phase"] == "active":
             if time.time() >= state["deadline"]:
                 errors.append("Session deadline has passed; cleanup has not completed.")
-            if not on_ac():
+            if not local_only and not on_ac():
                 errors.append("Power disconnected; cleanup has not completed.")
             if sleep_disabled() != 1:
                 errors.append("Sleep override is missing; lid-closed access is not protected.")
@@ -514,7 +514,7 @@ def main():
     default_seconds = 12600 if local_only else 12 * 3600
     default_duration = "3h30m" if local_only else "12h"
     parser = argparse.ArgumentParser(
-        description=("Keep this Mac awake on AC for local work, without managing Tailscale or SSH."
+        description=("Keep this Mac awake on battery or AC for local work, without managing Tailscale or SSH."
                      if local_only else "Temporary AC-only, lid-closed remote access over Tailscale."),
         usage=name + " {start [duration],stop,status}",
         epilog="Examples: " + name + " start; " + name + " start 30m; " + name + " start 2h. "
@@ -534,7 +534,7 @@ def main():
             if len(args.arguments) > 1:
                 parser.error("Usage: " + name + " start [duration], e.g. " + name + " start 30m")
             seconds = duration(args.arguments[0]) if args.arguments else default_seconds
-            if not on_ac():
+            if not local_only and not on_ac():
                 raise ModeError("Connect the power adapter before starting " + name + " mode.")
             command += [str(int(os.environ.get("SUDO_UID", os.getuid()))), str(seconds)]
         elif args.arguments:

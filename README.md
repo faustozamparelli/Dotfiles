@@ -114,18 +114,19 @@ remote status
 remote stop        # restores sleep and only the VPN state remote created
 ```
 
-Both modes require AC power and normal administrator authorization at start/
-stop. `awake` defaults to 3h30m; `remote` keeps its 12h default. Explicit
+`awake` works on battery or AC and keeps running when you unplug. `remote`
+requires AC and restores settings when unplugged. Both use normal administrator
+authorization at start/stop. `awake` defaults to 3h30m; `remote` keeps its 12h default. Explicit
 durations include `30m`, `2h`, `1h30m`, up to 7d. Only one mode can run at a
-time: stop it before switching. Unplugging, logout, reboot or interrupted
+time: stop it before switching. Logout, reboot or interrupted
 startup restores the saved settings. **At timed expiry, the helper requests
 native macOS sleep**; stopping early restores settings without forcing sleep.
 Nothing starts automatically when plugged in. Existing VPN sessions are
 untouched by `awake`; it does not disable Remote Login.
 
-For closed-lid work while plugged in, `awake` uses the same system sleep
+For closed-lid work on battery or AC, `awake` uses the same system sleep
 override as `remote`, without its VPN dependency. Headless closed-lid operation
-on Air still needs a physical test; the implementation and logic tests do not
+on Air (especially on battery) still needs a physical test; the implementation and logic tests do not
 prove it. Apple's documented closed-display setup uses external displays,
 power, and an external keyboard/mouse or trackpad
 ([Apple requirements](https://support.apple.com/en-us/117373)). Start while

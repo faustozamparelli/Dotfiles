@@ -30,6 +30,7 @@ class RemoteModeTests(unittest.TestCase):
                  ({"phase": "starting"}, 100, True, "boot-A", 501, "interrupted start"),
                  ({}, 1000, True, "boot-A", 501, "session expired"),
                  ({}, 100, False, "boot-A", 501, "power disconnected"),
+                 ({"local_only": True}, 100, False, "boot-A", 501, None),
                  ({}, 100, True, "boot-A", 0, "user logged out or switched"),
                  ({"gui": False}, 100, True, "boot-A", 0, None)]
         for changes, now, ac, boot, uid, expected in cases:
@@ -271,13 +272,12 @@ class RemoteModeTests(unittest.TestCase):
             self.assertTrue(state["sleep_on_expiry"])
             self.assertEqual(state["phase"], "active")
 
-    def test_local_start_requires_ac_and_rolls_back_on_power_failure(self):
+    def test_local_battery_start_and_rollback_on_power_failure(self):
         with contextlib.ExitStack() as stack:
             mocks = self.start_patches(stack, ac=False)
-            with self.assertRaisesRegex(mode.ModeError, "power adapter"):
-                mode.root_start(501, 1800, local_only=True)
-            mocks["save"].assert_not_called()
-            mocks["set_sleep"].assert_not_called()
+            mode.root_start(501, 1800, local_only=True)
+            mocks["set_sleep"].assert_called_once_with(1)
+            mocks["vpn_state"].assert_not_called()
         with contextlib.ExitStack() as stack:
             mocks = self.start_patches(stack)
             mocks["set_sleep"].side_effect = mode.ModeError("power failure")
@@ -286,20 +286,21 @@ class RemoteModeTests(unittest.TestCase):
             mocks["restore"].assert_called_once()
             mocks["as_user"].assert_not_called()
 
-    def test_local_unplug_during_start_rolls_back_before_override(self):
+    def test_local_start_does_not_depend_on_power_source(self):
         with contextlib.ExitStack() as stack:
             mocks = self.start_patches(stack)
             mocks["on_ac"].side_effect = [True, False]
-            with self.assertRaisesRegex(mode.ModeError, "disconnected during startup"):
-                mode.root_start(501, 1800, local_only=True)
-            mocks["set_sleep"].assert_not_called()
-            mocks["restore"].assert_called_once()
+            mode.root_start(501, 1800, local_only=True)
+            mocks["on_ac"].assert_not_called()
+            mocks["set_sleep"].assert_called_once_with(1)
+            mocks["restore"].assert_not_called()
 
     def test_local_renewal_preserves_snapshot_without_vpn(self):
         state = self.state(local_only=True, cli=None, connected_by_mode=False, opened_by_mode=False)
         with contextlib.ExitStack() as stack:
             mocks = self.start_patches(stack)
             mocks["load"].return_value = state
+            mocks["on_ac"].return_value = False
             stack.enter_context(patch.object(mode.time, "time", return_value=100))
             mode.root_start(501, 1800, local_only=True)
             self.assertEqual(state["deadline"], 1900)
@@ -337,7 +338,7 @@ class RemoteModeTests(unittest.TestCase):
                            deadline=10**15)
         with patch.object(mode, "load", return_value=state), \
              patch.object(mode, "run", return_value=Mock(returncode=0, stdout="pid = 123")), \
-             patch.object(mode, "on_ac", return_value=True), \
+             patch.object(mode, "on_ac", return_value=False), \
              patch.object(mode, "sleep_disabled", return_value=1), \
              patch.object(mode, "vpn_state") as vpn, \
              patch.object(mode.socket, "create_connection") as ssh, patch("builtins.print"):
@@ -345,8 +346,8 @@ class RemoteModeTests(unittest.TestCase):
             vpn.assert_not_called()
             ssh.assert_not_called()
 
-    def test_local_watchdog_restores_on_unplug_logout_reboot_and_sleeps_on_expiry(self):
-        for reason in ("power disconnected", "user logged out or switched", "reboot", "session expired"):
+    def test_local_watchdog_restores_on_logout_reboot_and_sleeps_on_expiry(self):
+        for reason in ("user logged out or switched", "reboot", "session expired"):
             with self.subTest(reason=reason), contextlib.ExitStack() as stack:
                 state = self.state(local_only=True, cli=None, connected_by_mode=False, opened_by_mode=False)
                 values = {"locked": contextlib.nullcontext(), "end_reason": reason,
@@ -380,6 +381,19 @@ class RemoteModeTests(unittest.TestCase):
                 mode.main()
                 arguments = execute.call_args.args[1]
                 self.assertEqual(arguments[-2] if command == "awake" else arguments[-1], seconds)
+
+    def test_awake_cli_accepts_battery_remote_rejects_it_before_sudo(self):
+        for command in ("awake", "remote"):
+            with self.subTest(command=command), \
+                 patch.object(mode.sys, "argv", [command, "start"]), \
+                 patch.object(mode, "on_ac", return_value=False), patch.object(mode.os, "execv") as execute:
+                if command == "awake":
+                    mode.main()
+                    execute.assert_called_once()
+                else:
+                    with self.assertRaisesRegex(mode.ModeError, "power adapter"):
+                        mode.main()
+                    execute.assert_not_called()
 
     def test_watchdog_retains_expiry_action_across_cleanup_retry(self):
         state = self.state(phase="restoring", end_reason="session expired")
