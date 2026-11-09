@@ -106,7 +106,6 @@
   "editor.detectIndentation": true,
   "editor.minimap.enabled": false,
   "editor.stickyScroll.enabled": false,
-  "files.autoSave": "onFocusChange",
   "python.useEnvironmentsExtension": false,
   "python.experiments.enabled": false,
   "git.autofetch": true,
@@ -211,5 +210,6 @@
   "chat.mcp.gallery.enabled": true,
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "push",
-  "workbench.preferredLightColorTheme": "Light Modern"
+  "workbench.preferredLightColorTheme": "Light Modern",
+  "files.autoSave": "afterDelay"
 }

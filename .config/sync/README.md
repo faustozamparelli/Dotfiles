@@ -1084,8 +1084,8 @@ and install failure propagation. Remote deployment remains unverified.
 ### Helium web apps
 
 `~/.config/sync/helium-apps.json` shares Helium web-app names and HTTPS launch
-URLs. It currently includes Gmail, Slack, WeBeep, and Discord (named `Discrod`
-in Helium). App bundles, browser registrations, and sign-ins stay local.
+URLs. It includes Gmail, Slack, SoundCloud, WeBeep, WhatsApp Web, Telegram Web,
+Discord, and Messenger. App bundles, browser registrations, and sign-ins stay local.
 
 Install web apps normally in Helium, then run `bcp` to capture, commit, and push
 their names and URLs. `sync-maintain` also captures and stages this list when
@@ -1112,6 +1112,19 @@ inside `bcp` defers them until after the commit and push to avoid duplicates.
 Keep `~/.config/sync/helium-apps.py`: maintenance uses `capture` and the final
 reminders use `report`. There is no setup step, configuration profile, automatic
 web-app installation, or automatic web-app removal.
+
+On 2026-11-05, Beeper Desktop was uninstalled from Air, Pro, and Studio and
+added to `retired-apps.tsv`; remaining local Beeper data was moved to Trash.
+The four messaging apps were installed in each Mac's own Helium profile using
+its built-in `PWA.install` / `chrome.management.generateAppForLink` APIs and
+set to standalone windows with `PWA.changeAppUserSettings`. Signatures, native
+registrations, normal local profile paths and Beeper absence were checked;
+all 11 existing web-app sync tests passed on each Mac. Pro required the
+one-time installer in its GUI launchd context after SSH keychain access failed.
+Air's Beeper login item was removed; remote login-item cleanup on Pro timed
+out, so its stale startup-entry removal is unverified. Browser state and
+credentials were not transferred. This was a one-time installation;
+`mac-sync` continues to share URLs and report missing web apps.
 
 ### macOS App Shortcuts
 
@@ -1200,7 +1213,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | Helium | Existing menu-shortcut sharing and web-app reminders. Browser profiles, sessions and history are not copied. |
 | Wispr Flow | Its [account sync](https://docs.wisprflow.ai/articles/5284722493-sync-flow-across-your-devices) handles supported dictionary, snippet, language and style preferences. Shortcuts, microphones and sounds are per-device. |
 | Anki | Use [AnkiWeb](https://docs.ankiweb.net/manual/syncing) for collections. This is not a full application-preferences sync; local databases are not copied. |
-| Beeper Desktop | Sign in on each device; no portable settings export was verified. Messaging/account databases are excluded. |
+| WhatsApp Web, Telegram Web, Discord, Messenger | Helium web apps; sign in separately on each Mac. Beeper Desktop is retired. |
 | Microsoft Excel, ProtonVPN | No reviewed portable settings profile yet. Sandboxed/account data and VPN state are excluded. |
 | MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
 | GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |

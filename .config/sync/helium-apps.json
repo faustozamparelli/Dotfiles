@@ -1,12 +1,20 @@
 {
   "apps": [
     {
-      "name": "Discrod",
+      "name": "Discord",
       "url": "https://discord.com/channels/@me"
     },
     {
       "name": "Gmail",
       "url": "https://mail.google.com/mail/?usp=installed_webapp"
+    },
+    {
+      "name": "Messenger",
+      "url": "https://www.messenger.com/"
+    },
+    {
+      "name": "Notion",
+      "url": "https://app.notion.com/p/72833eecc72542c79873d25289d41550"
     },
     {
       "name": "Slack",
@@ -17,12 +25,20 @@
       "url": "https://soundcloud.com/discover"
     },
     {
+      "name": "Telegram Web",
+      "url": "https://web.telegram.org/a/"
+    },
+    {
       "name": "WeBeep",
       "url": "https://webeep.polimi.it/my/"
     },
     {
       "name": "WeBeep",
       "url": "https://webeep.polimi.it/my/courses.php"
+    },
+    {
+      "name": "WhatsApp Web",
+      "url": "https://web.whatsapp.com/"
     }
   ]
 }
