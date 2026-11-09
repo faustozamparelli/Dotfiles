@@ -1215,7 +1215,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | Anki | Use [AnkiWeb](https://docs.ankiweb.net/manual/syncing) for collections. This is not a full application-preferences sync; local databases are not copied. |
 | WhatsApp Web, Telegram Web, Discord, Messenger | Helium web apps; sign in separately on each Mac. Beeper Desktop is retired. |
 | Microsoft Excel, ProtonVPN | No reviewed portable settings profile yet. Sandboxed/account data and VPN state are excluded. |
-| MySielteID, Solves, Picture-In-Picture, uBlock Origin Lite | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
+| MySielteID, Solves | No reviewed portable settings interface verified in this audit; app-specific setup remains manual. |
 | GitHub Copilot CLI | Only a first-launch timestamp was present in its config; nothing portable was selected. |
 | SF Mono | Shared font installation; no separate application preferences. |
 | Hammerspoon | Tracked one-desktop maximize/split configuration; Accessibility authorization stays local. |
@@ -1481,3 +1481,5 @@ is accepted. Only committed and pushed content is recoverable from GitHub.
 
 Verify with `python3 ~/.config/sync/test-sync-check.py`, the existing sync
 tests, `mac-sync --check`, `fdesetup status`, and the firewall/ownership checks.
+
+Safari extension apps uBlock Origin Lite, Picture-In-Picture, and Accelerate are retired across Macs via `retired-apps.tsv` and `mac-sync`.

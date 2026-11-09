@@ -41,3 +41,6 @@ formula	neovim	Neovim
 formula	lua-language-server	Lua language server
 formula	tree-sitter-cli	Tree-sitter CLI
 cask	omniwm	OmniWM
+mas	6745342698	uBlock Origin Lite
+mas	6475380719	Picture-In-Picture
+direct	accelerate	Accelerate
