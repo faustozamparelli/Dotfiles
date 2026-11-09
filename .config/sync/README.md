@@ -135,7 +135,8 @@ OmniWM was retired on 2026-11-05. Its config, capture helpers and bindings
 are removed; retired-apps.tsv prevents reinstall and mac-sync cleans its data.
 
 The com.fausto.window-workflow LaunchAgent runs Hammerspoon 1.1.1
-with ~/.hammerspoon/init.lua at login. Normal resizable
+with ~/.hammerspoon/init.lua at login. System Settings and windows without settable AXSize/AXFullScreen attributes are
+left unmanaged by maximization and split pairing. Normal resizable
 windows maximize when shown or focused, except the active split pair. Dialogs,
 launchers and fixed-size utility windows keep their native size. Command-Tab
 retains normal macOS behavior. No fullscreen Spaces are created.

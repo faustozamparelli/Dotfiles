@@ -17,8 +17,13 @@ local resizeWatchers = {}
 local resized
 
 local function normal(w)
-    return w and w:id() and w:isStandard() and not w:isFullScreen()
-        and hs.axuielement.windowElement(w):isAttributeSettable('AXSize')
+    if not w or not w:id() or not w:isStandard() or w:isFullScreen() then return false end
+    local app = w:application()
+    -- Settings exposes a resizable AX window but constrains its layout.
+    if not app or app:bundleID() == 'com.apple.systempreferences' then return false end
+    local element = hs.axuielement.windowElement(w)
+    return element and element:isAttributeSettable('AXSize')
+        and element:isAttributeSettable('AXFullScreen')
 end
 
 local function maximize(w)
