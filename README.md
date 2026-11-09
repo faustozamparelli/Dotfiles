@@ -126,8 +126,10 @@ untouched by `awake`; it does not disable Remote Login.
 
 For closed-lid work on battery or AC, `awake` uses the same system sleep
 override as `remote`, without its VPN dependency. Headless closed-lid operation
-on Air (especially on battery) still needs a physical test; the implementation and logic tests do not
-prove it. Apple's documented closed-display setup uses external displays,
+on Air (especially on battery) still needs a physical test; the implementation
+and logic tests do not prove it. Air's November 6 timed session did record
+native sleep and restoration of its previous settings; verified November 9.
+Apple's documented closed-display setup uses external displays,
 power, and an external keyboard/mouse or trackpad
 ([Apple requirements](https://support.apple.com/en-us/117373)). Start while
 awake; this is not a wake-from-sleep or power-on service.
