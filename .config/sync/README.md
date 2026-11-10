@@ -6,6 +6,10 @@ and the rules for safely changing or synchronizing the configuration.
 
 The primary workspace is VS Code for editing and Ghostty with Herdr for terminal sessions.
 
+The compact workflow and tool map is `~/README.md`; agents can use
+`$fausto-workflow` from `~/.codex/skills/fausto-workflow/SKILL.md`. This manual
+retains detailed procedures and validation evidence.
+
 ## App Sync
 
 On Air and Pro, `mac-update` checks eligibility every 30 minutes while awake
@@ -416,7 +420,7 @@ Paths matter:
 ./script      a script in the current directory
 ```
 
-Quote paths containing spaces: `n "My Notes/file.md"`. Press `Tab` for
+Quote paths containing spaces: `nano "My Notes/file.md"`. Press `Tab` for
 completion, `Up` for history, `Ctrl-r` for searchable history, `Ctrl-c` to
 interrupt a running command, and `Ctrl-d` to end an idle shell.
 
@@ -444,7 +448,7 @@ pwd                       # print current directory
 z project-name            # jump using zoxide's learned history
 cd ..                     # parent directory
 l                         # eza listing, including hidden files and Git state
-b file.py                  # syntax-highlighted file output with bat
+bat file.py                # syntax-highlighted file output
 rg 'text'                  # recursively search file contents
 rg --files                 # list searchable files
 fzf                        # fuzzy-select input paths
@@ -456,7 +460,7 @@ typing a long path. Use `zi` for interactive fuzzy directory selection.
 
 ### Filesystem changes
 
-Prefer Oil for interactive changes. When the shell is clearer:
+Use Finder or the shell for filesystem changes:
 
 ```fish
 mkdir -p path/to/folder
@@ -466,8 +470,8 @@ mv old-name new-name
 rm file
 ```
 
-`rm` bypasses Trash and is irreversible by default. Inspect paths first. Use
-Oil for deletions when possible because this setup sends them to Trash.
+`rm` bypasses Trash and is irreversible by default. Inspect paths first;
+use Finder or `trash path` when recoverable deletion is appropriate.
 
 ### Pipes and redirection
 
@@ -508,13 +512,10 @@ termination has failed and data loss is acceptable.
 
 ```text
 l / ls     eza -a --git
-b          bat
-o          open
 cl         clear
 py         Homebrew Python (alias for python)
 python     stable Homebrew Python command maintained by mac-sync
 sv         activate .venv for fish
-nb         jupyter lab
 ```
 
 Use `type <name>` to discover whether a name is an executable, function, or
@@ -541,7 +542,7 @@ for project searches.
 `eza` is a readable `ls` replacement. Examples:
 
 ```fish
-b ~/.config/fish/config.fish
+bat ~/.config/fish/config.fish
 eza -lah --git
 eza --tree --level=2
 ```
@@ -610,7 +611,7 @@ uv run pytest
 uv sync
 ```
 
-`nb` opens JupyterLab. Create a `uv` project and add the libraries it needs
+`jupyter lab` opens JupyterLab. Create a `uv` project and add the libraries it needs
 before using notebooks or Python scripts for that project. C and C++ course
 work uses the professor's container rather than shared Mac packages.
 
@@ -1427,6 +1428,12 @@ For a new Mac, verify `bare pull --ff-only` and `bare status`, run the installer
 and maintenance script, then report missing manual sign-ins and permissions.
 
 ## Maintenance Checks
+
+For workflow skill edits, run
+`uv run --no-project --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.codex/skills/fausto-workflow`.
+Validation (2026-11-10): skill validation, five bcp tests, keymap consistency,
+shell syntax and whitespace checks passed. Maintenance stages only this custom
+skill; managed skills and plugin caches remain untracked.
 
 Use these after changing the setup:
 

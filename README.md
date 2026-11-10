@@ -1,23 +1,132 @@
-# Dotfiles
+# Fausto's workflow
 
-This repository is the source of truth for Fausto's Mac configuration. Apps
-are shared by default, command-line packages are shared only when listed, and
-each Mac may have a tiny local app list or skip list.
+A small, living guide to this Mac setup. Detailed procedures and validation
+history live in `~/.config/sync/README.md`; agent rules live in
+`~/.codex/AGENTS.md`. Agents can use `$fausto-workflow`
+(`~/.codex/skills/fausto-workflow/SKILL.md`) for a compact orientation.
 
-## New Mac
+## Daily work and tools
 
-These are the only bootstrap steps that cannot live inside the repository.
+| Work | Tools and conventions |
+| --- | --- |
+| Coding agents | **T3 Code → Codex**; select the project/workspace there. Use available native browser/thread tools; the Codex CLI remains installed. |
+| Editing and terminals | **VS Code** (`code .`); **Ghostty → Herdr → fish**. Detaching preserves server processes; reboot does not. Terminal editor: `nano`. |
+| Search and Git | `rg`, `fd`, `bat`, `eza`, `fzf`, `z`/`zi` (zoxide), `git`, `gh`. |
+| Python/notebooks | `uv sync`, `uv run …`, Ruff/Pyright; JupyterLab or VS Code with the project's `.venv` kernel. Jupytext pairing is opt-in; dependencies stay per-project. |
+| Course C/C++ | OrbStack's Linux `amsc` container; projects under `~/shared-folder`. VS Code's clangd bridge/Dev Containers use its toolchain. |
+| Pro engineering | QGIS, ParaView, Blender, SolidCraft, `openfoam2306`; setup/debugging in the detailed manual. |
+| Math PDFs | `tectonic --keep-logs document.tex`; `pandoc document.md --pdf-engine=tectonic -o document.pdf`. First use downloads support files; `--only-cached` checks offline Tectonic compilation. |
+| Desktop/web | Karabiner, Hammerspoon, Raycast, Wispr Flow, Helium web apps. Sign-ins and privacy permissions stay local. |
+| Agent artifacts | Document/PDF/spreadsheet/presentation/visualization skills. Discover current callable tools; plugins/MCPs vary by Mac and app bridges. |
 
-1. Sign in to the Mac App Store, then install Homebrew:
+## Keep work running
+
+| Command | Purpose | Default / power |
+| --- | --- | --- |
+| `awake start [duration]` | Local work; leaves Tailscale untouched | **3h30m**, battery or AC; unplugging does not stop it |
+| `remote start [duration]` | Keep awake and connect Tailscale for remote access | **12h**, AC only; unplugging restores settings |
+
+Use `awake status` / `awake stop` or `remote status` / `remote stop`.
+Durations accept `30m`, `5h`, `1h30m` (1s–7d); starting again resets the deadline.
+One mode at a time; start/stop need administrator authorization. **Expiry
+requests native sleep**; stop restores settings without forcing sleep.
+
+For T3 limit-reset retries, leave T3 running, its resume/retry enabled, and
+internet available; include both the wait and subsequent work in the duration.
+T3 owns resumption. Lock/display sleep is fine; logout/reboot ends the session.
+Closed-lid battery work and T3 limit-reset resumption still need verification;
+one Air expiry/sleep/restoration passed. Neither command wakes a sleeping Mac.
+
+## Macs and access
+
+Account/home: `faustozamparelli`, `/Users/faustozamparelli`; DNS suffix:
+`tailed8082.ts.net`. Identify the current host first; prefer Studio remotely.
+
+| Name / SSH alias | Tailscale IP | Role |
+| --- | --- | --- |
+| `studio` | `100.95.1.50` | Preferred remote host |
+| `air` / `air-ts` | `100.82.17.2` | Minimal shared setup |
+| `pro` / `pro-ts` | `100.122.185.114` | Shared setup plus engineering tools |
+
+Check `/usr/local/bin/tailscale status`; probe with
+`ssh -o BatchMode=yes -o ConnectTimeout=5 studio true`. `~/.ssh/config` also
+provides Bonjour fallbacks `air-lan`/`pro-lan`; follow AGENTS.md's route checks.
+Send remote scripts through `ssh -o BatchMode=yes studio /bin/sh -s`;
+remote PATH may need `/opt/homebrew/bin`.
+
+Laptop Tailscale is normally off. Preserve user-opened VPN sessions; restore
+agent-opened Air state. Wake recovery is unverified. Desktop control additionally
+needs a console login and privacy permissions; SSH alone is insufficient.
+
+## Dotfiles, apps and sync
+
+The private bare repository is `~/.config/git/dotfiles`, with `$HOME` as its
+work tree. Fish's `bare` alias targets it; it is **not** a standalone executable.
+Other shells/agents use `git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" …`.
+
+| Command | Effect |
+| --- | --- |
+| `bare status`, `bare diff` | Inspect portable configuration changes |
+| `sync-maintain` | Capture preferences/web-app URLs, run manual sync and validation, stage maintained files; can install missing software |
+| `bcp` | Run maintenance, stage tracked dotfiles, ask for a message, commit and push |
+| `gcp` | Stage all changes, commit and push the **current ordinary repository** |
+| `mac-sync --check` | Inspect local manifest drift without applying changes |
+| `mac-sync` | Apply the current checkout: packages, apps, settings and retirements |
+| `mac-sync --pull` | Fetch/apply incoming dotfiles, then reconcile; refuses automatic pull with tracked/staged edits |
+| `mac-app firefox` | Install/share an app and publish its manifest change |
+
+`bcp`/`gcp` stage broadly. Agents stage task paths, check, commit/push and
+reconcile reachable Macs while preserving independent edits. Keep secrets,
+accounts, caches and runtime state out of Git. `mac-sync --nuke` removes
+uncurated formulae; use deliberately.
+
+Apps are shared by default; Air stays minimal. `mac-app local …` adds Pro/Studio
+extras; `skip` excludes; `share` promotes; `remove` records retirement. Global
+retirement also removes obsolete config/helpers and retains the retirement row.
+CLI tools are shared only through `packages.txt`; other `brew install` stays local.
+
+Login/hourly sync exchanges macOS **App Shortcuts** on a separate Git branch
+and checks manifests; it does not pull executable config or install apps.
+Air/Pro's `mac-update` checks every 30 minutes while awake: one active daily pass
+upgrades formulae/downloads app updates; queued apps install after closing.
+Use `--status`, `--dry-run`, `--now`. Studio has no schedule; native/App Store/
+privileged updates have separate rules.
+
+Only reviewed app preferences are shared. Helium shares web-app names/URLs;
+install missing web apps manually when prompted. Browser sessions stay local.
+
+## Shortcuts
+
+| Keys | Action |
+| --- | --- |
+| Right Command | Super (Karabiner); `§` holds Wispr Flow dictation |
+| Super-M / Super-F | Split current/last app or maximize; Super-minus/plus moves the boundary |
+| Ctrl-h/l | Previous/next Herdr workspace |
+| Cmd-h/l; Cmd-t/w | Previous/next Herdr tab; new tab / close pane |
+| Cmd-b/n; Alt-h/j/k/l | Split right/down; focus panes (add Shift to resize) |
+| Cmd-g; Ctrl-Space ? | Herdr Codex tab; searchable Herdr keymap |
+| Tab / Shift-Tab / Ctrl-r | Fish fuzzy completion / native completion / history search |
+
+Window automation requires Hammerspoon Accessibility permission. The complete
+keymap is `~/.config/keymaps/registry.tsv`; update implementation and registry
+together, then run `keymap-docs` and `keymap-docs --check`.
+Fish also keeps `l`/`ls`, `py`, `cl`, `sv` (activate `.venv`) and `keymap-docs`.
+
+## Where to look
+
+- Apps, CLI tools, per-Mac extras/skip lists: `~/.config/mac-setup/{apps.tsv,packages.txt,machines/}`; removals: `retired-apps.tsv`.
+- Fish, terminal, windows, keys: `~/.config/{fish,ghostty,herdr,karabiner,keymaps}/`, `~/.hammerspoon/init.lua`.
+- VS Code: `~/Library/Application Support/Code/User/`; extension lists: `~/.config/sync/vscode-{extensions,disabled-extensions}.txt`.
+- Shared preferences, web apps, agent tool choices: `~/.config/sync/{app-preferences,helium-apps,codex-technical}.json` and matching Python helpers. Use `codex-technical.py set-mcp` / `set-plugin` for local toggles; credentials remain local.
+- Full procedures, limitations and evidence: `~/.config/sync/README.md`, `~/.codex/AGENTS.md`. Select relevant checks from `~/.config/mac-setup/justfile` (`just --justfile ~/.config/mac-setup/justfile check` runs the suite).
+
+## New Mac bootstrap
+
+Sign in to the Mac App Store. Install Homebrew, authenticate, then check out:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-2. Authenticate and check out the private bare dotfiles repository:
-
-```sh
 brew install git gh
 gh auth login
 gh auth setup-git
@@ -25,170 +134,10 @@ mkdir -p "$HOME/.config/git"
 git clone --bare https://github.com/faustozamparelli/Dotfiles.git "$HOME/.config/git/dotfiles"
 git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" config --local status.showUntrackedFiles no
 git --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" checkout
-```
-
-If checkout reports conflicts, move only the listed stock files aside and run
-the checkout command again.
-
-3. Install everything and enable automatic sync:
-
-```sh
 ~/.config/sync/install-agent.sh
 ```
 
-The installer handles Homebrew casks, Mac App Store IDs, and reviewed pinned
-downloads. macOS may still ask once for Accessibility, system extensions,
-privileged helpers, or application sign-in; those approvals cannot safely be
-automated.
-
-## Installing apps
-
-Use `mac-app` instead of installing an app separately on each Mac:
-
-```sh
-mac-app firefox                         # shared Homebrew cask (default)
-mac-app share --mas 497799835 Xcode    # shared Mac App Store app
-mac-app local transmission             # only this Mac
-mac-app temporary handbrake            # install without tracking
-mac-app skip firefox                    # exclude a shared app on this Mac
-mac-app unskip firefox
-mac-app remove firefox                  # remove here; run mac-sync on the other Mac
-```
-
-The command records the app change, commits it, and pushes it. `mac-app remove`
-also removes the shared app locally and records its retirement; run `mac-sync`
-on the other Mac to apply the removal there. At login and hourly a LaunchAgent
-exchanges menu-shortcut data and checks manifests; it does not install apps or
-pull executable configuration. Direct downloads require a small reviewed installer under
-`~/.config/mac-setup/direct` with a pinned checksum.
-
-Managed installs on the MacBook Air always join the common shared set. Use
-`local` for extra Pro/Studio apps; `share` promotes an app into the common set
-and removes duplicate local rows. The Studio and Pro can keep different extras.
-The sync manual lists portable settings support for all shared apps. Select
-reviewed preference profiles with `app-preferences.py enable/disable`, then
-publish with `bcp`; new profiles are opt-in.
-
-Helium web-app names and URLs are shared through
-`~/.config/sync/helium-apps.json`. Install an app in Helium, then run `bcp` to
-capture and share it. At the end, `mac-sync` and `bcp` print
-`INSTALL {NAME} WEB APP` only for apps missing on that Mac. Install those
-manually in Helium; their reminders disappear on the next run. Keep the Python
-helper used by these commands. See the sync manual for the full workflow.
-
-Shared CLI tools live in `~/.config/mac-setup/packages.txt`. Ordinary
-`brew install` packages stay local and temporary unless intentionally added to
-that short list. Removing an entry never automatically uninstalls software.
-Course C/C++ libraries run in the professor's container; project Python
-libraries are installed with `uv`. See `~/.config/sync/README.md`.
-
-Run a sync immediately with:
-
-```sh
-mac-sync
-```
-
-## Keep work running on this Mac
-
-For T3 Code/Codex waiting for a usage-limit reset, start a local awake session
-long enough to cover the wait **and** the work after it:
-
-```sh
-awake start         # 3h30m; does not open, connect, or require Tailscale
-awake status
-awake start 5h      # optional duration; replaces the deadline, keeps the snapshot
-awake stop          # restore previous sleep settings early
-```
-
-Leave T3 Code running with its resume/retry feature enabled and keep internet
-available. `awake` only prevents this Mac from sleeping; it does not schedule
-T3 retries, reset Codex limits, or move work to another Mac. The display may
-turn off and the screen may lock without ending the session. Do not log out
-or quit T3 while waiting.
-
-For access from another machine, use the existing VPN-aware command instead:
-
-```sh
-remote start 2h     # connects Tailscale if needed; preserves an existing session
-remote status
-remote stop        # restores sleep and only the VPN state remote created
-```
-
-`awake` works on battery or AC and keeps running when you unplug. `remote`
-requires AC and restores settings when unplugged. Both use normal administrator
-authorization at start/stop. `awake` defaults to 3h30m; `remote` keeps its 12h default. Explicit
-durations include `30m`, `2h`, `1h30m`, up to 7d. Only one mode can run at a
-time: stop it before switching. Logout, reboot or interrupted
-startup restores the saved settings. **At timed expiry, the helper requests
-native macOS sleep**; stopping early restores settings without forcing sleep.
-Nothing starts automatically when plugged in. Existing VPN sessions are
-untouched by `awake`; it does not disable Remote Login.
-
-For closed-lid work on battery or AC, `awake` uses the same system sleep
-override as `remote`, without its VPN dependency. Headless closed-lid operation
-on Air (especially on battery) still needs a physical test; the implementation
-and logic tests do not prove it. Air's November 6 timed session did record
-native sleep and restoration of its previous settings; verified November 9.
-Apple's documented closed-display setup uses external displays,
-power, and an external keyboard/mouse or trackpad
-([Apple requirements](https://support.apple.com/en-us/117373)). Start while
-awake; this is not a wake-from-sleep or power-on service.
-
-## Updates and math PDFs
-
-On Air and Pro, `mac-update` checks every 30 minutes while awake. Once a day,
-when you are actively using the unlocked Mac, it updates Homebrew formulae
-and downloads app updates even for open apps. It installs queued app updates
-after those apps close, without automatically quitting them. Native updaters,
-App Store updates, and installers needing approval follow their own rules.
-Studio has no recurring update schedule.
-
-```sh
-mac-update --status    # inspect pending versions
-mac-update --dry-run  # inspect eligibility and planned work
-mac-update --now      # request an extra pass with the same safeguards
-```
-
-Tectonic and Pandoc provide lightweight math PDFs without a full TeX install:
-
-```sh
-tectonic --keep-logs document.tex
-pandoc document.md --pdf-engine=tectonic -o document.pdf
-tectonic --only-cached document.tex  # offline after required files are cached
-```
-
-Tectonic downloads support files on first use. AMS math, theorem environments,
-TikZ/PGFPlots and BibTeX are covered by `~/.config/mac-setup/latex-smoke.tex`.
-LuaLaTeX, minted/Pygments and Biber may need additional tooling. Pro's math
-tool rollout remains pending until it is reachable.
-
-## Keyboard and window controls
-
-- Right Command is the global Super key, implemented by Karabiner.
-- Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
-- Super-M splits the current app and the last other app; press again to maximize.
-- Super-F maximizes; Super-minus/plus moves the split boundary.
-
-Hammerspoon manages windows on one desktop and needs Accessibility permission
-on each Mac. Normal windows maximize when focused unless they belong to the
-active split. Ghostty attaches to persistent Herdr terminal sessions; VS Code
-is the editor. Codex runs through T3 Code; the terminal CLI is also available.
-
-Fish keeps `amsc`, `sv`, `gcp`, `bcp`, `py`, `l`/`ls`, `cl`, and `keymap-docs`.
-`gcp` stages, commits and pushes the current repository; `bcp` maintains the
-bare dotfiles repository. The unused `nb`, `b`, `o`, and Codex stealth wrapper
-were removed; use `jupyter lab`, `bat`, `open`, and the normal `codex` command.
-
-The canonical binding inventory is `~/.config/keymaps/registry.tsv`; the
-readable generated table is in `~/.config/sync/README.md`.
-
-App Shortcuts edited in macOS System Settings > Keyboard > Keyboard Shortcuts
-are shared automatically by `mac-sync`, including additions and deletions on
-either Mac. They use a separate `app-shortcuts` Git branch; other macOS
-Keyboard Shortcuts categories remain local. See the sync manual for details.
-
-## Dotfile maintenance
-
-`bcp` validates the app and keymap configuration, stages the maintained
-dotfiles, then asks for a commit message and pushes. `sync-maintain` performs
-the validation and staging without committing.
+If checkout conflicts, move only the listed stock files aside and retry.
+Finish the detailed manual's **New Mac** steps (Herdr service, fish login shell,
+sign-ins and privacy permissions). Keep this guide short; add mechanics and
+validation evidence to the existing detailed manual.

@@ -21,6 +21,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/fish/config.fish \
   .config/fish/fish_plugins \
   .config/fish/functions/sync-maintain.fish \
+  .codex/skills/fausto-workflow \
   .config/gh/config.yml \
   .config/ghostty \
   .hammerspoon/init.lua \
