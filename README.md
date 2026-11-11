@@ -131,10 +131,6 @@ physical monitor; Shift gives smaller steps. Pro has the 85 KB
 No extra app is used, and no brightness listener/helper runs while the mode is off.
 DDC/CI support depends on the monitor/connection; physical-monitor writes still
 need a live check. **Sidecar brightness uses the iPad's own Control Center.**
-Portrait Sidecar requires an additional virtual-display stream, such as
-BetterDisplay Pro, running while used; the detailed manual has researched options
-and limitations. BetterDisplay is managed for Pro and Studio, with Air explicitly
-excluded. Licenses, permissions and display settings stay local.
 
 Window automation requires Hammerspoon Accessibility permission. The complete
 keymap is `~/.config/keymaps/registry.tsv`; update implementation and registry

@@ -15,6 +15,12 @@ ARCHIVE = HOME / 'Cleanup Review' / 'orphan-app-data'
 
 # App bundles are never removed here. Existing installations keep their data.
 TARGETS = [
+    ('BetterDisplay', 'BetterDisplay.app', None, 'betterdisplay', [
+        'Library/Application Support/BetterDisplay', 'Library/Application Support/BetterDummy',
+        'Library/Caches/pro.betterdisplay.BetterDisplay', 'Library/Caches/SentryCrash/BetterDisplay',
+        'Library/HTTPStorages/pro.betterdisplay.BetterDisplay',
+        'Library/HTTPStorages/pro.betterdisplay.BetterDisplay.binarycookies',
+        'Library/Preferences/pro.betterdisplay.BetterDisplay.plist']),
     ('Discord', 'Discord.app', None, 'discord', [
         'Library/Application Support/discord', 'Library/Caches/com.hnc.Discord',
         'Library/Caches/com.hnc.Discord.ShipIt', 'Library/Preferences/com.hnc.Discord.plist',

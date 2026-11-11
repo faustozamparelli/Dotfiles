@@ -1,6 +1,7 @@
 # Explicit removals applied on every Mac. Nothing else is auto-uninstalled.
 # source	identifier	application name
 cask	beeper	Beeper Desktop
+cask	betterdisplay	BetterDisplay
 cask	chatgpt	ChatGPT
 cask	discord	Discord
 cask	gitbutler	GitButler

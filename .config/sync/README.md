@@ -181,28 +181,13 @@ Sidecar/AirPlay display names are excluded from DDC control. When only the iPad
 is connected, Ctrl-Option-B explains the native alternative and starts no listener
 or helper. Adjust actual iPad brightness in its Control Center: swipe down from
 the top-right edge and drag the brightness slider ([Apple](https://education.apple.com/learning-center/T021988A-en_US)).
-[BetterDisplay's brightness guide](https://betterdisplay.pro/guide/faq/brightness/monitor-percentage-mismatch/)
-confirms that its Sidecar dimming changes the image, not the iPad's brightness setting.
-
-Portrait Sidecar research (2026-11-11): native Sidecar normally provides a landscape
-desktop; simply rotating the iPad can crop/letterbox it. [BetterDisplay's portrait
-guide](https://betterdisplay.pro/guide/tutorials/rotated-sidecar/) documents a Pro
-virtual portrait display streamed/rotated onto Sidecar. It requires Screen Recording,
-must remain running during use, and adds capture/render work. It can be kept out
-of login startup and used only for portrait sessions. Hide Sidecar's sidebar/Touch
-Bar; keep Sidecar's own session in landscape (landscape rotation lock can prevent
-cropping), then use the virtual portrait desktop. Prefer USB/lower resolution/FPS
-if slow. A smaller [experimental portrait project](https://github.com/toho-stdio/sidecar-portrait-macos)
-uses ScreenCaptureKit/Metal and can quit after a session, but its README lists
-keyboard-forwarding limitations; compatibility, input and overhead are unverified
-here. Neither portrait app was installed. Lowest added overhead remains native
-Sidecar in landscape with brightness adjusted on the iPad itself.
-Fausto subsequently installed BetterDisplay 5.2.1 on Pro and requested management
-for Pro/Studio only: `apps.tsv` records `cask:betterdisplay`, and
-`machines/fausto-s-macbook-air.skip` excludes Air. Pro's existing bundle satisfies
-installation checks without adoption/reinstallation. Studio was unreachable and
-will receive the app on its next `mac sync`. Licenses, Screen Recording approval,
-display configuration and startup preferences remain machine-local.
+BetterDisplay was retired on 2026-11-11 at Fausto's request. Its shared install
+entry, Air exclusion, portrait setup notes and local app data were removed;
+`retired-apps.tsv` retains only the removal record so other Macs remove it and
+sync cannot reinstall it. The existing orphan-data helper removes its reviewed
+named files only when the app is absent. Pro's virtual portrait screen was
+removed after moving its windows back to the built-in display; native Sidecar
+remains available. Studio's retirement is pending while it is unreachable.
 
 Window frame changes have zero animation duration. window-defaults.sh disables
 window/Dock animations, disables Stage Manager and tile
@@ -1472,6 +1457,18 @@ Discord, GitButler and Tor Browser also require their retirement entries.
 This never removes project or document directories. macOS Full Disk Access may
 be needed for protected folders. Without `--delete`, the script archives data
 locally for review instead of permanently deleting it.
+
+Pro cleanup (2026-11-11): BetterDisplay was zapped/uninstalled and removed from
+managed installs. Mole 1.71.0 reported 1.61 GB across 94 cleanup items; its operation
+history is saved under `~/Library/Logs/mac-routines/mole-clean-20261111.json`.
+The initial stdout transcript was itself cleared during log cleanup. Beeper's
+updater cache, MonitorControl preferences/web data and empty Fusion directories
+were removed. An active Homebrew upgrade, documents, Trash, editor/browser/agent
+state and Tectonic support files were protected; temporary protections were then
+removed. System cleanup needing sudo was skipped. Apple's `familycircled` cache
+returned permission denied; the protected Obsidian QuickLook container remains.
+The existing 43 sync and five background-cleanup tests passed. Reachability checks
+failed for Studio/Air, so their BetterDisplay retirement remains pending.
 
 Closed-app background policy (2026-11-02): preserve normal background work
 while an app is open, including CodexBar polling and Wispr dictation. Their
