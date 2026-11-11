@@ -197,6 +197,12 @@ uses ScreenCaptureKit/Metal and can quit after a session, but its README lists
 keyboard-forwarding limitations; compatibility, input and overhead are unverified
 here. Neither portrait app was installed. Lowest added overhead remains native
 Sidecar in landscape with brightness adjusted on the iPad itself.
+Fausto subsequently installed BetterDisplay 5.2.1 on Pro and requested management
+for Pro/Studio only: `apps.tsv` records `cask:betterdisplay`, and
+`machines/fausto-s-macbook-air.skip` excludes Air. Pro's existing bundle satisfies
+installation checks without adoption/reinstallation. Studio was unreachable and
+will receive the app on its next `mac sync`. Licenses, Screen Recording approval,
+display configuration and startup preferences remain machine-local.
 
 Window frame changes have zero animation duration. window-defaults.sh disables
 window/Dock animations, disables Stage Manager and tile
