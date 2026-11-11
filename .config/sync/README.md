@@ -1459,9 +1459,9 @@ be needed for protected folders. Without `--delete`, the script archives data
 locally for review instead of permanently deleting it.
 
 Pro cleanup (2026-11-11): BetterDisplay was zapped/uninstalled and removed from
-managed installs. Mole 1.71.0 reported 1.61 GB across 94 cleanup items; its operation
-history is saved under `~/Library/Logs/mac-routines/mole-clean-20261111.json`.
-The initial stdout transcript was itself cleared during log cleanup. Beeper's
+managed installs. Mole 1.71.0 reported 1.61 GB across 94 cleanup items. Detailed
+agent-created logs and diagnostic temporary files were subsequently deleted at
+Fausto's request. Beeper's
 updater cache, MonitorControl preferences/web data and empty Fusion directories
 were removed. An active Homebrew upgrade, documents, Trash, editor/browser/agent
 state and Tectonic support files were protected; temporary protections were then
