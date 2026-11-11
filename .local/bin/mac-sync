@@ -511,8 +511,15 @@ cleanup_retired_desktop_tool() {
         "$HOME/Library/HTTPStorages/com.barut.OmniWM.binarycookies" \
         "$HOME/Library/Logs/OmniWM" \
         "$HOME/Library/Saved Application State/com.barut.OmniWM.savedState" || return 1
-      if defaults read com.barut.OmniWM >/dev/null 2>&1; then
-        defaults delete com.barut.OmniWM || return 1
+      # macOS reads an empty plist as {}, but deleting that domain returns
+      # "not found". Remove the empty retired file without invoking delete.
+      if [[ -f "$HOME/Library/Preferences/com.barut.OmniWM.plist" ]]; then
+        local omniwm_preferences
+        omniwm_preferences="$(defaults read com.barut.OmniWM)" || return 1
+        if [[ "$(printf '%s' "$omniwm_preferences" | tr -d '[:space:]')" != '{}' ]]; then
+          defaults delete com.barut.OmniWM || return 1
+        fi
+        rm -f -- "$HOME/Library/Preferences/com.barut.OmniWM.plist" || return 1
       fi
       ;;
     obsidian)

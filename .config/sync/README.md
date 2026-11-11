@@ -1239,6 +1239,17 @@ just --justfile ~/.config/mac-setup/justfile check`, `mac status`, and
 `helium-extension list`. Use `mac sync` on other Macs once reachable; the
 first changed-policy application needs their administrator authorization.
 
+Final reconciliation (2026-11-11): the compact workflow-guide commit and the
+concurrent display-control work were merged without losing either workflow;
+unrelated working edits were preserved. The complete recipe passes 149 tests. Manual application completed successfully in
+11 seconds. Its remaining action list correctly reports the earlier updater
+failures, three interactive installers and three missing web apps. A pre-existing
+retirement bug also surfaced: macOS reads OmniWM's empty plist as `{}` but
+`defaults delete` returns “domain not found.” Cleanup now removes the empty
+retired file directly; missing preferences are already clean, while failures
+to delete real preferences still propagate. The added regression case covers
+all three conditions. Air and Studio remain unreachable; their rollout is pending.
+
 ### Helium web apps
 
 `~/.config/sync/helium-apps.json` shares Helium web-app names and HTTPS launch

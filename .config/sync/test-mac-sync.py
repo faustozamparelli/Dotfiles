@@ -342,6 +342,28 @@ cleanup_retired_desktop_tool omniwm
         self.assertTrue(all(not (self.root / 'home' / p).exists() for p in paths))
         self.assertEqual(keyboard.read_text(), 'keep keyboard settings')
 
+    def test_omniwm_absent_cached_domain_is_clean_but_real_delete_failures_propagate(self):
+        prefs = self.root / 'home/Library/Preferences/com.barut.OmniWM.plist'
+        calls = self.root / 'defaults-calls'
+        setup = '''pkill() { :; }
+defaults() {
+    printf '%s\\n' "$*" >> "$lock/defaults-calls"
+    if [[ "$1" == read ]]; then printf '%s' "$mock_domain"; fi
+    [[ "$1" == read ]]
+}
+'''
+        for exists, empty in ((False, False), (True, True), (True, False)):
+            with self.subTest(existing_preferences=exists, empty=empty):
+                calls.unlink(missing_ok=True)
+                if exists:
+                    prefs.parent.mkdir(parents=True, exist_ok=True)
+                    prefs.write_text('keep until deletion succeeds')
+                result = self.run_shell(DESKTOP_CLEANUP + '\ncleanup_retired_desktop_tool omniwm\n',
+                                        setup + f"\nmock_domain={'{}' if empty else 'nonempty'}\n")
+                self.assertEqual(result.returncode, int(exists and not empty), result.stderr)
+                self.assertEqual(calls.exists(), exists)
+                self.assertEqual(prefs.exists(), exists and not empty)
+
     def test_spotify_cleanup_is_idempotent_and_preserves_browser_data(self):
         cache = self.root / 'home/Library/Caches/com.spotify.client'
         browser = self.root / 'home/Library/Application Support/Helium/profile'
