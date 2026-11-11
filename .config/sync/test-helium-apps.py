@@ -72,6 +72,11 @@ class HeliumAppsTests(unittest.TestCase):
         self.app(name='Another Mail')
         self.assertEqual(self.report(), 'INSTALL Courses WEB APP\n')
 
+    def test_same_name_and_host_with_different_path_counts(self):
+        self.app(dict(ONE, url='https://mail.example.test/inbox'))
+        self.assertEqual(self.report(), 'INSTALL Courses WEB APP\n')
+        self.assertEqual(helium.missing_apps([ONE], [dict(ONE, url='https://other.example.test/')]), [ONE])
+
     def test_same_app_in_another_browser_does_not_count(self):
         self.app(domain='com.google.Chrome')
         self.assertEqual(self.report(), 'INSTALL Courses WEB APP\nINSTALL Mail WEB APP\n')

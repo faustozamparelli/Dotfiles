@@ -927,6 +927,8 @@ for diagnosis. Git pull errors stop the canonical bundle before application.
 
 All four bundles end with a separate action panel and keep the latest full
 transcript, including that panel, under `~/Library/Logs/mac-routines/`.
+Web-app reminders match an exact URL or the same app name and hostname; launch paths may differ across Macs. Saved launch URLs remain distinct.
+
 `manual-actions.py` repeats detectable missing web apps/TwitchNoSub, pending or
 unapplied extension choices, failed updates and installers needing interaction.
 Existing `bcp`, `mac-sync`, and direct maintenance also print the action list

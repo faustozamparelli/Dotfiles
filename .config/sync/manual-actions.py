@@ -72,10 +72,8 @@ def collect():
                                f'brew upgrade --cask {name}.')
     # Preserve the established web-app reminders verbatim, at the end.
     apps = load('helium-apps')
-    installed = {app['url'] for app in apps.scan()}
-    for app in apps.load_manifest():
-        if app['url'] not in installed:
-            actions.append(f'INSTALL {app["name"]} WEB APP')
+    for app in apps.missing_apps(apps.load_manifest(), apps.scan()):
+        actions.append(f'INSTALL {app["name"]} WEB APP')
     if any(action.endswith(' WEB APP') for action in actions):
         actions.insert(0, 'Missing web apps: open their URLs from ~/.config/sync/helium-apps.json '
                        'in Helium and install each as a web app.')

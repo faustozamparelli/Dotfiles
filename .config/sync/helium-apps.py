@@ -91,10 +91,16 @@ def capture():
         print(f'Captured {len(apps)} shared Helium apps (review, commit and push with dotfiles).')
 
 
+def missing_apps(manifest, installed):
+    def matches(expected, local):
+        return (expected['url'] == local['url'] or
+                (expected['name'].casefold() == local['name'].casefold() and
+                 urlsplit(expected['url']).hostname == urlsplit(local['url']).hostname))
+    return [app for app in manifest if not any(matches(app, local) for local in installed)]
+
+
 def report():
-    installed = {app['url'] for app in scan()}
-    for app in load_manifest():
-        if app['url'] not in installed:
+    for app in missing_apps(load_manifest(), scan()):
             print(f"INSTALL {app['name']} WEB APP")
 
 
