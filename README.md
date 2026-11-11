@@ -114,8 +114,8 @@ stay local. No extension watcher or new maintenance timer is installed.
 | --- | --- |
 | Right Command | Super (Karabiner); `§` holds Wispr Flow dictation |
 | Super-M / Super-F | Split current/last app on the same display or maximize; Super-minus/plus moves the boundary |
-| Super-H/L; Super-1/2/3 | Send the focused window to previous/next display, or directly to screen 1/2/3 in arrangement order |
-| Super-B | Toggle optional external brightness keys for this session; off at startup and after a display change |
+| Ctrl-Option-H/L | Send the focused window to the previous/next display, including Sidecar; wraps around |
+| Ctrl-Option-B | Toggle optional physical-monitor DDC brightness keys; off by default, excludes Sidecar |
 | Ctrl-h/l | Previous/next Herdr workspace |
 | Cmd-h/l; Cmd-t/w | Previous/next Herdr tab; new tab / close pane |
 | Cmd-b/n; Alt-h/j/k/l | Split right/down; focus panes (add Shift to resize) |
@@ -124,12 +124,16 @@ stay local. No extension watcher or new maintenance timer is installed.
 
 Screens are ordered left to right in macOS Display Settings (top to bottom when
 vertically aligned), supporting the built-in display and two externals. Moved
-windows maximize; moving a split member releases its neighbor. Optional brightness
-keys follow the focused screen; Shift gives smaller steps. Pro has the 85 KB
+windows maximize; moving a split member releases its neighbor. Super keeps its
+original maximize/split bindings. Optional brightness keys follow the focused
+physical monitor; Shift gives smaller steps. Pro has the 85 KB
 `m1ddc` CLI; install it elsewhere with `brew install m1ddc` only when wanted.
 No extra app is used, and no brightness listener/helper runs while the mode is off.
-DDC/CI support depends on the monitor and connection; hardware key writes still
-need a live check after reconnecting Pro's monitor.
+DDC/CI support depends on the monitor/connection; physical-monitor writes still
+need a live check. **Sidecar brightness uses the iPad's own Control Center.**
+Portrait Sidecar requires an additional virtual-display stream, such as
+BetterDisplay Pro, running while used; the detailed manual has researched options
+and limitations. No portrait app is installed.
 
 Window automation requires Hammerspoon Accessibility permission. The complete
 keymap is `~/.config/keymaps/registry.tsv`; update implementation and registry

@@ -8,6 +8,7 @@ hs.consoleOnTop(false)
 require('hs.ipc')
 
 local super = {'cmd', 'ctrl', 'alt'} -- Karabiner's Right Command
+local displayKeys = {'ctrl', 'alt'}
 local wf = hs.window.filter.new():setOverrideFilter({
     currentSpace = true, fullscreen = false, allowRoles = {'AXStandardWindow'},
 }):setAppFilter('Hammerspoon', false)
@@ -89,6 +90,10 @@ end
 local brightnessTap, brightnessTask
 local brightnessPending = {}
 local ddc = '/opt/homebrew/bin/m1ddc'
+local function wirelessDisplay(screen)
+    local name = screen and (screen:name() or ''):lower() or ''
+    return name:find('sidecar', 1, true) or name:find('airplay', 1, true)
+end
 local function stopBrightness()
     if brightnessTap then brightnessTap:stop(); brightnessTap = nil end
     brightnessPending = {}
@@ -126,12 +131,17 @@ local function toggleBrightness()
         hs.alert.show('External brightness keys off')
         return
     end
-    local hasExternal = false
+    local hasExternal, hasWireless = false, false
     for _, screen in ipairs(hs.screen.allScreens()) do
-        if screen:getBrightness() == nil then hasExternal = true; break end
+        if wirelessDisplay(screen) then
+            hasWireless = true
+        elseif screen:getBrightness() == nil then
+            hasExternal = true
+        end
     end
     if not hasExternal then
-        hs.alert.show('Connect a DDC display; native brightness stays with macOS')
+        hs.alert.show(hasWireless and 'iPad/AirPlay brightness: use Control Center on that device'
+            or 'Connect a DDC display; native brightness stays with macOS')
         return
     end
     if not hs.fs.attributes(ddc) then
@@ -144,8 +154,8 @@ local function toggleBrightness()
         if flags.cmd or flags.ctrl or flags.alt then return false end
         local w = hs.window.focusedWindow()
         local screen = w and w:screen() or hs.screen.mainScreen()
-        -- Leave native brightness-capable displays to macOS.
-        if not screen or screen:getBrightness() ~= nil then return false end
+        -- Sidecar/AirPlay has no DDC hardware brightness controller.
+        if not screen or wirelessDisplay(screen) or screen:getBrightness() ~= nil then return false end
         if key.down then
             local uuid = screen:getUUID()
             local delta = (key.key == 'BRIGHTNESS_UP' and 1 or -1) * (flags.shift and 1 or 5)
@@ -224,17 +234,11 @@ hs.hotkey.bind(super, '-', function() resizeSplit(-0.05) end, nil,
 hs.hotkey.bind(super, '=', function() resizeSplit(0.05) end, nil,
     function() resizeSplit(0.05) end)
 -- km:windows.display.previous
-hs.hotkey.bind(super, 'h', function() cycleDisplay(-1) end)
+hs.hotkey.bind(displayKeys, 'h', function() cycleDisplay(-1) end)
 -- km:windows.display.next
-hs.hotkey.bind(super, 'l', function() cycleDisplay(1) end)
--- km:windows.display.first
-hs.hotkey.bind(super, '1', function() sendToDisplay(1) end)
--- km:windows.display.second
-hs.hotkey.bind(super, '2', function() sendToDisplay(2) end)
--- km:windows.display.third
-hs.hotkey.bind(super, '3', function() sendToDisplay(3) end)
+hs.hotkey.bind(displayKeys, 'l', function() cycleDisplay(1) end)
 -- km:windows.brightness.toggle
-hs.hotkey.bind(super, 'b', toggleBrightness)
+hs.hotkey.bind(displayKeys, 'b', toggleBrightness)
 
 -- Keep the two app edges together when either window is resized by dragging.
 resized = function(w)

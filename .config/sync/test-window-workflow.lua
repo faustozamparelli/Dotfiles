@@ -1,7 +1,7 @@
 -- Run with: lua ~/.config/sync/test-window-workflow.lua
 -- Synthetic displays cover the second external screen without changing macOS.
 local screens, windows, focused, alerts = {}, {}, nil, {}
-local bindings, subscriptions = {}, {}
+local bindings, bindingMods, subscriptions = {}, {}, {}
 local helperAvailable, tapCount, currentTap = true, 0, nil
 local tasks = {}
 local filter = {}
@@ -25,6 +25,7 @@ local function screen(id, x, y)
         fullFrame=function() return {x=x, y=y, w=1000, h=800} end,
         frame=function() return {x=x, y=y+25, w=1000, h=775} end,
         getBrightness=function(self) return self.brightness end,
+        name=function(self) return self.displayName or 'Test Monitor' end,
     }
 end
 local function window(id, display, pid)
@@ -88,7 +89,9 @@ hs = {
     axuielement={windowElement=function()
         return {isAttributeSettable=function() return true end}
     end},
-    hotkey={bind=function(_, key, callback) bindings[key] = callback end},
+    hotkey={bind=function(mods, key, callback)
+        bindings[key], bindingMods[key] = callback, mods
+    end},
     alert={show=function(message) table.insert(alerts, message) end},
     uielement={watcher={windowResized='resized'}},
     timer={doAfter=noop},
@@ -105,6 +108,13 @@ local function check(condition, message)
     assert(condition, message)
     checks = checks + 1
 end
+for _, key in ipairs({'m','f','-','='}) do
+    check(table.concat(bindingMods[key], ',') == 'cmd,ctrl,alt', 'original Super binding preserved: '..key)
+end
+for _, key in ipairs({'h','l','b'}) do
+    check(table.concat(bindingMods[key], ',') == 'ctrl,alt', 'display controls stay off Super: '..key)
+end
+check(not bindings['1'] and not bindings['2'] and not bindings['3'], 'display number bindings removed')
 local left, laptop, right = screen(40, -1000, 0), screen(1, 0, 0), screen(9, 1000, 0)
 laptop.brightness = 0.5
 screens = {right, laptop, left}
@@ -113,15 +123,15 @@ windows, focused = {a, elsewhere, b}, a
 local ordered = windowWorkflow.screens()
 check(ordered[1] == left and ordered[2] == laptop and ordered[3] == right,
     'display order must follow arrangement, not enumeration or numeric ID')
-bindings['1']()
+windowWorkflow.send(1)
 check(a.display == left and a.rect.w == 1000, 'send to first external and maximize')
-bindings['3']()
+windowWorkflow.send(3)
 check(a.display == right, 'send to second external')
 bindings['l']()
 check(a.display == left, 'next display wraps from last to first')
 bindings['h']()
 check(a.display == right, 'previous display wraps from first to last')
-bindings['2']()
+windowWorkflow.send(2)
 check(a.display == laptop, 'return to built-in display')
 
 bindings['m']()
@@ -131,15 +141,15 @@ check(a.rect.w == 500 and b.rect.x == 500, 'equal split on current display')
 bindings['=']()
 check(a.rect.w == 550 and b.rect.w == 450, 'existing split resize remains available')
 local moves = a.moves
-bindings['2']()
+windowWorkflow.send(2)
 check(windowWorkflow.state() ~= nil and a.moves == moves,
     'sending to the same display preserves the split')
 focused = elsewhere
-bindings['1']()
+windowWorkflow.send(1)
 check(windowWorkflow.state() ~= nil and a.rect.w == 550,
     'moving an unrelated window preserves the split')
 focused = a
-bindings['3']()
+windowWorkflow.send(3)
 check(windowWorkflow.state() == nil and b.display == laptop and b.rect.w == 1000,
     'moving a split member releases and maximizes its neighbor')
 check(a.display == right and a.rect.w == 1000, 'moved split member maximizes on target')
@@ -165,13 +175,13 @@ a.display, b.display, elsewhere.display = laptop, laptop, laptop
 moves = a.moves
 bindings['l'](); bindings['h']()
 check(a.moves == moves, 'cycling with one display is a no-op')
-bindings['3']()
+windowWorkflow.send(3)
 check(a.moves == moves and #alerts == 1, 'missing destination alerts without moving')
 focused = nil
-bindings['1'](); bindings['h']()
+windowWorkflow.send(1); bindings['h']()
 check(a.moves == moves, 'no focused window is safe')
 focused, a.standard = a, false
-bindings['1'](); bindings['l']()
+windowWorkflow.send(1); bindings['l']()
 check(a.moves == moves, 'fixed-size or nonstandard windows remain unmanaged')
 a.standard = true
 
@@ -194,11 +204,22 @@ screens, helperAvailable = {laptop, left, right}, false
 bindings['b']()
 check(not windowWorkflow.brightnessEnabled() and tapCount == 0,
     'optional helper is never installed or started implicitly')
+local ipad = screen(6, 1000, 0)
+ipad.displayName = 'Sidecar Display (AirPlay)'
+screens = {laptop, ipad}
+bindings['b']()
+check(not windowWorkflow.brightnessEnabled() and tapCount == 0 and #tasks == 0
+    and alerts[#alerts]:find('Control Center'),
+    'Sidecar-only setup explains native iPad brightness without requesting a helper')
+screens = {laptop, left, right, ipad}
 helperAvailable = true
 bindings['b']()
 check(windowWorkflow.brightnessEnabled() and #tasks == 0, 'enable is idle until a keypress')
 check(not currentTap.callback(event('BRIGHTNESS_DOWN',true)) and #tasks == 0,
     'built-in brightness passes through to macOS')
+a.display = ipad
+check(not currentTap.callback(event('BRIGHTNESS_DOWN',true)) and #tasks == 0,
+    'Sidecar never receives DDC commands even with a physical monitor connected')
 a.display = left
 check(not currentTap.callback(event('SOUND_UP',true)), 'unrelated media keys pass through')
 check(not currentTap.callback(event('BRIGHTNESS_UP',true,{cmd=true})),

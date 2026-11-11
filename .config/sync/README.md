@@ -154,17 +154,18 @@ inner edge also resizes its neighbor. The boundary is limited to 25-75 percent;
 application minimum sizes still apply. Closing, minimizing or hiding either
 member maximizes the survivor. Other apps stay maximized when switched to.
 
-Super-H/L sends the focused window to the previous/next display, wrapping around.
-Super-1/2/3 sends it directly to display 1/2/3, ordered left to right in macOS
-Display Settings (top to bottom for vertically aligned screens). This covers
-the built-in display plus two externals; numbering follows the current arrangement,
-including when the lid is closed. A missing destination shows an alert. The moved
+Ctrl-Option-H/L sends the focused window to the previous/next display, wrapping
+around in left-to-right macOS Display Settings order (top to bottom for vertically
+aligned screens). This covers the built-in display plus two externals, including
+Sidecar. With two screens either key sends to the other screen; with one it does
+nothing. Super retains the original maximize/split controls; the added Super
+display/brightness bindings and display-number shortcuts were removed. The moved
 window maximizes and keeps focus. Moving or dragging a split member to another
 screen ends the split and maximizes its neighbor on the original screen.
 
-External brightness is optional and **off at startup**. Super-B enables/disables
-the normal brightness keys for this session. They target the focused window's
-screen; Shift uses one monitor unit instead of five. Native Apple brightness and
+Physical-monitor brightness is optional and **off at startup**. Ctrl-Option-B
+enables/disables the normal brightness keys for this session. They target the
+focused physical monitor; Shift uses one monitor unit instead of five. Native Apple brightness and
 modified system shortcuts pass through. A display change or DDC failure turns the
 mode off. Off means no brightness event tap, timer, polling or helper process.
 While enabled, keypresses run the small [m1ddc](https://github.com/waydabber/m1ddc)
@@ -175,6 +176,27 @@ machine-local install (1.3.1, 85 KB on Pro); no app, login item or shared packag
 entry is added. Air/Studio do not install it automatically. `mac-sync --nuke`
 may remove this optional formula; reinstall it only when wanted. MonitorControl
 was removed after Fausto chose this lighter approach; no shared setup remains.
+
+Sidecar/AirPlay display names are excluded from DDC control. When only the iPad
+is connected, Ctrl-Option-B explains the native alternative and starts no listener
+or helper. Adjust actual iPad brightness in its Control Center: swipe down from
+the top-right edge and drag the brightness slider ([Apple](https://education.apple.com/learning-center/T021988A-en_US)).
+[BetterDisplay's brightness guide](https://betterdisplay.pro/guide/faq/brightness/monitor-percentage-mismatch/)
+confirms that its Sidecar dimming changes the image, not the iPad's brightness setting.
+
+Portrait Sidecar research (2026-11-11): native Sidecar normally provides a landscape
+desktop; simply rotating the iPad can crop/letterbox it. [BetterDisplay's portrait
+guide](https://betterdisplay.pro/guide/tutorials/rotated-sidecar/) documents a Pro
+virtual portrait display streamed/rotated onto Sidecar. It requires Screen Recording,
+must remain running during use, and adds capture/render work. It can be kept out
+of login startup and used only for portrait sessions. Hide Sidecar's sidebar/Touch
+Bar; keep Sidecar's own session in landscape (landscape rotation lock can prevent
+cropping), then use the virtual portrait desktop. Prefer USB/lower resolution/FPS
+if slow. A smaller [experimental portrait project](https://github.com/toho-stdio/sidecar-portrait-macos)
+uses ScreenCaptureKit/Metal and can quit after a session, but its README lists
+keyboard-forwarding limitations; compatibility, input and overhead are unverified
+here. Neither portrait app was installed. Lowest added overhead remains native
+Sidecar in landscape with brightness adjusted on the iPad itself.
 
 Window frame changes have zero animation duration. window-defaults.sh disables
 window/Dock animations, disables Stage Manager and tile
@@ -218,12 +240,21 @@ was disconnected before the read/change/restore and brightness-key checks, so
 hardware writes and physical keys remain unverified. Brightness was left off.
 Air's LAN name did not resolve; Studio's Tailscale IP timed out with Pro's VPN off.
 Their rollout remains pending; Pro's existing VPN state was preserved.
+Follow-up (2026-11-11): 48 isolated checks passed after moving display controls to
+Ctrl-Option and preserving the four original Super bindings. Pro reported Sidecar
+as AirPlay/virtual display ID 6; Hammerspoon native brightness returned nil and
+`m1ddc display list` omitted it, confirming this connection has no DDC target.
+Both new Ctrl-Option-H/L shortcuts moved a real window between Pro and Sidecar;
+the original frame was restored. Sidecar-only brightness activation stayed off,
+with no helper process. Physical-monitor DDC writes remain unverified. Air/Studio
+connection probes failed again; their rollout remains pending.
 
 ## Keyboard Layers
 
 The configuration assigns each modifier a stable job:
 
-- `Right Cmd` (`Super`): global macOS window/display controls and optional brightness.
+- `Right Cmd` (`Super`): original global macOS maximize/split controls.
+- `Ctrl-Option-h/l`: send windows between displays; `Ctrl-Option-b`: optional physical-monitor DDC brightness mode.
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
@@ -335,12 +366,9 @@ update the registry and implementation together, then run `keymap-docs`.
 | Hammerspoon | Super | `Super-f` | Maximize and leave the current split |
 | Hammerspoon | Super | `Super--` | Move the split boundary left by five percentage points |
 | Hammerspoon | Super | `Super-+ (=/+ key, no Shift)` | Move the split boundary right by five percentage points |
-| Hammerspoon | Super | `Super-h` | Send the focused window to the previous display, wrapping around |
-| Hammerspoon | Super | `Super-l` | Send the focused window to the next display, wrapping around |
-| Hammerspoon | Super | `Super-1` | Send the focused window to display 1 in left-to-right arrangement order |
-| Hammerspoon | Super | `Super-2` | Send the focused window to display 2 in left-to-right arrangement order |
-| Hammerspoon | Super | `Super-3` | Send the focused window to display 3 in left-to-right arrangement order |
-| Hammerspoon | Super | `Super-b` | Toggle optional external-display brightness keys for this session (off by default) |
+| Hammerspoon | Control-Alt | `Ctrl-Alt-h` | Send the focused window to the previous display, wrapping around |
+| Hammerspoon | Control-Alt | `Ctrl-Alt-l` | Send the focused window to the next display, wrapping around |
+| Hammerspoon | Control-Alt | `Ctrl-Alt-b` | Toggle optional physical-monitor DDC brightness keys (off by default; excludes Sidecar) |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice
