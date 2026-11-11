@@ -29,6 +29,7 @@ class HeliumAppsTests(unittest.TestCase):
         self.config = self.root / '.config/sync'
         self.config.mkdir(parents=True)
         shutil.copyfile(SCRIPT, self.config / 'helium-apps.py')
+        shutil.copyfile(SCRIPT.with_name('manual-actions.py'), self.config / 'manual-actions.py')
         self.manifest = self.config / 'helium-apps.json'
         self.manifest.write_text(json.dumps({'apps': [ONE, TWO]}))
         self.bundles = self.root / 'Applications/Chromium Apps.localized'
@@ -149,8 +150,8 @@ end
                 result = subprocess.run(['fish', '--no-config', '-c', stubs + bcp + '\nbcp'],
                                         check=False, env=self.env, input='\n\n', text=True, capture_output=True)
                 self.assertEqual(result.returncode, push_status, result.stderr)
-                self.assertEqual(result.stdout.splitlines()[-2:],
-                                 ['bare push', 'INSTALL Courses WEB APP'])
+                self.assertEqual(result.stdout.splitlines()[-1], 'INSTALL Courses WEB APP')
+                self.assertLess(result.stdout.index('bare push'), result.stdout.index('ACTION REQUIRED'))
                 self.assertEqual(result.stdout.count('INSTALL Courses WEB APP'), 1)
 
 

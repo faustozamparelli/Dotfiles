@@ -126,7 +126,7 @@ function bcp --description "Bare add -u, commit, and push (subject + optional de
     end
     bare push
     set -l push_status $status
-    python3 ~/.config/sync/helium-apps.py report
+    python3 ~/.config/sync/manual-actions.py
     set -l report_status $status
     if test $push_status -ne 0
         return $push_status

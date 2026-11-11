@@ -14,6 +14,10 @@ check:
     python3 ~/.config/sync/test-vscode-local.py
     python3 ~/.config/sync/test-background-cleanup.py
     python3 ~/.config/sync/test-helium-apps.py
+    /usr/bin/python3 ~/.config/sync/test-helium-extensions.py
+    /usr/bin/python3 ~/.config/sync/test-app-shortcuts.py
+    /usr/bin/python3 ~/.config/sync/test-mac-commands.py
+    /usr/bin/python3 ~/.config/sync/test-manual-actions.py
     python3 ~/.config/sync/helium-apps.py check
     jq empty ~/.config/karabiner/karabiner.json
     plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist

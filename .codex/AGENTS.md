@@ -32,6 +32,12 @@
 - A globally retired app must also lose its obsolete tracked configuration, app-specific helpers/tests, keybindings and sync/capture hooks. Keep its explicit retirement entry so later sync cannot reinstall it. Include those deletions in the same publication; do not leave unused app configuration tracked. A missing app on one Mac, an offline Mac, or a temporary uninstall does not establish global retirement.
 - Reconcile and verify the published changes on reachable Macs, preserving their independent edits. Report any failed push, unreachable Mac, or required local permission instead of silently leaving completed work unpublished or claiming all devices are current.
 
+## Mac maintenance and Helium extensions (2026-11-11)
+
+- Prefer the user-facing bundles `mac status` (inspect), `mac sync` (receive/apply), `mac save` (capture/apply/validate/stage/commit/push), and `mac update` (existing safeguarded updater). `bare` remains plain Git; `bcp` remains compatible. Explain the occasion, not every internal helper; `~/README.md` is the quick command reference.
+- No extension watcher or new periodic maintenance job. Helium store-extension choices use `helium-extension add/remove ID` and the private Dotfiles `helium-extensions` data branch. Manual sync/save exchanges them; scheduled/check runs do not. Later command timestamps win per ID; retain offline changes and tombstones. Keep browser profiles, extension data and local sync state out of Git.
+- TwitchNoSub remains a user-approved manual install. Routine bundles must end with a distinct action panel, including failures; repeat detectable unresolved manual steps and provide the saved transcript under `~/Library/Logs/mac-routines/`. Never claim a policy write proves a completed browser download or that unreachable Macs are current.
+
 ## Personal Macs and remote access
 
 - Use the names `studio`, `air`, and `pro`; prefer `studio` for remote work. The user authorizes SSH commands, file edits/transfers, and available desktop automation on these Macs as needed for the requested task. Handle routine work independently and keep consequential changes within scope.

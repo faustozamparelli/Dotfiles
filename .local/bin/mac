@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Four entry points for Mac maintenance; bare remains plain Git."""
+import json
+import importlib.util
+import io
+from contextlib import redirect_stdout
+import os
+from pathlib import Path
+import plistlib
+import subprocess
+import sys
+
+HOME = Path.home()
+BIN = HOME / '.local/bin'
+ENV = dict(os.environ, PATH='/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin')
+HELP = '''Usage: mac status | sync | save | update
+
+  status  Inspect automatic jobs, update results and extension sync (read-only).
+  sync    Pull clean dotfiles, apply setup, exchange shortcuts and extensions.
+  save    Capture/apply local settings, validate, stage, commit and push (bcp).
+  update  Request software updates; open apps stay open.
+
+Change shared apps with mac-app; change shared extensions with
+helium-extension add/remove ID. Changes reach other Macs on their next
+mac sync or mac save. bare remains a plain Git command.
+'''
+
+
+def run(args):
+    return subprocess.run([str(a) for a in args], env=ENV, check=False).returncode
+
+
+def status():
+    failures = 0
+    print('Automatic jobs on this Mac (launchd):', flush=True)
+    for base, domain in [(HOME / 'Library/LaunchAgents', f'gui/{os.getuid()}'),
+                         (Path('/Library/LaunchDaemons'), 'system')]:
+        for path in sorted(base.glob('*.plist')):
+            config = plistlib.loads(path.read_bytes())
+            label = config.get('Label')
+            if not label:
+                continue
+            result = subprocess.run(['/bin/launchctl', 'print', f'{domain}/{label}'],
+                                    text=True, capture_output=True)
+            if result.returncode and domain != 'system':
+                result = subprocess.run(['/bin/launchctl', 'print', f'user/{os.getuid()}/{label}'],
+                                        text=True, capture_output=True)
+            interval = config.get('StartInterval')
+            trigger = f'every {interval // 60}m' if interval else 'login/on demand'
+            state = 'loaded' if result.returncode == 0 else 'not loaded'
+            details = [line.strip() for line in result.stdout.splitlines()
+                       if line.strip().startswith(('state =', 'last exit code ='))]
+            print(f'  {label}: {trigger}; {state}; {", ".join(details[:2])}')
+    stamp = HOME / '.local/state/app-updates/last-run.json'
+    if stamp.exists():
+        update = json.loads(stamp.read_text())
+        errors = update.get('failures', [])
+        print(f'Updates: {update.get("date", "unknown")}; {len(errors)} failures; '
+              f'{len(update.get("pending", {}))} pending.')
+        for error in errors:
+            print(f'  {error}')
+        failures |= bool(errors)
+    print('Manifest check:', flush=True)
+    failures |= bool(run([BIN / 'mac-sync', '--check']))
+    print('Helium extensions:', flush=True)
+    failures |= bool(run([BIN / 'helium-extension', 'list']))
+    print('More: System Settings > General > Login Items & Extensions; '
+          'native app updaters and macOS background services are separate.')
+    return int(failures)
+
+
+def main():
+    if len(sys.argv) != 2 or sys.argv[1] in ('-h', '--help', 'help'):
+        print(HELP)
+        return 0 if len(sys.argv) == 1 or sys.argv[1] in ('-h', '--help', 'help') else 2
+    action = sys.argv[1]
+    if action == 'status':
+        return status()
+    if action == 'sync':
+        bare = ['git', '-C', str(HOME), f'--git-dir={HOME}/.config/git/dotfiles', f'--work-tree={HOME}']
+        for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+            if run([*bare, *args]):
+                print('mac sync: dotfiles have local/staged edits. Review them first; '
+                      'use mac save when ready, or mac-sync to apply the local checkout.', file=sys.stderr)
+                return 1
+        # Pull errors must stop the bundle, rather than claiming incoming changes were applied.
+        if run([*bare, 'pull', '--ff-only']):
+            return 1
+        return run([BIN / 'mac-sync', '--no-pull'])
+    if action == 'save':
+        return run(['/opt/homebrew/bin/fish', '-c', 'bcp'])
+    if action == 'update':
+        return run([BIN / 'mac-update', '--now'])
+    print(HELP, file=sys.stderr)
+    return 2
+
+
+def bundle():
+    if len(sys.argv) != 2 or sys.argv[1] not in ('status', 'sync', 'save', 'update'):
+        return main()
+    action = sys.argv[1]
+    directory = HOME / 'Library/Logs/mac-routines'
+    directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+    log = directory / (action + '.log')
+    # Run the existing implementation in a child so stdout/stderr share one
+    # transcript, while interactive prompts retain the caller's stdin/TTY.
+    env = dict(ENV, MAC_ROUTINE_CHILD='1', MAC_ROUTINE_DEFER_ACTIONS='1')
+    with log.open('wb') as stream:
+        os.fchmod(stream.fileno(), 0o600)
+        process = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), action],
+                                   env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                   text=False)
+        try:
+            while chunk := process.stdout.read1(4096):
+                sys.stdout.buffer.write(chunk)
+                sys.stdout.buffer.flush()
+                stream.write(chunk)
+                stream.flush()
+            code = process.wait()
+        except KeyboardInterrupt:
+            process.terminate()
+            process.wait()
+            code = 130
+        finally:
+            process.stdout.close()
+    spec = importlib.util.spec_from_file_location('manual_actions', HOME / '.config/sync/manual-actions.py')
+    actions = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(actions)
+    summary = io.StringIO()
+    try:
+        with redirect_stdout(summary):
+            actions.report(failed=bool(code), log=log)
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        summary.write(f'\n========== ACTION REQUIRED ==========\nManual-action inspection failed: {error}\n'
+                      f'Full log to share with an agent: {log}\n')
+        code = code or 1
+    plain = summary.getvalue()
+    with log.open('a') as stream:
+        stream.write(plain)
+    if sys.stdout.isatty():
+        color = '\033[1;31m' if code else '\033[1;33m'
+        plain = plain.replace('========== ACTION REQUIRED ==========',
+                              color + '========== ACTION REQUIRED ==========\033[0m')
+    print(plain, end='', flush=True)
+    return code
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main() if os.environ.get('MAC_ROUTINE_CHILD') == '1' else bundle())
+    except (OSError, ValueError, plistlib.InvalidFileException) as error:
+        print(f'\n========== ACTION REQUIRED ==========\nmac: {error}', file=sys.stderr)
+        sys.exit(1)

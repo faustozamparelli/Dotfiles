@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# A manually started server already owns the socket; do not start a duplicate.
+set -euo pipefail
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+if herdr status server 2>/dev/null | /usr/bin/grep -qx 'status: running'; then
+  exit 0
+fi
+exec herdr server

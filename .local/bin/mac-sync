@@ -164,6 +164,12 @@ if [[ -f "$HOME/.config/sync/codex-technical.json" ]]; then
   }
 fi
 
+# Explicit manual runs exchange extension choices. The scheduled/check path
+# above never invokes this helper or requests administrator authorization.
+if [[ -f "$HOME/.config/sync/helium-extensions.py" ]]; then
+  /usr/bin/python3 "$HOME/.config/sync/helium-extensions.py" sync || failed=1
+fi
+
 
 # ---------------------------------------------------------------------------
 # Validate app manifests
@@ -970,6 +976,10 @@ fi
 # Finish
 # ---------------------------------------------------------------------------
 
+if [[ -f "$setup/herdr-service.py" ]]; then
+  /usr/bin/python3 "$setup/herdr-service.py" || failed=1
+fi
+
 next_stage "Finished"
 if $timing; then
   printf 'mac-sync timing: total: %ss\n' "$((SECONDS - run_started))" >&2
@@ -983,7 +993,7 @@ fi
 
 # Maintenance/bcp defer reminders until their own final output.
 if [[ "${MAC_SYNC_DEFER_WEB_APP_REPORT:-0}" != 1 ]]; then
-  python3 "$HOME/.config/sync/helium-apps.py" report || failed=1
+  python3 "$HOME/.config/sync/manual-actions.py" || failed=1
 fi
 
 exit "$failed"

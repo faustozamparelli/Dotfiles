@@ -31,6 +31,8 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/qalculate/qalc.cfg \
   .config/mac-setup \
   .local/bin/mac-app \
+  .local/bin/mac \
+  .local/bin/helium-extension \
   .local/bin/mac-sync \
   .local/bin/mac-update \
   .local/bin/awake \
@@ -42,5 +44,5 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "${bare[@]}" status --short
 
 if [[ "${MAC_SYNC_DEFER_WEB_APP_REPORT:-0}" != 1 ]]; then
-  python3 "$HOME/.config/sync/helium-apps.py" report
+  python3 "$HOME/.config/sync/manual-actions.py"
 fi

@@ -851,6 +851,97 @@ changes.
 
 ## Mac Synchronization
 
+### Routine command bundles and startup audit (2026-11-11)
+
+The user-facing command family is `mac status`, `mac sync`, `mac save`, and
+`mac update`; the root `~/README.md` has the occasion-to-command table.
+`mac sync` rejects dirty/staged dotfiles, fast-forwards once, then applies the
+checkout. `mac save` reuses `bcp` (capture, apply, keymap validation, staging,
+commit and push); it stages maintained configuration broadly, so review
+unfinished edits first. `mac update` calls the existing updater with `--now`.
+`bare` remains a plain Git alias, and lower-level commands remain available
+for diagnosis. Git pull errors stop the canonical bundle before application.
+
+All four bundles end with a separate action panel and keep the latest full
+transcript, including that panel, under `~/Library/Logs/mac-routines/`.
+`manual-actions.py` repeats detectable missing web apps/TwitchNoSub, pending or
+unapplied extension choices, failed updates and installers needing interaction.
+Existing `bcp`, `mac-sync`, and direct maintenance also print the action list
+when they reach their reporting step; the canonical bundles print it even
+when an earlier step fails. Logs, manifests and credentials remain local except
+for explicitly shared metadata. A successful exit does not erase manual tasks.
+
+Pro audit: no crontab; the login/hourly shortcut-data/check agent is loaded and
+last exited 0. The 30-minute app updater is loaded; its last pass recorded five
+fetch failures and five pending updates. A same-environment Raycast fetch
+subsequently succeeded; this does not establish that the other downloads or
+the next scheduled pass succeed. Hammerspoon's login opener is loaded and
+exited 0. The root awake/remote recovery job is loaded but idle; Office licensing
+and OrbStack helpers are on demand. No extension timer is added, and the
+existing automatic job boundaries remain unchanged.
+
+Herdr's original Homebrew login service had attempted over 2,400 duplicate
+starts while the user's independently launched server remained healthy.
+`herdr-service.py` now reconciles that same label with a wrapper that exits
+successfully if a server already exists, and supervises a server it starts.
+A successful no-op is not restarted. A later manually started server is not
+monitored by this completed job; opening Herdr starts it again if needed.
+The active server and sessions were preserved. Do not run `brew services start
+herdr` separately; manual sync installs/reconciles its login configuration.
+
+The background-items inventory additionally shows enabled Raycast, Task Timer,
+Wispr Flow and Karabiner items, app-owned background tasks and native updaters.
+GoogleUpdater's hourly plist is not loaded and is disallowed; its two empty
+Keystone plist placeholders are inert. Retired OmniWM/Vorssaint registrations
+remain in background-item metadata; an entry is not evidence of a live
+process or installed app. These were not reset wholesale. The exact current
+loaded plist inventory is available with `mac status`; System Settings >
+General > Login Items & Extensions also includes modern app registrations.
+Fish startup initializes PATH, Pure/Carapace/fzf/zoxide and OrbStack shell
+integration; Ghostty attaches to Herdr. It does not start sync or upgrades.
+
+### Helium extension choices
+
+`helium-extension add/remove ID` records a timestamped install/removal event,
+exchanges it immediately with the separate `helium-extensions` data branch in
+the private Dotfiles remote, and applies macOS managed policy locally. A Chrome
+Web Store URL is accepted by add/remove; `--name` supplies an optional display
+name. `helium-extension list` is local inspection only. Manual `mac-sync`, and
+therefore both sync/save bundles, exchange and apply the list. Scheduled/check
+runs never do so and never request administrator authorization.
+
+Initial enrollment imports this Mac's installed store extensions once and fills
+gaps in the shared set. Existing shared choices, including deletions, take
+precedence over initial imports. Subsequent choices must use add/remove;
+normal UI changes are not silently timestamped at scan time. Unshared UI
+installs are reported by `list`. The later command timestamp wins per ID;
+independent changes merge. Mac clocks must be correct; a stable device ID
+breaks equal-time ties, and a local logical clock prevents backward revisions.
+Offline edits are saved before network access, retried without force-pushing,
+and never change the working dotfiles index/HEAD. Keep the local state under
+`~/Library/Application Support/mac-sync/helium-extensions/` so commands retain
+their identity and pending edits.
+
+Only IDs, display names, timestamps and removal events leave this Mac.
+Browser preferences, cookies, credentials, profile databases, extension code,
+extension settings, pinning and enabled/disabled choices are not transferred.
+TwitchNoSub is an explicitly user-approved manual-install exception; its
+missing installation is highlighted at the end of routine bundles. Built-in
+extensions, themes, PWAs, bookmarks and Dock layout are outside this sync.
+
+Policy uses bare IDs in `ExtensionInstallForcelist`, so Helium selects its own
+store/proxy URL. Explicit standard Chrome URLs were rejected in the live test
+by Helium's inherited unmanaged-Mac policy filter; that unsuccessful approach
+was replaced. Explicit removals use `ExtensionSettings` with `removed`.
+The helper merges only the managed IDs into the root-owned
+`/Library/Managed Preferences/net.imput.helium.plist`, preserving other policy
+keys and per-extension fields. Changed policy requires ordinary sudo; no
+passwordless rule or resident privileged helper is installed. Helium may need
+its native policy refresh (`helium://policy`, Reload policies) or a relaunch,
+and downloads can take longer. Managed extensions cannot be removed from the
+normal UI; use the command. A policy write alone does not prove installation.
+
+
 The MacBook Air, MacBook Pro, and Mac Studio use one shared app manifest. Apps
 are shared by default; formulae are shared only when intentionally listed in
 `~/.config/mac-setup/packages.txt`. Run an immediate reconciliation with:
@@ -1082,6 +1173,29 @@ The new tests use temporary Git history to cover bcp failures and clean-tree
 push retries, and verify VSIX contents, unchanged-install skips, CSS updates
 and install failure propagation. Remote deployment remains unverified.
 
+Validation (2026-11-11, Pro): the complete `just check` recipe passed using
+Homebrew's Python-first PATH; Apple's Python cannot run the existing tomllib
+checks. The focused tests cover reverse-order publication, offline merges,
+bootstrap deletion protection, monotonic/tied revisions, policy preservation,
+manual-action persistence, command boundaries and full failure transcripts.
+A disposable Helium 0.21.1.1 / Chromium 157.0.8103.38 profile recognized the
+ID-only force list with status OK and installed all 12 shared store extensions
+through Helium's own proxy. Early 12-second checks were incomplete; later
+bounded checks observed 7 and then 12 installations. Live uninstall was not
+run against the user's profile; explicit removal policy generation is tested
+in isolated fixtures. Herdr's duplicate-start job settled at one successful
+run, preserving its original server. A dirty `mac sync` failed before pulling
+and saved its action panel/transcript. No remote Mac rollout is verified:
+Pro's Tailscale is stopped, Studio's canonical hostname could not resolve,
+and Air's LAN hostname could not resolve. Pro's VPN state was preserved.
+A subsequent full local sync reached the final check in 26 seconds but failed
+because another session added five window bindings without regenerating their
+keymap table. Those unrelated, unfinished changes were preserved.
+Reproduce with `PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH
+just --justfile ~/.config/mac-setup/justfile check`, `mac status`, and
+`helium-extension list`. Use `mac sync` on other Macs once reachable; the
+first changed-policy application needs their administrator authorization.
+
 ### Helium web apps
 
 `~/.config/sync/helium-apps.json` shares Helium web-app names and HTTPS launch
@@ -1211,7 +1325,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | T3 Code (Nightly) | Selected interface, notification, confirmation, diff and sidebar preferences. Conversations, projects, connections, browser profiles, models and credentials stay local. |
 | OrbStack | Menu-bar visibility. VM/container data, CPU/RAM limits, networking and device-specific settings stay local. |
 | Tailscale | Dock visibility only. Device identity, routes, exit nodes and connections stay local. |
-| Helium | Existing menu-shortcut sharing and web-app reminders. Browser profiles, sessions and history are not copied. |
+| Helium | Menu shortcuts, command-driven store-extension choices and manual-action web-app reminders. Browser profiles, sessions and history stay local. |
 | Wispr Flow | Its [account sync](https://docs.wisprflow.ai/articles/5284722493-sync-flow-across-your-devices) handles supported dictionary, snippet, language and style preferences. Shortcuts, microphones and sounds are per-device. |
 | Anki | Use [AnkiWeb](https://docs.ankiweb.net/manual/syncing) for collections. This is not a full application-preferences sync; local databases are not copied. |
 | WhatsApp Web, Telegram Web, Discord, Messenger | Helium web apps; sign in separately on each Mac. Beeper Desktop is retired. |
@@ -1352,8 +1466,8 @@ The shared profile was verified across all three Macs; the custom handoff skill 
 1. Follow the root dotfiles bootstrap instructions until the bare repository
    exists.
 2. Run `~/.config/sync/install-agent.sh`.
-3. Run `brew services start herdr`. This installs a per-user launch agent with
-   `RunAtLoad` and `KeepAlive`, so the Herdr server returns after login/reboot.
+3. Run `mac sync` to reconcile the Herdr login agent. It preserves an already
+   running server instead of repeatedly attempting a duplicate start.
 4. Make Homebrew Fish the account login shell:
 
    ```fish
@@ -1438,6 +1552,9 @@ python3 ~/.config/sync/test-bcp.py
 python3 ~/.config/sync/test-vscode-local.py
 python3 ~/.config/sync/test-background-cleanup.py
 python3 ~/.config/sync/test-helium-apps.py
+/usr/bin/python3 ~/.config/sync/test-helium-extensions.py
+/usr/bin/python3 ~/.config/sync/test-mac-commands.py
+/usr/bin/python3 ~/.config/sync/test-manual-actions.py
 python3 ~/.config/sync/helium-apps.py check
 jq empty ~/.config/karabiner/karabiner.json
 plutil -lint ~/.config/mac-setup/com.fausto.mac-sync.plist

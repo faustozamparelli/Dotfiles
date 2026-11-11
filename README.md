@@ -4,6 +4,71 @@ This repository is the source of truth for Fausto's Mac configuration. Apps
 are shared by default, command-line packages are shared only when listed, and
 each Mac may have a tiny local app list or skip list.
 
+## Everyday maintenance
+
+Use these four commands; you do not need to run their internal helpers separately.
+
+| Occasion | Command | What it bundles |
+| --- | --- | --- |
+| Inspect this Mac or diagnose a problem | `mac status` | Loaded startup jobs, last update results, missing apps/packages, extension state and manual steps |
+| Receive changes from another Mac | `mac sync` | Fast-forward clean dotfiles, apply setup, exchange menu shortcuts and extension choices |
+| Publish your local configuration changes | `mac save` | Capture portable settings/web-app URLs, apply setup, exchange shortcut/extension data, validate keymaps, stage, commit and push |
+| Request software updates now | `mac update` | Existing daily updater safeguards: downloads while open, installs after closing, defers installers needing approval |
+
+Each command ends with a separate `ACTION REQUIRED` or `ROUTINE COMPLETE` panel.
+The panel repeats unresolved manual work until its local checks pass. Failed
+runs point to the full log in `~/Library/Logs/mac-routines/{command}.log`;
+share that file with an agent. Each file holds the latest run of that command,
+including its final action panel. `mac status` may return nonzero for reported
+problems; it does not apply configuration or contact the Git remote.
+
+`bare` remains plain Git: `bare status`, `bare diff`, and `bare pull` do not run
+setup. `bcp` remains compatible with saving; prefer `mac save` for the final
+failure summary and saved transcript. `mac sync` stops if dotfiles have local
+or staged edits or the pull fails. Review unfinished edits before publishing;
+`mac-sync` is the lower-level way to apply only the current checkout.
+`mac save` stages the maintained configuration broadly, including tracked edits:
+review `bare diff` first when another task is unfinished. It does not pull or
+upgrade existing software. `sync-maintain`, `just check`, `install-agent.sh`,
+and the Python helpers are maintenance/setup tools, not extra daily steps.
+
+Change app choices with `mac-app`. Change shared Helium extensions with:
+
+```sh
+helium-extension add EXTENSION_ID       # a Chrome Web Store listing URL also works
+helium-extension remove EXTENSION_ID
+helium-extension list
+```
+
+Add/remove records and publishes the choice immediately, then applies its local
+policy; the other Macs receive it on `mac sync` or `mac save`. Later command
+timestamps win, even if offline changes publish in reverse order. Keep Mac
+clocks correct. IDs, display names and deletion events use the private
+Dotfiles repository's separate `helium-extensions` branch; browser data and
+extension settings stay local. Administrator authorization is needed only when
+the managed policy changes. Helium applies changes on its policy refresh or
+next launch. A policy write is not confirmation that a download has finished.
+Manage shared removals through the command: managed extensions cannot be
+uninstalled through Helium's normal UI. Install TwitchNoSub manually on each
+Mac; missing installations appear in the final action panel. Built-in uBlock,
+themes, web apps, bookmarks and Dock layout are outside extension sync.
+
+### What runs automatically
+
+| Trigger | Work | Manual action |
+| --- | --- | --- |
+| Login and hourly | Menu-shortcut data exchange and local manifest checks | None; `mac sync` applies incoming setup and extension choices |
+| Every 30 minutes while awake, Air/Pro | Check updater eligibility; one daily active-session pass, then finish cached closed-app updates | `mac update` requests an extra pass; native installers/App Store approvals remain manual |
+| Login, or opening Ghostty | Herdr terminal server; Hammerspoon window workflow | None after initial Accessibility approval |
+| Explicit `awake` / `remote` session | Bounded power/session recovery helper | Start/stop deliberately; no automatic VPN connection or power session |
+| App/OS managed | Karabiner, Office/OrbStack helpers, Raycast/Wispr/Task Timer login items, native updaters | Use each app's settings; these are not duplicate dotfiles sync jobs |
+
+No extension watcher or extra maintenance timer is installed. GoogleUpdater's
+old hourly plist exists on Pro but is not loaded and its background item is
+disallowed; empty Keystone plists are inert. Background-item inventory also
+contains stale retired-app registrations; their presence does not establish a
+running app. See the main sync manual for the dated audit and limitations.
+
 ## New Mac
 
 These are the only bootstrap steps that cannot live inside the repository.
@@ -82,11 +147,7 @@ that short list. Removing an entry never automatically uninstalls software.
 Course C/C++ libraries run in the professor's container; project Python
 libraries are installed with `uv`. See `~/.config/sync/README.md`.
 
-Run a sync immediately with:
-
-```sh
-mac-sync
-```
+Receive and apply changes with `mac sync`; publish local changes with `mac save`.
 
 ## Keep work running on this Mac
 
@@ -189,6 +250,7 @@ Keyboard Shortcuts categories remain local. See the sync manual for details.
 
 ## Dotfile maintenance
 
-`bcp` validates the app and keymap configuration, stages the maintained
-dotfiles, then asks for a commit message and pushes. `sync-maintain` performs
-the validation and staging without committing.
+Use `mac save` for capture, application, keymap validation, staging, commit and
+push. `bcp` is retained for compatibility; `sync-maintain` is its internal
+maintenance/staging step. Software updates remain the separate `mac update`
+occasion. See Everyday maintenance above.

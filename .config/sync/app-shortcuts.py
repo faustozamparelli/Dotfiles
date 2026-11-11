@@ -180,11 +180,12 @@ def capture(state, current):
 
 class Transport:
     """An independent bare repository keeps the dotfiles index/HEAD untouched."""
-    def __init__(self, root, url):
+    def __init__(self, root, url, *, branch=BRANCH, filename='shortcuts.json', label='App Shortcuts'):
+        self.branch, self.filename, self.label = branch, filename, label
         self.repo = root / 'transport.git'
         self.env = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
-        self.env.update(GIT_TERMINAL_PROMPT='0', GIT_AUTHOR_NAME='Mac App Shortcuts',
-                        GIT_AUTHOR_EMAIL='mac-sync@localhost', GIT_COMMITTER_NAME='Mac App Shortcuts',
+        self.env.update(GIT_TERMINAL_PROMPT='0', GIT_AUTHOR_NAME=f'Mac {self.label}',
+                        GIT_AUTHOR_EMAIL='mac-sync@localhost', GIT_COMMITTER_NAME=f'Mac {self.label}',
                         GIT_COMMITTER_EMAIL='mac-sync@localhost')
         if not self.repo.exists():
             self.git('init', '--bare', str(self.repo), external=True)
@@ -201,14 +202,14 @@ class Transport:
         return result
 
     def read(self):
-        result = self.git('ls-remote', '--exit-code', 'origin', f'refs/heads/{BRANCH}', check=False)
+        result = self.git('ls-remote', '--exit-code', 'origin', f'refs/heads/{self.branch}', check=False)
         if result.returncode == 2:
             return None, {}
         if result.returncode:
             raise RuntimeError(result.stderr.strip() or 'Cannot reach shortcut remote')
-        self.git('fetch', '--quiet', 'origin', f'refs/heads/{BRANCH}')
+        self.git('fetch', '--quiet', 'origin', f'refs/heads/{self.branch}')
         parent = self.git('rev-parse', 'FETCH_HEAD').stdout.strip()
-        return parent, merge(json.loads(self.git('show', f'{parent}:shortcuts.json').stdout))
+        return parent, merge(json.loads(self.git('show', f'{parent}:{self.filename}').stdout))
 
     def exchange(self, pending, seed):
         for _ in range(3):
@@ -223,14 +224,14 @@ class Transport:
             if parent and combined == remote:
                 return combined
             blob = self.git('hash-object', '-w', '--stdin', input=dump(combined)).stdout.strip()
-            tree = self.git('mktree', input=f'100644 blob {blob}\tshortcuts.json\n').stdout.strip()
+            tree = self.git('mktree', input=f'100644 blob {blob}\t{self.filename}\n').stdout.strip()
             commit = self.git('commit-tree', tree, *(['-p', parent] if parent else []),
-                              input='Sync macOS App Shortcuts\n').stdout.strip()
-            pushed = self.git('push', '--quiet', 'origin', f'{commit}:refs/heads/{BRANCH}', check=False)
+                              input=f'Sync {self.label}\n').stdout.strip()
+            pushed = self.git('push', '--quiet', 'origin', f'{commit}:refs/heads/{self.branch}', check=False)
             if pushed.returncode == 0:
                 return combined
             # Concurrent edits are merged against the new remote and retried.
-        raise RuntimeError('Cannot publish App Shortcuts; local changes retained. ' + pushed.stderr.strip())
+        raise RuntimeError(f'Cannot publish {self.label}; local changes retained. ' + pushed.stderr.strip())
 
 
 def sync(root=ROOT, preferences=None, transport=None):
