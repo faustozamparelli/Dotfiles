@@ -143,12 +143,34 @@ retains normal macOS behavior. No fullscreen Spaces are created.
 
 Super is Right Command (Control + Option + Command), supplied by Karabiner.
 Super-M puts the current app on the left and the most recently focused other
-app on the right. Press it again to maximize both. Super-F also exits the split
-and maximizes the focused window. Super-minus/plus moves the split boundary
+app **on that display** on the right. Press it again to maximize both. Super-F
+also exits the split and maximizes the focused window. Super-minus/plus moves the split boundary
 left/right by five percentage points (plus is = without Shift). Dragging the
 inner edge also resizes its neighbor. The boundary is limited to 25-75 percent;
 application minimum sizes still apply. Closing, minimizing or hiding either
 member maximizes the survivor. Other apps stay maximized when switched to.
+
+Super-H/L sends the focused window to the previous/next display, wrapping around.
+Super-1/2/3 sends it directly to display 1/2/3, ordered left to right in macOS
+Display Settings (top to bottom for vertically aligned screens). This covers
+the built-in display plus two externals; numbering follows the current arrangement,
+including when the lid is closed. A missing destination shows an alert. The moved
+window maximizes and keeps focus. Moving or dragging a split member to another
+screen ends the split and maximizes its neighbor on the original screen.
+
+External brightness is optional and **off at startup**. Super-B enables/disables
+the normal brightness keys for this session. They target the focused window's
+screen; Shift uses one monitor unit instead of five. Native Apple brightness and
+modified system shortcuts pass through. A display change or DDC failure turns the
+mode off. Off means no brightness event tap, timer, polling or helper process.
+While enabled, keypresses run the small [m1ddc](https://github.com/waydabber/m1ddc)
+CLI asynchronously, serializing/coalescing held keys and addressing each monitor
+by its system UUID. DDC/CI must be supported and enabled on the monitor/connection;
+there is no software-dimming fallback. `brew install m1ddc` is an optional,
+machine-local install (1.3.1, 85 KB on Pro); no app, login item or shared package
+entry is added. Air/Studio do not install it automatically. `mac-sync --nuke`
+may remove this optional formula; reinstall it only when wanted. MonitorControl
+was removed after Fausto chose this lighter approach; no shared setup remains.
 
 Window frame changes have zero animation duration. window-defaults.sh disables
 window/Dock animations, disables Stage Manager and tile
@@ -178,12 +200,26 @@ Accessibility authorization. Consolidation there remains unverified.
 Inspect with `hs -c 'print(hs.accessibilityState()); print(hs.inspect(hs.spaces.allSpaces()))'`.
 Exercise the layout with `hs -c 'windowWorkflow.toggle()'`,
 `hs -c 'windowWorkflow.resize(0.05)'` and `hs -c 'windowWorkflow.finish()'`.
+Run `lua ~/.config/sync/test-window-workflow.lua` for the display/brightness checks.
+Verification (2026-11-11, Pro): 38 isolated checks passed, covering three-screen
+ordering, wraparound, missing destinations, split moves/unplug, optional helper
+absence, default-off behavior, native-key passthrough, UUID targeting, serialized
+repeats, failures and shutoff. The 42 existing sync tests also passed. Three live
+checks passed for a portrait external, return to the built-in display and cycling.
+An initial recent-app split assertion failed during interactive focus changes;
+a controlled rerun verified recent-app selection, split, resize and paired edges,
+then restored the windows and focus.
+`m1ddc` read hardware luminance 10 from the attached Samsung display. The display
+was disconnected before the read/change/restore and brightness-key checks, so
+hardware writes and physical keys remain unverified. Brightness was left off.
+Air's LAN name did not resolve; Studio's Tailscale IP timed out with Pro's VPN off.
+Their rollout remains pending; Pro's existing VPN state was preserved.
 
 ## Keyboard Layers
 
 The configuration assigns each modifier a stable job:
 
-- `Right Cmd` (`Super`): global macOS maximize/split controls.
+- `Right Cmd` (`Super`): global macOS window/display controls and optional brightness.
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
 - `Alt`: directional Herdr pane focus; adding Shift resizes.
@@ -295,6 +331,12 @@ update the registry and implementation together, then run `keymap-docs`.
 | Hammerspoon | Super | `Super-f` | Maximize and leave the current split |
 | Hammerspoon | Super | `Super--` | Move the split boundary left by five percentage points |
 | Hammerspoon | Super | `Super-+ (=/+ key, no Shift)` | Move the split boundary right by five percentage points |
+| Hammerspoon | Super | `Super-h` | Send the focused window to the previous display, wrapping around |
+| Hammerspoon | Super | `Super-l` | Send the focused window to the next display, wrapping around |
+| Hammerspoon | Super | `Super-1` | Send the focused window to display 1 in left-to-right arrangement order |
+| Hammerspoon | Super | `Super-2` | Send the focused window to display 2 in left-to-right arrangement order |
+| Hammerspoon | Super | `Super-3` | Send the focused window to display 3 in left-to-right arrangement order |
+| Hammerspoon | Super | `Super-b` | Toggle optional external-display brightness keys for this session (off by default) |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice

@@ -93,3 +93,9 @@ windows.split	Hammerspoon	Super	Super-m	toggle-split	Toggle current and last-use
 windows.maximize	Hammerspoon	Super	Super-f	maximize	Maximize and leave the current split
 windows.resize.left	Hammerspoon	Super	Super--	resize-left	Move the split boundary left by five percentage points
 windows.resize.right	Hammerspoon	Super	Super-+ (=/+ key, no Shift)	resize-right	Move the split boundary right by five percentage points
+windows.display.previous	Hammerspoon	Super	Super-h	previous-display	Send the focused window to the previous display, wrapping around
+windows.display.next	Hammerspoon	Super	Super-l	next-display	Send the focused window to the next display, wrapping around
+windows.display.first	Hammerspoon	Super	Super-1	first-display	Send the focused window to display 1 in left-to-right arrangement order
+windows.display.second	Hammerspoon	Super	Super-2	second-display	Send the focused window to display 2 in left-to-right arrangement order
+windows.display.third	Hammerspoon	Super	Super-3	third-display	Send the focused window to display 3 in left-to-right arrangement order
+windows.brightness.toggle	Hammerspoon	Super	Super-b	toggle-brightness-keys	Toggle optional external-display brightness keys for this session (off by default)

@@ -229,6 +229,12 @@ tool rollout remains pending until it is reachable.
 - Command/Alt/Ctrl-Space control Herdr tabs, panes, and workspaces.
 - Super-M splits the current app and the last other app; press again to maximize.
 - Super-F maximizes; Super-minus/plus moves the split boundary.
+- Super-H/L sends the focused window to the previous/next display; Super-1/2/3
+  sends it directly to a screen ordered left to right in macOS Display Settings.
+- Super-B toggles optional external brightness keys for this session (off at
+  startup and after a display change). Keys follow the focused screen; Shift
+  gives smaller steps. Pro has the optional 85 KB `m1ddc` CLI; other Macs only
+  need `brew install m1ddc` when wanted. Nothing extra runs while the mode is off.
 
 Hammerspoon manages windows on one desktop and needs Accessibility permission
 on each Mac. Normal windows maximize when focused unless they belong to the
