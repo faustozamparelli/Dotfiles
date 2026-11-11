@@ -147,8 +147,8 @@ retains normal macOS behavior. No fullscreen Spaces are created.
 
 Super is Right Command (Control + Option + Command), supplied by Karabiner.
 Super-M puts the current app on the left and the most recently focused other
-app **on that display** on the right. Press it again to maximize both. Super-F
-also exits the split and maximizes the focused window. Super-minus/plus moves the split boundary
+app **on that display** on the right. Press it again to maximize both.
+Super-minus/plus moves the split boundary
 left/right by five percentage points (plus is = without Shift). Dragging the
 inner edge also resizes its neighbor. The boundary is limited to 25-75 percent;
 application minimum sizes still apply. Closing, minimizing or hiding either
@@ -158,7 +158,7 @@ Ctrl-Option-H/L sends the focused window to the previous/next display, wrapping
 around in left-to-right macOS Display Settings order (top to bottom for vertically
 aligned screens). This covers the built-in display plus two externals, including
 Sidecar. With two screens either key sends to the other screen; with one it does
-nothing. Super retains the original maximize/split controls; the added Super
+nothing. Super retains the split/boundary controls; the added Super
 display/brightness bindings and display-number shortcuts were removed. The moved
 window maximizes and keeps focus. Moving or dragging a split member to another
 screen ends the split and maximizes its neighbor on the original screen.
@@ -248,12 +248,14 @@ Both new Ctrl-Option-H/L shortcuts moved a real window between Pro and Sidecar;
 the original frame was restored. Sidecar-only brightness activation stayed off,
 with no helper process. Physical-monitor DDC writes remain unverified. Air/Studio
 connection probes failed again; their rollout remains pending.
+Super-F was subsequently removed at Fausto's request as redundant with Super-M
+and automatic maximization; the remaining 47 isolated checks passed.
 
 ## Keyboard Layers
 
 The configuration assigns each modifier a stable job:
 
-- `Right Cmd` (`Super`): original global macOS maximize/split controls.
+- `Right Cmd` (`Super`): global macOS split toggle and boundary controls.
 - `Ctrl-Option-h/l`: send windows between displays; `Ctrl-Option-b`: optional physical-monitor DDC brightness mode.
 - `Ctrl-h/l`: move between Herdr workspaces.
 - `Cmd`: frequent Herdr tab and pane operations.
@@ -363,7 +365,6 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-Shift-j` | Show or hide the secondary sidebar |
 | VS Code | Command | `Cmd-k` | Show or hide Source Control |
 | Hammerspoon | Super | `Super-m` | Toggle current and last-used app between split and maximized |
-| Hammerspoon | Super | `Super-f` | Maximize and leave the current split |
 | Hammerspoon | Super | `Super--` | Move the split boundary left by five percentage points |
 | Hammerspoon | Super | `Super-+ (=/+ key, no Shift)` | Move the split boundary right by five percentage points |
 | Hammerspoon | Control-Alt | `Ctrl-Alt-h` | Send the focused window to the previous display, wrapping around |

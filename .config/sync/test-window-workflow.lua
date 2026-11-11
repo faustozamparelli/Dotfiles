@@ -108,7 +108,7 @@ local function check(condition, message)
     assert(condition, message)
     checks = checks + 1
 end
-for _, key in ipairs({'m','f','-','='}) do
+for _, key in ipairs({'m','-','='}) do
     check(table.concat(bindingMods[key], ',') == 'cmd,ctrl,alt', 'original Super binding preserved: '..key)
 end
 for _, key in ipairs({'h','l','b'}) do

@@ -222,11 +222,6 @@ end
 
 -- km:windows.split
 hs.hotkey.bind(super, 'm', toggleSplit)
--- km:windows.maximize
-hs.hotkey.bind(super, 'f', function()
-    finishSplit()
-    maximize(hs.window.focusedWindow())
-end)
 -- km:windows.resize.left
 hs.hotkey.bind(super, '-', function() resizeSplit(-0.05) end, nil,
     function() resizeSplit(-0.05) end)

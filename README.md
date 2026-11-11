@@ -113,7 +113,7 @@ stay local. No extension watcher or new maintenance timer is installed.
 | Keys | Action |
 | --- | --- |
 | Right Command | Super (Karabiner); `§` holds Wispr Flow dictation |
-| Super-M / Super-F | Split current/last app on the same display or maximize; Super-minus/plus moves the boundary |
+| Super-M | Toggle current/last app on the same display between split and maximized; Super-minus/plus moves the boundary |
 | Ctrl-Option-H/L | Send the focused window to the previous/next display, including Sidecar; wraps around |
 | Ctrl-Option-B | Toggle optional physical-monitor DDC brightness keys; off by default, excludes Sidecar |
 | Ctrl-h/l | Previous/next Herdr workspace |
@@ -124,8 +124,8 @@ stay local. No extension watcher or new maintenance timer is installed.
 
 Screens are ordered left to right in macOS Display Settings (top to bottom when
 vertically aligned), supporting the built-in display and two externals. Moved
-windows maximize; moving a split member releases its neighbor. Super keeps its
-original maximize/split bindings. Optional brightness keys follow the focused
+windows maximize; moving a split member releases its neighbor. Super controls
+the split toggle and boundary. Optional brightness keys follow the focused
 physical monitor; Shift gives smaller steps. Pro has the 85 KB
 `m1ddc` CLI; install it elsewhere with `brew install m1ddc` only when wanted.
 No extra app is used, and no brightness listener/helper runs while the mode is off.

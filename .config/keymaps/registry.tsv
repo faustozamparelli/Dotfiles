@@ -90,7 +90,6 @@ vscode.view.explorer	VS Code	Command	Cmd-j	toggle-explorer	Show or hide the file
 vscode.view.secondary-sidebar	VS Code	Command	Cmd-Shift-j	toggle-secondary-sidebar	Show or hide the secondary sidebar
 vscode.view.git	VS Code	Command	Cmd-k	toggle-git	Show or hide Source Control
 windows.split	Hammerspoon	Super	Super-m	toggle-split	Toggle current and last-used app between split and maximized
-windows.maximize	Hammerspoon	Super	Super-f	maximize	Maximize and leave the current split
 windows.resize.left	Hammerspoon	Super	Super--	resize-left	Move the split boundary left by five percentage points
 windows.resize.right	Hammerspoon	Super	Super-+ (=/+ key, no Shift)	resize-right	Move the split boundary right by five percentage points
 windows.display.previous	Hammerspoon	Control-Alt	Ctrl-Alt-h	previous-display	Send the focused window to the previous display, wrapping around
