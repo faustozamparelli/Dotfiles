@@ -46,7 +46,7 @@ local function window(id, display, pid)
     function w:focus() focused = self; return self end
     function w:raise() return self end
     function w:application()
-        return {pid=function() return pid end, bundleID=function() return 'test.app' end}
+        return {pid=function() return pid end, bundleID=function() return self.bundle or 'test.app' end}
     end
     function w:newWatcher() return {start=noop, stop=noop} end
     return w
@@ -189,6 +189,31 @@ screens = {screen(8, 0, 800), laptop, screen(7, 0, -800)}
 ordered = windowWorkflow.screens()
 check(ordered[1]:id() == 7 and ordered[2] == laptop and ordered[3]:id() == 8,
     'vertically stacked displays use top-to-bottom order')
+
+-- Remote-session windows must retain native sizing on every automatic path.
+screens = {laptop, left}
+a.display, focused = laptop, a
+a.bundle = 'com.apple.ScreenSharing'
+a.rect = {x=100, y=100, w=640, h=480}
+for _, eventName in ipairs({'windowFocused', 'windowVisible', 'windowMoved'}) do
+    subscriptions[eventName](a)
+    check(a.rect.w == 640 and a.rect.h == 480,
+        'Screen Sharing retains native frame on '..eventName)
+end
+windowScreenWatcher.callback()
+check(a.rect.w == 640, 'display changes leave Screen Sharing unmanaged')
+windowWorkflow.send(1)
+check(a.display == laptop, 'display shortcuts leave Screen Sharing native')
+bindings['m']()
+check(windowWorkflow.state() == nil, 'Screen Sharing cannot initiate a split')
+focused = b
+windows = {a, b}
+bindings['m']()
+check(windowWorkflow.state() == nil, 'Screen Sharing cannot be selected as split neighbor')
+a.bundle = nil
+subscriptions.windowFocused(a)
+check(a.rect.w == 1000, 'ordinary apps still maximize on focus')
+windows, focused = {a, elsewhere, b}, a
 
 local function event(key, down, flags)
     return {systemKey=function() return {key=key,down=down} end,

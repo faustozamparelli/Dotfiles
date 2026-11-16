@@ -20,8 +20,13 @@ local resized
 local function normal(w)
     if not w or not w:id() or not w:isStandard() or w:isFullScreen() then return false end
     local app = w:application()
-    -- Settings exposes a resizable AX window but constrains its layout.
-    if not app or app:bundleID() == 'com.apple.systempreferences' then return false end
+    if not app then return false end
+    local bundle = app:bundleID()
+    -- Settings constrains its layout; Screen Sharing owns session sizing/scaling.
+    -- Leave both unmanaged on focus, move, display changes and split pairing.
+    if bundle == 'com.apple.systempreferences' or bundle == 'com.apple.ScreenSharing' then
+        return false
+    end
     local element = hs.axuielement.windowElement(w)
     return element and element:isAttributeSettable('AXSize')
         and element:isAttributeSettable('AXFullScreen')

@@ -124,7 +124,8 @@ stay local. No extension watcher or new maintenance timer is installed.
 
 Screens are ordered left to right in macOS Display Settings (top to bottom when
 vertically aligned), supporting the built-in display and two externals. Moved
-windows maximize; moving a split member releases its neighbor. Super controls
+windows maximize; moving a split member releases its neighbor. Screen Sharing
+keeps its native sizing and is excluded from automatic layouts and display shortcuts. Super controls
 the split toggle and boundary. Optional brightness keys follow the focused
 physical monitor; Shift gives smaller steps. Pro has the 85 KB
 `m1ddc` CLI; install it elsewhere with `brew install m1ddc` only when wanted.
