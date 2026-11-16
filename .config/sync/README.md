@@ -1771,3 +1771,9 @@ frames, not a proven root cause. GUI bridge remains unavailable. No bundled
 Qt binaries, app signature or global color settings were modified.
 T3 Connect final check: link pending server startup, relay not provisioned.
 A desktop restart/service handoff is still required; account approval passed.
+OpenFOAM live startup passed after image download: API 2306, patch 0,
+build `_fbf00d6b-20230626`; the pinned digest matched. Final `mac-sync` completed
+and manifest drift check passed. FileVault is ON: normal SSH/T3 availability
+after a power-loss reboot requires preboot unlock; no auto-login or encryption
+change was made. Computer use is enabled in Studio's profile but not validated:
+current session lacks its runtime tools and screen capture failed earlier.
