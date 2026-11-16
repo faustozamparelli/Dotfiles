@@ -1804,3 +1804,52 @@ has not been observed. Computer-use plugin/skill is present but its required
 function`); no UI/permission test completed. QGIS crash is accepted pending
 an upstream update and was not retested. Helium web apps are optional website
 shortcuts from the shared manifest, not prerequisites for T3 or project work.
+
+### Studio native desktop MCP (2026-11-16)
+
+User approved replacing the blocked OpenAI/node_repl route with Peekaboo.
+Current Studio profile: `studio-desktop` runs `~/.local/bin/peekaboo mcp`;
+computer-use plugin is off. Removed the obsolete `js_repl` feature workaround
+and its test: Codex 0.169.0 reports that feature as removed. No ChatGPT app,
+provider API key, modified signatures, TCC edits or recurring job was added.
+
+Explicit setup: `~/.config/mac-setup/direct/studio-desktop.sh`. It is Studio-only,
+pins CLI/app 4.9.9, verifies both SHA-256 release assets and OpenClaw signing team
+FWJYW4S8P8, and opens the GUI host through a user login item without a timer.
+CLI lives outside Homebrew so `mac-sync --nuke` cannot remove it. Re-running
+setup validated the installed signatures without downloading again. Initial
+archive extraction assumed a flat directory; fixed to strip its release folder.
+App upgrades across pinned versions require review with the app closed.
+
+Verified: permissions report Screen Recording, Accessibility and Event
+Synthesizing granted; real screen capture was visually inspected; an exact T3
+window UI read passed; native MCP initialized and exposed 26 tools, and its
+`see` UI call passed. A Calculator test used five observed AX button clicks
+(All Clear, 1, Add, 1, Equals) and read back 2; Calculator was closed afterwards.
+Automatic capture can encounter ScreenCaptureKit ownership conflicts. An
+explicit app Bridge socket also failed MCP startup under that condition;
+the registered server uses normal process-local startup, with the documented
+`capture_engine: "classic"` request-level fallback. Do not change target or
+repeat a mutation after an unverified result; observe its exact window first.
+Keyboard permission is granted; the live action test exercised AX clicks.
+Reboot/locked-screen recovery and standalone service-host permission inheritance
+remain separate from this logged-in desktop verification.
+
+Diagnostic evidence: installed OpenAI helper rejects `initialize` with
+`capabilities.experimental` but accepts the same payload without it (upstream
+https://github.com/openai/codex/issues/45269). A temporary protocol adapter
+passed initialization and listed 10 native tools, but Finder access failed
+with -1743 under T3 and -10000 from a user LaunchAgent. T3's installed desktop
+and standalone binary both lack the Automation entitlement (related issue:
+https://github.com/pingdotgg/t3code/issues/21282). The user confirmed the visible
+Automation permission was already enabled. The adapter and temporary launchd
+test were removed, not published as working desktop control.
+References: https://github.com/openclaw/Peekaboo/blob/main/docs/MCP.md and
+https://github.com/openclaw/Peekaboo/blob/main/docs/permissions.md.
+Fresh T3-session verification also passed: the existing smoke-test thread was
+resumed with fresh context, registered all 26 `studio-desktop` tools, listed
+six T3 windows, and read exact window 432 using classic capture. It returned
+23 elements with the accessibility tree truncated at depth 12. This validates
+model-visible registration and an actual native MCP read, not just CLI access.
+The final sync regression suite passed 43 tests after removing the obsolete
+JavaScript-runtime test; installer bash syntax and idempotent rerun passed.

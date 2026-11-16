@@ -29,10 +29,17 @@
           "args": [],
           "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
           "enabled": true
+        },
+        "studio-desktop": {
+          "command": "/Users/faustozamparelli/.local/bin/peekaboo",
+          "args": [
+            "mcp"
+          ],
+          "enabled": true
         }
       },
       "plugins": {
-        "computer-use@openai-bundled": true
+        "computer-use@openai-bundled": false
       }
     }
   },

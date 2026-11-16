@@ -37,3 +37,11 @@ reviewed preferences and `codex-technical.json` (plugins/MCPs/per-Mac overrides)
 Use its helper's `set-mcp`/`set-plugin`; app MCPs need their local bridge.
 Track this custom skill; leave managed skills/caches local. Keep command details
 in the guide and operational evidence in the existing manual.
+
+Studio desktop control uses the user-approved Peekaboo `studio-desktop` native
+MCP, not the bundled node_repl skill. Explicit Studio setup:
+`~/.config/mac-setup/direct/studio-desktop.sh` (pinned signed CLI and Mac app).
+macOS Screen Recording/Accessibility grants remain machine-local. Use `see`
+before acting and keep operations tied to the observed app/window/snapshot.
+For MCP `see`, use `capture_engine: "classic"` if automatic capture reports
+a ScreenCaptureKit owner refusal; do not repeatedly start competing hosts.

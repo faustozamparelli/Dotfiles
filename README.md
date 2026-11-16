@@ -189,9 +189,12 @@ local unlock before remote tools become available.
 
 Use `~/.t3/bin/t3 status` and `~/.t3/bin/t3 service status` to check hosting.
 T3 Connect needs Studio's own account approval; its service starts at login.
-Computer use additionally requires local Screen Recording, Accessibility and
-any requested Automation permissions for the actual T3/Codex processes, plus
-an available desktop. Enabling its plugin alone does not verify UI control.
+Studio desktop control uses **Peekaboo** through the `studio-desktop` MCP.
+Setup: `~/.config/mac-setup/direct/studio-desktop.sh` installs the pinned signed
+CLI/app and an on-demand login item. Screen Recording, Accessibility and optional
+Event Synthesizing grants stay local. The old OpenAI node_repl plugin is disabled.
+Use exact window IDs and fresh snapshots; `capture_engine: "classic"` is the
+documented MCP fallback when another process owns ScreenCaptureKit.
 
 For later cleanup, inventory Git status, untracked files, worktrees and active
 T3 work before removing a project; preserve unpublished work and outputs.

@@ -275,8 +275,6 @@ def apply():
     if isinstance(notify, list) and notify and "SkyComputerUseClient" in notify[0]:
         update_section(lines, "", {"notify": None})
     update_section(lines, "", effective["settings"])
-    if effective["plugins"].get("computer-use@openai-bundled"):
-        update_section(lines, "features", {"js_repl": True})
     for app_id, enabled in effective["apps"].items():
         update_section(lines, f"apps.{json.dumps(app_id)}", {"enabled": enabled})
     for name, enabled in effective["plugins"].items():

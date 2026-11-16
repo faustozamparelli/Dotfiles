@@ -101,3 +101,9 @@
   databases, credentials, or browser profiles across machines.
 - Later project cleanup must check unpublished/untracked work, linked
   worktrees and active T3 jobs; preserve results before removing projects.
+
+- Studio computer-use choice (2026-11-16): the user approved Peekaboo native
+  desktop MCP tools through `studio-desktop`, replacing the blocked OpenAI
+  helper/node_repl route. Use these tools directly for desktop operations.
+  Follow ordinary macOS Screen Recording/Accessibility permission prompts;
+  no ChatGPT app, TCC edits, modified vendor signatures or API key is required.
