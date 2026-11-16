@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Official OpenCFD v2306 image, pinned to its Apple-silicon manifest.
 image="opencfd/openfoam-default@sha256:7df8c49ff2f966deb0d8afba54a5deb19befc93ea4346e974f0f13869572c289"
-export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.orbstack/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 if [[ "${1:-}" == --run ]]; then
   shift

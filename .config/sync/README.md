@@ -1758,3 +1758,8 @@ Total targeted checks: 43 sync, 7 command, 5 drift-check, 4 manual-action,
 3 VS Code and 11 extension tests passed (73 across separate suites).
 Pro received commit 2411705 with its unrelated VS Code edit preserved and
 Remote SSH installed. Air's Tailscale probe timed out and LAN did not resolve.
+QGIS MCP initialized and listed 125 tools on Studio. GUI bridge was not
+listening at that point; tool enumeration does not establish a live app call.
+OrbStack finished first startup and reported its Docker engine ready. The
+OpenFOAM launcher now includes `~/.orbstack/bin` so noninteractive T3/SSH
+commands can find OrbStack's Docker without fish startup.
