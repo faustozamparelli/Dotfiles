@@ -1777,3 +1777,7 @@ and manifest drift check passed. FileVault is ON: normal SSH/T3 availability
 after a power-loss reboot requires preboot unlock; no auto-login or encryption
 change was made. Computer use is enabled in Studio's profile but not validated:
 current session lacks its runtime tools and screen capture failed earlier.
+User decision: preserve FileVault encryption and accept/document the preboot
+unlock limitation. Do not disable encryption or enable automatic login to
+hide it. Studio Tailscale remains continuously connected; laptop VPN stays
+manual. Reboot/power-loss recovery to an available T3 desktop is not promised.
