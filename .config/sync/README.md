@@ -1793,3 +1793,14 @@ without changing it on Macs where that plugin is off. Updated sync suite:
 across the targeted suites). Actual computer-use permission/UI validation is
 still pending a fresh session. Removed the extra uv-managed Python 3.14
 download used during setup; QGIS MCP uses existing uv-managed 3.13.
+
+Post-restart smoke check (2026-11-16): T3 Connect now passes with a provisioned
+link and connected QUIC tunnel, superseding the pending-link result above.
+A separate fresh T3 thread verified canonical SSH, connected Tailscale,
+manifest drift and all four repository HEADs. Desktop still owns the server;
+the installed user service waits for that owner to stop, so service takeover
+has not been observed. Computer-use plugin/skill is present but its required
+`node_repl` runtime is unavailable (`TypeError: tools.node_repl is not a
+function`); no UI/permission test completed. QGIS crash is accepted pending
+an upstream update and was not retested. Helium web apps are optional website
+shortcuts from the shared manifest, not prerequisites for T3 or project work.
