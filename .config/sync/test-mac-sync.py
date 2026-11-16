@@ -426,6 +426,36 @@ class CodexTechnicalTests(unittest.TestCase):
         module.OLD_PREFERENCE_MARKER = root / 'old-marker'
         return module
 
+    def test_computer_use_feature_is_machine_local_and_preserves_other_features(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            snapshot = {'plugins': {}, 'mcp_servers': {}, 'machines': {
+                'studio': {'features': {'computer_use': False}}, 'air': {}}}
+            module.SNAPSHOT.write_text(json.dumps(snapshot))
+            original = '[features]\ncomputer_use = true\nunrelated_feature = true\n'
+            module.CONFIG.write_text(original)
+            with patch.object(module, 'machine_name', return_value='studio'):
+                module.apply()
+                first = module.CONFIG.read_text()
+                module.apply()
+                self.assertEqual(first, module.CONFIG.read_text())
+                config = tomllib.loads(first)
+                self.assertFalse(config['features']['computer_use'])
+                self.assertTrue(config['features']['unrelated_feature'])
+                captured = module.snapshot_from_config()
+                self.assertEqual(captured['machines']['studio']['features'],
+                                 {'computer_use': False})
+                self.assertNotIn('features', captured['machines']['air'])
+                self.assertNotIn('unrelated_feature', json.dumps(captured))
+            module.CONFIG.write_text(original)
+            with patch.object(module, 'machine_name', return_value='air'):
+                module.apply()
+            self.assertTrue(tomllib.loads(module.CONFIG.read_text())['features']['computer_use'])
+            for features in ({'computer_use': 'false'}, {'unknown': False}, []):
+                snapshot['machines']['studio']['features'] = features
+                with self.subTest(features=features), self.assertRaises(ValueError):
+                    module.validate(snapshot)
+
     def test_account_plugin_inventory_cannot_reenable_codex_connectors(self):
         with tempfile.TemporaryDirectory() as directory:
             module = self.load_module(Path(directory))

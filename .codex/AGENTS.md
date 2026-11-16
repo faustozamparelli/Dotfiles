@@ -1,144 +1,21 @@
-# Personal working principles
+# Fausto's preferences
 
-## Engineering
+- Prefer simple, readable, maintainable changes. Reuse existing tools and architecture; avoid unnecessary dependencies, abstractions and infrastructure.
+- Handle authorized work and routine choices independently. Ask only about consequential unresolved decisions. Explain substantial design choices briefly before implementation.
+- Start with repository instructions, pinned versions, source and nearby tests. Use official documentation when local evidence is insufficient, version details are uncertain or research is requested.
+- Use native files/terminal, app-specific CLIs and MCPs first. Use computer use only when those cannot perform the task. For browser work use T3's browser tools. Avoid unnecessary tool discovery, screenshots and skill loading.
+- Work through T3 Code; do not add dependencies on the retired ChatGPT desktop app. Desktop fallback is Peekaboo (`studio-desktop` / `pro-desktop`); prefer text-only UI inspection and verify actions from fresh state.
+- Be concise and concrete. Explain outcomes, important choices and limitations. Reuse living documentation; avoid extra planning/history files.
+- Run relevant checks and inspect important outputs. Distinguish requirements, assumptions and measured findings; report failures and unverified behavior. Preserve scientific protocols, seeds, baselines and metric denominators.
+- Keep credentials and runtime state machine-local. Preserve unrelated edits. Do not add periodic maintenance jobs.
+- For Mac work: identify the host; prefer `studio` remotely. SSH/file transfers and available desktop automation are authorized. Studio stays online; laptop Tailscale remains manual. Read the operating reference before changing access or power.
+- After Mac configuration/documentation changes, check, commit and push scoped portable changes to the bare dotfiles repository automatically, then reconcile reachable Macs without overwriting their edits. Report publication or rollout failures.
 
-- Prefer simple, readable, maintainable solutions. Reuse functionality; avoid unnecessary abstractions, dependencies, frameworks, duplication and infrastructure. Preserve architecture unless a concrete problem justifies change; keep changes scoped and reviewable. Prioritize correctness, reproducibility and testability.
-- Handle authorized work and routine choices independently. Ask about consequential unresolved product, scientific or architectural decisions; do not silently change important decisions.
-- Start with repository instructions, pinned versions, source, types and nearby tests. Retrieve official documentation through native search/browser tools only when local evidence is insufficient, version details are uncertain or requested; disclose version mismatches. Mentioning a library alone requires no lookup.
-- Prefer native file, terminal and T3 tools; use integrations only for needed capabilities. Avoid tool discovery and skill loading for trivial tasks.
-- Codex tool defaults and per-Mac overrides are tracked in `~/.config/sync/codex-technical.json`; use its helper's `set-mcp`/`set-plugin` commands for local toggles. Keep authentication machine-local. App MCPs need their application's bridge running; do not install them on Macs without that app or repeatedly retry authentication/quota failures. Prefer existing local evidence, then official documentation when an optional documentation MCP is unavailable.
+# Where to look
 
-## Planning and communication
-
-- The user uses Codex through T3 Code. Prefer T3's native browser and tool integration; do not configure dependencies on the retired ChatGPT desktop app.
-- Understand substantial or ambiguous tasks and explain important design choices before implementation. Use native Plan mode when available and appropriate; divide large work into verifiable milestones.
-- Minimize files and words while preserving technical depth and evidence. Reuse existing documents; create extra documentation only when requested or required by repository conventions. Keep Markdown compact; avoid redundant planning, architecture, decision, progress or tracking files.
-- Treat the user as the technical decision-maker. Explain architecture, algorithms and information flow rather than code line by line. Scale detail to significance; answer routine actions directly. Use tables or diagrams only when helpful.
-
-## Research integrity
-
-- Distinguish requirements, assumptions, decisions, hypotheses and validated findings; label proposals and user-approved versus autonomous choices.
-- Preserve configurations, seeds, protocols, metrics and historical baselines. Disclose incomparable conditions, budgets or populations; report unsuccessful experiments, exclusions and uncertainty without selecting results for a preferred conclusion.
-- State metric denominators; distinguish conditional from overall mission performance, simulator truth from controller information, and training objectives from evaluation metrics. Implementation completeness does not establish research validity. Suggest research only for concrete uncertainties.
-
-## Completion
-
-- Run relevant checks and important failure cases where possible; inspect numerical/visual outputs. Broaden checks only when changes, failures or unresolved risks justify it. Never claim unverified behavior works; separate actual results from expectations and report regressions, failures and unrun checks.
-- Preserve authoritative requirements unless changes are authorized. Follow existing documentation conventions: record meaningful implementation changes, decisions, evidence, failures, limitations and useful study pointers in living documentation; keep its structure and change log concise. Maintain reproducible commands and outputs in existing reproduction documentation.
-
-## Dotfiles publication
-
-- Standing authorization (2026-11-05): when requested Mac work changes portable configuration, manifests, shortcuts, setup scripts or related documentation, track the completed changes in the bare dotfiles repository, run relevant checks, commit and push automatically before reporting completion. Do not ask separately for permission to publish those changes. Keep secrets, credentials, caches and machine-local runtime state out of Git; preserve unrelated or unfinished work from other sessions.
-- A globally retired app must also lose its obsolete tracked configuration, app-specific helpers/tests, keybindings and sync/capture hooks. Keep its explicit retirement entry so later sync cannot reinstall it. Include those deletions in the same publication; do not leave unused app configuration tracked. A missing app on one Mac, an offline Mac, or a temporary uninstall does not establish global retirement.
-- Reconcile and verify the published changes on reachable Macs, preserving their independent edits. Report any failed push, unreachable Mac, or required local permission instead of silently leaving completed work unpublished or claiming all devices are current.
-
-## Mac maintenance and Helium extensions (2026-11-11)
-
-- Prefer the user-facing bundles `mac status` (inspect), `mac sync` (receive/apply), `mac save` (capture/apply/validate/stage/commit/push), and `mac update` (existing safeguarded updater). `bare` remains plain Git; `bcp` remains compatible. Explain the occasion, not every internal helper; `~/README.md` is the quick command reference.
-- No extension watcher or new periodic maintenance job. Helium store-extension choices use `helium-extension add/remove ID` and the private Dotfiles `helium-extensions` data branch. Manual sync/save exchanges them; scheduled/check runs do not. Later command timestamps win per ID; retain offline changes and tombstones. Keep browser profiles, extension data and local sync state out of Git.
-- TwitchNoSub remains a user-approved manual install. Routine bundles must end with a distinct action panel, including failures; repeat detectable unresolved manual steps and provide the saved transcript under `~/Library/Logs/mac-routines/`. Never claim a policy write proves a completed browser download or that unreachable Macs are current.
-
-## Personal Macs and remote access
-
-- Use the names `studio`, `air`, and `pro`; prefer `studio` for remote work. The user authorizes SSH commands, file edits/transfers, and available desktop automation on these Macs as needed for the requested task. Handle routine work independently and keep consequential changes within scope.
-- Tailscale inventory: `studio.tailed8082.ts.net` (`100.95.1.50`), `air.tailed8082.ts.net` (`100.82.17.2`), `pro.tailed8082.ts.net` (`100.122.185.114`). Each uses account `faustozamparelli`, home `/Users/faustozamparelli`. Check current availability with `/usr/local/bin/tailscale status`.
-- Identify the machine hosting the current agent/thread before accessing another Mac. If already running on `air`, execute tasks locally instead of SSHing back into `air`.
-- For remote `air`, check local Tailscale availability (`tailscale status --json`: local backend running and Air peer available), then probe `ssh -o BatchMode=yes -o ConnectTimeout=5 air-ts true`. Prefer that route when reachable. If Tailscale is unavailable or the connection fails, try `ssh -o BatchMode=yes -o ConnectTimeout=5 air-lan true`; a known current LAN IP can be passed with `-o HostName=ADDRESS`. Select the connection with a harmless probe before running the task; do not retry a failed task through another route merely because its remote command returned nonzero.
-- `ssh air` / `ssh air-ts` target `air.tailed8082.ts.net`; `ssh pro` / `ssh pro-ts` target `pro.tailed8082.ts.net`; `ssh studio` targets `studio.tailed8082.ts.net`. `air-lan` and `pro-lan` explicitly select their Bonjour hostnames and reuse the Tailscale host-key identity via `HostKeyAlias`. All use the machine-local `~/.ssh/id_ed25519` and strict host-key checking. All six cross-machine SSH directions passed on 2026-11-02 using the canonical aliases after verifying host keys and authorizing the existing public keys. Pro's power log attributes the observed dropouts to Clamshell Sleep; `caffeinate -i` does not prevent lid-close sleep. Keep its lid open during remote work. Sleep/wake recovery remains unverified. Never copy private keys or disable host checks.
-- Keep this workflow in the tracked `~/.codex/AGENTS.md` and relevant configuration/scripts. On 2026-11-06 the user also requested command usage and recent system features in `~/readme.md`, superseding the earlier no-README instruction for that documentation.
-- Use `ssh -o BatchMode=yes studio 'command'` for unattended commands; send scripts to `ssh -o BatchMode=yes studio /bin/sh -s` with a literal quoted heredoc. `air` uses fish as its login shell. `studio` has a minimal remote PATH; use absolute paths or explicitly include `/opt/homebrew/bin`, `/opt/homebrew/sbin`, and `/usr/local/bin`. Use `scp` or `rsync -av` for transfers and inspect remote repository instructions before edits.
-- Execute remote work explicitly through SSH. Browser/desktop tools stay attached to their own host unless they support remote targets. For a remote development server, use `ssh -N -L 127.0.0.1:LOCAL_PORT:127.0.0.1:REMOTE_PORT studio`.
-
-### Laptop VPN, sleep, and local access
-
-- Current user requirement: Tailscale on `air` and `pro` is normally disconnected/closed except when wanted for Studio or other explicitly chosen remote access. Agents may start, connect, disconnect and quit Tailscale on `air` as needed for requested work (authorized 2026-11-05); restore its prior disconnected/closed state after an agent-started session. Use the existing native client/CLI and verify connection state. On `pro`, use an available connection or the user's chosen session. AC power must not automatically enable it. This supersedes the earlier AC auto-connect policy. Preserve a VPN session the user opened; do not persistently run `caffeinate` or disable native sleep outside an explicitly started, bounded `remote` or `awake` session below.
-- The old Air power watcher was unloaded and its executable, source, and launch agent archived under `~/.local/state/air-power/retired-autoconnect-*` on 2026-11-01. Dotfiles no longer install a watcher. `mac-sync` runs `~/.config/mac-setup/retire-tailscale-power.sh` to retire any remaining old watcher without changing manual VPN sessions. Use the native Tailscale client to Connect/Disconnect; closing a window does not establish the tunnel's state. Existing temporary sessions may remain connected until the user finishes remote work.
-- Administrator-approved Air settings: battery `sleep 1 standby 1 powernap 0 tcpkeepalive 0 womp 0 ttyskeepawake 0`; AC `sleep 1 standby 1 powernap 0 tcpkeepalive 1 womp 1 ttyskeepawake 1`. Hibernation mode 3 and active-use CPU settings are preserved. Reproduce with `sudo ~/.local/bin/air-power-setup`; inspect with `pmset -g custom`. Original baseline: `~/.local/state/air-power/pmset-before-20261101.txt`. Battery charge caps do not establish the current power source; check `pmset -g batt`.
-- Wake for network access permits supported local wake requests; AC power alone does not make a fully sleeping Mac reachable. The Air reports wireless wake support. On 2026-11-01 it was awake on AC and reachable through Tailscale, but Bonjour resolution and direct LAN SSH to `10.169.208.93` from Pro (`10.169.222.68`) failed, with incomplete ARP and no reverse peer reachability. The Air firewall was disabled and ProtonVPN disconnected. University Wi-Fi client isolation is a strong possibility, not a confirmed cause. Both Macs have the same `/20` IP subnet, which does not prove direct peer access.
-- If Air is remote and sleeping, use an available supported local network-wake agent/sender or sleep proxy from an awake Mac on its LAN, then retry the connection probes. Keep AC network wake enabled and battery sleep conservative. A working wake sender/relay has not yet been configured or verified; do not claim that the agent can wake Air until that path passes a real test. Do not enable Tailscale automatically or keep Air awake persistently as a substitute.
-- Earlier `pmset sleepnow` testing on 2026-11-01 produced SSH timeouts over both LAN and Tailscale. No working LAN wake relay or sleep-to-network-wake recovery is verified. Since peer access fails on the current LAN even while awake, LAN SSH with Tailscale off cannot be promised. Use a network that permits peer discovery/traffic and a supported local wake sender or sleep proxy, then verify awake access before testing sleep/wake. Never keep the Air awake to conceal a failed wake path.
-- A fully sleeping Mac cannot receive its own Tailscale wake request ([Tailscale](https://tailscale.com/blog/wake-on-lan-tailscale-upsnap), [Apple wake requirements](https://support.apple.com/guide/remote-desktop/sleep-shut-down-log-out-or-restart-a-computer-apd5535ee19/mac)). `air` is often near `pro`, not `studio`; use local access where available. Overnight battery drain and wake-on-LAN recovery remain unmeasured. The macOS GUI Tailscale CLI can fail in an SSH session; use its GUI context if an explicitly requested CLI action is needed.
-
-### Explicit remote mode (2026-11-05)
-
-- User-approved interface in fish on all Macs: `remote start`, `remote start 30m` / `remote start 2h` / `remote start 1h30m`, `remote stop`, and `remote status`. The executable is `~/.local/bin/remote`, already on fish's PATH; `remote-mode` remains a compatibility symlink. Default 12h, range 1s–7d; bare numbers retain the old hours syntax. Starting an active session resets its deadline while preserving its original snapshot. Start/stop use normal sudo; no passwordless rule or automatic AC start.
-- Start requires AC and a connected/signed-in Tailscale client, saves the system-wide SleepDisabled and VPN/GUI state, installs the root-owned com.fausto.remote-mode launchd helper, and sets SleepDisabled=1. Stop restores the original state, disconnecting/quitting only VPN state created by remote. Unplug, reboot, interrupted startup, and GUI logout also restore. There are no remote sleep-prevention assertions or polling loop once off; the recovery job exits when no state is present. Independent VPN/caffeinate sessions are preserved and may affect sleep separately.
-- User explicitly chose native macOS sleep at timed expiry, preserving battery, standby, hibernation, and ordinary sleep timers. Expiry cleans up, clears the sleep override, and runs pmset sleepnow. The helper checks macOS's sleep counter after wake and restores any pre-existing SleepDisabled=1 (Studio's baseline); if the counter does not advance within 30 seconds it restores the baseline, records an error, and exits. This is not a guarantee of immediate disk hibernation or remote wake. Legacy already-running sessions gain the new expiry action when renewed with remote start.
-- Failures print ERROR and return nonzero; status checks deadline, AC, sleep override, Tailscale, SSH listener, watchdog, and stored failures. Automatic failures are kept in /var/db/com.fausto.remote-mode/last-result.json and announced via best-effort macOS notification. State/logs live in that directory, the helper in /Library/PrivilegedHelperTools/com.fausto.remote-mode, and its plist in /Library/LaunchDaemons. Never track runtime files or credentials. Logic checks: /usr/bin/python3 ~/.config/sync/test-remote-mode.py.
-- Earlier live evidence: Air start/stop preserved an existing VPN, then separately opened/connected and disconnected/quit the originally closed/stopped app; pmset -g custom matched before/after. Its old watchdog restored after an injected expired deadline. Studio SSH checks confirmed Pro's lid closed, AC connected, remote mode active, and SleepDisabled=1 twice 80 seconds apart; an existing caffeinate -is process was preserved, so retention was not isolated to remote. Native-expiry sleep, physical unplug/reboot recovery, Air closed-lid operation, and overnight battery drain require distinct evidence; implementation/mocked checks do not validate them. Existing SSH/desktop permissions, login, and FileVault requirements remain.
-- Command update checks (2026-11-05): 21 logic tests passed on all three Macs, including expiry/sleep failure handling and no off-state loop. Fish discovers remote directly and invalid durations return ERROR/nonzero. Live Air renewal/stop restored SleepDisabled=0, left no watchdog PID, and preserved pmset -g custom byte-for-byte. Pro's running helper was upgraded with its existing 19:55 deadline and its source/helper checksums matched. Native sleep at expiry is implemented and covered by mocked checks; it has not yet been physically observed for this update.
-
-### Local awake mode (2026-11-06)
-
-- User-requested `awake start [duration]`, `awake status`, and `awake stop` keep local T3 Code/Codex work running while waiting for limits to reset, including intended closed-lid use on battery or AC. `~/.local/bin/awake` links to `remote`; both share the root helper, state directory, restoration and native-sleep expiry. `awake` defaults to 3h30m (user choice); `remote` keeps 12h. Explicit durations retain the 1s–7d range. A mode cannot start or stop over the other mode's active session; stop the owning mode first. The next start/renew installs the updated helper.
-- `awake` never probes, opens, connects, disconnects or quits Tailscale and does not require or manage SSH. Preserve independently opened VPN sessions. The user explicitly enabled awake on battery as well as AC on 2026-11-06; unplugging does not end a local session. Start requires a logged-in desktop; the display may sleep or lock. Reboot, logout and interrupted startup restore prior power settings. `remote` stays AC-only with unplug recovery. No automatic activation, passwordless sudo or off-state polling. Timed expiry requests sleep; stop restores without forcing sleep.
-- This keeps the machine available; T3's configured resume/retry owns resumption and still needs the app running and internet. Choose a duration covering the wait and subsequent work. Physical Air lid-close operation and actual T3 resumption after a limit reset remain unverified; do not infer them from mocked checks. See `~/README.md` for user commands. On 2026-11-06 the user also removed fish aliases `nb`, `b`, `o` and the obsolete Codex stealth wrapper and its supporting files.
-- Initial AC-only verification (2026-11-06): Air passed 31 awake/remote logic tests, five existing bcp tests, 42 sync tests, fish syntax/interactive discovery and keymap checks. Studio passed the 31 logic and five bcp tests after reconciling the published configuration, preserving its independent edits. Initial local mode coverage included no VPN/SSH dependency, original power restoration, mode conflicts, renewal, startup rollback, unplug/logout/reboot handling, expiry and the 3h30m default. The user then started a local session and requested battery support/activation. Physical lid-close and sleep-expiry tests remain pending. Pro's Tailscale SSH probe timed out and its LAN hostname did not resolve; rollout there remains pending.
-- Battery-capable revision: 32 logic tests passed on Air and Studio. Administrator authorization renewed Air for 3h30m until 2026-11-06 19:03:36. Checked on 2026-11-09: the installed helper SHA-256 matches the published source; last-result.json records native sleep observed and previous settings restored at 2026-11-06 19:03:46. Air is OFF with SleepDisabled=0 and Tailscale stopped. This validates one expiry/restoration, superseding the pending expiry check above; it does not establish closed-lid battery operation, endurance or T3 limit-reset resumption.
-
-### Remote desktop and computer use
-
-- On 2026-11-01, `studio` answered the Screen Sharing/VNC handshake on port 5900 but had no logged-in console user; `air` refused port 5900. `/usr/sbin/screencapture` failed on both with `could not create image from display`. Agent desktop control is not yet verified.
-- Human desktop access: `open 'vnc://studio.tailed8082.ts.net'`. For `air`, first enable Screen Sharing in System Settings > General > Sharing for the user's account. Agent computer use also needs a logged-in desktop, a remote-capable control tool, and applicable Screen Recording, Accessibility, and Automation permissions for its actual process. Once granted, verify a harmless screenshot/UI read; use `/usr/sbin/screencapture` and `/usr/bin/osascript` where permitted. Report login/permission blockers; working SSH or VNC alone does not establish desktop automation. Preserve supported authentication and do not edit TCC databases or expose VNC publicly.
-
-## Math PDFs
-
-- Shared lightweight tools: Homebrew `tectonic` and `pandoc`, maintained in `~/.config/mac-setup/packages.txt`. Compile LaTeX with `tectonic --keep-logs document.tex`; compile Markdown math with `pandoc document.md --pdf-engine=tectonic -o document.pdf`. No full MacTeX/TeX Live installation is required.
-- Tectonic downloads support files on demand into a machine-local cache. First use of new packages needs network access; use `tectonic --only-cached document.tex` to verify offline compilation after warming the cache. Do not sync caches. AMS math, theorem environments, TikZ/PGFPlots and BibTeX have a shared smoke fixture at `~/.config/mac-setup/latex-smoke.tex`; compile it into a temporary output directory, then repeat with `--only-cached`.
-- This is an XeTeX-based workflow. Documents requiring LuaLaTeX, external shell tools, minted/Pygments or Biber may need additional tooling; inspect project requirements before adding it. Inspect compile warnings and the rendered PDF before delivering.
-- Validation (2026-11-06): Air and Studio compiled the shared math/BibTeX fixture with Tectonic 0.17.0, then passed `--only-cached` recompilation; Pandoc 3.13 produced math PDFs on both. Air render inspection passed. The existing sync suite passed 42 tests using `/opt/homebrew/bin/python3` (Apple Python lacks `tomllib`). Pro was unreachable over Tailscale and its LAN hostname did not resolve; run `mac-sync --pull` there when reachable, then compile the fixture.
-
-### Studio project worker (2026-11-16)
-
-- Studio stays on its home network as an unattended worker; keep Tailscale
-  connected continuously. Pro/Air in Milan use eduroam, which blocks direct
-  peer LAN access; use Tailscale for cross-Mac access. Laptop VPN remains manual.
-- Studio privacy/power choice (2026-11-16): user declines a VM and Apple
-  Remote Desktop and accepts an unlocked desktop. FileVault stays ON. There
-  is no separate always-on wake device at Studio; true system sleep cannot
-  receive T3/Tailscale requests. Preserve system sleep=0 for availability;
-  the external monitor can be turned off. Do not promise wake-on-agent or
-  enable automatic system sleep without a verified independent wake path.
-- Studio follows Pro's curated app/skip manifests; Air stays minimal. Keep
-  repositories under `~/Developer`. Use T3-managed worktrees for independent
-  changes; report the exact worktree path when handing off results.
-- Air/Pro view Studio's T3 environment and VS Code Remote SSH files directly.
-  Thread visibility does not replicate repository files. Do not copy live T3
-  databases, credentials, or browser profiles across machines.
-- Later project cleanup must check unpublished/untracked work, linked
-  worktrees and active T3 jobs; preserve results before removing projects.
-
-- Studio computer-use choice (2026-11-16): the user approved Peekaboo native
-  desktop MCP tools through `studio-desktop`, replacing the blocked OpenAI
-  helper/node_repl route. Use these tools directly for desktop operations.
-  Follow ordinary macOS Screen Recording/Accessibility permission prompts;
-  no ChatGPT app, TCC edits, modified vendor signatures or API key is required.
-
-### Pro desktop control and travel routes (2026-11-16)
-
-- Pro now uses the same signed Peekaboo 4.9.9 setup as Studio, exposed as
-  `pro-desktop`; Studio keeps `studio-desktop`. The existing explicit installer
-  `~/.config/mac-setup/direct/studio-desktop.sh` supports both Macs and leaves Air
-  unchanged. Prefer native desktop MCP tools, exact observed windows and fresh
-  snapshots; keep ordinary work in terminal/files and website work in T3 browser.
-- User prefers to operate visible T3 settings themselves: give exact steps when
-  needed instead of repeatedly navigating their settings UI.
-- Use the short names `studio`, `pro`, and `air`. Pro's T3 viewer now connects to
-  Studio through its saved environment. Route order is preferred first: recommend
-  Tailscale, LAN where available, then T3 Connect; retain Air's SSH route last.
-  T3 Connect is an internet fallback independent of the laptop VPN. SSH through
-  `air` still uses Tailscale and is not an independent network path.
-- Studio's duplicate GUI Tailscale client was disconnected and quit after it
-  prevented canonical inbound access. Keep the existing system daemon connected
-  as `studio` (100.95.1.50); SSH, Screen Sharing and T3 port 3773 passed on Pro.
-  The old `mac-studio` entry may remain offline in the admin inventory; it was
-  not deleted. Screen Sharing was also confirmed by the user.
-
-- SSH cleanup (2026-11-16): `studio-ts` explicitly selects Tailscale;
-  `studio-lan` uses `studio.local` with `HostKeyAlias studio.tailed8082.ts.net`.
-  Both passed from Pro; Studio → Pro Tailscale and LAN passed. Five duplicate
-  Studio host records were removed from Pro, retaining canonical trust; old
-  known_hosts backups were archived under machine-local `~/.local/state/ssh-cleanup`.
-  Studio/Pro current host keys matched all stored algorithms. Air trust remains
-  unmodified until online. Pro and Studio advertise the same login public-key
-  fingerprint; no identity rotation or private-key transfer was performed.
+- `~/README.md`: commands, shortcuts, Mac/IP inventory and common workflows (`mac status/sync/save/update`, `awake`, `remote`).
+- `~/.config/sync/README.md`: detailed procedures/evidence; **Machine operating reference** for SSH, power and desktop control; **Agent Contract** for dotfiles/keymap changes. Read relevant sections, not the whole manual.
+- `~/.config/sync/codex-technical.json`: shared tool choices and per-Mac overrides; `codex-technical.py set-mcp/set-plugin/set-feature NAME on|off` changes local toggles. Authentication stays local; app MCPs require their app bridge.
+- `~/.config/mac-setup/`: app/package manifests and explicit installers. `~/.config/keymaps/registry.tsv`: shortcut source of truth.
+- `~/Developer`: Studio projects. Use T3-managed worktrees and report exact result paths. Inspect unpublished work, linked worktrees and active T3 jobs before project cleanup.
+- Bare Git: `git -C "$HOME" --git-dir="$HOME/.config/git/dotfiles" --work-tree="$HOME" ...`; fish's `bare` is only an alias.

@@ -28,6 +28,9 @@
     },
     "studio": {
       "apps": {},
+      "features": {
+        "computer_use": false
+      },
       "mcp_servers": {
         "docling": {
           "enabled": false

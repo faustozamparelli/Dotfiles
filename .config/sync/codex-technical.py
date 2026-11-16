@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync shareable Codex plugin choices and remote MCP endpoints."""
+"""Sync Codex tool choices and per-Mac overrides."""
 
 import argparse
 import copy
@@ -18,6 +18,7 @@ SNAPSHOT = HOME / ".config/sync/codex-technical.json"
 OLD_PREFERENCE_MARKER = HOME / ".codex/chatgpt-settings-applied.sha256"
 ASSIGNMENT = re.compile(r'^\s*("(?:[^"\\]|\\.)*"|[A-Za-z0-9_-]+)\s*=')
 BARE_NAME = re.compile(r'^[A-Za-z0-9_-]+$')
+MANAGED_FEATURES = {"computer_use"}
 
 
 def machine_name():
@@ -33,9 +34,10 @@ def machine_name():
 
 def effective_snapshot(snapshot):
     effective = {key: copy.deepcopy(snapshot.get(key, {}))
-                 for key in ("plugins", "mcp_servers", "settings", "apps")}
+                 for key in ("plugins", "mcp_servers", "settings", "apps", "features")}
     profile = snapshot.get("machines", {}).get(machine_name(), {})
     effective["plugins"].update(profile.get("plugins", {}))
+    effective["features"].update(profile.get("features", {}))
     derived_apps = {}
     for plugin, app_ids in snapshot.get("plugin_apps", {}).items():
         for app_id in app_ids:
@@ -67,6 +69,16 @@ def snapshot_from_config():
             # Local toggles belong to this Mac, never to the shared defaults.
             snapshot = copy.deepcopy(previous)
             profile = snapshot["machines"].setdefault(machine_name(), {})
+            choices = profile.setdefault("features", {})
+            for name, enabled in config.get("features", {}).items():
+                if name not in MANAGED_FEATURES or not isinstance(enabled, bool):
+                    continue
+                if enabled == snapshot.get("features", {}).get(name):
+                    choices.pop(name, None)
+                else:
+                    choices[name] = enabled
+            if not choices:
+                profile.pop("features", None)
             choices = profile.setdefault("plugins", {})
             for name, settings in config.get("plugins", {}).items():
                 enabled = settings.get("enabled")
@@ -152,7 +164,7 @@ def installed_plugins():
 
 def validate(snapshot):
     required = {"plugins", "mcp_servers"}
-    if not required <= set(snapshot) or set(snapshot) - required - {"settings", "machines", "remove_mcp_servers", "apps", "plugin_apps"}:
+    if not required <= set(snapshot) or set(snapshot) - required - {"settings", "machines", "remove_mcp_servers", "apps", "plugin_apps", "features"}:
         raise ValueError("unexpected technical snapshot fields")
     if not isinstance(snapshot["plugins"], dict) or not isinstance(snapshot["mcp_servers"], dict):
         raise ValueError("invalid technical snapshot")
@@ -178,7 +190,7 @@ def validate(snapshot):
         if plugin not in snapshot["plugins"] or not isinstance(ids, list) or not all(isinstance(i, str) and BARE_NAME.fullmatch(i) for i in ids):
             raise ValueError("invalid plugin app mapping")
     for machine, profile in snapshot.get("machines", {}).items():
-        if machine not in {"air", "pro", "studio"} or set(profile) - {"plugins", "mcp_servers", "apps"}:
+        if machine not in {"air", "pro", "studio"} or set(profile) - {"plugins", "mcp_servers", "apps", "features"}:
             raise ValueError("invalid machine profile")
         if not all(isinstance(n, str) and isinstance(v, bool) for n, v in profile.get("apps", {}).items()):
             raise ValueError("invalid local app choice")
@@ -197,6 +209,12 @@ def validate(snapshot):
                 raise ValueError("invalid local MCP arguments")
             if "url" in entry and "command" in entry:
                 raise ValueError("mixed MCP transports")
+    for scope in (snapshot, *snapshot.get("machines", {}).values()):
+        features = scope.get("features", {})
+        if not isinstance(features, dict) or not all(
+                name in MANAGED_FEATURES and isinstance(enabled, bool)
+                for name, enabled in features.items()):
+            raise ValueError("invalid managed Codex feature")
 
 
 def section_line(section):
@@ -275,6 +293,8 @@ def apply():
     if isinstance(notify, list) and notify and "SkyComputerUseClient" in notify[0]:
         update_section(lines, "", {"notify": None})
     update_section(lines, "", effective["settings"])
+    if effective["features"]:
+        update_section(lines, "features", effective["features"])
     for app_id, enabled in effective["apps"].items():
         update_section(lines, f"apps.{json.dumps(app_id)}", {"enabled": enabled})
     for name, enabled in effective["plugins"].items():
@@ -304,7 +324,7 @@ def apply():
         temporary.write_text(candidate)
         os.chmod(temporary, 0o600)
         temporary.replace(CONFIG)
-        print("Applied Codex plugin choices and remote MCP endpoints")
+        print("Applied Codex technical choices")
     OLD_PREFERENCE_MARKER.unlink(missing_ok=True)
     # Retire the custom handoff skill on each Mac.
     handoff = HOME / ".codex/skills/research-handoff"
@@ -342,18 +362,22 @@ def restore_plugins():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("capture", "apply", "restore-plugins", "set-mcp", "set-plugin"))
+    parser.add_argument("action", choices=("capture", "apply", "restore-plugins", "set-mcp", "set-plugin", "set-feature"))
     parser.add_argument("name", nargs="?")
     parser.add_argument("state", nargs="?", choices=("on", "off"))
     args = parser.parse_args()
     if args.action.startswith("set-"):
         if not args.name or not args.state:
-            parser.error("set-mcp/set-plugin require a name and on/off")
+            parser.error("set commands require a name and on/off")
         snapshot = json.loads(SNAPSHOT.read_text())
         validate(snapshot)
         profile = snapshot.setdefault("machines", {}).setdefault(machine_name(), {})
         enabled = args.state == "on"
-        if args.action == "set-plugin":
+        if args.action == "set-feature":
+            if args.name not in MANAGED_FEATURES:
+                parser.error("unknown managed Codex feature")
+            profile.setdefault("features", {})[args.name] = enabled
+        elif args.action == "set-plugin":
             if args.name not in snapshot["plugins"]:
                 parser.error("unknown shared plugin")
             profile.setdefault("plugins", {})[args.name] = enabled

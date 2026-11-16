@@ -1577,12 +1577,78 @@ machine-local. Only `~/.config/herdr/config.toml` and its helper scripts belong
 in dotfiles. The superseded tmux, skhd, yabai, and Micro configurations have
 been removed.
 
+## Machine operating reference
+
+Consult this section for Mac access/power work; the short always-loaded
+preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
+`~/README.md`; executable behavior is defined by the existing scripts.
+
+- Identify the current host first; use local commands when already on the
+  target. Mac names are `studio`, `air`, `pro`, account `faustozamparelli`,
+  home `/Users/faustozamparelli`. Requested SSH, transfers and desktop
+  automation are authorized. Never transfer private keys or disable host checks.
+- SSH aliases use Tailscale; `studio-ts`, `air-ts`, `pro-ts` are explicit.
+  `*-lan` uses Bonjour with canonical HostKeyAlias trust. Select a route with
+  `ssh -o BatchMode=yes -o ConnectTimeout=5 HOST true` before work. For Air,
+  check the local Tailscale backend/peer, probe `air-ts`, then try `air-lan`
+  if unavailable; a verified current IP can override HostName. A failed remote
+  command is not a reason to execute the same task through another route.
+- Pro/Air on eduroam cannot rely on peer LAN access. Prefer Tailscale, then
+  usable LAN, then T3 Connect. SSH through Air still depends on Tailscale.
+  For Studio scripts use `ssh -o BatchMode=yes studio /bin/sh -s` with a
+  literal quoted heredoc. Remote PATH can be minimal; use absolute paths or
+  include Homebrew and `/usr/local/bin`. Air's login shell is fish.
+- Desktop/browser tools stay on their own host. Use explicit SSH for remote
+  commands; forward dev ports with `ssh -N -L 127.0.0.1:LOCAL:127.0.0.1:REMOTE studio`.
+  T3 thread sharing does not replicate files: view Studio through its T3
+  environment or VS Code Remote SSH. Do not copy live T3 databases or profiles.
+- Studio uses the root Tailscale daemon at `100.95.1.50`, always connected.
+  Do not reconnect the duplicate GUI client. Check the daemon with the CLI's
+  `--socket=/var/run/tailscaled.socket`, not the GUI client's stopped identity.
+  Studio may idle with its monitor off/disconnected; keep system sleep=0.
+  User accepts an unlocked desktop and declines a VM/Apple Remote Desktop.
+  FileVault stays ON: full reboot/power loss needs preboot unlock. No
+  independent wake relay exists; do not promise remote wake from true sleep.
+- Laptop VPN stays manual. Preserve a user-opened session; agents may start
+  Air's VPN when needed and must restore its original stopped/closed state.
+  On Pro use an available or user-chosen session. No AC autoconnect, watcher,
+  persistent caffeinate or sleep override outside bounded requested sessions.
+  The retired Air watcher must stay retired; `retire-tailscale-power.sh`
+  handles old copies without disturbing manual VPN sessions.
+- `awake start [duration]` defaults to 3h30m on battery/AC, never manages VPN;
+  `remote start [duration]` defaults to 12h, AC and Tailscale required. Shared
+  helper/state; stop the owning mode before switching. Renewing resets the
+  deadline while retaining the original snapshot. Normal sudo only. Expiry
+  requests native sleep; stop restores without forcing sleep. Logout/reboot
+  restore settings; unplug also ends remote. No unattended wake or lid-close
+  guarantee. Inspect `status`, source `~/.local/bin/remote`, and
+  `/var/db/com.fausto.remote-mode/last-result.json`; run `test-remote-mode.py`
+  for logic checks. Preserve independent assertions and original power settings.
+- Air's approved pmset baseline: battery `sleep 1 standby 1 powernap 0
+  tcpkeepalive 0 womp 0 ttyskeepawake 0`; AC `sleep 1 standby 1 powernap 0
+  tcpkeepalive 1 womp 1 ttyskeepawake 1`. Keep hibernation mode 3 and other
+  active-use settings. `air-power-setup` reproduces it with sudo; inspect power
+  source using `pmset -g batt`. Closed-lid and wake recovery need live evidence;
+  do not keep Air awake to conceal a failed wake path.
+- Desktop control is a fallback after app-specific CLI/MCP routes. Peekaboo
+  setup: `~/.config/mac-setup/direct/studio-desktop.sh`, Studio/Pro only.
+  Use native MCP `inspect_ui` for text; `see` with `capture_engine:"classic"`
+  when an image is needed. Pin observed app/window/snapshot. Input may use
+  signed Peekaboo CLI with explicit foreground authority when MCP mutations
+  report an unconfirmed result; re-observe before any retry. Never bypass
+  login, change TCC databases or modify vendor signatures. User prefers to
+  operate visible T3 settings; give exact steps unless asked to do them.
+- Math PDFs use shared `tectonic`/`pandoc`, not full TeX Live. Compile the
+  `~/.config/mac-setup/latex-smoke.tex` fixture into a temporary directory;
+  warm the cache then verify `--only-cached`. Inspect warnings/rendering.
+  LuaLaTeX, Biber and shell-escape workflows require a project-specific review.
+
 ## Agent Contract
 
 Agents working on this setup must follow these rules:
 
-1. Read this entire file before changing dotfiles, Mac synchronization,
-   Ghostty, Herdr, VS Code, fish, or keymaps.
+1. Read the short global preferences, this contract and the relevant manual
+   sections before changing this setup; do not load unrelated history.
 2. Use the bare dotfiles repository; do not recreate tracked configuration.
 3. Use VS Code for editing and Ghostty and Herdr for terminal work.
 4. Keep this as the only Markdown file under `~/.config`. Update it instead of
@@ -1972,3 +2038,48 @@ Studio daemon status was verified Running/Online at 100.95.1.50 through
 The default GUI client correctly reports its duplicate identity Stopped and
 is not the worker's daemon. The CLI warned of client 1.104.4 versus daemon
 1.102.3; this was a read-only status check, not a compatibility validation.
+
+### Studio desktop choice and compact instructions (2026-11-16)
+
+User approved testing both routes on Studio and uninstalling the rejected
+route without another review. Keep Peekaboo 4.9.9. In this T3 session its
+native MCP captured Calculator and read Accessibility text; signed CLI input
+completed 7 × 6, with a fresh MCP read confirming 42. MCP click reported an
+unconfirmed outcome even though All Clear changed the value, so input used
+the foreground CLI and each subsequent observation verified the effect.
+Do not repeat an action solely because its delivery result is unconfirmed.
+
+Codex Computer Use helper 26.817.1000761 initialized and listed ten tools
+through a direct MCP diagnostic launched by T3's terminal. Empty experimental
+capabilities also initialized in this retest; this supersedes a blanket claim
+that any experimental field fails. Calculator access returned -1743 before
+unlock and timed out at 15 seconds afterward. The bundled node_repl route is
+not available in this T3 runtime. This is a compatibility/action check, not
+a comparative token or speed benchmark; the full bundled route did not run.
+
+After the user opened the existing desktop in Screen Sharing, Peekaboo UI
+access recovered. After the user disconnected Screen Sharing (with the
+external display disconnected), fresh classic capture and text inspection
+still worked; CLI All Clear changed 42 to 0 and the MCP read confirmed 0.
+This supersedes the earlier blocked no-viewer check. Calculator was closed;
+subsequent window lookup found no running Calculator. Longer idle periods,
+reboot and power-loss recovery were not tested. Studio remains awake and
+no power settings were changed; no electrical consumption was measured.
+
+Removed the Studio computer-use Codex plugin with `codex plugin remove`,
+removed its helper bundle and stale compatibility-adapter bytecode, and
+unregistered the bundle from Launch Services. No helper processes remain.
+The plugin's disabled entries remain explicit. Studio alone now has
+`features.computer_use=false`, managed in `codex-technical.json`; apply also
+removes the obsolete helper notify hook. Use
+`python3 ~/.config/sync/codex-technical.py set-feature computer_use off`.
+Other Macs' feature settings and credentials are preserved. The six technical
+configuration tests and full 44-test sync suite passed.
+
+Personal `~/.codex/AGENTS.md` was reduced from 3,489 to 377 words (25,767 to
+3,013 bytes). It states CLI/app-MCP-first selection, desktop fallback only,
+concise working preferences and stable lookup locations. Detailed current
+Mac rules moved to Machine operating reference; previous validation history
+remains in this manual and Git. Agent Contract now requires relevant sections
+rather than loading the entire manual. This changes personal instructions,
+not T3's provider/system instructions or its tool schemas.
