@@ -1372,7 +1372,7 @@ any Mac; the other Macs apply them during their next sync. There is no master
 Mac. Unpublished changes do not automatically propagate.
 Run `bcp` after changing a shared preference; apply reviewed incoming values
 on other Macs with `mac-sync --pull`. Fausto selected Raycast, T3 and Tailscale (Dock visibility
-only); CodexBar keeps its existing enabled profile. QuickRecorder, MacWhisper
+only). QuickRecorder, MacWhisper
 and OrbStack preference sharing remain off.
 
 Choose portable preference sharing per app, independently of its installation:
@@ -1397,7 +1397,6 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | --- | --- |
 | Ghostty, Karabiner-Elements, Visual Studio Code | Existing tracked configuration; VS Code's selected extensions are installed during sync. |
 | Codex | Existing reviewed plugin choices and public MCP endpoints; account connections stay local. |
-| CodexBar | Portable refresh/power settings and selected provider fields; credentials retained locally. |
 | QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
 | MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
 | Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
@@ -1444,14 +1443,7 @@ Homebrew's broad zap list, which includes Codex/CUAService data. During Studio
 enrollment the older rule moved 12 such objects to Trash; all 12 were restored
 in place without overwriting files, and a regression test now preserves them.
 
-CodexBar uses adaptive refresh and
-follows system Low Power Mode. Its provider IDs, enabled choices and selected
-source are shared through the whitelist, merged into
-`~/.config/codexbar/config.json` while preserving local credentials. Provider
-catalog order is retained during capture; unknown providers and
-machine-local file/account source references are not automatically enrolled.
-The former tracked `~/.codexbar/config.json` was an inactive duplicate and has
-been removed.
+CodexBar is retired across Macs through `retired-apps.tsv`; its local credentials are not synced.
 
 Ghostty uses a non-blinking default cursor and keeps vsync enabled.
 

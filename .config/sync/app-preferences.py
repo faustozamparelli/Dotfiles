@@ -9,7 +9,6 @@ from pathlib import Path
 HOME = Path.home()
 PROFILE = Path(__file__).with_name('app-preferences.json')
 APPLICATIONS = (Path('/Applications'), HOME / 'Applications')
-PROVIDER_KEYS = {'id', 'enabled', 'codexActiveSource', 'region'}
 
 
 def shared_applications():
@@ -94,31 +93,6 @@ def main():
                 raise ValueError(f'Unsupported preference type: {domain}/{key}')
             subprocess.run(['defaults', 'write', domain, key, *args], check=True)
             print(f'Applied {domain}: {key} = {wanted}')
-    if shared_installed('CodexBar.app', shared):
-        target = HOME / '.config/codexbar/config.json'
-        legacy = HOME / '.codexbar/config.json'
-        source = target if target.exists() else legacy
-        runtime = json.loads(source.read_text()) if source.exists() else {'version': 1, 'providers': []}
-        if action == 'capture':
-            providers = {provider['id']: provider for provider in runtime.get('providers', [])}
-            for provider in profile.get('codexbarProviders', []):
-                current = providers.get(provider['id'], {})
-                for key, wanted in provider.items():
-                    if key == 'id' or key not in PROVIDER_KEYS or key not in current:
-                        continue
-                    if key == 'codexActiveSource' and current[key] != {'kind': 'liveSystem'}:
-                        continue  # File/account references are machine-local.
-                    if type(current[key]) is type(wanted):
-                        provider[key] = current[key]
-        else:
-            providers = {provider['id']: provider for provider in runtime.get('providers', [])}
-            for provider in profile.get('codexbarProviders', []):
-                if not set(provider) <= PROVIDER_KEYS:
-                    raise ValueError('Unreviewed CodexBar provider fields in portable profile')
-                providers.setdefault(provider['id'], {'id': provider['id']}).update(provider)
-            runtime['providers'] = list(providers.values())
-            if write_json(target, runtime):
-                print('Applied portable CodexBar provider choices; local credentials retained')
     if shared_installed('T3 Code (Nightly).app', shared):
         target = HOME / '.t3/userdata/client-settings.json'
         runtime = json.loads(target.read_text()) if target.exists() else {}
