@@ -1890,3 +1890,26 @@ Air's existing SSH route last. T3 Connect works over the internet without the
 laptop VPN; Air's SSH alias still traverses Tailscale. Route ordering and labels
 remain machine-local and user-operated; the supplied screenshot had T3 Connect
 first. Air is powered off and its routes/rollout were not live-tested.
+
+### SSH cleanup (2026-11-16)
+
+Audited Pro and Studio without reading or transferring private keys. Pro had
+five redundant Studio known_hosts lines (`mac-studio` ×3, `studio`, and old LAN
+IP 192.168.1.10); their fingerprints matched the current Studio host. Removed
+those lines while retaining canonical `studio.tailed8082.ts.net` trust. Before
+images and known_hosts.old are archived locally under
+`~/.local/state/ssh-cleanup/20261116-154208` on both Macs, outside Git. Studio's
+canonical Pro/Studio host records match current ED25519/RSA/ECDSA public keys;
+its Air records and both authorized_keys files remain intact. Neither Mac has
+an extra unused login-key file. Pro and Studio advertise the same login public
+fingerprint; separating their identities requires a distinct rotation, not
+blind deletion of a working authorization.
+
+Shared SSH config now pins canonical Studio trust with HostKeyAlias and adds
+`studio-ts` and `studio-lan` (`studio.local`). Verified Pro → Studio via both
+Tailscale and LAN, Studio → Pro via both existing routes, and `ssh -G` confirms
+strict checking and the expected identity. Air remains offline/unverified.
+T3's existing direct Tailscale, LAN, Connect and SSH routes are sufficient;
+no additional tunnel service or recurring job was installed. An SSH LAN route
+would duplicate the existing LAN network path and is optional rather than a
+travel requirement. Existing user-managed T3 routes were not edited.

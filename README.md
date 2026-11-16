@@ -184,6 +184,8 @@ Use the short environment labels `studio`, `pro`, and `air`. Saved routes are
 preferred first: Tailscale, LAN if present, then T3 Connect; keep Air's SSH
 route last. T3 Connect also works over the internet with the laptop VPN off.
 Screen Sharing: `open vnc://studio.tailed8082.ts.net` with Tailscale connected.
+`ssh studio` uses Tailscale; `ssh studio-lan` uses `studio.local` on a reachable
+local network, sharing the verified host identity. `studio-ts` is explicit VPN.
 Studio uses its system Tailscale daemon; leave the duplicate GUI client off.
 Use VS Code **Remote-SSH: Connect to Host → studio**, then open `~/Developer`
 or the agent's exact worktree. Files, terminals and debugging stay on Studio;

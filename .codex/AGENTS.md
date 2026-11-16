@@ -127,3 +127,12 @@
   as `studio` (100.95.1.50); SSH, Screen Sharing and T3 port 3773 passed on Pro.
   The old `mac-studio` entry may remain offline in the admin inventory; it was
   not deleted. Screen Sharing was also confirmed by the user.
+
+- SSH cleanup (2026-11-16): `studio-ts` explicitly selects Tailscale;
+  `studio-lan` uses `studio.local` with `HostKeyAlias studio.tailed8082.ts.net`.
+  Both passed from Pro; Studio → Pro Tailscale and LAN passed. Five duplicate
+  Studio host records were removed from Pro, retaining canonical trust; old
+  known_hosts backups were archived under machine-local `~/.local/state/ssh-cleanup`.
+  Studio/Pro current host keys matched all stored algorithms. Air trust remains
+  unmodified until online. Pro and Studio advertise the same login public-key
+  fingerprint; no identity rotation or private-key transfer was performed.
