@@ -11,6 +11,8 @@
 - For Mac work: identify the host; prefer `studio` remotely. SSH/file transfers and available desktop automation are authorized. Studio stays online; laptop Tailscale remains manual. Read the operating reference before changing access or power.
 - After Mac configuration/documentation changes, check, commit and push scoped portable changes to the bare dotfiles repository automatically, then reconcile reachable Macs without overwriting their edits. Report publication or rollout failures.
 
+- From both Pro and Air, run agent work on Studio when available and free. Keep full projects, datasets and heavy outputs on Studio; copy back only requested results or lightweight review files. Check for conflicting work first; report unavailability before starting heavy work locally.
+
 # Where to look
 
 - `~/README.md`: commands, shortcuts, Mac/IP inventory and common workflows (`mac status/sync/save/update`, `awake`, `remote`).

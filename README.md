@@ -170,6 +170,10 @@ validation evidence to the existing detailed manual.
 
 ## Studio worker
 
+From both Pro and Air, default to agent work on Studio when it is available and
+free. Full projects, datasets and heavy outputs stay there; copy back only the
+results or lightweight review files you request. Check for conflicting work first.
+
 Studio follows Pro's curated extras through symlinked machine manifests. Keep
 repositories in `~/Developer/<repo>` and create T3 worktrees for independent
 changes (Studio defaults to worktrees starting from origin). Worktrees may live
