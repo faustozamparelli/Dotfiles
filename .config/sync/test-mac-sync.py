@@ -426,6 +426,20 @@ class CodexTechnicalTests(unittest.TestCase):
         module.OLD_PREFERENCE_MARKER = root / 'old-marker'
         return module
 
+    def test_computer_use_enables_javascript_runtime_only_when_selected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            module = self.load_module(Path(directory))
+            module.SNAPSHOT.write_text(json.dumps({'plugins': {
+                'computer-use@openai-bundled': False}, 'mcp_servers': {},
+                'machines': {'studio': {'plugins': {'computer-use@openai-bundled': True}}}}))
+            module.CONFIG.write_text('[features]\njs_repl = false\n')
+            with patch.object(module, 'machine_name', return_value='air'):
+                module.apply()
+            self.assertFalse(tomllib.loads(module.CONFIG.read_text())['features']['js_repl'])
+            with patch.object(module, 'machine_name', return_value='studio'):
+                module.apply()
+            self.assertTrue(tomllib.loads(module.CONFIG.read_text())['features']['js_repl'])
+
     def test_account_plugin_inventory_cannot_reenable_codex_connectors(self):
         with tempfile.TemporaryDirectory() as directory:
             module = self.load_module(Path(directory))

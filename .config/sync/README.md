@@ -1781,3 +1781,15 @@ User decision: preserve FileVault encryption and accept/document the preboot
 unlock limitation. Do not disable encryption or enable automatic login to
 hide it. Studio Tailscale remains continuously connected; laptop VPN stays
 manual. Reboot/power-loss recovery to an available T3 desktop is not promised.
+
+Cloned Pro's four GitHub origins into Studio `~/Developer` and registered them
+with `t3 project add` (no extra threads): PDE_Lora `acc2fe9`, course Monte Carlo
+`18d56cf`, Inverse-Heat-Problem `ab7a67b`, Drone-Digi-Twin `1682593`.
+These are published repository snapshots, not copies of Pro's working trees;
+Drone-Digi-Twin had uncommitted work on Pro, which was preserved there.
+Computer-use selection now enables Codex's JavaScript runtime (`features.js_repl`)
+without changing it on Macs where that plugin is off. Updated sync suite:
+44 tests passed, including the machine-specific runtime dependency (74 total
+across the targeted suites). Actual computer-use permission/UI validation is
+still pending a fresh session. Removed the extra uv-managed Python 3.14
+download used during setup; QGIS MCP uses existing uv-managed 3.13.
