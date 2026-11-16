@@ -1924,7 +1924,9 @@ After the authorized UI changes, effective readback reports `screenLock is off`
 and display/system sleep both 0; FileVault remains ON. The popup initially
 continued to show Immediately, so the later effective readback supersedes that
 intermediate observation. These are Studio-only settings, not laptop defaults.
-Further security-mode changes are paused pending the privacy design choice.
+The user subsequently declined Apple Remote Desktop and a VM, and accepted
+an unlocked desktop. FileVault remains enabled; a full reboot still needs
+preboot unlock before normal unattended access returns.
 
 Apple Remote Desktop's remote Lock Screen blocks local keyboard/mouse input
 while remote administration remains possible. Peekaboo behavior under that
@@ -1937,3 +1939,36 @@ Pro's Tailscale SSH probe timed out during this check. Tailscale key-expiry
 changes and the rest of the unattended UI checklist remain uncompleted.
 Sources: https://support.apple.com/en-gb/guide/remote-desktop/apd37d6089c/mac
 and https://support.apple.com/en-gu/guide/mac-help/mchl1883115d/mac.
+
+### Studio idle power and wake-on-agent limitation (2026-11-16)
+
+User wants sleep while idle and activation when an agent is sent from Pro/Air,
+but confirms there is no other always-on device at Studio's location. A
+fully sleeping Studio cannot receive its own Tailscale/T3 wake request. True
+sleep-on-demand needs an independent awake local wake sender and a verified
+Mac wake path; neither exists. Keep the existing system sleep=0 so the worker
+remains reachable. Turning off the external monitor is compatible with that
+choice. An awake idle computer can reduce CPU activity, but this session did
+not measure electrical consumption or validate a particular wattage.
+
+No sleep settings were changed in this follow-up. Readback remains system
+sleep=0, displaysleep=0, wake-for-network=1 and screenLock off. A proposed
+display-sleep/resume test could not proceed: Peekaboo refused capture because
+it detected a locked GUI session, despite password-after-sleep being off.
+IORegistry reported IOConsoleLocked=false but the console user's
+CGSSessionScreenIsLocked=true. Ordinary five-second user-activity assertion
+did not clear this; no authentication bypass or vendor modification was used.
+Therefore password-free desktop resumption is still unverified. T3 itself
+currently owns a caffeinate -i assertion; no additional persistent keep-awake
+process or wake service was installed. Pro SSH became reachable again; its
+unrelated VS Code settings edits must be preserved during reconciliation.
+
+Source: https://tailscale.com/blog/wake-on-lan-tailscale-upsnap . Apple's
+Wake for network access setting alone is not evidence that Tailscale/T3 can
+wake this Mac from another city.
+
+Studio daemon status was verified Running/Online at 100.95.1.50 through
+`/Applications/Tailscale.app/Contents/MacOS/Tailscale --socket=/var/run/tailscaled.socket status --json`.
+The default GUI client correctly reports its duplicate identity Stopped and
+is not the worker's daemon. The CLI warned of client 1.104.4 versus daemon
+1.102.3; this was a read-only status check, not a compatibility validation.

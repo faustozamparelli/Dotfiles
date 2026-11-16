@@ -93,6 +93,12 @@
 - Studio stays on its home network as an unattended worker; keep Tailscale
   connected continuously. Pro/Air in Milan use eduroam, which blocks direct
   peer LAN access; use Tailscale for cross-Mac access. Laptop VPN remains manual.
+- Studio privacy/power choice (2026-11-16): user declines a VM and Apple
+  Remote Desktop and accepts an unlocked desktop. FileVault stays ON. There
+  is no separate always-on wake device at Studio; true system sleep cannot
+  receive T3/Tailscale requests. Preserve system sleep=0 for availability;
+  the external monitor can be turned off. Do not promise wake-on-agent or
+  enable automatic system sleep without a verified independent wake path.
 - Studio follows Pro's curated app/skip manifests; Air stays minimal. Keep
   repositories under `~/Developer`. Use T3-managed worktrees for independent
   changes; report the exact worktree path when handing off results.
