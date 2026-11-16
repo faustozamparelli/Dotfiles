@@ -41,6 +41,24 @@ class MacCommandsTests(unittest.TestCase):
         self.assertEqual(self.action('save', [5]), (5, [['/opt/homebrew/bin/fish', '-c', 'bcp']]))
         self.assertEqual(self.action('update', [6]), (6, [[mac.BIN / 'mac-update', '--now']]))
 
+    def test_status_continues_after_unreadable_service(self):
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            agent = home / 'Library/LaunchAgents/private.plist'
+            agent.parent.mkdir(parents=True)
+            agent.write_text('unreadable fixture')
+            original = Path.read_bytes
+            def read_bytes(path):
+                if path == agent:
+                    raise PermissionError('fixture permission denied')
+                return original(path)
+            output = io.StringIO()
+            with patch.object(mac, 'HOME', home), patch.object(Path, 'read_bytes', read_bytes), \
+                    patch.object(mac, 'run', return_value=0) as run, redirect_stdout(output):
+                self.assertEqual(mac.status(), 1)
+            self.assertIn('inspection unavailable', output.getvalue())
+            self.assertEqual(run.call_count, 2)
+
     def test_unknown_command_does_not_run_anything(self):
         code, calls = self.action('unknown', [])
         self.assertEqual((code, calls), (2, []))

@@ -166,3 +166,32 @@ If checkout conflicts, move only the listed stock files aside and retry.
 Finish the detailed manual's **New Mac** steps (Herdr service, fish login shell,
 sign-ins and privacy permissions). Keep this guide short; add mechanics and
 validation evidence to the existing detailed manual.
+
+## Studio worker
+
+Studio follows Pro's curated extras through symlinked machine manifests. Keep
+repositories in `~/Developer/<repo>` and create T3 worktrees for independent
+changes (Studio defaults to worktrees starting from origin). Worktrees may live
+under `~/.t3/worktrees`; use `git -C ~/Developer/<repo> worktree list` to find
+an agent's exact directory. Open that directory when reviewing its files.
+
+Studio keeps Tailscale connected continuously. On Pro/Air in Milan, enable
+Tailscale when needed: eduroam does not permit direct LAN peer access.
+
+From Air/Pro, choose **Mac Studio** in T3's environments before starting work.
+Use VS Code **Remote-SSH: Connect to Host → studio**, then open `~/Developer`
+or the agent's exact worktree. Files, terminals and debugging stay on Studio;
+no pull is required to see unsaved-to-Git results. Commit/push publishes work;
+a local clone on the laptop still needs a pull. Closing the laptop ends its
+viewer connection; Studio work can continue. Keep Studio logged in and awake;
+lock the screen instead of logging out. After a reboot, FileVault may require
+local unlock before remote tools become available.
+
+Use `~/.t3/bin/t3 status` and `~/.t3/bin/t3 service status` to check hosting.
+T3 Connect needs Studio's own account approval; its service starts at login.
+Computer use additionally requires local Screen Recording, Accessibility and
+any requested Automation permissions for the actual T3/Codex processes, plus
+an available desktop. Enabling its plugin alone does not verify UI control.
+
+For later cleanup, inventory Git status, untracked files, worktrees and active
+T3 work before removing a project; preserve unpublished work and outputs.

@@ -1695,3 +1695,48 @@ Verify with `python3 ~/.config/sync/test-sync-check.py`, the existing sync
 tests, `mac-sync --check`, `fdesetup status`, and the firewall/ownership checks.
 
 Safari extension apps uBlock Origin Lite, Picture-In-Picture, and Accelerate are retired across Macs via `retired-apps.tsv` and `mac-sync`.
+
+### Studio worker setup (2026-11-16)
+
+Studio's `machines/mac-studio.{tsv,skip}` link to Pro's curated manifests so
+future manifest changes apply to both. Air remains minimal. Remote SSH is a
+shared VS Code extension; Studio T3 defaults to worktrees from origin. Repos
+belong in `~/Developer`; T3 owns worktree paths and its machine-local database.
+Do not sync live repositories or T3 databases through cloud folders. Review
+Studio's actual worktree through VS Code Remote SSH rather than pulling an
+uncommitted agent result into a separate laptop clone.
+
+User approved removing Studio apps outside shared/Pro manifests. Claude,
+Chrome, Itsycal and Yaak were removed via Homebrew without zap; MATLAB, Xcode,
+Send to Kindle and CountUp were moved to Trash, preserving user data. Command
+Line Tools remain selected. Computer-use plugin enabled only on Studio;
+QGIS MCP 0.15.2 source and GUI plugin copied from Pro without credentials,
+with a fresh environment from its frozen lock. GUI availability/permissions
+and a live QGIS round trip still require verification. Plugin inventory
+restoration timed out after 30 seconds; no repeated authentication attempts.
+
+`mac status` now reports an unreadable/malformed launchd plist, continues
+remaining inspections, and returns failure. Seven command tests pass,
+including an unreadable-plist regression fixture.
+
+References: https://github.com/pingdotgg/t3code/blob/main/docs/user/remote-access.md
+and https://github.com/pingdotgg/t3code/blob/main/docs/user/background-service.md;
+VS Code https://code.visualstudio.com/docs/remote/ssh. Upstream docs may advance
+beyond installed T3 0.1.10-nightly.20261116.4774; installed CLI help was checked.
+
+Unattended Studio requirement: keep Tailscale connected continuously; Pro/Air
+use manual VPN on eduroam in Milan. Studio has two Tailscale identities on the
+same physical Mac (hardware UUID hash and host key matched); preserve canonical
+`studio` at 100.95.1.50. GUI identity is `mac-studio` at 100.122.117.87.
+`sudo /usr/bin/python3 ~/.config/mac-setup/studio-worker-setup.py` explicitly
+sets KeepAlive/10s throttling on the existing root Tailscale daemon, enables it,
+and preserves sleep=0/autorestart=1. No polling maintenance job is added.
+Initial bootstrap failed while the launchd label was disabled; enabling it
+before bootstrap fixed the failure. Loaded daemon and canonical SSH passed
+following reload; reboot/power-loss recovery was not physically tested.
+
+T3 service installed and Connect account approved, but Connect's reachability
+check failed: the desktop-owned server has not applied the link. The installed
+service waits for that server to stop. Finish with a controlled T3 desktop
+quit/reopen or service handoff when active turns can stop; rerun
+`~/.t3/bin/t3 connect status`. Do not interpret signed-in status as reachability.

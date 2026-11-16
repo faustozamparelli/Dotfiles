@@ -87,3 +87,17 @@
 - Tectonic downloads support files on demand into a machine-local cache. First use of new packages needs network access; use `tectonic --only-cached document.tex` to verify offline compilation after warming the cache. Do not sync caches. AMS math, theorem environments, TikZ/PGFPlots and BibTeX have a shared smoke fixture at `~/.config/mac-setup/latex-smoke.tex`; compile it into a temporary output directory, then repeat with `--only-cached`.
 - This is an XeTeX-based workflow. Documents requiring LuaLaTeX, external shell tools, minted/Pygments or Biber may need additional tooling; inspect project requirements before adding it. Inspect compile warnings and the rendered PDF before delivering.
 - Validation (2026-11-06): Air and Studio compiled the shared math/BibTeX fixture with Tectonic 0.17.0, then passed `--only-cached` recompilation; Pandoc 3.13 produced math PDFs on both. Air render inspection passed. The existing sync suite passed 42 tests using `/opt/homebrew/bin/python3` (Apple Python lacks `tomllib`). Pro was unreachable over Tailscale and its LAN hostname did not resolve; run `mac-sync --pull` there when reachable, then compile the fixture.
+
+### Studio project worker (2026-11-16)
+
+- Studio stays on its home network as an unattended worker; keep Tailscale
+  connected continuously. Pro/Air in Milan use eduroam, which blocks direct
+  peer LAN access; use Tailscale for cross-Mac access. Laptop VPN remains manual.
+- Studio follows Pro's curated app/skip manifests; Air stays minimal. Keep
+  repositories under `~/Developer`. Use T3-managed worktrees for independent
+  changes; report the exact worktree path when handing off results.
+- Air/Pro view Studio's T3 environment and VS Code Remote SSH files directly.
+  Thread visibility does not replicate repository files. Do not copy live T3
+  databases, credentials, or browser profiles across machines.
+- Later project cleanup must check unpublished/untracked work, linked
+  worktrees and active T3 jobs; preserve results before removing projects.

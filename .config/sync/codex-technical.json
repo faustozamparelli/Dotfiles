@@ -24,9 +24,16 @@
       "mcp_servers": {
         "docling": {
           "enabled": false
+        },
+        "qgis": {
+          "args": [],
+          "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
+          "enabled": true
         }
       },
-      "plugins": {}
+      "plugins": {
+        "computer-use@openai-bundled": true
+      }
     }
   },
   "mcp_servers": {

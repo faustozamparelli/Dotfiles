@@ -36,7 +36,12 @@ def status():
     for base, domain in [(HOME / 'Library/LaunchAgents', f'gui/{os.getuid()}'),
                          (Path('/Library/LaunchDaemons'), 'system')]:
         for path in sorted(base.glob('*.plist')):
-            config = plistlib.loads(path.read_bytes())
+            try:
+                config = plistlib.loads(path.read_bytes())
+            except (OSError, plistlib.InvalidFileException) as error:
+                print(f'  {path.name}: inspection unavailable: {error}')
+                failures = 1
+                continue
             label = config.get('Label')
             if not label:
                 continue
