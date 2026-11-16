@@ -1913,3 +1913,27 @@ T3's existing direct Tailscale, LAN, Connect and SSH routes are sufficient;
 no additional tunnel service or recurring job was installed. An SSH LAN route
 would duplicate the existing LAN network path and is optional rather than a
 travel requirement. Existing user-managed T3 routes were not edited.
+
+### Physical privacy versus agent desktop access (2026-11-16)
+
+User wants Studio to stay awake, online and usable from T3 on Pro/Air, ideally
+with the physical screen/input protected while agents retain desktop access.
+This is separate from ordinary coding work, which does not require GUI unlock.
+The normal macOS locked session refused Peekaboo capture during a live check.
+After the authorized UI changes, effective readback reports `screenLock is off`
+and display/system sleep both 0; FileVault remains ON. The popup initially
+continued to show Immediately, so the later effective readback supersedes that
+intermediate observation. These are Studio-only settings, not laptop defaults.
+Further security-mode changes are paused pending the privacy design choice.
+
+Apple Remote Desktop's remote Lock Screen blocks local keyboard/mouse input
+while remote administration remains possible. Peekaboo behavior under that
+mode is unverified. High Performance Screen Sharing blanks physical displays
+while connected, but it is session-dependent and is not proof of unattended
+privacy after the viewing laptop disconnects. Neither establishes the desired
+T3 + Peekaboo workflow without a live test. No new remote-control app, virtual
+machine, private API, screen curtain or lock bypass was installed/configured.
+Pro's Tailscale SSH probe timed out during this check. Tailscale key-expiry
+changes and the rest of the unattended UI checklist remain uncompleted.
+Sources: https://support.apple.com/en-gb/guide/remote-desktop/apd37d6089c/mac
+and https://support.apple.com/en-gu/guide/mac-help/mchl1883115d/mac.
