@@ -1763,3 +1763,11 @@ listening at that point; tool enumeration does not establish a live app call.
 OrbStack finished first startup and reported its Docker engine ready. The
 OpenFOAM launcher now includes `~/.orbstack/bin` so noninteractive T3/SSH
 commands can find OrbStack's Docker without fish startup.
+QGIS 4.2.3 GUI failed on launch twice with EXC_BREAKPOINT in
+`QImage::toCGImage → CGColorSpaceGetType` while creating a native menu icon.
+This matches the upstream crash family in
+https://github.com/qgis/QGIS/issues/67981; it is an inference from matching
+frames, not a proven root cause. GUI bridge remains unavailable. No bundled
+Qt binaries, app signature or global color settings were modified.
+T3 Connect final check: link pending server startup, relay not provisioned.
+A desktop restart/service handoff is still required; account approval passed.
