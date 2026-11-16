@@ -165,6 +165,7 @@ def write_policy(document, path=POLICY):
     wanted = merged_policy(document, current)
     if wanted == current:
         return False
+    path.parent.mkdir(parents=True, exist_ok=True)
     # A root-owned, one-time backup is separate from browser data and Git.
     backup = path.with_name(path.name + '.before-extension-sync')
     if not backup.exists():

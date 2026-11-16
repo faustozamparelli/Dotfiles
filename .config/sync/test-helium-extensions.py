@@ -105,6 +105,14 @@ class ExtensionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             helium.inventory(profile)
 
+    def test_policy_creates_missing_managed_preferences_directory(self):
+        path = self.root / 'missing' / 'managed' / 'policy.plist'
+        state = {'device': 'a'}
+        helium.record(state, ONE, 'One', now=100)
+        self.assertTrue(helium.write_policy(state['pending'], path))
+        self.assertEqual(plistlib.loads(path.read_bytes())['ExtensionInstallForcelist'], [ONE])
+        self.assertTrue(path.with_name(path.name + '.before-extension-sync').exists())
+
     def test_policy_preserves_other_preferences_and_removes_explicitly(self):
         path = self.root / 'policy.plist'
         original = {'OtherSetting': True, 'ExtensionSettings': {

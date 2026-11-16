@@ -1740,3 +1740,21 @@ check failed: the desktop-owned server has not applied the link. The installed
 service waits for that server to stop. Finish with a controlled T3 desktop
 quit/reopen or service handoff when active turns can stop; rerun
 `~/.t3/bin/t3 connect status`. Do not interpret signed-in status as reachability.
+
+Final installation checks: shared+Pro app/package manifest check passed.
+Blender, ParaView, QGIS and SolidCraft installed; OpenFOAM launcher installed.
+Temporary formulae were unmarked and autoremoved with Homebrew retaining
+required dependencies. QGIS MCP imports with the existing uv-managed Python
+3.13.14 (independent of Homebrew cleanup); an attempted 3.15 dependency build
+was stopped before installation and replaced with frozen-lock 3.13 wheels.
+OpenFOAM's initial runtime check failed because OrbStack had not provisioned
+Docker. This is separate from installation of the pinned launcher.
+
+Helium policy first failed because `/Library/Managed Preferences` was absent.
+The helper now creates the parent directory; eleven extension tests passed,
+including this fresh-Mac case. Policy application then passed; seven browser
+extension downloads and manual web apps/TwitchNoSub still need browser checks.
+Total targeted checks: 43 sync, 7 command, 5 drift-check, 4 manual-action,
+3 VS Code and 11 extension tests passed (73 across separate suites).
+Pro received commit 2411705 with its unrelated VS Code edit preserved and
+Remote SSH installed. Air's Tailscale probe timed out and LAN did not resolve.
