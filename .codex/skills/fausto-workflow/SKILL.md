@@ -38,9 +38,10 @@ Use its helper's `set-mcp`/`set-plugin`; app MCPs need their local bridge.
 Track this custom skill; leave managed skills/caches local. Keep command details
 in the guide and operational evidence in the existing manual.
 
-Studio desktop control uses the user-approved Peekaboo `studio-desktop` native
-MCP, not the bundled node_repl skill. Explicit Studio setup:
-`~/.config/mac-setup/direct/studio-desktop.sh` (pinned signed CLI and Mac app).
+Desktop control uses the user-approved Peekaboo `studio-desktop` (Studio) or
+`pro-desktop` (Pro) native MCP, not the bundled node_repl skill. Explicit Studio/Pro setup:
+`~/.config/mac-setup/direct/studio-desktop.sh` (pinned signed CLI and Mac app). Let the user operate visible T3 settings when
+needed; provide exact steps.
 macOS Screen Recording/Accessibility grants remain machine-local. Use `see`
 before acting and keep operations tied to the observed app/window/snapshot.
 For MCP `see`, use `capture_engine: "classic"` if automatic capture reports

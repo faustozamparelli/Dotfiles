@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Explicit Studio-only desktop MCP setup; no background maintenance job.
-[[ "$(scutil --get ComputerName)" == 'Mac Studio' && "$(uname -m)" == arm64 ]]
+# Explicit Studio/Pro desktop MCP setup; no background maintenance job.
+[[ "$(uname -m)" == arm64 ]]
+case "$(scutil --get ComputerName)" in
+  'Mac Studio') desktop_machine=studio ;;
+  *'MacBook Pro'*) desktop_machine=pro ;;
+  *) echo 'This setup is enabled only for Studio and Pro.' >&2; exit 1 ;;
+esac
 version=4.9.9
 base="https://github.com/openclaw/Peekaboo/releases/download/v$version"
 root="$HOME/.local/share/peekaboo/$version"
@@ -24,7 +29,8 @@ if [[ ! -x "$root/peekaboo" || ! -d "$app" ]]; then
   /usr/bin/codesign --verify --strict "$work/cli/peekaboo"
   /usr/bin/codesign --verify --deep --strict "$work/app/Peekaboo.app"
   for signed in "$work/cli/peekaboo" "$work/app/Peekaboo.app"; do
-    /usr/bin/codesign -dv "$signed" 2>&1 | /usr/bin/grep -qx 'TeamIdentifier=FWJYW4S8P8'
+    signing_info="$(/usr/bin/codesign -dv "$signed" 2>&1)"
+    /usr/bin/grep -qx 'TeamIdentifier=FWJYW4S8P8' <<< "$signing_info"
   done
   mkdir -p "$root" "$HOME/.local/bin"
   /usr/bin/ditto "$work/cli" "$root"
@@ -35,19 +41,19 @@ fi
 ln -sfn "$root/peekaboo" "$link"
 "$link" --version
 # Open the signed GUI host at login; this is an on-demand login item, not a timer.
-agent="$HOME/Library/LaunchAgents/com.fausto.studio-desktop.plist"
+agent="$HOME/Library/LaunchAgents/com.fausto.$desktop_machine-desktop.plist"
 mkdir -p "$(dirname "$agent")"
 /usr/bin/python3 - "$agent" <<'PY'
 from pathlib import Path
 import plistlib,sys
 path=Path(sys.argv[1])
-config={'Label':'com.fausto.studio-desktop','ProgramArguments':['/usr/bin/open','-g','/Applications/Peekaboo.app'],'RunAtLoad':True}
+config={'Label':path.stem,'ProgramArguments':['/usr/bin/open','-g','/Applications/Peekaboo.app'],'RunAtLoad':True}
 if path.exists() and plistlib.loads(path.read_bytes()).get('Label') != config['Label']:
     raise RuntimeError('Unexpected login item; refusing replacement')
 path.write_bytes(plistlib.dumps(config))
 PY
 if launchctl print "gui/$UID" >/dev/null 2>&1; then
-  launchctl print "gui/$UID/com.fausto.studio-desktop" >/dev/null 2>&1 || launchctl bootstrap "gui/$UID" "$agent"
+  launchctl print "gui/$UID/com.fausto.$desktop_machine-desktop" >/dev/null 2>&1 || launchctl bootstrap "gui/$UID" "$agent"
 else
   echo 'Peekaboo login item installed; GUI host starts at the next desktop login.'
 fi

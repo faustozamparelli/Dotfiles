@@ -107,3 +107,23 @@
   helper/node_repl route. Use these tools directly for desktop operations.
   Follow ordinary macOS Screen Recording/Accessibility permission prompts;
   no ChatGPT app, TCC edits, modified vendor signatures or API key is required.
+
+### Pro desktop control and travel routes (2026-11-16)
+
+- Pro now uses the same signed Peekaboo 4.9.9 setup as Studio, exposed as
+  `pro-desktop`; Studio keeps `studio-desktop`. The existing explicit installer
+  `~/.config/mac-setup/direct/studio-desktop.sh` supports both Macs and leaves Air
+  unchanged. Prefer native desktop MCP tools, exact observed windows and fresh
+  snapshots; keep ordinary work in terminal/files and website work in T3 browser.
+- User prefers to operate visible T3 settings themselves: give exact steps when
+  needed instead of repeatedly navigating their settings UI.
+- Use the short names `studio`, `pro`, and `air`. Pro's T3 viewer now connects to
+  Studio through its saved environment. Route order is preferred first: recommend
+  Tailscale, LAN where available, then T3 Connect; retain Air's SSH route last.
+  T3 Connect is an internet fallback independent of the laptop VPN. SSH through
+  `air` still uses Tailscale and is not an independent network path.
+- Studio's duplicate GUI Tailscale client was disconnected and quit after it
+  prevented canonical inbound access. Keep the existing system daemon connected
+  as `studio` (100.95.1.50); SSH, Screen Sharing and T3 port 3773 passed on Pro.
+  The old `mac-studio` entry may remain offline in the admin inventory; it was
+  not deleted. Screen Sharing was also confirmed by the user.

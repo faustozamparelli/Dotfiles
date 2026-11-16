@@ -1856,3 +1856,37 @@ six T3 windows, and read exact window 432 using classic capture. It returned
 model-visible registration and an actual native MCP read, not just CLI access.
 The final sync regression suite passed 43 tests after removing the obsolete
 JavaScript-runtime test; installer bash syntax and idempotent rerun passed.
+
+### Pro Peekaboo and travel access (2026-11-16)
+
+Read Studio's setup conversation before reproducing its signed Peekaboo 4.9.9
+installation on Pro. The existing `direct/studio-desktop.sh` now supports both
+machines, preserving Studio's login label and using `com.fausto.pro-desktop`
+on Pro. Capturing codesign output before grep fixes a SIGPIPE/141 failure under
+pipefail during fresh installation. Release hashes and both signatures passed;
+installer rerun and bash syntax passed. Pro's managed profile enables
+`pro-desktop` through `codex-technical.py set-mcp pro-desktop on`; the OpenAI
+computer-use plugin stays off. Air receives no desktop installation.
+
+Pro verification: all three desktop permissions reported granted; Finder screen
+capture was visually inspected; native MCP initialization exposed 26 tools and
+its classic `see` read returned 94 elements. Five observed Calculator AX clicks
+entered `1 + 1 =`, and a fresh read returned expression `1 + 1` and result `2`.
+An initial Calculator capture preceded window readiness and failed; the next
+observation passed. Calculator was closed after the test. All 43 sync tests
+passed. These checks validate the local CLI and MCP protocol; model-visible
+registration of the new MCP awaits the next Codex session/tool refresh.
+
+Disconnected and quit Studio's duplicate GUI Tailscale client, using verified
+LAN SSH for recovery. Canonical `studio` at 100.95.1.50 then passed SSH, Screen
+Sharing port 5900 and T3 port 3773; T3 Connect retained four QUIC connections.
+User confirmed Screen Sharing. The obsolete GUI node remains in the Tailscale
+admin inventory; no deletion was performed. Studio must keep its system daemon
+connected, without reconnecting the competing GUI identity.
+
+User connected Studio in Pro's T3 environment settings. Saved route lists are
+preferred first. Recommendation: Tailscale, LAN when present, T3 Connect, and
+Air's existing SSH route last. T3 Connect works over the internet without the
+laptop VPN; Air's SSH alias still traverses Tailscale. Route ordering and labels
+remain machine-local and user-operated; the supplied screenshot had T3 Connect
+first. Air is powered off and its routes/rollout were not live-tested.
