@@ -364,6 +364,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | Hammerspoon | Control-Alt | `Ctrl-Alt-h` | Send the focused window to the previous display, wrapping around |
 | Hammerspoon | Control-Alt | `Ctrl-Alt-l` | Send the focused window to the next display, wrapping around |
 | Hammerspoon | Control-Alt | `Ctrl-Alt-b` | Toggle optional physical-monitor DDC brightness keys (off by default; excludes Sidecar) |
+| VS Code | Command | `Cmd-0` | Reset zoom to the configured default |
 <!-- KEYMAPS:END -->
 
 ## Herdr in Practice

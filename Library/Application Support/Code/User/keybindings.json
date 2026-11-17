@@ -1,4 +1,6 @@
 [
+  // km:vscode.view.reset-zoom
+  { "key": "cmd+0", "command": "workbench.action.zoomReset" },
   // km:vscode.tab.previous
   { "key": "cmd+h", "command": "workbench.action.previousEditor" },
   // km:vscode.tab.next

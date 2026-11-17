@@ -81,6 +81,7 @@
     }
   },
   "window.zoomLevel": -0.5,
+  "window.zoomPerWindow": true,
   "workbench.startupEditor": "none",
   // Explorer opens rendered Markdown; Git diffs retain source text.
   "workbench.editorAssociations": {

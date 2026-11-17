@@ -95,3 +95,4 @@ windows.resize.right	Hammerspoon	Super	Super-+ (=/+ key, no Shift)	resize-right	
 windows.display.previous	Hammerspoon	Control-Alt	Ctrl-Alt-h	previous-display	Send the focused window to the previous display, wrapping around
 windows.display.next	Hammerspoon	Control-Alt	Ctrl-Alt-l	next-display	Send the focused window to the next display, wrapping around
 windows.brightness.toggle	Hammerspoon	Control-Alt	Ctrl-Alt-b	toggle-brightness-keys	Toggle optional physical-monitor DDC brightness keys (off by default; excludes Sidecar)
+vscode.view.reset-zoom	VS Code	Command	Cmd-0	workbench.action.zoomReset	Reset zoom to the configured default
