@@ -6,9 +6,10 @@ and the rules for safely changing or synchronizing the configuration.
 
 The primary workspace is VS Code for editing and Ghostty with Herdr for terminal sessions.
 
-The compact workflow and tool map is `~/README.md`; agents can use
-`$fausto-workflow` from `~/.codex/skills/fausto-workflow/SKILL.md`. This manual
-retains detailed procedures and validation evidence.
+The canonical setup overview and tool map is `~/README.md`. The
+`fausto-mac-setup` skill routes Mac tasks here without repeating the inventory.
+`teach` handles learning and `full-stop` handles project changes through an
+open PR. This manual retains detailed procedures and validation evidence.
 
 ## App Sync
 
@@ -1638,6 +1639,25 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   warm the cache then verify `--only-cached`. Inspect warnings/rendering.
   LuaLaTeX, Biber and shell-escape workflows require a project-specific review.
 
+### Project placement and handoff
+
+From Pro/Air, prefer Studio for long project runs, builds/tests, simulations and
+data processing when reachable and sufficiently free. Explicit placement wins;
+keep quick questions, caller-Mac maintenance and requested local outputs local.
+Check linked T3 environments, capacity, active jobs and repository state before
+routing. Continue the existing Studio thread for the same task. Use T3 delegation
+when appropriate; create a new top-level thread only when Fausto requests one.
+If Studio is unavailable, report that and continue only independent lightweight
+work rather than silently starting heavy work locally.
+
+Keep full projects, datasets and heavy outputs on Studio. Follow **Studio
+worker** and **Review Studio results** in `~/README.md` for checkout locations,
+T3 worktrees, requested local clones and self-contained GitHub Release bundles.
+Preserve repository visibility and existing local work. Include host, exact
+checkout/branch, changed/untracked files, report/output paths, checks, and a
+runnable command or preview/port with stop instructions in project handoffs.
+Preserve scientific evidence and provisional-result labels.
+
 ## Agent Contract
 
 Agents working on this setup must follow these rules:
@@ -1694,11 +1714,14 @@ and maintenance script, then report missing manual sign-ins and permissions.
 
 ## Maintenance Checks
 
-For workflow skill edits, run
-`uv run --no-project --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.codex/skills/fausto-workflow`.
-Validation (2026-11-10): skill validation, five bcp tests, keymap consistency,
-shell syntax and whitespace checks passed. Maintenance stages only this custom
-skill; managed skills and plugin caches remain untracked.
+For personal skill edits, run
+`uv run --no-project --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.codex/skills/NAME`
+for each changed skill (`teach`, `full-stop`, `fausto-mac-setup`).
+Validation (2026-11-10): former workflow skill validation, five bcp tests,
+keymap consistency, shell syntax and whitespace checks passed.
+Maintenance stages the three personal skills; managed
+skills and plugin caches remain untracked. The former `fausto-workflow` skill
+is replaced by `fausto-mac-setup`. `sol-loop` is not required by this setup.
 
 Use these after changing the setup:
 

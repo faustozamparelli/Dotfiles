@@ -2,8 +2,10 @@
 
 A small, living guide to this Mac setup. Detailed procedures and validation
 history live in `~/.config/sync/README.md`; agent rules live in
-`~/.codex/AGENTS.md`. Agents can use `$fausto-workflow`
-(`~/.codex/skills/fausto-workflow/SKILL.md`) for a compact orientation.
+`~/.codex/AGENTS.md`. Use `teach` to understand code and `full-stop` to complete
+substantive project changes through an open PR that you review and merge.
+`fausto-mac-setup` points agents to the relevant sections of this guide and the
+manual only when working on Macs, custom commands or shared configuration.
 
 ## Daily work and tools
 
@@ -173,8 +175,9 @@ validation evidence to the existing detailed manual.
 From Pro/Air, default substantial project work to Studio when reachable and
 sufficiently free: long agent runs, builds/tests, simulations and data processing.
 Keep quick questions, maintenance of the caller Mac and explicitly local outputs
-on the caller. Explicit placement wins. Check active work and repository state;
-continue the existing Studio task thread where possible. If Studio is unavailable,
+on the caller. Explicit placement wins. Check linked T3 environments, available
+capacity, active work and repository state; continue the existing Studio task
+thread where possible. If Studio is unavailable,
 report it before starting heavy work locally. Full projects, datasets and heavy
 outputs stay there; copy back only requested deliverables.
 

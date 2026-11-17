@@ -13,7 +13,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs" --check
 
 "${bare[@]}" add -u -- .config/sync
-"${bare[@]}" add -u -- .codex/AGENTS.md .ssh/config .local/bin/air-power-setup .local/bin/remote
+"${bare[@]}" add -u -- .codex/AGENTS.md .codex/skills .ssh/config .local/bin/air-power-setup .local/bin/remote
 "${bare[@]}" add \
   .config/sync/vscode-markdown-preview-wrap \
   .gitconfig \
@@ -21,7 +21,9 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .config/fish/config.fish \
   .config/fish/fish_plugins \
   .config/fish/functions/sync-maintain.fish \
-  .codex/skills/fausto-workflow \
+  .codex/skills/fausto-mac-setup \
+  .codex/skills/teach \
+  .codex/skills/full-stop \
   .config/gh/config.yml \
   .config/ghostty \
   .hammerspoon/init.lua \
