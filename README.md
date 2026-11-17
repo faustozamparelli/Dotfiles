@@ -170,9 +170,13 @@ validation evidence to the existing detailed manual.
 
 ## Studio worker
 
-From both Pro and Air, default to agent work on Studio when it is available and
-free. Full projects, datasets and heavy outputs stay there; copy back only the
-results or lightweight review files you request. Check for conflicting work first.
+From Pro/Air, default substantial project work to Studio when reachable and
+sufficiently free: long agent runs, builds/tests, simulations and data processing.
+Keep quick questions, maintenance of the caller Mac and explicitly local outputs
+on the caller. Explicit placement wins. Check active work and repository state;
+continue the existing Studio task thread where possible. If Studio is unavailable,
+report it before starting heavy work locally. Full projects, datasets and heavy
+outputs stay there; copy back only requested deliverables.
 
 Studio follows Pro's curated extras through symlinked machine manifests. Keep
 repositories in `~/Developer/<repo>` and create T3 worktrees for independent
@@ -211,3 +215,27 @@ documented MCP fallback when another process owns ScreenCaptureKit.
 
 For later cleanup, inventory Git status, untracked files, worktrees and active
 T3 work before removing a project; preserve unpublished work and outputs.
+
+### Review Studio results without copying a repository
+
+Use the Studio environment in T3 for the conversation, supported file previews
+and diffs. New/untracked files also need inspection; a diff alone is incomplete.
+For a full review, VS Code → **Remote-SSH: Connect to Host → studio**, then open
+the exact checkout/worktree reported by the agent. This uses SSH as transport
+but does not clone or manually transfer the repository to the laptop.
+
+- Markdown: open the report, then **Markdown: Open Preview to the Side**
+  (`Cmd-K V`). Source Control shows tracked changes; inspect untracked files too.
+- Figures: open the image files in the remote Explorer. Keep large raw data on
+  Studio and review plots or reduced exports first.
+- Runnable outputs: use the remote terminal and the project's documented command.
+  For web apps/notebooks, forward the reported Studio port in VS Code's Ports
+  panel and open its local URL. Keep services bound to loopback where possible.
+  Stop the review server/kernel when finished.
+- Native GUI-only results: use Studio Screen Sharing when necessary; ordinary
+  file review does not need a streamed desktop. Download only final files needed
+  in a local application, presentation or offline session.
+
+Agent handoffs should name the host, exact checkout/branch, report and output
+paths, changed/untracked files, checks, and run/preview instructions. Reuse living
+reports instead of generating a new workflow/status document for each run.
