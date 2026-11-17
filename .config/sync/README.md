@@ -1594,7 +1594,9 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
 - Desktop/browser tools stay on their own host. Use explicit SSH for remote
   commands; forward dev ports with `ssh -N -L 127.0.0.1:LOCAL:127.0.0.1:REMOTE studio`.
   T3 thread sharing does not replicate files: view Studio through its T3
-  environment or VS Code Remote SSH. Do not copy live T3 databases or profiles.
+  environment; review published branches/PRs in T3 or GitHub, or clone locally
+  when needed. Requested runnable review bundles go under the caller’s
+  `~/Developer`. Do not copy live T3 databases or profiles.
 - Studio uses the root Tailscale daemon at `100.95.1.50`, always connected.
   Do not reconnect the duplicate GUI client. Check the daemon with the CLI's
   `--socket=/var/run/tailscaled.socket`, not the GUI client's stopped identity.

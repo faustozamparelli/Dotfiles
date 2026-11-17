@@ -195,13 +195,10 @@ Screen Sharing: `open vnc://studio.tailed8082.ts.net` with Tailscale connected.
 `ssh studio` uses Tailscale; `ssh studio-lan` uses `studio.local` on a reachable
 local network, sharing the verified host identity. `studio-ts` is explicit VPN.
 Studio uses its system Tailscale daemon; leave the duplicate GUI client off.
-Use VS Code **Remote-SSH: Connect to Host → studio**, then open `~/Developer`
-or the agent's exact worktree. Files, terminals and debugging stay on Studio;
-no pull is required to see unsaved-to-Git results. Commit/push publishes work;
-a local clone on the laptop still needs a pull. Closing the laptop ends its
-viewer connection; Studio work can continue. Keep Studio logged in and awake;
-lock the screen instead of logging out. After a reboot, FileVault may require
-local unlock before remote tools become available.
+Review through T3 and project branches/PRs. A laptop clone needs a pull to see
+published changes. Closing the laptop ends its viewer connection; Studio work
+can continue. Keep Studio logged in and awake; lock instead of logging out.
+After a reboot, FileVault may require local unlock before remote tools work.
 
 Use `~/.t3/bin/t3 status` and `~/.t3/bin/t3 service status` to check hosting.
 T3 Connect needs Studio's own account approval; its service starts at login.
@@ -216,23 +213,20 @@ documented MCP fallback when another process owns ScreenCaptureKit.
 For later cleanup, inventory Git status, untracked files, worktrees and active
 T3 work before removing a project; preserve unpublished work and outputs.
 
-### Review Studio results without copying a repository
+### Review Studio results
 
-Use T3 for prompting, supported file previews and the shared browser for runnable
-web outputs. Review published code/diffs on GitHub; press `.` in a repository
-for github.dev without cloning. Clone for regular/offline reading or local runs;
-use a partial sparse clone when only selected directories are needed.
+Review iterations primarily in T3 Code, including supported file previews and
+the shared browser for runnable web outputs. Use project branches/PRs for review
+in T3 or GitHub as the output becomes satisfactory. Clone into the requesting
+Mac's `~/Developer` when you want to read the codebase locally.
 
-For native apps (ParaView/QGIS) or offline review, ask the Studio agent for a
-self-contained review ZIP with required data, portable paths and opening
-instructions. Publish it as a GitHub Release asset in the appropriate repository
-with its existing visibility; keep large generated files out of Git history.
-Download only the bundle through GitHub or
-`gh release download TAG --repo OWNER/REPO --pattern 'review-*.zip'`.
-Identify the source commit and any uncommitted inputs. GitHub only contains
-pushed/uploaded work; inspect new/untracked files too. Full datasets stay on Studio.
-
-VS Code Remote SSH and Studio Screen Sharing remain optional fallbacks.
+Only when you ask to run/review outputs yourself locally, prepare a self-contained
+review ZIP with required data, portable paths and opening instructions. Publish
+it as a GitHub Release asset preserving repository visibility, then download and
+extract it into a distinct directory under the requesting Mac's `~/Developer`,
+without overwriting existing work. Keep large generated files out of Git history
+and identify the source commit and any uncommitted inputs. Full datasets stay on
+Studio unless requested for the local review.
 
 Agent handoffs should name the host, exact checkout/branch, report and output
 paths, changed/untracked files, checks, and run/preview instructions. Reuse living
