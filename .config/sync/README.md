@@ -1716,10 +1716,10 @@ and maintenance script, then report missing manual sign-ins and permissions.
 
 For personal skill edits, run
 `uv run --no-project --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.codex/skills/NAME`
-for each changed skill (`teach`, `full-stop`, `fausto-mac-setup`).
+for each changed personal skill. The explicit list is in `maintain.sh`.
 Validation (2026-11-10): former workflow skill validation, five bcp tests,
 keymap consistency, shell syntax and whitespace checks passed.
-Maintenance stages the three personal skills; managed
+Maintenance stages the explicitly listed personal skills; managed
 skills and plugin caches remain untracked. The former `fausto-workflow` skill
 is replaced by `fausto-mac-setup`. `sol-loop` is not required by this setup.
 

@@ -7,6 +7,13 @@ substantive project changes through an open PR that you review and merge.
 `fausto-mac-setup` points agents to the relevant sections of this guide and the
 manual only when working on Macs, custom commands or shared configuration.
 
+For substantial implementation, the main thread owns architecture and final
+review while one bounded worker normally handles implementation. A second worker
+is used only for independent work. `diagnosing-bugs` assists with hard failures;
+`benchmark-checklist` checks performance evidence. Invoke `$hillclimb` explicitly
+for a bounded optimization experiment. Native persistent Goals also remain
+explicit; an ordinary task gets acceptance checks without an automatic Goal.
+
 ## Daily work and tools
 
 | Work | Tools and conventions |

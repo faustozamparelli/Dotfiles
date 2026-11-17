@@ -24,6 +24,9 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .codex/skills/fausto-mac-setup \
   .codex/skills/teach \
   .codex/skills/full-stop \
+  .codex/skills/diagnosing-bugs \
+  .codex/skills/benchmark-checklist \
+  .codex/skills/hillclimb \
   .config/gh/config.yml \
   .config/ghostty \
   .hammerspoon/init.lua \

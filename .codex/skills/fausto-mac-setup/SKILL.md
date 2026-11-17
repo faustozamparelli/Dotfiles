@@ -22,4 +22,4 @@ an SSH connection alone does not establish desktop or wake access.
 
 Publish portable changes with scoped paths in the bare dotfiles repository,
 then reconcile reachable Macs using its existing contract. Managed plugin
-skills and runtime state stay local; the three personal skills are tracked.
+skills and runtime state stay local; personal skills are tracked explicitly.

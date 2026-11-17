@@ -17,12 +17,15 @@ It grants no additional permission for unrelated work or production operations.
    working tree and existing PR. Preserve unrelated changes. Reuse the task's
    checkout and PR where appropriate; create a task branch if on the default
    branch. Use T3-managed worktrees when isolation is needed. Follow Fausto's
-   Studio placement preference before substantial execution. Before working
+   Studio placement preference before substantial execution. Derive observable
+   acceptance checks from the request and settle the relevant architecture and
+   interfaces before assigning implementation. Before working
    on an existing PR, disable auto-merge/remove it from a merge queue if set,
    and report doing so. If that cannot be done, stop before a push could merge it.
 2. **Implement.** Make the smallest maintainable change that satisfies the
    request. Explain consequential choices briefly, then proceed autonomously.
-   Keep documentation edits limited to the global documentation policy.
+   Use the coordinator/worker procedure below for substantial work. Keep
+   documentation edits limited to the global documentation policy.
 3. **Verify.** Reproduce a bug when practical and recheck the same case after
    the fix. Run the relevant repository checks and inspect their outputs.
    Check actual runtime behavior when static or mocked checks cannot establish
@@ -54,3 +57,45 @@ If there is no remote, PR facility or sufficient access, complete the local
 work and verification and report the exact blocker and branch. Ask only for
 the consequential information or access needed to continue; never invent a PR
 or approval. Use T3's secret request tool for credentials only the user can give.
+
+## Coordinator and workers
+
+For substantial implementation, delegate one bounded implementation task at
+a time. The main thread owns requirements, architecture, interfaces, integration
+and the final PR review. Read enough source to judge the approach; leave bulk
+exploration, low-level implementation and verbose check output with the worker.
+Do small or tightly coupled edits directly when delegation adds more cost than
+it saves. Use at most two simultaneous workers, only for independent scopes;
+do not create a reviewer panel or workers that spawn their own agents.
+
+Give each worker a short brief with the goal, acceptance checks, relevant file
+pointers, owned paths, interface constraints, non-goals and validation commands.
+Start without the full parent transcript when supported. Ask for a concise
+handoff: what changed, exact checkout/branch and commit if any, checks and their
+results, evidence locations, unresolved decisions and risks. Keep raw logs out
+of the main thread. Tell the worker not to push, open PRs or start other agents.
+
+Follow the harness's native-versus-T3 delegation rules. Workers normally inherit
+the parent model/settings; do not add a model roster. Use T3 `delegate_task` for
+isolated worktrees or remote workers, and let T3 create their checkouts. Only one
+writer may own a file at a time; do not edit the worker's files while it runs.
+Separate concurrent writers into worktrees and integrate their changes in the
+main thread. Follow a T3 delegate's returned `next` instruction rather than
+polling. Keep lightweight work local; route substantial project work per the
+Mac placement policy.
+
+Inspect the actual diff and important outputs when the worker finishes. Check
+the implementation against the architecture, caller contracts and acceptance
+checks, as if reviewing someone else's PR. A worker's summary is not proof.
+Give concrete corrections; use a fresh worker when the direction or task changes,
+and resume an existing one only when preserving its state saves meaningful work.
+Cancel and confirm a running delegate has stopped before replacing it. Fix small findings yourself rather
+than spawning another review. After two unsuccessful implementation attempts on
+the same approach, stop respawning and re-examine the premise or missing evidence.
+Integrate and verify the final result before filing the PR.
+
+Use `diagnosing-bugs` for unclear, intermittent or recurring failures, and
+`benchmark-checklist` before relying on measured performance claims. Ordinary
+tasks end at their acceptance checks. Start a native persistent Goal only when
+the user explicitly requests one; never convert a normal task into an unbounded
+optimization loop. Explicit sustained optimization uses `hillclimb`.
