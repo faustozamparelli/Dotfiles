@@ -218,23 +218,21 @@ T3 work before removing a project; preserve unpublished work and outputs.
 
 ### Review Studio results without copying a repository
 
-Use the Studio environment in T3 for the conversation, supported file previews
-and diffs. New/untracked files also need inspection; a diff alone is incomplete.
-For a full review, VS Code → **Remote-SSH: Connect to Host → studio**, then open
-the exact checkout/worktree reported by the agent. This uses SSH as transport
-but does not clone or manually transfer the repository to the laptop.
+Use T3 for prompting, supported file previews and the shared browser for runnable
+web outputs. Review published code/diffs on GitHub; press `.` in a repository
+for github.dev without cloning. Clone for regular/offline reading or local runs;
+use a partial sparse clone when only selected directories are needed.
 
-- Markdown: open the report, then **Markdown: Open Preview to the Side**
-  (`Cmd-K V`). Source Control shows tracked changes; inspect untracked files too.
-- Figures: open the image files in the remote Explorer. Keep large raw data on
-  Studio and review plots or reduced exports first.
-- Runnable outputs: use the remote terminal and the project's documented command.
-  For web apps/notebooks, forward the reported Studio port in VS Code's Ports
-  panel and open its local URL. Keep services bound to loopback where possible.
-  Stop the review server/kernel when finished.
-- Native GUI-only results: use Studio Screen Sharing when necessary; ordinary
-  file review does not need a streamed desktop. Download only final files needed
-  in a local application, presentation or offline session.
+For native apps (ParaView/QGIS) or offline review, ask the Studio agent for a
+self-contained review ZIP with required data, portable paths and opening
+instructions. Publish it as a GitHub Release asset in the appropriate repository
+with its existing visibility; keep large generated files out of Git history.
+Download only the bundle through GitHub or
+`gh release download TAG --repo OWNER/REPO --pattern 'review-*.zip'`.
+Identify the source commit and any uncommitted inputs. GitHub only contains
+pushed/uploaded work; inspect new/untracked files too. Full datasets stay on Studio.
+
+VS Code Remote SSH and Studio Screen Sharing remain optional fallbacks.
 
 Agent handoffs should name the host, exact checkout/branch, report and output
 paths, changed/untracked files, checks, and run/preview instructions. Reuse living
