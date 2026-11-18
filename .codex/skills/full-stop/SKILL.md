@@ -3,7 +3,7 @@ name: full-stop
 description: Complete substantive project changes through implementation, verification and an open PR for Fausto to review and merge. Use for features, fixes, refactoring, or preparing an existing PR for review. Excludes read-only explanations, trivial edits and Mac dotfiles publication. Never merge under this workflow.
 metadata:
   upstream: https://github.com/t3dotgg/tstack/tree/11e37a74d0a6868c121cd0910ab2b3bd9873b92a/skills/full-stop
-  adaptation: Self-contained personal workflow; no full-send, sol-loop, file-pr or babysit-pr dependency.
+  adaptation: Personal delivery workflow with PR writing delegated to file-pr.
 ---
 
 # Full stop
@@ -25,7 +25,9 @@ It grants no additional permission for unrelated work or production operations.
 2. **Implement.** Make the smallest maintainable change that satisfies the
    request. Explain consequential choices briefly, then proceed autonomously.
    Use the coordinator/worker procedure below for substantial work. Keep
-   documentation edits limited to the global documentation policy.
+   documentation edits limited to the global documentation policy. Update
+   affected commands, examples and user-facing behavior where readers
+   already look for them, and check the guidance against the final change.
 3. **Verify.** Reproduce a bug when practical and recheck the same case after
    the fix. Run the relevant repository checks and inspect their outputs.
    Check actual runtime behavior when static or mocked checks cannot establish
@@ -36,9 +38,9 @@ It grants no additional permission for unrelated work or production operations.
    unnecessary complexity. Fix supported problems. Independent model review
    is optional when requested, not a mandatory review loop. Address existing
    review findings with a fix or a concrete reason for disagreeing.
-5. **Prepare the PR.** Commit and push only task paths. Open or update the PR
-   with the problem, resulting behavior, relevant checks and material limits.
-   Keep the description brief; add reviewer entry points for a complex diff.
+5. **Prepare the PR.** Commit and push only task paths. Read and apply
+   `file-pr` when drafting, opening or updating the PR, even when the
+   user asked for implementation without explicitly asking for a PR.
    Keep unrelated changes out and split oversized work when useful. Do not
    rewrite published history just to polish it. Use `--force-with-lease` only
    for an authorized rewrite of this task's branch. Link the PR to T3 as the
