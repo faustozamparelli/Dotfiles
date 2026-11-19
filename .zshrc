@@ -1,7 +1,8 @@
 export HOMEBREW_PREFIX="/opt/homebrew"
 
-export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+typeset -gU path
+path=("$HOME/.local/bin" "$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin" "${path[@]}")
+export PATH
 
 # Keep terminal applications such as Codex in color mode.
 unset NO_COLOR

@@ -1,8 +1,12 @@
 set -gx HOMEBREW_PREFIX /opt/homebrew
 set -gx PNPM_HOME $HOME/Library/pnpm
 
-# Keep one deterministic toolchain path on all Macs. fish_add_path normalizes
-# paths and prevents the duplicate Homebrew entries produced by editing PATH.
+# Keep the first occurrence of each inherited directory before adding tools.
+set -l unique_path
+for directory in $PATH
+    contains -- "$directory" $unique_path; or set -a unique_path "$directory"
+end
+set -gx PATH $unique_path
 set -g fish_user_paths
 fish_add_path -g \
     $HOME/.local/toolchains/bin \
