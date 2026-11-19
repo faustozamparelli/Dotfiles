@@ -660,7 +660,10 @@ class AppPreferencesTests(unittest.TestCase):
         arguments = ['app-preferences.py', action] + ([application] if application else [])
         with patch.object(sys, 'argv', arguments), \
              patch.object(self.module.subprocess, 'run') as run:
-            run.return_value.returncode = 0 if process_running else 1
+            run.return_value.returncode = 0
+            run.return_value.stdout = (
+                '/Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)\n'
+                if process_running else '/usr/libexec/lsd\n')
             self.module.main()
         return run
 
@@ -710,7 +713,8 @@ class AppPreferencesTests(unittest.TestCase):
         local = {'wordWrap': False, 'browserProfiles': [{'id': 'device-only'}]}
         config.write_text(json.dumps(local))
         self.profile = {'preferences': {}, 't3ClientSettings': {'wordWrap': True}}
-        self.run_profile('apply', process_running=True)
+        run = self.run_profile('apply', process_running=True)
+        run.assert_called_once_with(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
         self.assertEqual(json.loads(config.read_text()), local)
         self.run_profile('apply')
         self.assertEqual(json.loads(config.read_text()), dict(local, wordWrap=True))

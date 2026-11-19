@@ -2,6 +2,7 @@
 """Apply/capture reviewed portable settings for shared apps, never full plists."""
 import json
 import plistlib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -102,10 +103,11 @@ def main():
                 if key in runtime and type(runtime[key]) is type(wanted):
                     settings[key] = runtime[key]
         elif any(runtime.get(key) != wanted for key, wanted in settings.items()):
-            running = subprocess.run(
-                ['pgrep', '-f', r'/T3 Code( \((Alpha|Nightly)\))?\.app/Contents/MacOS/'],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if running.returncode != 1:
+            processes = subprocess.run(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
+            t3_running = re.search(
+                r'/T3 Code(?: \((?:Alpha|Nightly)\))?\.app/Contents/MacOS/',
+                processes.stdout)
+            if processes.returncode != 0 or t3_running:
                 print('T3 interface settings deferred: close T3 before the next mac-sync.')
             else:
                 runtime.update(settings)
