@@ -1402,7 +1402,7 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
 | MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
 | Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
-| T3 Code (Nightly) | Selected interface, notification, confirmation, diff and sidebar preferences. Conversations, projects, connections, browser profiles, models and credentials stay local. |
+| T3 Code (Nightly) | Selected interface, font sizes, notification, confirmation, diff and sidebar preferences, plus the Auto balance toggle. Machine weights, conversations, projects, connections, browser profiles, models and credentials stay local. Set Resume after usage limits via T3 Settings → Threads with All environments selected. |
 | OrbStack | Menu-bar visibility. VM/container data, CPU/RAM limits, networking and device-specific settings stay local. |
 | Tailscale | Dock visibility only. Device identity, routes, exit nodes and connections stay local. |
 | Helium | Menu shortcuts, command-driven store-extension choices and manual-action web-app reminders. Browser profiles, sessions and history stay local. |
