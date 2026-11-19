@@ -560,6 +560,20 @@ is_safari_web_app() {
   [[ "$bundle_id" == com.apple.Safari.WebApp.* ]]
 }
 
+stop_retired_peekaboo() {
+  local label
+  for label in com.fausto.pro-desktop com.fausto.studio-desktop; do
+    if launchctl print "gui/$UID/$label" >/dev/null 2>&1; then
+      launchctl bootout "gui/$UID/$label" || return 1
+    fi
+    rm -f -- "$HOME/Library/LaunchAgents/$label.plist" || return 1
+  done
+  pkill -TERM -u "$UID" -x Peekaboo 2>/dev/null || true
+  pkill -TERM -u "$UID" -x peekaboo 2>/dev/null || true
+  rm -f -- "$HOME/.local/bin/peekaboo" || return 1
+  rm -rf -- "$HOME/.local/share/peekaboo"
+}
+
 retire_manifest() {
   local source
   local identifier
@@ -596,6 +610,12 @@ retire_manifest() {
 
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
+
+    if [[ "$token" == "peekaboo" ]] && ! stop_retired_peekaboo; then
+      echo "Cannot stop or remove the Peekaboo CLI and login items." >&2
+      failed=1
+      continue
+    fi
 
     if [[ "$source" == "cask" ]] &&
        grep -Fxq "$token" <<<"$installed_casks"; then

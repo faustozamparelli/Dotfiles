@@ -16,6 +16,7 @@ cask	tor-browser	Tor Browser
 cask	vorssaint	Vorssaint
 cask	zed	zed
 direct	maghue	MagHue
+direct	peekaboo	Peekaboo
 direct	pi-desktop	Pi Desktop
 direct	sioyek	Sioyek
 formula	cmake	CMake

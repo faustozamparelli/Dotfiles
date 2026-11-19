@@ -11,13 +11,6 @@
     "pro": {
       "apps": {},
       "mcp_servers": {
-        "pro-desktop": {
-          "args": [
-            "mcp"
-          ],
-          "command": "/Users/faustozamparelli/.local/bin/peekaboo",
-          "enabled": true
-        },
         "qgis": {
           "args": [],
           "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
@@ -38,13 +31,6 @@
         "qgis": {
           "args": [],
           "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
-          "enabled": true
-        },
-        "studio-desktop": {
-          "args": [
-            "mcp"
-          ],
-          "command": "/Users/faustozamparelli/.local/bin/peekaboo",
           "enabled": true
         }
       },
@@ -131,7 +117,9 @@
     "exa",
     "node_repl",
     "computer-use",
-    "autodesk_fusion"
+    "autodesk_fusion",
+    "pro-desktop",
+    "studio-desktop"
   ],
   "settings": {
     "model_reasoning_effort": "high"

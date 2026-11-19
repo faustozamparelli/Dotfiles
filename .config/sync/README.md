@@ -1626,14 +1626,8 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   active-use settings. `air-power-setup` reproduces it with sudo; inspect power
   source using `pmset -g batt`. Closed-lid and wake recovery need live evidence;
   do not keep Air awake to conceal a failed wake path.
-- Desktop control is a fallback after app-specific CLI/MCP routes. Peekaboo
-  setup: `~/.config/mac-setup/direct/studio-desktop.sh`, Studio/Pro only.
-  Use native MCP `inspect_ui` for text; `see` with `capture_engine:"classic"`
-  when an image is needed. Pin observed app/window/snapshot. Input may use
-  signed Peekaboo CLI with explicit foreground authority when MCP mutations
-  report an unconfirmed result; re-observe before any retry. Never bypass
-  login, change TCC databases or modify vendor signatures. User prefers to
-  operate visible T3 settings; give exact steps unless asked to do them.
+- Prefer app-specific CLI and MCP routes for desktop tasks. Keep macOS privacy
+  permissions machine-local.
 - Math PDFs use shared `tectonic`/`pandoc`, not full TeX Live. Compile the
   `~/.config/mac-setup/latex-smoke.tex` fixture into a temporary directory;
   warm the cache then verify `--only-cached`. Inspect warnings/rendering.
@@ -1892,74 +1886,7 @@ function`); no UI/permission test completed. QGIS crash is accepted pending
 an upstream update and was not retested. Helium web apps are optional website
 shortcuts from the shared manifest, not prerequisites for T3 or project work.
 
-### Studio native desktop MCP (2026-11-16)
-
-User approved replacing the blocked OpenAI/node_repl route with Peekaboo.
-Current Studio profile: `studio-desktop` runs `~/.local/bin/peekaboo mcp`;
-computer-use plugin is off. Removed the obsolete `js_repl` feature workaround
-and its test: Codex 0.169.0 reports that feature as removed. No ChatGPT app,
-provider API key, modified signatures, TCC edits or recurring job was added.
-
-Explicit setup: `~/.config/mac-setup/direct/studio-desktop.sh`. It is Studio-only,
-pins CLI/app 4.9.9, verifies both SHA-256 release assets and OpenClaw signing team
-FWJYW4S8P8, and opens the GUI host through a user login item without a timer.
-CLI lives outside Homebrew so `mac-sync --nuke` cannot remove it. Re-running
-setup validated the installed signatures without downloading again. Initial
-archive extraction assumed a flat directory; fixed to strip its release folder.
-App upgrades across pinned versions require review with the app closed.
-
-Verified: permissions report Screen Recording, Accessibility and Event
-Synthesizing granted; real screen capture was visually inspected; an exact T3
-window UI read passed; native MCP initialized and exposed 26 tools, and its
-`see` UI call passed. A Calculator test used five observed AX button clicks
-(All Clear, 1, Add, 1, Equals) and read back 2; Calculator was closed afterwards.
-Automatic capture can encounter ScreenCaptureKit ownership conflicts. An
-explicit app Bridge socket also failed MCP startup under that condition;
-the registered server uses normal process-local startup, with the documented
-`capture_engine: "classic"` request-level fallback. Do not change target or
-repeat a mutation after an unverified result; observe its exact window first.
-Keyboard permission is granted; the live action test exercised AX clicks.
-Reboot/locked-screen recovery and standalone service-host permission inheritance
-remain separate from this logged-in desktop verification.
-
-Diagnostic evidence: installed OpenAI helper rejects `initialize` with
-`capabilities.experimental` but accepts the same payload without it (upstream
-https://github.com/openai/codex/issues/45269). A temporary protocol adapter
-passed initialization and listed 10 native tools, but Finder access failed
-with -1743 under T3 and -10000 from a user LaunchAgent. T3's installed desktop
-and standalone binary both lack the Automation entitlement (related issue:
-https://github.com/pingdotgg/t3code/issues/21282). The user confirmed the visible
-Automation permission was already enabled. The adapter and temporary launchd
-test were removed, not published as working desktop control.
-References: https://github.com/openclaw/Peekaboo/blob/main/docs/MCP.md and
-https://github.com/openclaw/Peekaboo/blob/main/docs/permissions.md.
-Fresh T3-session verification also passed: the existing smoke-test thread was
-resumed with fresh context, registered all 26 `studio-desktop` tools, listed
-six T3 windows, and read exact window 432 using classic capture. It returned
-23 elements with the accessibility tree truncated at depth 12. This validates
-model-visible registration and an actual native MCP read, not just CLI access.
-The final sync regression suite passed 43 tests after removing the obsolete
-JavaScript-runtime test; installer bash syntax and idempotent rerun passed.
-
-### Pro Peekaboo and travel access (2026-11-16)
-
-Read Studio's setup conversation before reproducing its signed Peekaboo 4.9.9
-installation on Pro. The existing `direct/studio-desktop.sh` now supports both
-machines, preserving Studio's login label and using `com.fausto.pro-desktop`
-on Pro. Capturing codesign output before grep fixes a SIGPIPE/141 failure under
-pipefail during fresh installation. Release hashes and both signatures passed;
-installer rerun and bash syntax passed. Pro's managed profile enables
-`pro-desktop` through `codex-technical.py set-mcp pro-desktop on`; the OpenAI
-computer-use plugin stays off. Air receives no desktop installation.
-
-Pro verification: all three desktop permissions reported granted; Finder screen
-capture was visually inspected; native MCP initialization exposed 26 tools and
-its classic `see` read returned 94 elements. Five observed Calculator AX clicks
-entered `1 + 1 =`, and a fresh read returned expression `1 + 1` and result `2`.
-An initial Calculator capture preceded window readiness and failed; the next
-observation passed. Calculator was closed after the test. All 43 sync tests
-passed. These checks validate the local CLI and MCP protocol; model-visible
-registration of the new MCP awaits the next Codex session/tool refresh.
+### Studio travel access (2026-11-16)
 
 Disconnected and quit Studio's duplicate GUI Tailscale client, using verified
 LAN SSH for recovery. Canonical `studio` at 100.95.1.50 then passed SSH, Screen
@@ -2013,11 +1940,9 @@ an unlocked desktop. FileVault remains enabled; a full reboot still needs
 preboot unlock before normal unattended access returns.
 
 Apple Remote Desktop's remote Lock Screen blocks local keyboard/mouse input
-while remote administration remains possible. Peekaboo behavior under that
-mode is unverified. High Performance Screen Sharing blanks physical displays
+while remote administration remains possible. High Performance Screen Sharing blanks physical displays
 while connected, but it is session-dependent and is not proof of unattended
-privacy after the viewing laptop disconnects. Neither establishes the desired
-T3 + Peekaboo workflow without a live test. No new remote-control app, virtual
+privacy after the viewing laptop disconnects.  No new remote-control app, virtual
 machine, private API, screen curtain or lock bypass was installed/configured.
 Pro's Tailscale SSH probe timed out during this check. Tailscale key-expiry
 changes and the rest of the unattended UI checklist remain uncompleted.
@@ -2057,32 +1982,11 @@ The default GUI client correctly reports its duplicate identity Stopped and
 is not the worker's daemon. The CLI warned of client 1.104.4 versus daemon
 1.102.3; this was a read-only status check, not a compatibility validation.
 
-### Studio desktop choice and compact instructions (2026-11-16)
+### Peekaboo retirement (2026-11-19)
 
-User approved testing both routes on Studio and uninstalling the rejected
-route without another review. Keep Peekaboo 4.9.9. In this T3 session its
-native MCP captured Calculator and read Accessibility text; signed CLI input
-completed 7 × 6, with a fresh MCP read confirming 42. MCP click reported an
-unconfirmed outcome even though All Clear changed the value, so input used
-the foreground CLI and each subsequent observation verified the effect.
-Do not repeat an action solely because its delivery result is unconfirmed.
-
-Codex Computer Use helper 26.817.1000761 initialized and listed ten tools
-through a direct MCP diagnostic launched by T3's terminal. Empty experimental
-capabilities also initialized in this retest; this supersedes a blanket claim
-that any experimental field fails. Calculator access returned -1743 before
-unlock and timed out at 15 seconds afterward. The bundled node_repl route is
-not available in this T3 runtime. This is a compatibility/action check, not
-a comparative token or speed benchmark; the full bundled route did not run.
-
-After the user opened the existing desktop in Screen Sharing, Peekaboo UI
-access recovered. After the user disconnected Screen Sharing (with the
-external display disconnected), fresh classic capture and text inspection
-still worked; CLI All Clear changed 42 to 0 and the MCP read confirmed 0.
-This supersedes the earlier blocked no-viewer check. Calculator was closed;
-subsequent window lookup found no running Calculator. Longer idle periods,
-reboot and power-loss recovery were not tested. Studio remains awake and
-no power settings were changed; no electrical consumption was measured.
+Manual Mac sync removes the Peekaboo app, CLI and login agents and drops the
+`pro-desktop` and `studio-desktop` Codex MCP entries. Start a fresh Codex
+session to refresh the tool list.
 
 Removed the Studio computer-use Codex plugin with `codex plugin remove`,
 removed its helper bundle and stale compatibility-adapter bytecode, and
