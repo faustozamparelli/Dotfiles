@@ -13,7 +13,7 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
 "$HOME/.config/keymaps/keymap-docs" --check
 
 "${bare[@]}" add -u -- .config/sync
-"${bare[@]}" add -u -- .codex/AGENTS.md .codex/skills .ssh/config .local/bin/air-power-setup .local/bin/remote
+"${bare[@]}" add -u -- .codex/AGENTS.md .codex/skills .claude .ssh/config .local/bin/air-power-setup .local/bin/remote
 "${bare[@]}" add \
   .config/sync/vscode-markdown-preview-wrap \
   .gitconfig \
@@ -28,6 +28,9 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   .codex/skills/diagnosing-bugs \
   .codex/skills/benchmark-checklist \
   .codex/skills/hillclimb \
+  .claude/CLAUDE.md \
+  .claude/settings.json \
+  .claude/agents \
   .config/gh/config.yml \
   .config/ghostty \
   .hammerspoon/init.lua \
@@ -47,6 +50,11 @@ MAC_SYNC_DEFER_WEB_APP_REPORT=1 "$HOME/.local/bin/mac-sync" --no-pull
   "Library/Application Support/Code/User/keybindings.json" \
   "Library/Application Support/Code/User/tasks.json" \
   README.md
+
+# Skill symlinks only; Claude-managed skills under .claude/skills stay local.
+while IFS= read -r skill_link; do
+  "${bare[@]}" add -- "$skill_link"
+done < <(cd "$HOME" && find .claude/skills -maxdepth 1 -type l)
 
 "${bare[@]}" status --short
 

@@ -35,8 +35,9 @@ It grants no additional permission for unrelated work or production operations.
    pre-existing or failing checks honestly; do not call an unverified change
    ready. Recheck behavior changes and meaningful conflict fixes.
 4. **Review the final diff.** Check callers, scope, unintended behavior and
-   unnecessary complexity. Fix supported problems. Independent model review
-   is optional when requested, not a mandatory review loop. Address existing
+   unnecessary complexity. Fix supported problems. When the harness provides
+   a read-only reviewer agent (Claude Code: `reviewer`), run it once on
+   non-trivial diffs; it is one pass, not a review loop. Address existing
    review findings with a fix or a concrete reason for disagreeing.
 5. **Prepare the PR.** Commit and push only task paths. Read and apply
    `file-pr` when drafting, opening or updating the PR, even when the
@@ -77,8 +78,8 @@ handoff: what changed, exact checkout/branch and commit if any, checks and their
 results, evidence locations, unresolved decisions and risks. Keep raw logs out
 of the main thread. Tell the worker not to push, open PRs or start other agents.
 
-Follow the harness's native-versus-T3 delegation rules. Workers normally inherit
-the parent model/settings; do not add a model roster. Use T3 `delegate_task` for
+Follow the harness's native-versus-T3 delegation rules. Workers inherit the
+parent model/settings unless the harness's global instructions route models. Use T3 `delegate_task` for
 isolated worktrees or remote workers, and let T3 create their checkouts. Only one
 writer may own a file at a time; do not edit the worker's files while it runs.
 Separate concurrent writers into worktrees and integrate their changes in the

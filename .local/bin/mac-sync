@@ -164,6 +164,25 @@ if [[ -f "$HOME/.config/sync/codex-technical.json" ]]; then
   }
 fi
 
+# Claude Code loads the same personal skills through relative symlinks.
+# Link new skills and drop links whose skill was retired; leave other entries.
+if [[ -d "$HOME/.codex/skills" ]]; then
+  mkdir -p "$HOME/.claude/skills"
+  for skill_dir in "$HOME"/.codex/skills/*/; do
+    skill_name="$(basename "$skill_dir")"
+    [[ -f "$skill_dir/SKILL.md" ]] || continue
+    skill_link="$HOME/.claude/skills/$skill_name"
+    [[ -e "$skill_link" || -L "$skill_link" ]] ||
+      ln -s "../../.codex/skills/$skill_name" "$skill_link"
+  done
+  for skill_link in "$HOME"/.claude/skills/*; do
+    if [[ -L "$skill_link" && ! -e "$skill_link" &&
+          "$(readlink "$skill_link")" == ../../.codex/skills/* ]]; then
+      rm "$skill_link"
+    fi
+  done
+fi
+
 # Explicit manual runs exchange extension choices. The scheduled/check path
 # above never invokes this helper or requests administrator authorization.
 if [[ -f "$HOME/.config/sync/helium-extensions.py" ]]; then

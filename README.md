@@ -2,7 +2,7 @@
 
 A small, living guide to this Mac setup. Detailed procedures and validation
 history live in `~/.config/sync/README.md`; agent rules live in
-`~/.codex/AGENTS.md`. Use `teach` to understand code and `full-stop` to complete
+`~/.codex/AGENTS.md`, which Claude Code also imports. Use `teach` to understand code and `full-stop` to complete
 substantive project changes through an open PR that you review and merge.
 `fausto-mac-setup` points agents to the relevant sections of this guide and the
 manual only when working on Macs, custom commands or shared configuration.
@@ -18,7 +18,7 @@ explicit; an ordinary task gets acceptance checks without an automatic Goal.
 
 | Work | Tools and conventions |
 | --- | --- |
-| Coding agents | **T3 Code → Codex**; select the project/workspace there. Use available native browser/thread tools; the Codex CLI remains installed. |
+| Coding agents | **T3 Code → Codex or Claude Code** with the same rules and skills; select the project/workspace there. Use available native browser/thread tools; the Codex CLI remains installed. |
 | Editing and terminals | **VS Code** (`code .`); **Ghostty → Herdr → fish**. Detaching preserves server processes; reboot does not. Terminal editor: `nano`. |
 | Search and Git | `rg`, `fd`, `bat`, `eza`, `fzf`, `z`/`zi` (zoxide), `git`, `gh`. |
 | Python/notebooks | `uv sync`, `uv run …`, Ruff/Pyright; JupyterLab or VS Code with the project's `.venv` kernel. Jupytext pairing is opt-in; dependencies stay per-project. |

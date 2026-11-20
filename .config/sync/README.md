@@ -1652,6 +1652,24 @@ checkout/branch, changed/untracked files, report/output paths, checks, and a
 runnable command or preview/port with stop instructions in project handoffs.
 Preserve scientific evidence and provisional-result labels.
 
+### Claude Code setup
+
+Claude Code is also used only through T3 Code and shares Codex's workflow:
+`~/.claude/CLAUDE.md` imports `~/.codex/AGENTS.md` and adds Claude-only
+model, effort and context rules. Personal skills stay canonical in
+`~/.codex/skills`; `~/.claude/skills/NAME` are tracked relative symlinks, and
+`mac-sync` links newly added skills and removes links to retired ones.
+Claude-managed entries there (`synced`, `.trash`) stay local.
+
+`~/.claude/settings.json` sets Opus at medium effort and, through
+`CLAUDE_CODE_SUBAGENT_MODEL`/`CLAUDE_CODE_SUBAGENT_EFFORT`, the same default for
+subagents; an agent's own `model`/`effort` frontmatter wins over these
+(verified in Claude Code 2.1.329). `~/.claude/agents/Explore.md` replaces the
+built-in Explore with read-only Haiku at low effort; `reviewer.md` is a
+read-only Opus reviewer at high effort. A model chosen for a T3 thread
+overrides the settings default. Credentials, sessions, projects and caches
+under `~/.claude` stay untracked.
+
 ## Agent Contract
 
 Agents working on this setup must follow these rules:
