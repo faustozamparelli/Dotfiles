@@ -2023,3 +2023,14 @@ Mac rules moved to Machine operating reference; previous validation history
 remains in this manual and Git. Agent Contract now requires relevant sections
 rather than loading the entire manual. This changes personal instructions,
 not T3's provider/system instructions or its tool schemas.
+
+### Three-Mac reachability (2026-11-20)
+
+Verified from each Mac with `ssh -o BatchMode=yes HOST true`: `studio`, `air`
+and `pro` (and their `-ts` forms) all reach each other over Tailscale. Air was
+31 dotfile commits behind, so it lacked `studio-ts`/`studio-lan`; it was
+fast-forwarded and its uncommitted `alias c code` kept. `*-lan` succeeded only
+on the local Mac because the three were on different networks; cross-Mac LAN
+remains untested. All three T3 servers listen on port 3773 and are reachable
+through Tailscale. Studio's T3 had no linked Air/Pro environments; pairing and
+route lists (Tailscale, LAN, T3 Connect, SSH) need the T3 UI on each Mac.
