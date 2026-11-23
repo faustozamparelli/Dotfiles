@@ -1671,6 +1671,24 @@ read-only Opus reviewer at high effort. A model chosen for a T3 thread
 overrides the settings default. Credentials, sessions, projects and caches
 under `~/.claude` stay untracked.
 
+Claude Code, the Claude desktop app and ChatGPT are shared Homebrew casks
+(`claude-code`, `claude`, `chatgpt`); remove any native Claude Code install
+(`~/.local/bin/claude`, `~/.local/share/claude`) so `/opt/homebrew/bin/claude`
+is the only one on PATH. `codex-technical.py apply` also mirrors the Codex MCP
+servers effective on this Mac into Claude Code's user scope (`claude mcp
+add-json --scope user`); only servers named in `codex-technical.json` are
+managed, and servers needing local tokens, headers, env or a local stdio
+override stay Codex-only. Gmail, Calendar and Notion reach Claude as claude.ai connectors.
+
+Desktop control: Codex computer use (`features.computer_use` and the
+`computer-use@openai-bundled` plugin) is on for all Macs; `mac-sync` applies
+the setting and `codex-technical.py restore-plugins` installs the plugin.
+Claude Code's built-in computer use loads only in interactive CLI sessions; in
+T3 (SDK) sessions it is not set up, and its standalone `--computer-use-mcp`
+server refuses app grants ("not wired to a session"), verified with 2.1.329.
+The desktop app's computer use stays inside the Claude app. Use desktop
+control only when no CLI or app MCP covers the task.
+
 ## Agent Contract
 
 Agents working on this setup must follow these rules:
@@ -2010,8 +2028,8 @@ session to refresh the tool list.
 Removed the Studio computer-use Codex plugin with `codex plugin remove`,
 removed its helper bundle and stale compatibility-adapter bytecode, and
 unregistered the bundle from Launch Services. No helper processes remain.
-The plugin's disabled entries remain explicit. Studio alone now has
-`features.computer_use=false`, managed in `codex-technical.json`; apply also
+The plugin's disabled entries remain explicit. Studio then had
+`features.computer_use=false` (re-enabled for all Macs on 2026-11-24); apply also
 removes the obsolete helper notify hook. Use
 `python3 ~/.config/sync/codex-technical.py set-feature computer_use off`.
 Other Macs' feature settings and credentials are preserved. The six technical

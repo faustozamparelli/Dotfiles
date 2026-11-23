@@ -335,6 +335,70 @@ def apply():
 
 
 
+def claude_mcp_target(settings, local):
+    """The Claude Code user-scope entry for an enabled Codex MCP server.
+
+    Servers that need local credentials or a local stdio override stay
+    Codex-only, so Claude never gets a different or unauthenticated copy.
+    """
+    if not settings.get("enabled", True):
+        return None
+    if any(local.get(key) for key in ("bearer_token_env_var", "http_headers", "env")):
+        return None
+    if settings.get("url") and not local.get("command"):
+        return {"type": "http", "url": settings["url"]}
+    command = local.get("command") or settings.get("command")
+    if command and Path(command).is_file():
+        return {"type": "stdio", "command": command,
+                "args": local.get("args", settings.get("args", []))}
+    return None
+
+
+def sync_claude_mcp():
+    """Mirror this Mac's effective Codex MCP choices into Claude Code's user scope.
+
+    Only servers named in the snapshot with a URL or command are managed;
+    other Claude servers stay.
+    """
+    claude = shutil.which("claude", path=os.pathsep.join(
+        [os.environ.get("PATH", ""), "/opt/homebrew/bin", str(HOME / ".local/bin")]))
+    if not claude or not SNAPSHOT.exists():
+        return
+    snapshot = json.loads(SNAPSHOT.read_text())
+    validate(snapshot)
+    claude_config = HOME / ".claude.json"
+    try:
+        registered = json.loads(claude_config.read_text()).get("mcpServers", {})
+    except FileNotFoundError:
+        registered = {}
+    except (OSError, ValueError):
+        print("Warning: could not read ~/.claude.json; skipped Claude Code MCP sync")
+        return
+    codex_servers = tomllib.loads(CONFIG.read_text()).get("mcp_servers", {}) if CONFIG.exists() else {}
+    for name, settings in effective_snapshot(snapshot)["mcp_servers"].items():
+        if not settings.get("url") and not settings.get("command"):
+            continue  # A toggle never installs or removes an app-specific server.
+        target = claude_mcp_target(settings, codex_servers.get(name, {}))
+        current = registered.get(name)
+        if current is None and target is None:
+            continue
+        if current is not None and target is not None and all(
+                current.get(key, [] if key == "args" else None) == value
+                for key, value in target.items()):
+            continue
+        try:
+            if current is not None:
+                subprocess.run([claude, "mcp", "remove", "--scope", "user", name],
+                               capture_output=True, text=True, check=True, timeout=60)
+            if target is not None:
+                subprocess.run([claude, "mcp", "add-json", "--scope", "user", name, json.dumps(target)],
+                               capture_output=True, text=True, check=True, timeout=60)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+            print(f"Warning: Claude Code MCP server {name} not updated: {type(error).__name__}")
+            continue
+        print(f"Claude Code MCP server: {name}" if target else f"Removed Claude Code MCP server: {name}")
+
+
 def restore_plugins():
     apply()
     snapshot = json.loads(SNAPSHOT.read_text())
@@ -388,10 +452,12 @@ def main():
         validate(snapshot)
         SNAPSHOT.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n")
         apply()
+        sync_claude_mcp()
     elif args.action == "capture":
         capture()
     elif args.action == "apply":
         apply()
+        sync_claude_mcp()
     else:
         restore_plugins()
 

@@ -2,6 +2,9 @@
   "apps": {
     "_default": false
   },
+  "features": {
+    "computer_use": true
+  },
   "machines": {
     "air": {
       "apps": {},
@@ -21,9 +24,6 @@
     },
     "studio": {
       "apps": {},
-      "features": {
-        "computer_use": false
-      },
       "mcp_servers": {
         "docling": {
           "enabled": false
@@ -34,9 +34,7 @@
           "enabled": true
         }
       },
-      "plugins": {
-        "computer-use@openai-bundled": false
-      }
+      "plugins": {}
     }
   },
   "mcp_servers": {
@@ -95,7 +93,7 @@
     "browser@openai-bundled": false,
     "chrome@openai-bundled": false,
     "codex-app-tools@openai-bundled": false,
-    "computer-use@openai-bundled": false,
+    "computer-use@openai-bundled": true,
     "documents@openai-primary-runtime": true,
     "github@openai-curated": false,
     "github@openai-curated-remote": false,
