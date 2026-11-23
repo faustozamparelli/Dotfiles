@@ -63,6 +63,8 @@ provides Bonjour fallbacks `air-lan`/`pro-lan`; follow AGENTS.md's route checks.
 Send remote scripts through `ssh -o BatchMode=yes studio /bin/sh -s`;
 remote PATH may need `/opt/homebrew/bin`.
 
+Agents turn Tailscale on with `/usr/local/bin/tailscale up` (or `remote start`) when
+a route is down, and back off with `tailscale down` only if they started it.
 Laptop Tailscale is normally off. Preserve user-opened VPN sessions; restore
 agent-opened Air state. Wake recovery is unverified. Desktop control additionally
 needs a console login and privacy permissions; SSH alone is insufficient.
