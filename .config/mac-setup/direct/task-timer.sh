@@ -10,7 +10,7 @@ binary="$destination/Contents/MacOS/TaskTimer"
 
 [[ "$(uname -m)" == arm64 ]] || { echo "Task Timer requires Apple silicon." >&2; exit 1; }
 installed_version() { /usr/bin/plutil -extract CFBundleShortVersionString raw -o - "$destination/Contents/Info.plist" 2>/dev/null || true; }
-ensure_login() { "$binary" --login enable; }
+ensure_login() { "$binary" --login disable; }
 if [[ -d "$destination" ]]; then
   identifier="$(/usr/bin/plutil -extract CFBundleIdentifier raw -o - "$destination/Contents/Info.plist" 2>/dev/null || true)"
   [[ "$identifier" == com.fausto.TaskTimer ]] || { echo "Refusing to replace an unrelated Task Timer.app." >&2; exit 1; }
@@ -70,4 +70,4 @@ ensure_login
 if $was_running || /bin/launchctl print "gui/$(id -u)" >/dev/null 2>&1; then
   /usr/bin/open -g "$destination" --args --background
 fi
-echo "Installed Task Timer $version with launch at login."
+echo "Installed Task Timer $version."

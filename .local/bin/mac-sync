@@ -564,6 +564,34 @@ cleanup_retired_desktop_tool() {
         "$HOME/Library/Logs/Vorssaint" "$HOME/Library/Preferences/com.vorssaint.utils.plist" \
         "$HOME/Library/Saved Application State/com.vorssaint.utils.savedState" || return 1
       ;;
+    codexbar)
+      rm -rf -- "$HOME/Library/Application Support/CodexBar" "$HOME/Library/Application Support/com.steipete.codexbar" \
+        "$HOME/Library/Caches/com.steipete.codexbar" "$HOME/Library/HTTPStorages/com.steipete.codexbar" \
+        "$HOME/Library/WebKit/com.steipete.codexbar" "$HOME/Library/Group Containers/Y5PE65HELJ.com.steipete.codexbar" \
+        "$HOME/Library/Application Scripts/Y5PE65HELJ.com.steipete.codexbar" \
+        "$HOME/Library/Application Scripts/com.steipete.codexbar.widget" \
+        "$HOME/Library/Preferences/com.steipete.codexbar.plist" || return 1
+      ;;
+    microsoft-excel)
+      # Office user data only; VS Code (com.microsoft.VSCode) and documents are untouched.
+      local d
+      for d in Containers/com.microsoft.Excel Containers/com.microsoft.Excel.widgetextension \
+          Containers/com.microsoft.Powerpoint Containers/com.microsoft.Powerpoint.widgetextension \
+          Containers/com.microsoft.onenote.mac Containers/com.microsoft.onenote.mac.shareextension \
+          Containers/com.microsoft.teams2 Containers/com.microsoft.teams2.agent \
+          Containers/com.microsoft.teams2.respawn Containers/com.microsoft.teams2.notificationcenter \
+          Containers/com.microsoft.teams2.widgetextension "Application Support/Microsoft" \
+          "Application Support/Microsoft Edge" Caches/com.microsoft.autoupdate2 \
+          HTTPStorages/com.microsoft.autoupdate2 HTTPStorages/com.microsoft.autoupdate.fba \
+          Preferences/com.microsoft.autoupdate2.plist Preferences/com.microsoft.autoupdate.fba.plist \
+          Preferences/com.microsoft.office.plist Preferences/com.microsoft.shared.plist \
+          Preferences/com.microsoft.teams2.helper.plist; do
+        rm -rf -- "$HOME/Library/$d" || return 1
+      done
+      rm -rf -- "$HOME/Library/Group Containers"/UBF8T346G9.{Office,OfficeOsfWebHost,OfficeExcelWidget,OfficePPTWidget,OfficeOneDriveSyncIntegration,ms,com.microsoft.oneauth,com.microsoft.entrabroker,group.com.microsoft.shared} \
+        "$HOME/Library/Application Scripts"/UBF8T346G9.{Office,OfficeOsfWebHost,OfficeExcelWidget,OfficePPTWidget,OfficeOneDriveSyncIntegration,ms,com.microsoft.oneauth,com.microsoft.entrabroker,com.microsoft.teams,group.com.microsoft.shared} \
+        "$HOME/Library/Application Scripts"/com.microsoft.Excel{,.widgetextension} || return 1
+      ;;
     maghue)
       rm -rf -- "$HOME/Library/Caches/com.kamenlevi.MagHue" \
         "$HOME/Library/HTTPStorages/com.kamenlevi.MagHue" \
@@ -683,7 +711,7 @@ retire_manifest() {
     fi
 
     case "$token" in
-      omniwm|obsidian|spotify|vorssaint|maghue)
+      omniwm|obsidian|spotify|vorssaint|maghue|microsoft-excel|codexbar)
         if { [[ -d "$app_path" ]] && ! is_safari_web_app "$app_path"; } ||
            { [[ -d "$HOME/Applications/$name.app" ]] && ! is_safari_web_app "$HOME/Applications/$name.app"; }; then
           echo "Cannot clean $name's data while its app bundle remains installed." >&2
