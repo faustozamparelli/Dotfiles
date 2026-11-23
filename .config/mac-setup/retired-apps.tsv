@@ -2,13 +2,11 @@
 # source	identifier	application name
 cask	beeper	Beeper Desktop
 cask	betterdisplay	BetterDisplay
-cask	chatgpt	ChatGPT
 cask	discord	Discord
 cask	gitbutler	GitButler
 cask	homerow	homerow
 cask	mupdf	MuPDF
 cask	nikitabobko/tap/aerospace	AeroSpace
-cask	notion	Notion
 cask	obsidian	obsidian
 cask	sioyek	Sioyek
 cask	spotify	Spotify

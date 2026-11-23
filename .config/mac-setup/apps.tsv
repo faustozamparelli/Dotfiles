@@ -1,15 +1,18 @@
 # source	identifier	application name
 cask	anki	anki
+cask	chatgpt	ChatGPT
+cask	claude	Claude
 cask	codex	Codex
 cask	copilot-cli	copilot-cli
 cask	font-sf-mono	SF Mono
 cask	ghostty	Ghostty
-cask	helium-browser	Helium
 cask	hammerspoon	Hammerspoon
+cask	helium-browser	Helium
 cask	karabiner-elements	Karabiner-Elements
 cask	lihaoyun6/tap/quickrecorder	QuickRecorder
 cask	macwhisper	MacWhisper
 cask	microsoft-excel	Microsoft Excel
+cask	notion	Notion
 cask	orbstack	OrbStack
 cask	protonvpn	ProtonVPN
 cask	raycast	Raycast

@@ -1218,8 +1218,9 @@ Pi Desktop, the Pi coding agent, and Zed are retired on every Mac.
 `mac-sync` permanently removes their apps, Pi npm packages, settings, MCP
 configuration, credentials, extensions, sessions, logs, and app caches.
 
-`retired-apps.tsv` also records explicit removals. ChatGPT is retired on each
-Mac; VS Code is shared. Neovim, VS Code Vim, the Lua language server and
+`retired-apps.tsv` also records explicit removals. ChatGPT, Claude and Notion are shared
+casks (ChatGPT and Notion were un-retired on 2026-11-24; Notion replaces its Helium web app);
+VS Code is shared. Neovim, VS Code Vim, the Lua language server and
 Tree-sitter CLI were retired on 2026-11-03. The retirement manifest removes
 the formulae on sync; installed Neovim plugins and caches can be moved to Trash.
 
@@ -1440,7 +1441,7 @@ retirement removes app state only; note vaults remain user documents.
 Same-named Safari web apps are preserved and do not block native-app data
 cleanup; Spotify's Safari wrapper is a separate lightweight installation.
 
-ChatGPT retirement uses normal cask uninstall plus named ChatGPT paths, never
+The ChatGPT retirement path (kept for reference) uses normal cask uninstall plus named ChatGPT paths, never
 Homebrew's broad zap list, which includes Codex/CUAService data. During Studio
 enrollment the older rule moved 12 such objects to Trash; all 12 were restored
 in place without overwriting files, and a regression test now preserves them.
