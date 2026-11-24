@@ -1628,9 +1628,9 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   source using `pmset -g batt`. Closed-lid and wake recovery need live evidence;
   do not keep Air awake to conceal a failed wake path.
 - Prefer app-specific CLI and MCP routes for desktop tasks. UI fallback is the
-  `peekaboo` MCP on Studio and Pro (`direct/peekaboo.sh`, pinned 4.9.9): Studio
-  keeps Peekaboo.app open via `com.fausto.studio-desktop`; on Pro agents run
-  `open -g /Applications/Peekaboo.app` when needed. Air has none. Keep macOS privacy
+  shared `peekaboo` MCP (`direct/peekaboo.sh`, pinned 4.9.9, all Macs): Studio
+  keeps Peekaboo.app open via `com.fausto.studio-desktop`; on Pro and Air agents
+  run `open -g /Applications/Peekaboo.app` when needed. Keep macOS privacy
   permissions machine-local.
 - Math PDFs use shared `tectonic`/`pandoc`, not full TeX Live. Compile the
   `~/.config/mac-setup/latex-smoke.tex` fixture into a temporary directory;

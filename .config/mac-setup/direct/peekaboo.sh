@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Peekaboo desktop control for Studio and Pro (agents' UI fallback).
-# Studio opens the app at login; on Pro agents open it on demand.
+# Peekaboo desktop control on every Mac (agents' UI fallback).
+# Studio opens the app at login; on Pro and Air agents open it on demand.
 [[ "$(uname -m)" == arm64 ]]
 case "$(scutil --get ComputerName)" in
   'Mac Studio') desktop_machine=studio ;;
   *'MacBook Pro'*) desktop_machine=pro ;;
-  *) echo 'This setup is enabled only for Studio and Pro.' >&2; exit 1 ;;
+  *'MacBook Air'*) desktop_machine=air ;;
+  *) echo 'Unknown Mac for Peekaboo setup.' >&2; exit 1 ;;
 esac
 version=4.9.9
 base="https://github.com/openclaw/Peekaboo/releases/download/v$version"
