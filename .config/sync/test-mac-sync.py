@@ -396,25 +396,6 @@ cleanup_retired_desktop_tool spotify
         self.assertTrue(prefs.exists())
 
 
-    def test_peekaboo_retirement_removes_cli_and_both_login_items(self):
-        tracked_paths = [
-            '.local/bin/peekaboo',
-            '.local/share/peekaboo/4.9.9/peekaboo',
-            'Library/LaunchAgents/com.fausto.pro-desktop.plist',
-            'Library/LaunchAgents/com.fausto.studio-desktop.plist',
-        ]
-        for relative in tracked_paths:
-            path = self.root / 'home' / relative
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.touch()
-        (self.root / 'retired.tsv').write_text('direct\tpeekaboo\tPeekaboo\n')
-        result = self.run_shell(RETIRE + '\nretire_manifest\nretire_manifest\nexit "$failed"',
-                                'retired="$lock/retired.tsv"\ninstalled_casks=\nbrew_prefix="$lock/brew"'
-                                '\nlaunchctl() { return 1; }\npkill() { return 0; }')
-        self.assertEqual(result.returncode, 0, result.stderr)
-        for relative in tracked_paths:
-            self.assertFalse((self.root / 'home' / relative).exists())
-
     def test_chatgpt_retirement_preserves_codex_and_computer_use_data(self):
         paths = ['Library/Application Support/com.openai.chat',
                  'Library/Application Support/com.openai.codex',

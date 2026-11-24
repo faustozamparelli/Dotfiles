@@ -14,6 +14,13 @@
     "pro": {
       "apps": {},
       "mcp_servers": {
+        "peekaboo": {
+          "args": [
+            "mcp"
+          ],
+          "command": "/Users/faustozamparelli/.local/bin/peekaboo",
+          "enabled": true
+        },
         "qgis": {
           "args": [],
           "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
@@ -27,6 +34,13 @@
       "mcp_servers": {
         "docling": {
           "enabled": false
+        },
+        "peekaboo": {
+          "args": [
+            "mcp"
+          ],
+          "command": "/Users/faustozamparelli/.local/bin/peekaboo",
+          "enabled": true
         },
         "qgis": {
           "args": [],

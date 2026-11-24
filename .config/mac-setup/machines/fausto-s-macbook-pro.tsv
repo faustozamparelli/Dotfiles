@@ -5,5 +5,6 @@ cask	paraview	ParaView
 cask	qgis	QGIS
 cask	tangency-labs/tap/solidcraft	SolidCraft
 direct	openfoam2306	OpenFOAM v2306
+direct	peekaboo	Peekaboo
 mas	1538878817	UTM
 mas	571213070	DaVinci Resolve
