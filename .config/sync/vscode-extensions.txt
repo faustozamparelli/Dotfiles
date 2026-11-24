@@ -1,9 +1,8 @@
-# Editing, languages, Codex, and the current window customization.
+# Editing, languages, and the current window customization.
 ms-python.python
 ms-python.vscode-pylance
 llvm-vs-code-extensions.vscode-clangd
 charliermarsh.ruff
-openai.chatgpt
 subframe7536.custom-ui-style
 # Notebook support installed during VS Code migration.
 ms-toolsai.jupyter

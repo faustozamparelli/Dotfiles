@@ -6,3 +6,6 @@ fausto.preview-pdf
 
 # Retired Vim emulation.
 vscodevim.vim
+
+# Retired Codex extension.
+openai.chatgpt

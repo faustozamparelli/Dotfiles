@@ -734,7 +734,7 @@ The bare dotfiles repository tracks only
 `mac-sync` installs missing listed extensions on each Mac. Extension binaries,
 credentials, workspace storage, logs, and caches stay local.
 
-The extension list retains Python, Pylance, clangd, Ruff, Codex, and the
+The extension list retains Python, Pylance, clangd, Ruff, and the
 current Custom UI Style window customization, plus Jupyter for notebooks and
 Microsoft C/C++ for its debugger. Microsoft IntelliSense is disabled because
 clangd owns C/C++ analysis. Python Debugger and Dev Containers are explicitly
