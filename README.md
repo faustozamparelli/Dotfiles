@@ -62,6 +62,10 @@ Check `/usr/local/bin/tailscale status`; probe with
 provides Bonjour fallbacks `studio-lan`/`air-lan`/`pro-lan` (`NAME.local`; each
 Mac's HostName and LocalHostName equal its name). Screen Sharing is on for all
 three: `open vnc://NAME.tailed8082.ts.net` (or `NAME.local` on the same LAN).
+It must be switched on in System Settings > Sharing (enabling the launchd job
+by command alone leaves logins "not permitted"); the user must be in
+`com.apple.access_screensharing`. Each Mac's Screen Sharing app saves a host
+after one successful login.
 Each Mac has its own SSH key, commented `faustozamparelli@NAME` and titled
 `NAME` on GitHub; every Mac authorizes the other two.
 Send remote scripts through `ssh -o BatchMode=yes studio /bin/sh -s`;
