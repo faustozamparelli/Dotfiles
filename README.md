@@ -59,7 +59,11 @@ Account/home: `faustozamparelli`, `/Users/faustozamparelli`; DNS suffix:
 
 Check `/usr/local/bin/tailscale status`; probe with
 `ssh -o BatchMode=yes -o ConnectTimeout=5 studio true`. `~/.ssh/config` also
-provides Bonjour fallbacks `air-lan`/`pro-lan`; follow AGENTS.md's route checks.
+provides Bonjour fallbacks `studio-lan`/`air-lan`/`pro-lan` (`NAME.local`; each
+Mac's HostName and LocalHostName equal its name). Screen Sharing is on for all
+three: `open vnc://NAME.tailed8082.ts.net` (or `NAME.local` on the same LAN).
+Each Mac has its own SSH key, commented `faustozamparelli@NAME` and titled
+`NAME` on GitHub; every Mac authorizes the other two.
 Send remote scripts through `ssh -o BatchMode=yes studio /bin/sh -s`;
 remote PATH may need `/opt/homebrew/bin`.
 
