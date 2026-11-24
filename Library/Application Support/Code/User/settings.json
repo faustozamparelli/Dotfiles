@@ -80,7 +80,7 @@
       "display": "none !important"
     }
   },
-  "window.zoomLevel": -0.5,
+  "window.zoomLevel": 2,
   "window.zoomPerWindow": true,
   "workbench.startupEditor": "none",
   // Explorer opens rendered Markdown; Git diffs retain source text.
@@ -212,5 +212,6 @@
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "push",
   "workbench.preferredLightColorTheme": "Light Modern",
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "pdfPreviewDark.colorScheme": "vscodeTheme"
 }
