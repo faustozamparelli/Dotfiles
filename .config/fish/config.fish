@@ -58,6 +58,7 @@ end
 alias l "eza -a --git"
 alias ls l
 alias py python
+alias c code
 alias cl clear
 alias sv "source .venv/bin/activate.fish"
 alias keymap-docs "$HOME/.config/keymaps/keymap-docs"
