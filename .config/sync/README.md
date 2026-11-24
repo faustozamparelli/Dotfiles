@@ -1627,7 +1627,10 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   active-use settings. `air-power-setup` reproduces it with sudo; inspect power
   source using `pmset -g batt`. Closed-lid and wake recovery need live evidence;
   do not keep Air awake to conceal a failed wake path.
-- Prefer app-specific CLI and MCP routes for desktop tasks. Keep macOS privacy
+- Prefer app-specific CLI and MCP routes for desktop tasks. UI fallback is the
+  `peekaboo` MCP on Studio and Pro (`direct/peekaboo.sh`, pinned 4.9.9): Studio
+  keeps Peekaboo.app open via `com.fausto.studio-desktop`; on Pro agents run
+  `open -g /Applications/Peekaboo.app` when needed. Air has none. Keep macOS privacy
   permissions machine-local.
 - Math PDFs use shared `tectonic`/`pandoc`, not full TeX Live. Compile the
   `~/.config/mac-setup/latex-smoke.tex` fixture into a temporary directory;
@@ -1636,14 +1639,11 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
 
 ### Project placement and handoff
 
-From Pro/Air, prefer Studio for long project runs, builds/tests, simulations and
-data processing when reachable and sufficiently free. Explicit placement wins;
-keep quick questions, caller-Mac maintenance and requested local outputs local.
-Check linked T3 environments, capacity, active jobs and repository state before
-routing. Continue the existing Studio thread for the same task. Use T3 delegation
-when appropriate; create a new top-level thread only when Fausto requests one.
-If Studio is unavailable, report that and continue only independent lightweight
-work rather than silently starting heavy work locally.
+Since 2026-11-24 Studio is not the default (its Wi-Fi was weak): work stays on
+the thread's Mac and Fausto sends work to another Mac through T3 explicitly.
+Agents may suggest Studio for long runs. When work is placed on Studio, check
+capacity, active jobs and repository state, and continue the existing Studio
+thread for the same task; create a new top-level thread only on request.
 
 Keep full projects, datasets and heavy outputs on Studio. Follow **Studio
 worker** and **Review Studio results** in `~/README.md` for checkout locations,

@@ -49,7 +49,7 @@ one Air expiry/sleep/restoration passed. Neither command wakes a sleeping Mac.
 ## Macs and access
 
 Account/home: `faustozamparelli`, `/Users/faustozamparelli`; DNS suffix:
-`tailed8082.ts.net`. Identify the current host first; prefer Studio remotely.
+`tailed8082.ts.net`. Identify the current host first; Fausto places work on other Macs explicitly.
 
 | Name / SSH alias | Tailscale IP | Role |
 | --- | --- | --- |
