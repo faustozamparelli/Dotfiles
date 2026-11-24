@@ -2053,3 +2053,14 @@ on the local Mac because the three were on different networks; cross-Mac LAN
 remains untested. All three T3 servers listen on port 3773 and are reachable
 through Tailscale. Studio's T3 had no linked Air/Pro environments; pairing and
 route lists (Tailscale, LAN, T3 Connect, SSH) need the T3 UI on each Mac.
+
+### T3 environment routes (2026-11-24)
+
+Studio's T3 reaches Pro and Air through SSH routes (`pro`, `air` aliases over
+Tailscale; T3 tunnels to the remote 127.0.0.1:3773) with T3 Connect as
+fallback. Pro's university network blocks T3 Connect's Cloudflare tunnel (TLS
+handshake to the edge fails), so SSH/Tailscale is the dependable route. An SSH
+route fails with `ServerOwnsDatabaseError` when the remote T3 app predates its
+on-disk update; quit and reopen T3 on that Mac. Auto-found LAN/Tailscale HTTP
+routes stayed unused; route order cannot be dragged. Pro's and Air's own
+environment lists still need the same SSH routes added in their T3 UI.
