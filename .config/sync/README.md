@@ -1677,8 +1677,8 @@ Claude Code, the Claude desktop app and ChatGPT are shared Homebrew casks
 is the only one on PATH. `codex-technical.py apply` also mirrors the Codex MCP
 servers effective on this Mac into Claude Code's user scope (`claude mcp
 add-json --scope user`); only servers named in `codex-technical.json` are
-managed, and servers needing local tokens, headers, env or a local stdio
-override stay Codex-only. Gmail, Calendar and Notion reach Claude as claude.ai connectors.
+managed; a local stdio override, headers, bearer-token variable or env are
+copied into machine-local `~/.claude.json`, never into the snapshot. Gmail, Calendar and Notion reach Claude as claude.ai connectors.
 
 Desktop control: Codex computer use (`features.computer_use` and the
 `computer-use@openai-bundled` plugin) is on for all Macs; `mac-sync` applies

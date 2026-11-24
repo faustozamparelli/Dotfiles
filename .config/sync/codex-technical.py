@@ -338,19 +338,26 @@ def apply():
 def claude_mcp_target(settings, local):
     """The Claude Code user-scope entry for an enabled Codex MCP server.
 
-    Servers that need local credentials or a local stdio override stay
-    Codex-only, so Claude never gets a different or unauthenticated copy.
+    Local credentials (headers, bearer token variable, env) are copied into
+    Claude's machine-local ~/.claude.json, never into the synced snapshot.
     """
     if not settings.get("enabled", True):
         return None
-    if any(local.get(key) for key in ("bearer_token_env_var", "http_headers", "env")):
-        return None
     if settings.get("url") and not local.get("command"):
-        return {"type": "http", "url": settings["url"]}
+        target = {"type": "http", "url": settings["url"]}
+        headers = dict(local.get("http_headers") or {})
+        if local.get("bearer_token_env_var"):
+            headers["Authorization"] = "Bearer ${%s}" % local["bearer_token_env_var"]
+        if headers:
+            target["headers"] = headers
+        return target
     command = local.get("command") or settings.get("command")
     if command and Path(command).is_file():
-        return {"type": "stdio", "command": command,
-                "args": local.get("args", settings.get("args", []))}
+        target = {"type": "stdio", "command": command,
+                  "args": local.get("args", settings.get("args", []))}
+        if local.get("env"):
+            target["env"] = dict(local["env"])
+        return target
     return None
 
 
