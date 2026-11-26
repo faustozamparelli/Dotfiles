@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
-    "CLAUDE_CODE_SUBAGENT_EFFORT": "medium"
+    "CLAUDE_CODE_SUBAGENT_EFFORT": "medium",
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
   "model": "opus",
   "effortLevel": "medium",

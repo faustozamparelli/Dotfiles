@@ -13,7 +13,7 @@ from correct behavior. Read the relevant source and available evidence to design
 it; do not guess a fix and treat a passing generic test as proof.
 
 1. Capture the exact symptom and a command or interaction that reaches it.
-   Prefer the project's tests, CLI, HTTP tools or T3 browser. Minimize the input
+   Prefer the project's tests, CLI, HTTP tools or built-in browser. Minimize the input
    and steps while confirming that the original failure still occurs. Preserve
    versions, fixtures, time and seeds where they affect reproduction. For flaky
    failures, record failures per attempt and probe what changes that rate.

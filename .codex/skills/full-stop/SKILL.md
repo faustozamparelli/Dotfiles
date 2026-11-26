@@ -16,7 +16,7 @@ It grants no additional permission for unrelated work or production operations.
 1. **Establish the scope.** Read repository instructions and inspect the branch,
    working tree and existing PR. Preserve unrelated changes. Reuse the task's
    checkout and PR where appropriate; create a task branch if on the default
-   branch. Use T3-managed worktrees when isolation is needed. Follow Fausto's
+   branch. Use a separate Git worktree when isolation is needed. Follow Fausto's
    Studio placement preference before substantial execution. Derive observable
    acceptance checks from the request and settle the relevant architecture and
    interfaces before assigning implementation. Before working
@@ -44,22 +44,21 @@ It grants no additional permission for unrelated work or production operations.
    user asked for implementation without explicitly asking for a PR.
    Keep unrelated changes out and split oversized work when useful. Do not
    rewrite published history just to polish it. Use `--force-with-lease` only
-   for an authorized rewrite of this task's branch. Link the PR to T3 as the
-   next tool call after creating or pushing it.
+   for an authorized rewrite of this task's branch. Bind the PR to the session with
+   the app's PR tools right after creating or pushing it.
 6. **Resolve outstanding checks.** Inspect the live PR's head, base, checks,
    reviews and mergeability. Check again before each push that the PR cannot
-   merge automatically. Fix relevant CI and review problems. If waiting for
-   checks or reviews in T3, register
-   `watch_pull_request` and end the turn; resume when notified, without polling.
-7. **Hand back the result.** Verify the final PR state. Before final handoff,
-   remove any PR watch. Report the PR link, final head, checks, review state
+   merge automatically. Fix relevant CI and review problems. When waiting for
+   checks or reviews, rely on the app's PR monitoring and end the turn; resume
+   when notified, without polling.
+7. **Hand back the result.** Verify the final PR state. Report the PR link, final head, checks, review state
    and remaining risks. Distinguish ready for Fausto's review, waiting for
    required approval, and blocked. Leave the PR open and unmerged.
 
 If there is no remote, PR facility or sufficient access, complete the local
 work and verification and report the exact blocker and branch. Ask only for
 the consequential information or access needed to continue; never invent a PR
-or approval. Use T3's secret request tool for credentials only the user can give.
+or approval. Ask Fausto to enter credentials that only Fausto can provide.
 
 ## Coordinator and workers
 
@@ -78,14 +77,12 @@ handoff: what changed, exact checkout/branch and commit if any, checks and their
 results, evidence locations, unresolved decisions and risks. Keep raw logs out
 of the main thread. Tell the worker not to push, open PRs or start other agents.
 
-Follow the harness's native-versus-T3 delegation rules. Workers inherit the
-parent model/settings unless the harness's global instructions route models. Use T3 `delegate_task` for
-isolated worktrees or remote workers, and let T3 create their checkouts. Only one
+Workers are subagents. Pick their model per the global model routing. Only one
 writer may own a file at a time; do not edit the worker's files while it runs.
-Separate concurrent writers into worktrees and integrate their changes in the
-main thread. Follow a T3 delegate's returned `next` instruction rather than
-polling. Keep lightweight work local; route substantial project work per the
-Mac placement policy.
+Give concurrent writers their own worktrees and integrate their changes in the
+main thread. Wait for a worker's completion notice rather than polling. Keep
+lightweight work local; route substantial project work per the Mac placement
+policy.
 
 Inspect the actual diff and important outputs when the worker finishes. Check
 the implementation against the architecture, caller contracts and acceptance
@@ -99,6 +96,5 @@ Integrate and verify the final result before filing the PR.
 
 Use `diagnosing-bugs` for unclear, intermittent or recurring failures, and
 `benchmark-checklist` before relying on measured performance claims. Ordinary
-tasks end at their acceptance checks. Start a native persistent Goal only when
-the user explicitly requests one; never convert a normal task into an unbounded
-optimization loop. Explicit sustained optimization uses `hillclimb`.
+tasks end at their acceptance checks. Never convert a normal task into an unbounded
+loop, schedule or optimization run unless the user asks. Explicit sustained optimization uses `hillclimb`.

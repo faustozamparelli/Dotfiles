@@ -47,11 +47,10 @@ denominator. Do not edit the grader, test cases or rubric to improve the number;
 do not substitute a model's self-awarded grade for external evidence. If evaluator
 changes are the requested research, label them as a different experiment.
 
-Native persistent Goals manage continued pursuit, not experimental validity.
-Create one only when the user explicitly requests a Goal; never infer that grant
-from an ordinary task or from invoking this skill. Follow an existing Goal's
-lifecycle and budget without resetting it to extend the run. Do not create a
-Goal just to get automatic continuations. If the request includes implementation
+A loop or schedule manages continued pursuit, not experimental validity.
+Start one only when the user explicitly requests it; never infer that grant
+from an ordinary task or from invoking this skill. Keep an existing loop's
+budget without resetting it to extend the run. If the request includes implementation
 delivery, `full-stop` owns review and the open, unmerged PR. Report target,
 baseline, best result, uncertainty, attempted/accepted counts, evidence path and
 why the loop stopped. A budget limit is not proof that the target was achieved.
