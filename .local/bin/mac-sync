@@ -645,7 +645,7 @@ retire_manifest() {
     app_path="/Applications/$name.app"
 
     if [[ "$token" == "t3-code@nightly" ]] &&
-       { [[ -d "$app_path" ]] || pgrep -qf "$HOME/.t3/(runtime|tools/cloudflared)/"; }; then
+       { [[ -d "$app_path" ]] || pgrep -qf "/$name.app/Contents/|$HOME/.t3/(runtime|tools/cloudflared)/"; }; then
       # Stop T3's background service, local server and tunnel so nothing keeps
       # listening once the app is gone. ~/.t3 data stays for manual review.
       if [[ -x "$HOME/.t3/bin/t3" ]]; then
@@ -655,6 +655,9 @@ retire_manifest() {
         osascript -e "quit app \"$name\"" >/dev/null 2>&1 || true
         sleep 3
       fi
+      # An SSH-only session cannot ask the desktop app to quit; stop it
+      # directly before its helpers, or it restarts the tunnel.
+      pkill -f "/$name.app/Contents/" 2>/dev/null || true
       pkill -f "$HOME/.t3/(runtime|tools/cloudflared)/" 2>/dev/null || true
     fi
 
