@@ -644,21 +644,23 @@ retire_manifest() {
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
 
+    # pgrep reads patterns as regular expressions, so the parentheses in the
+    # bundle name are escaped.
+    t3_processes='/T3 Code \(Nightly\)\.app/Contents/|/\.t3/(runtime|tools/cloudflared)/'
     if [[ "$token" == "t3-code@nightly" ]] &&
-       { [[ -d "$app_path" ]] || pgrep -qf "/$name.app/Contents/|$HOME/.t3/(runtime|tools/cloudflared)/"; }; then
+       { [[ -d "$app_path" ]] || pgrep -qf "$t3_processes"; }; then
       # Stop T3's background service, local server and tunnel so nothing keeps
       # listening once the app is gone. ~/.t3 data stays for manual review.
       if [[ -x "$HOME/.t3/bin/t3" ]]; then
         "$HOME/.t3/bin/t3" service uninstall >/dev/null 2>&1 || true
       fi
-      if pgrep -qf "/$name.app/Contents/MacOS/"; then
+      if pgrep -qf '/T3 Code \(Nightly\)\.app/Contents/MacOS/'; then
         osascript -e "quit app \"$name\"" >/dev/null 2>&1 || true
         sleep 3
       fi
-      # An SSH-only session cannot ask the desktop app to quit; stop it
-      # directly before its helpers, or it restarts the tunnel.
-      pkill -f "/$name.app/Contents/" 2>/dev/null || true
-      pkill -f "$HOME/.t3/(runtime|tools/cloudflared)/" 2>/dev/null || true
+      # An SSH-only session cannot ask the desktop app to quit; stop the app
+      # and its helpers directly, or it restarts the tunnel.
+      pkill -f "$t3_processes" 2>/dev/null || true
     fi
 
     if [[ "$source" == "cask" ]] &&
