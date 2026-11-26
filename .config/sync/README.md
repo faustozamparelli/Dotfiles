@@ -877,9 +877,9 @@ the actual project before concluding that a previous CPU issue is resolved.
 
 ### Codex
 
-The current entry point is T3 Code. Select the project and workspace there
-before starting a Codex thread. The terminal CLI remains installed as T3's
-provider backend and for configuration diagnostics.
+The Claude Code desktop app (Code tab) is the entry point for coding agents;
+Codex is no longer driven through T3 Code, which was retired on 2026-11-26. The
+terminal CLI remains installed for direct use and configuration diagnostics.
 
 Provide concrete requests: desired outcome, relevant files, constraints, and
 verification. Ask the agent to inspect before editing when the problem is not
@@ -1377,7 +1377,7 @@ changes made in the apps can be staged. Publish those changes with `bcp` from
 any Mac; the other Macs apply them during their next sync. There is no master
 Mac. Unpublished changes do not automatically propagate.
 Run `bcp` after changing a shared preference; apply reviewed incoming values
-on other Macs with `mac-sync --pull`. Fausto selected Raycast, T3 and Tailscale (Dock visibility
+on other Macs with `mac-sync --pull`. Fausto selected Raycast and Tailscale (Dock visibility
 only). QuickRecorder, MacWhisper
 and OrbStack preference sharing remain off.
 
@@ -1393,11 +1393,10 @@ bcp
 Disabling leaves each Mac's current settings intact. These controls apply to
 the reviewed preference profiles below; existing tracked configuration files
 continue to use the dotfiles workflow. Apps may need reopening to load changed
-preferences. T3 interface settings are merged only while T3 is closed; an open
-app defers them until a later sync. Browser connections and other local fields
-in its settings file are retained.
+preferences.
 
-The 24 published shared app entries were reviewed on 2026-11-01:
+The published shared app entries were reviewed on 2026-11-01 (the T3 Code
+profile was removed on 2026-11-26):
 
 | Shared app | Settings route and current coverage |
 | --- | --- |
@@ -1406,7 +1405,6 @@ The 24 published shared app entries were reviewed on 2026-11-01:
 | QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
 | MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
 | Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
-| T3 Code (Nightly) | Selected interface, font sizes, notification, confirmation, diff and sidebar preferences, plus the Auto balance toggle. Machine weights, conversations, projects, connections, browser profiles, models and credentials stay local. Set Resume after usage limits via T3 Settings → Threads with All environments selected. |
 | OrbStack | Menu-bar visibility. VM/container data, CPU/RAM limits, networking and device-specific settings stay local. |
 | Tailscale | Dock visibility only. Device identity, routes, exit nodes and connections stay local. |
 | Helium | Menu shortcuts, command-driven store-extension choices and manual-action web-app reminders. Browser profiles, sessions and history stay local. |
@@ -1491,7 +1489,7 @@ has not been measured directly; the existing sync schedule is unchanged.
 
 ### Codex technical setup
 
-Codex is used through T3 Code. `~/.config/sync/codex-technical.json` tracks
+`~/.config/sync/codex-technical.json` tracks
 shared plugin/app choices, public MCP endpoints, the default `high` reasoning
 effort, and `air`/`pro`/`studio` overrides. It never contains credentials.
 `mac-sync` applies this profile; `sync-maintain` captures local on/off changes
@@ -1510,7 +1508,6 @@ Context7 is enabled by default on all three Macs. Credentials remain machine-loc
 Pro alone has a tracked QGIS server definition. App-specific servers are never
 installed on other Macs by a toggle; missing executables are disabled. The
 retired Exa and ChatGPT-desktop browser/computer-use MCP definitions are removed.
-T3's native browser tools are independent of those retired definitions.
 
 Change a managed tool on just the current Mac, then review/publish the profile
 with the usual dotfiles workflow:
@@ -1534,7 +1531,7 @@ not copied through Git; Codex can load them when a matching task needs them.
 Run `python3 ~/.config/sync/codex-technical.py restore-plugins` only when
 missing enabled plugins need installation; disabled plugins are skipped.
 Caches, conversations, full Codex configuration, account state and trusted
-project paths remain untracked. Models and existing T3 thread selections stay
+project paths remain untracked. Models and existing thread selections stay
 local; the shared reasoning effort is a default, not an override of an
 explicit thread choice. The new profile tests cover isolated toggles,
 credential preservation, retired definitions, missing app executables and
@@ -1592,16 +1589,17 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   if unavailable; a verified current IP can override HostName. A failed remote
   command is not a reason to execute the same task through another route.
 - Pro/Air on eduroam cannot rely on peer LAN access. Prefer Tailscale, then
-  usable LAN, then T3 Connect. SSH through Air still depends on Tailscale.
+  usable LAN. SSH through Air still depends on Tailscale.
   For Studio scripts use `ssh -o BatchMode=yes studio /bin/sh -s` with a
   literal quoted heredoc. Remote PATH can be minimal; use absolute paths or
   include Homebrew and `/usr/local/bin`. Air's login shell is fish.
 - Desktop/browser tools stay on their own host. Use explicit SSH for remote
   commands; forward dev ports with `ssh -N -L 127.0.0.1:LOCAL:127.0.0.1:REMOTE studio`.
-  T3 thread sharing does not replicate files: view Studio through its T3
-  environment; review published branches/PRs in T3 or GitHub, or clone locally
-  when needed. Requested runnable review bundles go under the caller’s
-  `~/Developer`. Do not copy live T3 databases or profiles.
+  Sessions do not replicate files: start a session on Studio through its SSH
+  connection in the app's New session picker; review published branches/PRs in
+  the app's PR panel or GitHub, or clone locally when needed. Requested
+  runnable review bundles go under the caller’s `~/Developer`. Do not copy live
+  app databases or profiles.
 - Studio uses the root Tailscale daemon at `100.95.1.50`, always connected.
   Do not reconnect the duplicate GUI client. Check the daemon with the CLI's
   `--socket=/var/run/tailscaled.socket`, not the GUI client's stopped identity.
@@ -1643,14 +1641,15 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
 ### Project placement and handoff
 
 Since 2026-11-24 Studio is not the default (its Wi-Fi was weak): work stays on
-the thread's Mac and Fausto sends work to another Mac through T3 explicitly.
-Agents may suggest Studio for long runs. When work is placed on Studio, check
-capacity, active jobs and repository state, and continue the existing Studio
-thread for the same task; create a new top-level thread only on request.
+the session's Mac and Fausto sends work to another Mac explicitly, by picking
+its SSH connection in the app's New session picker. Agents may suggest Studio
+for long runs. When work is placed on Studio, check capacity, active jobs and
+repository state, and continue the existing Studio session for the same task;
+start a new one only on request.
 
 Keep full projects, datasets and heavy outputs on Studio. Follow **Studio
 worker** and **Review Studio results** in `~/README.md` for checkout locations,
-T3 worktrees, requested local clones and self-contained GitHub Release bundles.
+session worktrees, requested local clones and self-contained GitHub Release bundles.
 Preserve repository visibility and existing local work. Include host, exact
 checkout/branch, changed/untracked files, report/output paths, checks, and a
 runnable command or preview/port with stop instructions in project handoffs.
@@ -1658,7 +1657,7 @@ Preserve scientific evidence and provisional-result labels.
 
 ### Claude Code setup
 
-Claude Code is also used only through T3 Code and shares Codex's workflow:
+Claude Code is used through its desktop app (Code tab) and shares Codex's workflow:
 `~/.claude/CLAUDE.md` imports `~/.codex/AGENTS.md` and adds Claude-only
 model, effort and context rules. Personal skills stay canonical in
 `~/.codex/skills`; `~/.claude/skills/NAME` are tracked relative symlinks, and
@@ -1670,7 +1669,7 @@ Claude-managed entries there (`synced`, `.trash`) stay local.
 subagents; an agent's own `model`/`effort` frontmatter wins over these
 (verified in Claude Code 2.1.329). `~/.claude/agents/Explore.md` replaces the
 built-in Explore with read-only Haiku at low effort; `reviewer.md` is a
-read-only Opus reviewer at high effort. A model chosen for a T3 thread
+read-only Opus reviewer at high effort. A model chosen for a session
 overrides the settings default. Credentials, sessions, projects and caches
 under `~/.claude` stay untracked.
 
@@ -1687,7 +1686,7 @@ Desktop control: Codex computer use (`features.computer_use` and the
 `computer-use@openai-bundled` plugin) is on for all Macs; `mac-sync` applies
 the setting and `codex-technical.py restore-plugins` installs the plugin.
 Claude Code's built-in computer use loads only in interactive CLI sessions; in
-T3 (SDK) sessions it is not set up, and its standalone `--computer-use-mcp`
+SDK-driven sessions it is not set up, and its standalone `--computer-use-mcp`
 server refuses app grants ("not wired to a session"), verified with 2.1.329.
 The desktop app's computer use stays inside the Claude app. Use desktop
 control only when no CLI or app MCP covers the task.
@@ -1800,11 +1799,11 @@ A plain `mac-sync` applies the current checkout without pulling; `--pull` is
 explicit and still refuses incoming changes while tracked/staged work is dirty.
 The separate approved `mac-update` app updater retains its existing policy.
 
-`python3 ~/.config/mac-setup/security-baseline.py user` restricts T3 userdata
-to 0700 and known credential files to 0600. Its explicit `system` mode requires
+`python3 ~/.config/mac-setup/security-baseline.py user` restricts known
+credential files to 0600. Its explicit `system` mode requires
 sudo, validates/removes the obsolete Vorssaint sudo rule, protects Studio's
 existing daemon directory without restarting Tailscale, enables the firewall
-with SSH/Tailscale/T3 exceptions, and removes the dormant Public Folder SMB
+with SSH/Tailscale exceptions, and removes the dormant Public Folder SMB
 share and guest access. It installs no daemon or passwordless sudo permission.
 The archived sudo rule is root-only in `/var/db/com.fausto.mac-security/`.
 FileVault enrollment/recovery is machine-local; no keys or credentials belong
@@ -2067,3 +2066,12 @@ route fails with `ServerOwnsDatabaseError` when the remote T3 app predates its
 on-disk update; quit and reopen T3 on that Mac. Auto-found LAN/Tailscale HTTP
 routes stayed unused; route order cannot be dragged. Pro's and Air's own
 environment lists still need the same SSH routes added in their T3 UI.
+
+### T3 Code retirement (2026-11-26)
+
+T3 Code (Nightly) is retired on all Macs and replaced by the Claude Code desktop
+app (Code tab), which uses the same rules and personal skills; the Codex CLI
+stays installed. `mac-sync` removes the app through `retired-apps.tsv`, and its
+interface-preference profile and firewall exception are gone. `~/.t3`
+(conversations, credentials, worktrees) is left on each Mac for manual deletion
+after checking `git worktree list` for unpushed work.

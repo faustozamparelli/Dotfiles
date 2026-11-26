@@ -77,8 +77,7 @@ def system():
         print('Retired obsolete Vorssaint passwordless pmset rule; sudoers validated')
     firewall = '/usr/libexec/ApplicationFirewall/socketfilterfw'
     for executable in ('/usr/sbin/sshd', '/usr/libexec/sshd-keygen-wrapper',
-                       '/Applications/Tailscale.app/Contents/MacOS/Tailscale',
-                       '/Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)'):
+                       '/Applications/Tailscale.app/Contents/MacOS/Tailscale'):
         if Path(executable).exists():
             run([firewall, '--add', executable])
             run([firewall, '--unblockapp', executable])

@@ -54,37 +54,5 @@
         "HideDockIcon": true
       }
     }
-  },
-  "t3ClientSettings": {
-    "notificationMode": "notifications-and-sound",
-    "inAppNotificationsEnabled": true,
-    "chatWidth": "comfortable",
-    "loadBalancingEnabled": true,
-    "fontSizeInterface": 18,
-    "fontSizePrompt": 14,
-    "fontSizeCode": 16,
-    "fontSizeTerminal": 12,
-    "confirmQuit": "hold",
-    "confirmThreadArchive": false,
-    "confirmThreadDelete": true,
-    "confirmThreadUnpin": false,
-    "diffFilesCollapsed": true,
-    "diffIgnoreWhitespace": true,
-    "diffLayout": "stacked",
-    "persistComposerContextStrip": false,
-    "contextWindowMeterEnabled": false,
-    "composerCollapseOnScroll": true,
-    "composerRichTextEnabled": true,
-    "followUpBehavior": "queue",
-    "proactivePanelsEnabled": false,
-    "showSkillsInSlashMenu": true,
-    "legacySidebarEnabled": false,
-    "sidebarWorkingShelfEnabled": false,
-    "sidebarProjectGroupingMode": "repository",
-    "sidebarProjectSortOrder": "updated_at",
-    "sidebarThreadSortOrder": "updated_at",
-    "sidebarThreadPreviewCount": 6,
-    "timestampFormat": "locale",
-    "wordWrap": true
   }
 }

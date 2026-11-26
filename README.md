@@ -18,7 +18,7 @@ explicit; an ordinary task gets acceptance checks without an automatic Goal.
 
 | Work | Tools and conventions |
 | --- | --- |
-| Coding agents | **T3 Code → Codex or Claude Code** with the same rules and skills; select the project/workspace there. Use available native browser/thread tools; the Codex CLI remains installed. |
+| Coding agents | **Claude Code desktop app** (Code tab) with the shared rules (`~/.codex/AGENTS.md`) and skills (`~/.codex/skills`); select the project there. The Codex CLI remains installed. T3 Code was retired on 2026-11-26. |
 | Editing and terminals | **VS Code** (`code .`); **Ghostty → Herdr → fish**. Detaching preserves server processes; reboot does not. Terminal editor: `nano`. |
 | Search and Git | `rg`, `fd`, `bat`, `eza`, `fzf`, `z`/`zi` (zoxide), `git`, `gh`. |
 | Python/notebooks | `uv sync`, `uv run …`, Ruff/Pyright; JupyterLab or VS Code with the project's `.venv` kernel. Jupytext pairing is opt-in; dependencies stay per-project. |
@@ -40,11 +40,11 @@ Durations accept `30m`, `5h`, `1h30m` (1s–7d); starting again resets the deadl
 One mode at a time; start/stop need administrator authorization. **Expiry
 requests native sleep**; stop restores settings without forcing sleep.
 
-For T3 limit-reset retries, leave T3 running, its resume/retry enabled, and
-internet available; include both the wait and subsequent work in the duration.
-T3 owns resumption. Lock/display sleep is fine; logout/reboot ends the session.
-Closed-lid battery work and T3 limit-reset resumption still need verification;
-one Air expiry/sleep/restoration passed. Neither command wakes a sleeping Mac.
+The Claude Code app's "Keep computer awake while Claude works" setting is on.
+After a usage limit the app does not resume on its own: resume the session
+manually. Lock/display sleep is fine; logout/reboot ends the session.
+Closed-lid battery work still needs verification; one Air
+expiry/sleep/restoration passed. Neither command wakes a sleeping Mac.
 
 ## Macs and access
 
@@ -195,45 +195,42 @@ validation evidence to the existing detailed manual.
 From Pro/Air, default substantial project work to Studio when reachable and
 sufficiently free: long agent runs, builds/tests, simulations and data processing.
 Keep quick questions, maintenance of the caller Mac and explicitly local outputs
-on the caller. Explicit placement wins. Check linked T3 environments, available
-capacity, active work and repository state; continue the existing Studio task
-thread where possible. If Studio is unavailable,
+on the caller. Explicit placement wins. Check available capacity, active work
+and repository state; continue the existing Studio session where possible. If Studio is unavailable,
 report it before starting heavy work locally. Full projects, datasets and heavy
 outputs stay there; copy back only requested deliverables.
 
 Studio follows Pro's curated extras through symlinked machine manifests. Keep
-repositories in `~/Developer/<repo>` and create T3 worktrees for independent
-changes (Studio defaults to worktrees starting from origin). Worktrees may live
-under `~/.t3/worktrees`; use `git -C ~/Developer/<repo> worktree list` to find
-an agent's exact directory. Open that directory when reviewing its files.
+repositories in `~/Developer/<repo>` and use session worktrees for independent
+changes. The app creates them in `<repo>/.claude/worktrees` (git-ignored per
+repo); use `git -C ~/Developer/<repo> worktree list` to find an agent's exact
+directory. Open that directory when reviewing its files. Old `~/.t3/worktrees`
+entries should be checked the same way and removed once clean and pushed.
 
 Studio keeps Tailscale connected continuously. On Pro/Air in Milan, enable
 Tailscale when needed: eduroam does not permit direct LAN peer access.
 
-From Air/Pro, choose **studio** in T3's environments before starting work.
-Use the short environment labels `studio`, `pro`, and `air`. Saved routes are
-preferred first: Tailscale, LAN if present, then T3 Connect; keep Air's SSH
-route last. T3 Connect also works over the internet with the laptop VPN off.
+From Air/Pro, pick the **studio** SSH connection in the app's New session
+picker before starting work (aliases `studio`, `pro` and `air` are in
+`~/.ssh/config`). The Remote Control app setting lets the Claude iPhone/iPad app
+and other devices continue a session.
 Screen Sharing: `open vnc://studio.tailed8082.ts.net` with Tailscale connected.
 `ssh studio` uses Tailscale; `ssh studio-lan` uses `studio.local` on a reachable
 local network, sharing the verified host identity. `studio-ts` is explicit VPN.
 Studio uses its system Tailscale daemon; leave the duplicate GUI client off.
-Review through T3 and project branches/PRs. A laptop clone needs a pull to see
+Review through the app's PR panel and GitHub. A laptop clone needs a pull to see
 published changes. Closing the laptop ends its viewer connection; Studio work
 can continue. Keep Studio logged in and awake; lock instead of logging out.
 After a reboot, FileVault may require local unlock before remote tools work.
 
-Use `~/.t3/bin/t3 status` and `~/.t3/bin/t3 service status` to check hosting.
-T3 Connect needs Studio's own account approval; its service starts at login.
-
 For later cleanup, inventory Git status, untracked files, worktrees and active
-T3 work before removing a project; preserve unpublished work and outputs.
+sessions before removing a project; preserve unpublished work and outputs.
 
 ### Review Studio results
 
-Review iterations primarily in T3 Code, including supported file previews and
-the shared browser for runnable web outputs. Use project branches/PRs for review
-in T3 or GitHub as the output becomes satisfactory. Clone into the requesting
+Review iterations primarily in the Claude Code app, including file previews and
+the browser pane for runnable web outputs. Use project branches/PRs for review
+in the app or GitHub as the output becomes satisfactory. Clone into the requesting
 Mac's `~/Developer` when you want to read the codebase locally.
 
 Only when you ask to run/review outputs yourself locally, prepare a self-contained

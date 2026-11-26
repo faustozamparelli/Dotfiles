@@ -644,6 +644,20 @@ retire_manifest() {
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
 
+    if [[ "$token" == "t3-code@nightly" ]] &&
+       { [[ -d "$app_path" ]] || pgrep -qf "$HOME/.t3/(runtime|tools/cloudflared)/"; }; then
+      # Stop T3's background service, local server and tunnel so nothing keeps
+      # listening once the app is gone. ~/.t3 data stays for manual review.
+      if [[ -x "$HOME/.t3/bin/t3" ]]; then
+        "$HOME/.t3/bin/t3" service uninstall >/dev/null 2>&1 || true
+      fi
+      if pgrep -qf "/$name.app/Contents/MacOS/"; then
+        osascript -e "quit app \"$name\"" >/dev/null 2>&1 || true
+        sleep 3
+      fi
+      pkill -f "$HOME/.t3/(runtime|tools/cloudflared)/" 2>/dev/null || true
+    fi
+
     if [[ "$source" == "cask" ]] &&
        grep -Fxq "$token" <<<"$installed_casks"; then
 
