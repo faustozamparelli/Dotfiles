@@ -17,7 +17,9 @@ link="$HOME/.local/bin/peekaboo"
 if [[ -e "$link" && ! -L "$link" ]]; then echo "Refusing unmanaged $link" >&2; exit 1; fi
 if [[ -d "$app" ]]; then
   installed="$(/usr/bin/plutil -extract CFBundleShortVersionString raw -o - "$app/Contents/Info.plist")"
-  [[ "$installed" == "$version" ]] || { echo 'Close and review the existing Peekaboo before replacing it.' >&2; exit 1; }
+  # The app updates itself, so newer releases are fine; older ones need review.
+  [[ "$(printf '%s\n' "$version" "$installed" | sort -V | head -n1)" == "$version" ]] ||
+    { echo 'Close and review the existing Peekaboo before replacing it.' >&2; exit 1; }
 fi
 if [[ ! -x "$root/peekaboo" || ! -d "$app" ]]; then
   work="$(mktemp -d "${TMPDIR:-/tmp}/peekaboo.XXXXXX")"
