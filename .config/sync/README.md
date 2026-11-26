@@ -152,6 +152,8 @@ retains normal macOS behavior. No fullscreen Spaces are created.
 Super is Right Command (Control + Option + Command), supplied by Karabiner.
 Super-M puts the current app on the left and the most recently focused other
 app **on that display** on the right. Press it again to maximize both.
+Super-Shift-M swaps the two sides while keeping the boundary where it is; it
+does nothing without an active split.
 Super-minus/plus moves the split boundary
 left/right by five percentage points (plus is = without Shift). Dragging the
 inner edge also resizes its neighbor. The boundary is limited to 25-75 percent;
@@ -360,6 +362,7 @@ update the registry and implementation together, then run `keymap-docs`.
 | VS Code | Command | `Cmd-Shift-j` | Show or hide the secondary sidebar |
 | VS Code | Command | `Cmd-k` | Show or hide Source Control |
 | Hammerspoon | Super | `Super-m` | Toggle current and last-used app between split and maximized |
+| Hammerspoon | Super | `Super-Shift-m` | Swap the left and right split windows |
 | Hammerspoon | Super | `Super--` | Move the split boundary left by five percentage points |
 | Hammerspoon | Super | `Super-+ (=/+ key, no Shift)` | Move the split boundary right by five percentage points |
 | Hammerspoon | Control-Alt | `Ctrl-Alt-h` | Send the focused window to the previous display, wrapping around |

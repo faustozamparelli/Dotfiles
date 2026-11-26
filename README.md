@@ -71,8 +71,11 @@ Each Mac has its own SSH key, commented `faustozamparelli@NAME` and titled
 Send remote scripts through `ssh -o BatchMode=yes studio /bin/sh -s`;
 remote PATH may need `/opt/homebrew/bin`.
 
-Agents turn Tailscale on with `/usr/local/bin/tailscale up` (or `remote start`) when
-a route is down, and back off with `tailscale down` only if they started it.
+Agents may start and stop Tailscale. When a route is down, run
+`/usr/local/bin/tailscale up --accept-routes` (or `remote start`), and run
+`tailscale down` afterwards only if they started it. The flag matters on Pro,
+where a plain `up` refuses because accepted routes are a saved setting. MagicDNS
+names can take a few seconds to resolve after connecting, so retry first.
 Laptop Tailscale is normally off. Preserve user-opened VPN sessions; restore
 agent-opened Air state. Wake recovery is unverified. Desktop control additionally
 needs a console login and privacy permissions; SSH alone is insufficient.
@@ -132,7 +135,7 @@ stay local. No extension watcher or new maintenance timer is installed.
 | Keys | Action |
 | --- | --- |
 | Right Command | Super (Karabiner); `§` holds Wispr Flow dictation |
-| Super-M | Toggle current/last app on the same display between split and maximized; Super-minus/plus moves the boundary |
+| Super-M | Toggle current/last app on the same display between split and maximized; Super-Shift-M swaps sides; Super-minus/plus moves the boundary |
 | Ctrl-Option-H/L | Send the focused window to the previous/next display, including Sidecar; wraps around |
 | Ctrl-Option-B | Toggle optional physical-monitor DDC brightness keys; off by default, excludes Sidecar |
 | Ctrl-h/l | Previous/next Herdr workspace |

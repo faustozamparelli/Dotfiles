@@ -225,8 +225,16 @@ local function resizeSplit(delta)
     layout()
 end
 
+local function swapSplit()
+    if not pair then return end
+    pair.left, pair.right = pair.right, pair.left
+    layout()
+end
+
 -- km:windows.split
 hs.hotkey.bind(super, 'm', toggleSplit)
+-- km:windows.swap
+hs.hotkey.bind({'cmd', 'ctrl', 'alt', 'shift'}, 'm', swapSplit)
 -- km:windows.resize.left
 hs.hotkey.bind(super, '-', function() resizeSplit(-0.05) end, nil,
     function() resizeSplit(-0.05) end)
@@ -283,7 +291,7 @@ end):start()
 for _, w in ipairs(wf:getWindows()) do maximize(w) end
 
 -- Small inspection surface for checks through the local Hammerspoon CLI.
-windowWorkflow = {toggle=toggleSplit, finish=finishSplit, resize=resizeSplit,
+windowWorkflow = {toggle=toggleSplit, finish=finishSplit, resize=resizeSplit, swap=swapSplit,
     send=sendToDisplay, cycle=cycleDisplay, screens=orderedScreens,
     brightness=toggleBrightness,
     brightnessEnabled=function() return brightnessTap and brightnessTap:isEnabled() or false end,

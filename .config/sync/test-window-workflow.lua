@@ -90,6 +90,9 @@ hs = {
         return {isAttributeSettable=function() return true end}
     end},
     hotkey={bind=function(mods, key, callback)
+        for _, mod in ipairs(mods) do
+            if mod == 'shift' then key = 'shift-'..key end
+        end
         bindings[key], bindingMods[key] = callback, mods
     end},
     alert={show=function(message) table.insert(alerts, message) end},
@@ -138,6 +141,14 @@ bindings['m']()
 check(windowWorkflow.state().right == b:id() and elsewhere.moves == 0,
     'split must skip more recently focused apps on other screens')
 check(a.rect.w == 500 and b.rect.x == 500, 'equal split on current display')
+local before, first, second = windowWorkflow.state(), windowWorkflow.state().left, windowWorkflow.state().right
+local ratio = before.ratio
+bindings['shift-m']()
+check(windowWorkflow.state().left == second and windowWorkflow.state().right == first
+    and windowWorkflow.state().ratio == ratio, 'swap exchanges sides and keeps the boundary')
+bindings['shift-m']()
+check(windowWorkflow.state().left == first and windowWorkflow.state().right == second,
+    'swapping twice restores the original sides')
 bindings['=']()
 check(a.rect.w == 550 and b.rect.w == 450, 'existing split resize remains available')
 local moves = a.moves
