@@ -2132,3 +2132,10 @@ bindings were T3's defaults (Air's fresh file differed only in a newer
 `saved-environments.json` import rather than the encrypted catalog; this
 relies on T3 keeping that migration path. No tokens, pairing codes or
 keychain items were moved.
+
+Rollout: Air and Studio match the tracked values. Air imported SSH
+connections to Pro and Studio and paired over SSH (both tunnels up); Pro
+tunnels to Air and Studio. Studio keeps its 2026-11-26 catalog, whose
+outgoing routes were not live-checked: while Pro or Air holds an SSH session,
+the T3 server it launched owns Studio's T3 home, and Studio's desktop app
+waits at startup until that server stops (it relaunches when they reconnect).
