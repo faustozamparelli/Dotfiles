@@ -1,0 +1,77 @@
+#!/bin/sh
+# Find a working SSH route to one of Fausto's Macs and print its alias.
+# Read-only: it never starts/stops Tailscale or changes settings.
+set -u
+TS=/usr/local/bin/tailscale
+
+usage() {
+  cat <<'EOF'
+Usage: mac-reach studio|air|pro
+
+Tries, in order:  NAME      Tailscale MagicDNS name
+                  NAME-ip   Tailscale IP (works when DNS lookup fails)
+                  NAME-lan  Bonjour NAME.local (same network only; not eduroam)
+Prints the first alias that answers SSH (use it: ssh -o BatchMode=yes ALIAS ...)
+and exits 0. Prints "local" and exits 3 when already on NAME. Otherwise
+explains what failed and exits 1.
+
+Non-SSH fallbacks for a person: Screen Sharing (open vnc://NAME.tailed8082.ts.net)
+and T3 Code's T3 Connect route, which needs no Tailscale on the laptop.
+EOF
+}
+
+case "${1:-}" in
+  studio|air|pro) name=$1 ;;
+  -h|--help) usage; exit 0 ;;
+  *) usage >&2; exit 2 ;;
+esac
+
+if [ "$(scutil --get LocalHostName 2>/dev/null)" = "$name" ]; then
+  echo "Already on $name; run commands locally." >&2
+  echo local
+  exit 3
+fi
+
+# On Studio the plain CLI talks to the GUI client, which must stay stopped;
+# its root daemon answers on the system socket instead.
+on_studio=no
+if [ "$(scutil --get LocalHostName 2>/dev/null)" = studio ]; then
+  on_studio=yes
+  TS="$TS --socket=/var/run/tailscaled.socket"
+fi
+
+ts_state=unknown
+if [ -x /usr/local/bin/tailscale ]; then
+  if $TS status >/dev/null 2>&1; then
+    ts_state=up
+    # The Studio has a second GUI Tailscale client; when it connects, replies to
+    # 100.95.1.50 leave through the wrong tunnel and SSH times out.
+    if [ "$name" = studio ] && $TS status --json 2>/dev/null | /usr/bin/python3 -c '
+import json, sys
+peers = json.load(sys.stdin).get("Peer") or {}
+sys.exit(0 if any(p.get("DNSName", "").startswith("mac-studio.") and p.get("Online") for p in peers.values()) else 1)'; then
+      echo "warning: Studio's duplicate GUI Tailscale node 'mac-studio' is online; see ~/README.md (Macs and access)." >&2
+    fi
+  else
+    ts_state=down
+  fi
+fi
+
+for alias in "$name" "$name-ip" "$name-lan"; do
+  if ssh -n -o BatchMode=yes -o ConnectTimeout=6 "$alias" true 2>/dev/null; then
+    echo "$alias"
+    exit 0
+  fi
+  echo "no answer: $alias" >&2
+done
+
+if [ "$ts_state" = down ] && [ "$on_studio" = yes ]; then
+  echo "Studio's root tailscaled is not running; never start the GUI client instead." >&2
+elif [ "$ts_state" = down ]; then
+  echo "Tailscale is stopped on this Mac. Start it (agents may): $TS up --accept-routes" >&2
+  echo "Stop it again afterwards only if you started it." >&2
+else
+  echo "$name is unreachable over Tailscale and LAN: it may be asleep, offline or" >&2
+  echo "have Tailscale off. Check '$TS status'; a person can still try T3 Connect." >&2
+fi
+exit 1

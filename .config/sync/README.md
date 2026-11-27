@@ -1586,11 +1586,10 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   target. Mac names are `studio`, `air`, `pro`, account `faustozamparelli`,
   home `/Users/faustozamparelli`. Requested SSH, transfers and desktop
   automation are authorized. Never transfer private keys or disable host checks.
-- SSH aliases use Tailscale; `studio-ts`, `air-ts`, `pro-ts` are explicit.
-  `*-lan` uses Bonjour with canonical HostKeyAlias trust. Select a route with
-  `ssh -o BatchMode=yes -o ConnectTimeout=5 HOST true` before work. For Air,
-  check the local Tailscale backend/peer, probe `air-ts`, then try `air-lan`
-  if unavailable; a verified current IP can override HostName. A failed remote
+- Select a route with `mac-reach NAME` before work: it tries `NAME`
+  (Tailscale MagicDNS; `*-ts` are explicit synonyms), `NAME-ip` (Tailscale
+  IP, no DNS) and `NAME-lan` (Bonjour), all with canonical HostKeyAlias trust,
+  and prints the first alias that answers. A failed remote
   command is not a reason to execute the same task through another route.
 - Pro/Air on eduroam cannot rely on peer LAN access. Prefer Tailscale, then
   usable LAN. SSH through Air still depends on Tailscale.
@@ -2088,3 +2087,17 @@ and `~/.local/share/peekaboo`, move the app to the Trash, and move
 `~/.peekaboo` and its Library data to a `mac-sync-peekaboo.*` Trash folder. The `peekaboo` MCP
 is in `remove_mcp_servers`, so `codex-technical.py apply` drops it from Codex
 and Claude Code's user scope. Restart open agent sessions to refresh tools.
+
+### Studio duplicate Tailscale recurrence and route fallbacks (2026-11-27)
+
+Studio's GUI Tailscale.app (running since 2026-11-16 with
+`TailscaleStartOnLogin = 0`) had its network extension reconnect at 14:30
+today as `mac-studio`; `ssh studio` and T3's Tailscale/SSH routes then timed
+out while T3 Connect still worked. Recovered through 100.122.117.87, quit the
+app, and set the GUI client to stopped over the canonical route
+(`tailscale down --accept-risk=lose-ssh`). A logout of the GUI identity was
+not performed; deleting `mac-studio` in the admin console is left to Fausto.
+Added `NAME-ip` SSH aliases and the read-only `mac-reach` probe.
+Separately, Air's T3 SSH launcher was looping: it downloads the 184 MB
+runtime with `curl --max-time 240` and Air's link manages about 97 MB in that
+time. Install the matching runtime on Air manually after desktop T3 updates.

@@ -53,14 +53,26 @@ Account/home: `faustozamparelli`, `/Users/faustozamparelli`; DNS suffix:
 
 | Name / SSH alias | Tailscale IP | Role |
 | --- | --- | --- |
-| `studio` | `100.95.1.50` | Preferred remote host |
+| `studio` | `100.95.1.50` | Preferred remote host (another city: always Tailscale) |
 | `air` / `air-ts` | `100.82.17.2` | Minimal shared setup |
 | `pro` / `pro-ts` | `100.122.185.114` | Shared setup plus engineering tools |
 
-Check `/usr/local/bin/tailscale status`; probe with
-`ssh -o BatchMode=yes -o ConnectTimeout=5 studio true`. `~/.ssh/config` also
-provides Bonjour fallbacks `studio-lan`/`air-lan`/`pro-lan` (`NAME.local`; each
-Mac's HostName and LocalHostName equal its name). Screen Sharing is on for all
+**Find a route with `mac-reach NAME`** (read-only). It prints the first SSH
+alias that answers; then use `ssh -o BatchMode=yes ALIAS …`. On the target
+itself it prints `local` and exits 3. If nothing answers, it says why (for
+example, local Tailscale stopped). Routes in order,
+all trusting the same canonical host key:
+
+| Alias | Path | Use when |
+| --- | --- | --- |
+| `NAME` | Tailscale MagicDNS name | Normal route, any network |
+| `NAME-ip` | Tailscale IP above | The name does not resolve (another VPN owns DNS, MagicDNS still starting) |
+| `NAME-lan` | Bonjour `NAME.local` | Same home network only |
+
+Pro and Air often share eduroam, which blocks SSH between devices, so even
+there they reach each other through Tailscale. For a person, T3 Code's T3
+Connect route and Screen Sharing are non-SSH fallbacks. Each Mac's HostName
+and LocalHostName equal its name. Screen Sharing is on for all
 three: `open vnc://NAME.tailed8082.ts.net` (or `NAME.local` on the same LAN).
 It must be switched on in System Settings > Sharing (enabling the launchd job
 by command alone leaves logins "not permitted"); the user must be in
@@ -76,6 +88,17 @@ Agents may start and stop Tailscale. When a route is down, run
 `tailscale down` afterwards only if they started it. The flag matters on Pro,
 where a plain `up` refuses because accepted routes are a saved setting. MagicDNS
 names can take a few seconds to resolve after connecting, so retry first.
+
+Studio must run only its root `tailscaled` (`studio`, 100.95.1.50). If its GUI
+Tailscale.app identity `mac-studio` (100.122.117.87) shows online, SSH to
+`studio` times out because replies leave through the wrong tunnel; `mac-reach`
+warns about this. Recover through the GUI identity's IP:
+`ssh -o HostKeyAlias=studio.tailed8082.ts.net faustozamparelli@100.122.117.87`,
+quit the app (`osascript -e 'quit app "Tailscale"'`, run detached because the
+session drops), then over `studio` run
+`/usr/local/bin/tailscale down --accept-risk=lose-ssh` so it stays stopped.
+That CLI talks to the GUI client; the daemon needs `--socket=/var/run/tailscaled.socket`.
+
 Laptop Tailscale is normally off. Preserve user-opened VPN sessions; restore
 agent-opened Air state. Wake recovery is unverified. Desktop control additionally
 needs a console login and privacy permissions; SSH alone is insufficient.
