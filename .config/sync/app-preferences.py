@@ -2,6 +2,7 @@
 """Apply/capture reviewed portable settings for shared apps, never full plists."""
 import json
 import plistlib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -46,6 +47,8 @@ def main():
     profile = json.loads(PROFILE.read_text())
     shared = shared_applications()
     applications = {entry['application'] for entry in profile['preferences'].values()}
+    if profile.get('t3ClientSettings'):
+        applications.add('T3 Code (Nightly).app')
     disabled = set(profile.get('disabledApplications', []))
     if action == 'list':
         for application in sorted(applications):
@@ -91,6 +94,25 @@ def main():
                 raise ValueError(f'Unsupported preference type: {domain}/{key}')
             subprocess.run(['defaults', 'write', domain, key, *args], check=True)
             print(f'Applied {domain}: {key} = {wanted}')
+    if shared_installed('T3 Code (Nightly).app', shared):
+        target = HOME / '.t3/userdata/client-settings.json'
+        runtime = json.loads(target.read_text()) if target.exists() else {}
+        settings = profile.get('t3ClientSettings', {})
+        if action == 'capture':
+            for key, wanted in settings.items():
+                if key in runtime and type(runtime[key]) is type(wanted):
+                    settings[key] = runtime[key]
+        elif any(runtime.get(key) != wanted for key, wanted in settings.items()):
+            processes = subprocess.run(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
+            t3_running = re.search(
+                r'/T3 Code(?: \((?:Alpha|Nightly)\))?\.app/Contents/MacOS/',
+                processes.stdout)
+            if processes.returncode != 0 or t3_running:
+                print('T3 interface settings deferred: close T3 before the next mac-sync.')
+            else:
+                runtime.update(settings)
+                write_json(target, runtime)
+                print('Applied portable T3 interface settings; local connections retained')
     if action == 'capture':
         updated = json.dumps(profile, indent=2) + '\n'
         if updated != PROFILE.read_text():

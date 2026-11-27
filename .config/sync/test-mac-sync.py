@@ -705,12 +705,15 @@ class AppPreferencesTests(unittest.TestCase):
         self.profile = {'preferences': {'example.demo': {
             'application': 'Demo.app', 'settings': {'showMenubar': True}}}}
 
-    def run_profile(self, action, *, application=None):
+    def run_profile(self, action, *, process_running=False, application=None):
         self.module.PROFILE.write_text(json.dumps(self.profile))
         arguments = ['app-preferences.py', action] + ([application] if application else [])
         with patch.object(sys, 'argv', arguments), \
              patch.object(self.module.subprocess, 'run') as run:
             run.return_value.returncode = 0
+            run.return_value.stdout = (
+                '/Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)\n'
+                if process_running else '/usr/libexec/lsd\n')
             self.module.main()
         return run
 
@@ -751,6 +754,25 @@ class AppPreferencesTests(unittest.TestCase):
             captured = json.loads(self.module.PROFILE.read_text())
             expected = value if type(value) is bool else True
             self.assertEqual(captured['preferences']['example.demo']['settings'], {'showMenubar': expected})
+
+    def test_t3_settings_preserve_local_connections_and_wait_while_running(self):
+        (self.home / 'Applications/T3 Code (Nightly).app').mkdir()
+        self.manifest.write_text('cask\tt3-code@nightly\tT3 Code (Nightly)\n')
+        config = self.home / '.t3/userdata/client-settings.json'
+        config.parent.mkdir(parents=True)
+        local = {'wordWrap': False, 'browserProfiles': [{'id': 'device-only'}]}
+        config.write_text(json.dumps(local))
+        self.profile = {'preferences': {}, 't3ClientSettings': {'wordWrap': True}}
+        run = self.run_profile('apply', process_running=True)
+        run.assert_called_once_with(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
+        self.assertEqual(json.loads(config.read_text()), local)
+        self.run_profile('apply')
+        self.assertEqual(json.loads(config.read_text()), dict(local, wordWrap=True))
+        local['wordWrap'] = False
+        config.write_text(json.dumps(local))
+        self.run_profile('capture').assert_not_called()
+        self.assertEqual(json.loads(self.module.PROFILE.read_text())['t3ClientSettings'], {'wordWrap': False})
+
 
 class TailscalePolicyTests(unittest.TestCase):
     def setUp(self):

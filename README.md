@@ -18,7 +18,7 @@ explicit; an ordinary task gets acceptance checks without an automatic Goal.
 
 | Work | Tools and conventions |
 | --- | --- |
-| Coding agents | **Claude Code desktop app** (Code tab) with the shared rules (`~/.codex/AGENTS.md`) and skills (`~/.codex/skills`); select the project there. The Codex CLI remains installed. T3 Code was retired on 2026-11-26. |
+| Coding agents | **Claude Code desktop app** (Code tab) with the shared rules (`~/.codex/AGENTS.md`) and skills (`~/.codex/skills`); select the project there. The Codex CLI remains installed. T3 Code (Nightly) was reinstated on 2026-11-27 as a shared app for its saved Mac connections and remote access; its retired MCP/Peekaboo extras stay retired. |
 | Editing and terminals | **VS Code** (`code .`); **Ghostty → Herdr → fish**. Detaching preserves server processes; reboot does not. Terminal editor: `nano`. |
 | Search and Git | `rg`, `fd`, `bat`, `eza`, `fzf`, `z`/`zi` (zoxide), `git`, `gh`. |
 | Python/notebooks | `uv sync`, `uv run …`, Ruff/Pyright; JupyterLab or VS Code with the project's `.venv` kernel. Jupytext pairing is opt-in; dependencies stay per-project. |

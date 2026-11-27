@@ -878,8 +878,12 @@ the actual project before concluding that a previous CPU issue is resolved.
 ### Codex
 
 The Claude Code desktop app (Code tab) is the entry point for coding agents;
-Codex is no longer driven through T3 Code, which was retired on 2026-11-26. The
-terminal CLI remains installed for direct use and configuration diagnostics.
+T3 Code (Nightly) was retired on 2026-11-26 and reinstated on 2026-11-27 as a
+shared app: its local `~/.t3/userdata` (interface settings, saved Mac
+connections, keybindings) survived the retirement, and `app-preferences.py`
+again applies the portable `t3ClientSettings`. The MCP and Peekaboo retirements
+are unchanged. The terminal CLI remains installed for direct use and
+configuration diagnostics.
 
 Provide concrete requests: desired outcome, relevant files, constraints, and
 verification. Ask the agent to inspect before editing when the problem is not
