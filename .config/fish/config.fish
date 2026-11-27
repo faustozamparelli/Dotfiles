@@ -1,4 +1,5 @@
 set -gx HOMEBREW_PREFIX /opt/homebrew
+set -gx HOMEBREW_NO_ASK 1
 set -gx PNPM_HOME $HOME/Library/pnpm
 
 # Keep the first occurrence of each inherited directory before adding tools.

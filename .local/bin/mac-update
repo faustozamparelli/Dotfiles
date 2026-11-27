@@ -78,19 +78,27 @@ def self_updated(cask, latest):
     """True when the app bundle already is `latest`, e.g. it updated itself.
 
     Homebrew keeps the version it installed, so self-updating apps stay
-    "outdated" forever even though the bundle is current."""
+    "outdated" forever even though the bundle is current. Installer (pkg)
+    casks list no app artifact, so their bundle is found through a binary
+    path inside it or the cask's display name."""
+    bundles = []
     for artifact in (cask or {}).get('artifacts', []):
-        for value in artifact.get('app', []):
-            if not isinstance(value, str):
+        bundles += [value for value in artifact.get('app', []) if isinstance(value, str)]
+        for value in artifact.get('binary', []):
+            match = isinstance(value, str) and re.search(r'([^/]+\.app)/', value)
+            if match:
+                bundles.append(match.group(1))
+    for name in (cask or {}).get('name', []):
+        bundles += [f'{name}.app', f'{name.replace(" ", "-")}.app']
+    for value in dict.fromkeys(bundles):
+        for base in (Path('/Applications'), HOME / 'Applications'):
+            try:
+                data = plistlib.loads((base / value / 'Contents/Info.plist').read_bytes())
+            except (OSError, plistlib.InvalidFileException):
                 continue
-            for base in (Path('/Applications'), HOME / 'Applications'):
-                try:
-                    data = plistlib.loads((base / value / 'Contents/Info.plist').read_bytes())
-                except (OSError, plistlib.InvalidFileException):
-                    continue
-                versions = {str(data.get('CFBundleShortVersionString', '')), str(data.get('CFBundleVersion', ''))}
-                if latest.split(',')[0] in versions:
-                    return True
+            versions = {str(data.get('CFBundleShortVersionString', '')), str(data.get('CFBundleVersion', ''))}
+            if latest.split(',')[0] in versions:
+                return True
     return False
 
 
@@ -246,6 +254,14 @@ def update(dry_run=False, now=False):
                     failures.append(str(error))
                     pending.pop(name, None)
             save('started')
+        if not dry_run and not finishing:
+            # Remove old downloads/versions and dependencies nothing needs any
+            # more (never formulae installed on request).
+            for step in (['cleanup'], ['autoremove']):
+                try:
+                    print(command([brew, *step], timeout=1800), flush=True)
+                except (RuntimeError, subprocess.TimeoutExpired) as error:
+                    failures.append(str(error))
         save('finished')
         for error in failures:
             print(error, flush=True)

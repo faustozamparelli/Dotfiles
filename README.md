@@ -140,7 +140,10 @@ CLI tools are shared only through `packages.txt`; other `brew install` stays loc
 Login/hourly sync exchanges macOS **App Shortcuts** on a separate Git branch
 and checks manifests; it does not pull executable config or install apps.
 Air/Pro's `mac-update` checks every 30 minutes while awake: one active daily pass
-upgrades formulae/downloads app updates; queued apps install after closing.
+upgrades formulae/downloads app updates, then runs `brew cleanup` and
+`brew autoremove`; queued apps install after closing. Installer casks that update
+themselves (Karabiner, Tailscale) are recognised by their app's version.
+`HOMEBREW_NO_ASK=1` in fish/zsh makes interactive `brew upgrade` skip its prompt.
 Use `--status`, `--dry-run`, `--now`. Studio has no schedule; native/App Store/
 privileged updates have separate rules.
 

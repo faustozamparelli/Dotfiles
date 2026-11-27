@@ -1,4 +1,5 @@
 export HOMEBREW_PREFIX="/opt/homebrew"
+export HOMEBREW_NO_ASK=1
 
 typeset -gU path
 path=("$HOME/.local/bin" "$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin" "${path[@]}")

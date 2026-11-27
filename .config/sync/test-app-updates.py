@@ -198,6 +198,21 @@ class UpdatesTests(unittest.TestCase):
         expected = ['/usr/bin/defaults', 'write', 'test.fixture.updater', 'SUAutomaticallyUpdate', '-bool', 'true']
         self.assertIn(expected, [c.args[0] for c in calls.call_args_list])
 
+    def test_installer_cask_bundle_is_found_by_binary_path_or_name(self):
+        apps = self.state / 'Applications'
+        for bundle in ('Karabiner-Elements.app', 'Tailscale.app'):
+            (apps / bundle / 'Contents').mkdir(parents=True)
+            (apps / bundle / 'Contents/Info.plist').write_bytes(
+                plistlib.dumps({'CFBundleShortVersionString': '17.0.0'}))
+        karabiner = {'name': ['Karabiner Elements'], 'artifacts': [
+            {'pkg': ['Karabiner-Elements.pkg']},
+            {'binary': ['/Applications/Karabiner-Elements.app/Contents/Helpers/karabiner_cli']}]}
+        tailscale = {'name': ['Tailscale'], 'artifacts': [{'pkg': ['Tailscale.pkg']}]}
+        with patch.object(updater, 'HOME', self.state):
+            self.assertTrue(updater.self_updated(karabiner, '17.0.0'))
+            self.assertTrue(updater.self_updated(tailscale, '17.0.0'))
+            self.assertFalse(updater.self_updated(tailscale, '18.0.0'))
+
 
 if __name__ == '__main__':
     unittest.main()
