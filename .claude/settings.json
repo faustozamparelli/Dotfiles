@@ -5,11 +5,19 @@
     "CLAUDE_CODE_SUBAGENT_EFFORT": "medium",
     "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
   },
-  "model": "opus",
-  "effortLevel": "medium",
-  "theme": "auto",
   "attribution": {
     "commit": "",
     "pr": ""
+  },
+  "model": "opus",
+  "enableWorkflows": true,
+  "outputStyle": "Explanatory",
+  "effortLevel": "medium",
+  "theme": "auto",
+  "agentPushNotifEnabled": true,
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "autoCompactWindow": 400000
+    }
   }
 }

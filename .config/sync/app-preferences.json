@@ -150,5 +150,24 @@
       "label": "Mac Studio",
       "hostname": "studio.tailed8082.ts.net"
     }
+  ],
+  "claudeDesktopPreferences": {
+    "ccRemoteControlDefaultEnabled": true,
+    "remoteControlStayReachable": true,
+    "remoteControlExcludedFolders": []
+  },
+  "claudeSshConnections": [
+    {
+      "mac": "air",
+      "label": "Air"
+    },
+    {
+      "mac": "pro",
+      "label": "Pro"
+    },
+    {
+      "mac": "studio",
+      "label": "Studio"
+    }
   ]
 }

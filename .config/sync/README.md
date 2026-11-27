@@ -1132,17 +1132,18 @@ Keep the engineering tools on the MacBook Pro using its local app manifest:
 ```fish
 mac-app local paraview ParaView
 mac-app local blender Blender
-mac-app local qgis QGIS
 brew tap tangency-labs/tap
 brew trust --cask tangency-labs/tap/solidcraft
 mac-app local tangency-labs/tap/solidcraft SolidCraft
 mac-app local --direct openfoam2306 "OpenFOAM v2306"
 ```
 
-Blender, QGIS, OpenCFD OpenFOAM, and SolidCraft are free and open source;
+Blender, OpenCFD OpenFOAM, and SolidCraft are free and open source;
 none requires a Polimi account or a student licence. SolidCraft's official
-tap needs trust for that cask only. All four entries belong exclusively to
-`machines/fausto-s-macbook-pro.tsv`, never `apps.tsv` or the Air's manifest.
+tap needs trust for that cask only. These entries belong exclusively to
+`machines/fausto-s-macbook-pro.tsv` (Studio's manifest links to it, so both
+Macs carry the same extras), never `apps.tsv` or the Air's manifest. QGIS was
+retired on 2026-11-27.
 
 OpenFOAM uses the existing OrbStack engine, not a Homebrew formula. Its
 reviewed `direct/openfoam2306.sh` installer creates `~/.local/bin/openfoam2306`
@@ -1529,7 +1530,7 @@ without changing account installation or authorization. App tools default
 to off, with plugin management enabled. See the [Codex app configuration
 reference](https://learn.chatgpt.com/docs/config-file/config-reference).
 Context7 is enabled by default on all three Macs. Credentials remain machine-local.
-Pro alone has a tracked QGIS server definition. App-specific servers are never
+The QGIS server is retired with QGIS (`remove_mcp_servers`). App-specific servers are never
 installed on other Macs by a toggle; missing executables are disabled. The
 retired Exa and ChatGPT-desktop browser/computer-use MCP definitions are removed.
 
@@ -1702,6 +1703,16 @@ servers effective on this Mac into Claude Code's user scope (`claude mcp
 add-json --scope user`); only servers named in `codex-technical.json` are
 managed; a local stdio override, headers, bearer-token variable or env are
 copied into machine-local `~/.claude.json`, never into the snapshot. Gmail, Calendar and Notion reach Claude as claude.ai connectors.
+
+The Claude desktop app's portable settings live in `app-preferences.json`
+(`claudeDesktopPreferences`, `claudeSshConnections`): Remote Control connects
+new sessions, stays reachable and excludes no folders, so every Mac's Code
+sessions appear in the other Macs' sidebars while their Mac is awake. Each Mac
+gets the other two as SSH connections in the New session picker (added, never
+removed). `app-preferences.py apply` writes them only while the app is closed;
+otherwise it reports them as deferred. Sessions already running keep their own
+Remote Control switch. Accounts, sessions, folder grants and window state stay
+local. `sandbox` in `~/.claude/settings.json` is not shared.
 
 Desktop control: Codex computer use (`features.computer_use` and the
 `computer-use@openai-bundled` plugin) is on for all Macs; `mac-sync` applies
@@ -2139,3 +2150,15 @@ tunnels to Air and Studio. Studio keeps its 2026-11-26 catalog, whose
 outgoing routes were not live-checked: while Pro or Air holds an SSH session,
 the T3 server it launched owns Studio's T3 home, and Studio's desktop app
 waits at startup until that server stops (it relaunches when they reconnect).
+
+### Shared sidebar, Claude app connections and app lists (2026-11-27)
+
+Pro's Claude app excluded `~/Developer`, `~/Documents/LongTerm` and
+`~/Documents/ShortTerm` from Remote Control, so only its folderless sessions
+reached the other Macs' sidebars; the new Claude profile clears that list on
+every Mac. Studio had no SSH connections and Air only Pro's. The Peekaboo
+commit `c250b58` had emptied the Pro/Studio manifest; its extras were restored
+without Peekaboo and QGIS, and QGIS was added to `retired-apps.tsv`. The
+Codex desktop cask (`codex-app`) is discontinued upstream in favour of ChatGPT,
+which is already shared, so no Codex app entry was added.
+

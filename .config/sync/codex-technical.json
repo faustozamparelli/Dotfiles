@@ -13,13 +13,7 @@
     },
     "pro": {
       "apps": {},
-      "mcp_servers": {
-        "qgis": {
-          "args": [],
-          "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
-          "enabled": false
-        }
-      },
+      "mcp_servers": {},
       "plugins": {}
     },
     "studio": {
@@ -27,11 +21,6 @@
       "mcp_servers": {
         "docling": {
           "enabled": false
-        },
-        "qgis": {
-          "args": [],
-          "command": "/Users/faustozamparelli/.local/share/qgis-mcp/0.15.2/venv/bin/qgis-mcp-server",
-          "enabled": true
         }
       },
       "plugins": {}
@@ -118,7 +107,8 @@
     "autodesk_fusion",
     "pro-desktop",
     "studio-desktop",
-    "peekaboo"
+    "peekaboo",
+    "qgis"
   ],
   "settings": {
     "model_reasoning_effort": "high"

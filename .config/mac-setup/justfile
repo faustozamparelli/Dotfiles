@@ -14,6 +14,7 @@ check:
     python3 ~/.config/sync/test-vscode-local.py
     python3 ~/.config/sync/test-background-cleanup.py
     python3 ~/.config/sync/test-helium-apps.py
+    /usr/bin/python3 ~/.config/sync/test-app-preferences.py
     /usr/bin/python3 ~/.config/sync/test-helium-extensions.py
     /usr/bin/python3 ~/.config/sync/test-app-shortcuts.py
     /usr/bin/python3 ~/.config/sync/test-mac-commands.py

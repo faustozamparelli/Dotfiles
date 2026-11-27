@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Apply/capture reviewed portable settings for shared apps, never full plists."""
+import getpass
 import json
 import plistlib
 import re
 import subprocess
 import sys
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -29,6 +31,11 @@ T3_DEFAULTS = {
 }
 # A T3 server another Mac launched over SSH runs from the pinned runtime.
 T3_SERVER_PROCESS = re.compile(r'/\.t3/runtime/versions/[^/\n]+/t3$', re.M)
+CLAUDE_APP = 'Claude.app'
+# The Claude app keeps these files in memory and rewrites them when it quits,
+# so they are changed only while it is closed.
+CLAUDE_SUPPORT = HOME / 'Library/Application Support/Claude'
+CLAUDE_PROCESS = re.compile(r'/Claude\.app/Contents/MacOS/Claude$', re.M)
 
 
 def shared_applications():
@@ -186,6 +193,82 @@ def sync_t3(profile, action):
     prepare_t3_connections(userdata, profile.get('t3Connections', []))
 
 
+def read_json(path, default):
+    """Return the file's object, default when missing, or None when unreadable."""
+    try:
+        value = json.loads(path.read_text())
+    except FileNotFoundError:
+        return default
+    except (OSError, ValueError):
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def claude_running():
+    processes = subprocess.run(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
+    return processes.returncode != 0 or bool(CLAUDE_PROCESS.search(processes.stdout))
+
+
+def sync_claude(profile, action):
+    """Share reviewed Claude app preferences and SSH connections to the other Macs.
+
+    Only the reviewed keys of claude_desktop_config.json's "preferences" are
+    shared; sessions, accounts, window state and folder grants stay local.
+    Missing SSH connections are added to ssh_configs.json, never removed.
+    """
+    settings = profile.get('claudeDesktopPreferences', {})
+    config_path = CLAUDE_SUPPORT / 'claude_desktop_config.json'
+    config = read_json(config_path, {})
+    if config is None:
+        print(f'Claude app settings skipped: {config_path} is not readable JSON')
+        return
+    preferences = config.get('preferences')
+    preferences = preferences if isinstance(preferences, dict) else {}
+    if action == 'capture':
+        # While the app is open a shared value may not be applied yet; capturing
+        # then would publish this Mac's stale value back to every Mac.
+        if claude_running():
+            return
+        for setting, wanted in list(settings.items()):
+            if setting in preferences and type(preferences[setting]) is type(wanted):
+                settings[setting] = preferences[setting]
+        return
+    ssh_path = CLAUDE_SUPPORT / 'ssh_configs.json'
+    ssh = read_json(ssh_path, {})
+    configs, trusted = (ssh or {}).get('configs', []), (ssh or {}).get('trustedHosts', [])
+    this_mac = machine_name()
+    added, trust = [], []
+    if ssh is not None and this_mac and isinstance(configs, list) and isinstance(trusted, list):
+        known = {entry.get('sshHost') for entry in configs if isinstance(entry, dict)}
+        user = getpass.getuser()
+        for connection in profile.get('claudeSshConnections', []):
+            if connection['mac'] == this_mac:
+                continue
+            host = f"{user}@{connection['mac']}"
+            if host not in known:
+                added.append({'name': connection['label'], 'sshHost': host, 'id': str(uuid.uuid4())})
+            if host not in trusted:
+                trust.append(host)
+    elif profile.get('claudeSshConnections'):
+        print('Claude SSH connections skipped: unknown Mac or unreadable ssh_configs.json')
+    prefs_changed = any(preferences.get(key) != value for key, value in settings.items())
+    if not (added or trust or prefs_changed):
+        return
+    if claude_running():
+        print('Claude app settings deferred: quit the Claude app before the next mac-sync.')
+        return
+    if prefs_changed:
+        preferences.update(settings)
+        config['preferences'] = preferences
+        write_json(config_path, config)
+        print('Applied portable Claude app settings; local values retained')
+    if added or trust:
+        ssh.update({'configs': configs + added, 'trustedHosts': trusted + trust})
+        write_json(ssh_path, ssh)
+        if added:
+            print(f'Added Claude SSH connections: {", ".join(entry["name"] for entry in added)}')
+
+
 def main():
     action = sys.argv[1] if len(sys.argv) > 1 else 'apply'
     if action not in {'apply', 'capture', 'list', 'enable', 'disable'}:
@@ -195,6 +278,8 @@ def main():
     applications = {entry['application'] for entry in profile['preferences'].values()}
     if any(profile.get(key) for key in (*T3_DOCUMENTS, 't3Connections')):
         applications.add(T3_APP)
+    if any(profile.get(key) for key in ('claudeDesktopPreferences', 'claudeSshConnections')):
+        applications.add(CLAUDE_APP)
     disabled = set(profile.get('disabledApplications', []))
     if action == 'list':
         for application in sorted(applications):
@@ -242,6 +327,8 @@ def main():
             print(f'Applied {domain}: {key} = {wanted}')
     if shared_installed(T3_APP, shared):
         sync_t3(profile, action)
+    if shared_installed(CLAUDE_APP, shared):
+        sync_claude(profile, action)
     if action == 'capture':
         updated = json.dumps(profile, indent=2) + '\n'
         if updated != PROFILE.read_text():
