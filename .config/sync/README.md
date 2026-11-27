@@ -1628,11 +1628,9 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
   active-use settings. `air-power-setup` reproduces it with sudo; inspect power
   source using `pmset -g batt`. Closed-lid and wake recovery need live evidence;
   do not keep Air awake to conceal a failed wake path.
-- Prefer app-specific CLI and MCP routes for desktop tasks. UI fallback is the
-  shared `peekaboo` MCP (`direct/peekaboo.sh`, pinned 4.9.9, all Macs): Studio
-  keeps Peekaboo.app open via `com.fausto.studio-desktop`; on Pro and Air agents
-  run `open -g /Applications/Peekaboo.app` when needed. Keep macOS privacy
-  permissions machine-local.
+- Prefer CLI, app-specific MCP and browser routes for desktop tasks. The UI
+  fallback is the Claude desktop app's built-in computer use. Keep macOS
+  privacy permissions machine-local.
 - Math PDFs use shared `tectonic`/`pandoc`, not full TeX Live. Compile the
   `~/.config/mac-setup/latex-smoke.tex` fixture into a temporary directory;
   warm the cache then verify `--only-cached`. Inspect warnings/rendering.
@@ -2075,3 +2073,14 @@ stays installed. `mac-sync` removes the app through `retired-apps.tsv`, and its
 interface-preference profile and firewall exception are gone. `~/.t3`
 (conversations, credentials, worktrees) is left on each Mac for manual deletion
 after checking `git worktree list` for unpushed work.
+
+### Peekaboo removal (2026-11-27)
+
+Peekaboo is retired again on all Macs; the Claude desktop app's built-in
+computer use replaces it for desktop UI. `retired-apps.tsv` makes `mac-sync`
+boot out the `com.fausto.studio-desktop` login item (it only reopened
+Peekaboo.app), stop the app and agents' `peekaboo mcp` servers, delete the CLI
+and `~/.local/share/peekaboo`, move the app to the Trash, and move
+`~/.peekaboo` and its Library data to a `mac-sync-peekaboo.*` Trash folder. The `peekaboo` MCP
+is in `remove_mcp_servers`, so `codex-technical.py apply` drops it from Codex
+and Claude Code's user scope. Restart open agent sessions to refresh tools.

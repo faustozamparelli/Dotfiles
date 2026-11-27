@@ -396,6 +396,38 @@ cleanup_retired_desktop_tool spotify
         self.assertTrue(prefs.exists())
 
 
+    def test_peekaboo_retirement_removes_tools_and_trashes_its_data(self):
+        removed = ['.local/bin/peekaboo', '.local/share/peekaboo/4.9.9/peekaboo',
+                   'Library/LaunchAgents/com.fausto.pro-desktop.plist',
+                   'Library/LaunchAgents/com.fausto.studio-desktop.plist']
+        data = ['.peekaboo/config.json', 'Library/Application Support/PeekabooShared/state',
+                'Library/Caches/boo.peekaboo.mac/state', 'Library/HTTPStorages/boo.peekaboo.mac/state',
+                'Library/Preferences/boo.peekaboo.mac.plist']
+        for relative in removed + data:
+            path = self.root / 'home' / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('fixture')
+        bundle = self.root / 'applications/Peekaboo.app/Contents'
+        bundle.mkdir(parents=True)
+        kept = self.root / 'home/Library/Preferences/com.example.keep.plist'
+        kept.write_text('keep')
+        (self.root / 'retired.tsv').write_text('direct\tpeekaboo\tPeekaboo\n')
+        # Stub process tools so the test never touches real Peekaboo servers.
+        result = self.run_shell(RETIRE + '\nretire_manifest\nretire_manifest\nexit "$failed"',
+                                'retired="$lock/retired.tsv"\ninstalled_casks=\nbrew_prefix="$lock/brew"'
+                                '\nlaunchctl() { return 1; }\npgrep() { return 1; }'
+                                '\npkill() { echo "$*" >> "$lock/pkill-calls"; return 0; }')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(bundle.parent.exists())
+        for relative in removed + data:
+            self.assertFalse((self.root / 'home' / relative).exists(), relative)
+        trashed = list((self.root / 'home/.Trash').glob('mac-sync-peekaboo.*'))
+        self.assertEqual(len(trashed), 1)
+        for relative in data:
+            self.assertEqual((trashed[0] / relative).read_text(), 'fixture', relative)
+        self.assertTrue(kept.exists())
+        self.assertIn('-x peekaboo', (self.root / 'pkill-calls').read_text())
+
     def test_chatgpt_retirement_preserves_codex_and_computer_use_data(self):
         paths = ['Library/Application Support/com.openai.chat',
                  'Library/Application Support/com.openai.codex',
@@ -540,6 +572,24 @@ class CodexTechnicalTests(unittest.TestCase):
             with patch.object(module, 'machine_name', return_value='pro'):
                 module.apply()
             self.assertFalse(tomllib.loads(module.CONFIG.read_text())['mcp_servers']['qgis']['enabled'])
+
+    def test_retired_mcp_servers_leave_claude_code_user_scope(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            module = self.load_module(root)
+            module.HOME = root
+            module.SNAPSHOT.write_text(json.dumps({'plugins': {}, 'mcp_servers': {},
+                                                   'machines': {'air': {}},
+                                                   'remove_mcp_servers': ['peekaboo', 'node_repl']}))
+            (root / '.claude.json').write_text(json.dumps({'mcpServers': {
+                'peekaboo': {'type': 'stdio', 'command': '/old/peekaboo', 'args': ['mcp']},
+                'keep': {'type': 'http', 'url': 'https://example.test/mcp'}}}))
+            with patch.object(module, 'machine_name', return_value='air'), \
+                 patch.object(module.shutil, 'which', return_value='/fake/claude'), \
+                 patch.object(module.subprocess, 'run') as run:
+                module.sync_claude_mcp()
+            self.assertEqual([call.args[0] for call in run.call_args_list],
+                             [['/fake/claude', 'mcp', 'remove', '--scope', 'user', 'peekaboo']])
 
     def test_profiles_reject_secrets_and_insecure_urls(self):
         with tempfile.TemporaryDirectory() as directory:

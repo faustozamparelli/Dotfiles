@@ -607,6 +607,48 @@ is_safari_web_app() {
   [[ "$bundle_id" == com.apple.Safari.WebApp.* ]]
 }
 
+stop_retired_peekaboo() {
+  local label
+  # Studio's login item only reopened Peekaboo.app; Pro's is from an older setup.
+  for label in com.fausto.pro-desktop com.fausto.studio-desktop; do
+    launchctl bootout "gui/$UID/$label" 2>/dev/null || true
+    if launchctl print "gui/$UID/$label" >/dev/null 2>&1; then
+      return 1
+    fi
+    rm -f -- "$HOME/Library/LaunchAgents/$label.plist" || return 1
+  done
+  if pgrep -qf '/Peekaboo\.app/Contents/MacOS/'; then
+    osascript -e 'quit app "Peekaboo"' >/dev/null 2>&1 || true
+    sleep 3
+  fi
+  # An SSH-only session cannot ask the app to quit. Agent sessions also keep
+  # `peekaboo mcp` servers running; stop both before removing the files.
+  pkill -TERM -u "$UID" -f '/Peekaboo\.app/Contents/' 2>/dev/null || true
+  pkill -TERM -u "$UID" -x peekaboo 2>/dev/null || true
+  rm -f -- "$HOME/.local/bin/peekaboo" || return 1
+  rm -rf -- "$HOME/.local/share/peekaboo"
+}
+
+# Peekaboo's settings, snapshots and app state go to a recoverable Trash folder.
+trash_retired_peekaboo_data() {
+  local path
+  local folder=""
+  # Paths stay relative to home inside the folder, so same-named items coexist.
+  for path in .peekaboo "Library/Application Support/Peekaboo" \
+      "Library/Application Support/PeekabooShared" \
+      Library/Caches/boo.peekaboo.mac Library/HTTPStorages/boo.peekaboo.mac \
+      Library/Preferences/boo.peekaboo.mac.plist \
+      "Library/Saved Application State/boo.peekaboo.mac.savedState"; do
+    [[ -e "$HOME/$path" ]] || continue
+    if [[ -z "$folder" ]]; then
+      mkdir -p "$HOME/.Trash" &&
+        folder="$(mktemp -d "$HOME/.Trash/mac-sync-peekaboo.XXXXXX")" || return 1
+    fi
+    mkdir -p "$folder/$(dirname "$path")" && /bin/mv "$HOME/$path" "$folder/$path" || return 1
+  done
+  [[ -z "$folder" ]] || log "Retired Peekaboo data is recoverable at $folder"
+}
+
 retire_manifest() {
   local source
   local identifier
@@ -643,6 +685,12 @@ retire_manifest() {
 
     token="${identifier##*/}"
     app_path="/Applications/$name.app"
+
+    if [[ "$source:$token" == "direct:peekaboo" ]] && ! stop_retired_peekaboo; then
+      echo "Cannot stop or remove the Peekaboo CLI and login items." >&2
+      failed=1
+      continue
+    fi
 
     # pgrep reads patterns as regular expressions, so the parentheses in the
     # bundle name are escaped.
@@ -720,6 +768,10 @@ retire_manifest() {
         cleanup_retired_desktop_tool "$token" || failed=1
         ;;
     esac
+
+    if [[ "$source:$token" == "direct:peekaboo" && ! -d "$app_path" ]]; then
+      trash_retired_peekaboo_data || failed=1
+    fi
 
     # The cask may already be gone while user caches remain.
     case "$token" in

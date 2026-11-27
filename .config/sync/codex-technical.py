@@ -364,8 +364,8 @@ def claude_mcp_target(settings, local):
 def sync_claude_mcp():
     """Mirror this Mac's effective Codex MCP choices into Claude Code's user scope.
 
-    Only servers named in the snapshot with a URL or command are managed;
-    other Claude servers stay.
+    Only servers named in the snapshot with a URL or command are managed, and
+    servers in remove_mcp_servers are removed; other Claude servers stay.
     """
     claude = shutil.which("claude", path=os.pathsep.join(
         [os.environ.get("PATH", ""), "/opt/homebrew/bin", str(HOME / ".local/bin")]))
@@ -404,6 +404,17 @@ def sync_claude_mcp():
             print(f"Warning: Claude Code MCP server {name} not updated: {type(error).__name__}")
             continue
         print(f"Claude Code MCP server: {name}" if target else f"Removed Claude Code MCP server: {name}")
+    # Retired servers leave Claude Code too, so an uninstalled command is not kept.
+    for name in snapshot.get("remove_mcp_servers", []):
+        if name not in registered:
+            continue
+        try:
+            subprocess.run([claude, "mcp", "remove", "--scope", "user", name],
+                           capture_output=True, text=True, check=True, timeout=60)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+            print(f"Warning: Claude Code MCP server {name} not removed: {type(error).__name__}")
+            continue
+        print(f"Removed retired Claude Code MCP server: {name}")
 
 
 def restore_plugins():
