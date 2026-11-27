@@ -879,11 +879,30 @@ the actual project before concluding that a previous CPU issue is resolved.
 
 The Claude Code desktop app (Code tab) is the entry point for coding agents;
 T3 Code (Nightly) was retired on 2026-11-26 and reinstated on 2026-11-27 as a
-shared app: its local `~/.t3/userdata` (interface settings, saved Mac
-connections, keybindings) survived the retirement, and `app-preferences.py`
-again applies the portable `t3ClientSettings`. The MCP and Peekaboo retirements
-are unchanged. The terminal CLI remains installed for direct use and
-configuration diagnostics.
+shared app. The MCP and Peekaboo retirements are unchanged. The terminal CLI
+remains installed for direct use and configuration diagnostics.
+
+`app-preferences.py` shares reviewed top-level keys of three `~/.t3/userdata`
+files: `t3ClientSettings` (`client-settings.json`: fonts, notifications,
+sidebar, diff and confirmation choices), `t3ServerSettings` (`settings.json`:
+hidden models, enabled providers, compaction, auto-resume, linked
+environments) and `t3DesktopSettings` (`desktop-settings.json`: network
+exposure, Tailscale Serve). T3 omits default values from the last two files,
+so capture reads a missing key as T3's default. Writes wait while T3 runs; a
+T3 server that another Mac started over SSH blocks only `settings.json`. Every
+other key stays local, for example window bounds, onboarding, microphones,
+browser profiles and Studio's `defaultThreadEnvMode: worktree`. Keybindings
+are not tracked: Pro's file held only T3's defaults.
+
+Saved connections live in `connection-catalog.json`, encrypted with a
+keychain key, so they are never copied or decrypted. `t3Connections` declares
+SSH routes `pro`, `air` and `studio`. When a Mac has no catalog (a fresh or
+wiped T3), sync reads each other Mac's `environment-id` over SSH and writes
+`saved-environments.json`, the plain registry T3 imports once at startup.
+T3 then pairs over SSH and stores the credential locally. A Mac that already
+has a catalog keeps it; add a missing Mac there in Settings > Connections
+with SSH host `NAME`. Linked environments (`t3 environment link`) need a
+pairing code from the other Mac and stay manual.
 
 Provide concrete requests: desired outcome, relevant files, constraints, and
 verification. Ask the agent to inspect before editing when the problem is not
@@ -1400,12 +1419,13 @@ continue to use the dotfiles workflow. Apps may need reopening to load changed
 preferences.
 
 The published shared app entries were reviewed on 2026-11-01 (the T3 Code
-profile was removed on 2026-11-26):
+profile was removed on 2026-11-26 and restored on 2026-11-27):
 
 | Shared app | Settings route and current coverage |
 | --- | --- |
 | Ghostty, Karabiner-Elements, Visual Studio Code | Existing tracked configuration; VS Code's selected extensions are installed during sync. |
 | Codex | Existing reviewed plugin choices and public MCP endpoints; account connections stay local. |
+| T3 Code (Nightly) | Reviewed client, server and desktop settings keys plus SSH connection seeding for a Mac without saved connections (see Codex). Threads, credentials, the connection catalog and window state stay local. |
 | QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
 | MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
 | Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
@@ -2101,3 +2121,14 @@ Added `NAME-ip` SSH aliases and the read-only `mac-reach` probe.
 Separately, Air's T3 SSH launcher was looping: it downloads the 184 MB
 runtime with `curl --max-time 240` and Air's link manages about 97 MB in that
 time. Install the matching runtime on Air manually after desktop T3 updates.
+
+### T3 settings and connections across Macs (2026-11-27)
+
+Pro's T3 setup became the shared profile: the reviewed server and desktop
+keys joined `t3ClientSettings`, whose key set already covered every
+non-default value on Pro. Keybindings stayed untracked because Pro's 92
+bindings were T3's defaults (Air's fresh file differed only in a newer
+`thread.jump` condition). Connections are seeded through T3's legacy
+`saved-environments.json` import rather than the encrypted catalog; this
+relies on T3 keeping that migration path. No tokens, pairing codes or
+keychain items were moved.

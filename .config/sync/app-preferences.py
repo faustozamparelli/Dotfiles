@@ -5,11 +5,30 @@ import plistlib
 import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 HOME = Path.home()
 PROFILE = Path(__file__).with_name('app-preferences.json')
 APPLICATIONS = (Path('/Applications'), HOME / 'Applications')
+T3_APP = 'T3 Code (Nightly).app'
+# Reviewed top-level keys of these ~/.t3/userdata files are shared; every other
+# key (window bounds, onboarding, microphones, browser profiles) stays local.
+T3_DOCUMENTS = {
+    't3ClientSettings': 'client-settings.json',
+    't3DesktopSettings': 'desktop-settings.json',
+    't3ServerSettings': 'settings.json',
+}
+T3_DESKTOP_PROCESS = re.compile(r'/T3 Code(?: \((?:Alpha|Nightly)\))?\.app/Contents/MacOS/')
+# T3 omits default values from these two files, so a missing key means this
+# default (T3 0.1.14 DEFAULT_DESKTOP_SETTINGS and server settings schema).
+T3_DEFAULTS = {
+    'desktop-settings.json': {'serverExposureMode': 'local-only', 'tailscaleServeEnabled': False},
+    'settings.json': {'autoResumeLimitedThreads': False, 'linkedEnvironmentsEnabled': False,
+                      'providerModelPreferences': {}, 'providerInstances': {}},
+}
+# A T3 server another Mac launched over SSH runs from the pinned runtime.
+T3_SERVER_PROCESS = re.compile(r'/\.t3/runtime/versions/[^/\n]+/t3$', re.M)
 
 
 def shared_applications():
@@ -40,6 +59,133 @@ def write_json(path, value):
     return True
 
 
+def machine_name():
+    result = subprocess.run(['/usr/sbin/scutil', '--get', 'ComputerName'],
+                            capture_output=True, text=True)
+    name = result.stdout.lower()
+    for label, needle in (('air', 'macbook air'), ('pro', 'macbook pro'),
+                          ('studio', 'mac studio')):
+        if needle in name:
+            return label
+    return None
+
+
+def t3_environment_id(alias):
+    """Read another Mac's T3 environment id (an identifier, not a credential)."""
+    try:
+        result = subprocess.run(
+            ['/usr/bin/ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', alias,
+             'cat .t3/userdata/environment-id'],
+            capture_output=True, text=True, timeout=20)
+    except subprocess.TimeoutExpired:
+        return None
+    value = result.stdout.strip()
+    return value if result.returncode == 0 and re.fullmatch(r'[A-Za-z0-9-]{8,64}', value) else None
+
+
+def prepare_t3_connections(userdata, connections):
+    """Seed SSH connections to the other Macs for T3's one-time import.
+
+    T3 keeps saved connections in connection-catalog.json, encrypted with a
+    keychain key, so they cannot be written directly. When that catalog is
+    missing, T3 imports the plain saved-environments.json registry once at
+    startup. The records hold only SSH targets; T3 pairs over SSH on first
+    connect and keeps the resulting credential on this Mac.
+    """
+    if not connections or (userdata / 'connection-catalog.json').exists():
+        return
+    this_mac = machine_name()
+    if this_mac is None:
+        return
+    registry = userdata / 'saved-environments.json'
+    try:
+        existing = json.loads(registry.read_text()).get('records', []) if registry.exists() else []
+    except (ValueError, AttributeError):
+        existing = []
+    existing = [record for record in existing if isinstance(record, dict)] if isinstance(existing, list) else []
+    managed = {connection['mac'] for connection in connections}
+    previous = {}
+    records = []
+    for record in existing:
+        target = record.get('desktopSsh')
+        alias = target.get('alias') if isinstance(target, dict) else None
+        if alias in managed:
+            previous[alias] = record
+        else:
+            records.append(record)
+    unreachable = []
+    for connection in connections:
+        alias = connection['mac']
+        if alias == this_mac:
+            continue
+        environment_id = t3_environment_id(alias)
+        old = previous.get(alias)
+        if environment_id is None:
+            unreachable.append(connection['label'])
+            if old is not None:
+                records.append(old)
+            continue
+        created = (old['createdAt'] if old and old.get('environmentId') == environment_id
+                   else datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z'))
+        records.append({
+            'environmentId': environment_id,
+            'label': connection['label'],
+            'httpBaseUrl': 'http://127.0.0.1:3773/',
+            'wsBaseUrl': 'ws://127.0.0.1:3773/',
+            'createdAt': created,
+            'lastConnectedAt': None,
+            'desktopSsh': {'alias': alias, 'hostname': connection['hostname'],
+                           'username': None, 'port': None},
+        })
+    if write_json(registry, {'version': 1, 'records': records}):
+        print('Prepared T3 SSH connections to the other Macs; T3 adds them when it next starts')
+    if unreachable:
+        print(f'T3 connection to {", ".join(unreachable)} deferred: Mac unreachable or T3 not set up there')
+
+
+def sync_t3(profile, action):
+    userdata = HOME / '.t3/userdata'
+    pending = []
+    for key, name in T3_DOCUMENTS.items():
+        settings = profile.get(key, {})
+        target = userdata / name
+        runtime = json.loads(target.read_text()) if target.exists() else {}
+        defaults = T3_DEFAULTS.get(name)
+        if defaults is not None:
+            current = {setting: runtime[setting] if setting in runtime else defaults.get(setting)
+                       for setting in settings}
+        else:
+            current = {setting: runtime.get(setting) for setting in settings}
+        if action == 'capture':
+            for setting, wanted in list(settings.items()):
+                if type(current[setting]) is type(wanted):
+                    settings[setting] = current[setting]
+                elif target.exists() and defaults is not None and current[setting] is None:
+                    # Reset to an unset value that has no default: stop sharing it.
+                    del settings[setting]
+        elif current != settings:
+            pending.append((name, target, runtime, settings))
+    if action == 'capture':
+        return
+    if pending:
+        processes = subprocess.run(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
+        unknown = processes.returncode != 0
+        desktop = unknown or T3_DESKTOP_PROCESS.search(processes.stdout)
+        server = unknown or T3_SERVER_PROCESS.search(processes.stdout)
+        deferred = []
+        for name, target, runtime, settings in pending:
+            if desktop or (server and name == 'settings.json'):
+                deferred.append(name)
+                continue
+            runtime.update(settings)
+            write_json(target, runtime)
+            print(f'Applied portable T3 settings to {name}; local values retained')
+        if deferred:
+            print(f'T3 {", ".join(deferred)} deferred: quit T3, and any T3 server another '
+                  'Mac started over SSH, before the next mac-sync.')
+    prepare_t3_connections(userdata, profile.get('t3Connections', []))
+
+
 def main():
     action = sys.argv[1] if len(sys.argv) > 1 else 'apply'
     if action not in {'apply', 'capture', 'list', 'enable', 'disable'}:
@@ -47,8 +193,8 @@ def main():
     profile = json.loads(PROFILE.read_text())
     shared = shared_applications()
     applications = {entry['application'] for entry in profile['preferences'].values()}
-    if profile.get('t3ClientSettings'):
-        applications.add('T3 Code (Nightly).app')
+    if any(profile.get(key) for key in (*T3_DOCUMENTS, 't3Connections')):
+        applications.add(T3_APP)
     disabled = set(profile.get('disabledApplications', []))
     if action == 'list':
         for application in sorted(applications):
@@ -94,25 +240,8 @@ def main():
                 raise ValueError(f'Unsupported preference type: {domain}/{key}')
             subprocess.run(['defaults', 'write', domain, key, *args], check=True)
             print(f'Applied {domain}: {key} = {wanted}')
-    if shared_installed('T3 Code (Nightly).app', shared):
-        target = HOME / '.t3/userdata/client-settings.json'
-        runtime = json.loads(target.read_text()) if target.exists() else {}
-        settings = profile.get('t3ClientSettings', {})
-        if action == 'capture':
-            for key, wanted in settings.items():
-                if key in runtime and type(runtime[key]) is type(wanted):
-                    settings[key] = runtime[key]
-        elif any(runtime.get(key) != wanted for key, wanted in settings.items()):
-            processes = subprocess.run(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
-            t3_running = re.search(
-                r'/T3 Code(?: \((?:Alpha|Nightly)\))?\.app/Contents/MacOS/',
-                processes.stdout)
-            if processes.returncode != 0 or t3_running:
-                print('T3 interface settings deferred: close T3 before the next mac-sync.')
-            else:
-                runtime.update(settings)
-                write_json(target, runtime)
-                print('Applied portable T3 interface settings; local connections retained')
+    if shared_installed(T3_APP, shared):
+        sync_t3(profile, action)
     if action == 'capture':
         updated = json.dumps(profile, indent=2) + '\n'
         if updated != PROFILE.read_text():

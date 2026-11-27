@@ -86,5 +86,69 @@
     "sidebarThreadPreviewCount": 6,
     "timestampFormat": "locale",
     "wordWrap": true
-  }
+  },
+  "t3ServerSettings": {
+    "providerModelPreferences": {
+      "codex": {
+        "hiddenModels": [
+          "gpt-6-astra",
+          "gpt-6-sol",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-5.6-luna"
+        ],
+        "modelOrder": []
+      },
+      "claudeAgent": {
+        "hiddenModels": [
+          "claude-fable-5-1",
+          "claude-fable-5",
+          "claude-opus-5",
+          "claude-opus-4-8",
+          "claude-opus-4-7",
+          "claude-opus-4-6",
+          "claude-opus-4-5",
+          "claude-sonnet-5",
+          "claude-sonnet-4-6",
+          "claude-haiku-4-5",
+          "claude-fable-5-2"
+        ],
+        "modelOrder": []
+      }
+    },
+    "idleCompaction": "onReturn",
+    "autoResumeLimitedThreads": true,
+    "linkedEnvironmentsEnabled": true,
+    "providerInstances": {
+      "claudeAgent": {
+        "driver": "claudeAgent",
+        "enabled": true
+      },
+      "codex": {
+        "driver": "codex",
+        "enabled": false
+      }
+    }
+  },
+  "t3DesktopSettings": {
+    "serverExposureMode": "network-accessible",
+    "tailscaleServeEnabled": true
+  },
+  "t3Connections": [
+    {
+      "mac": "pro",
+      "label": "MacBook Pro",
+      "hostname": "pro.tailed8082.ts.net"
+    },
+    {
+      "mac": "air",
+      "label": "MacBook Air",
+      "hostname": "air.tailed8082.ts.net"
+    },
+    {
+      "mac": "studio",
+      "label": "Mac Studio",
+      "hostname": "studio.tailed8082.ts.net"
+    }
+  ]
 }
