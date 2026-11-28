@@ -1706,7 +1706,8 @@ copied into machine-local `~/.claude.json`, never into the snapshot. Gmail, Cale
 
 The Claude desktop app's portable settings live in `app-preferences.json`
 (`claudeDesktopPreferences`, `claudeSshConnections`): Remote Control connects
-new sessions, stays reachable and excludes no folders, so every Mac's Code
+new sessions and excludes no folders; "stay reachable" is off because it holds
+the app's idle-sleep block even with no agent running, so every Mac's Code
 sessions appear in the other Macs' sidebars while their Mac is awake. Each Mac
 gets the other two as SSH connections in the New session picker (added, never
 removed). `app-preferences.py apply` writes them only while the app is closed;

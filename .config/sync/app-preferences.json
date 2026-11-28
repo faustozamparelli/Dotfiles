@@ -153,7 +153,7 @@
   ],
   "claudeDesktopPreferences": {
     "ccRemoteControlDefaultEnabled": true,
-    "remoteControlStayReachable": true,
+    "remoteControlStayReachable": false,
     "remoteControlExcludedFolders": []
   },
   "claudeSshConnections": [
