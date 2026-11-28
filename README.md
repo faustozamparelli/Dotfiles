@@ -18,7 +18,7 @@ explicit; an ordinary task gets acceptance checks without an automatic Goal.
 
 | Work | Tools and conventions |
 | --- | --- |
-| Coding agents | **Claude Code desktop app** (Code tab) with the shared rules (`~/.codex/AGENTS.md`) and skills (`~/.codex/skills`); select the project there. The Codex CLI remains installed. T3 Code (Nightly) was reinstated on 2026-11-27 as a shared app for its saved Mac connections and remote access; its retired MCP/Peekaboo extras stay retired. |
+| Coding agents | **Claude Code desktop app** (Code tab) with the shared rules (`~/.codex/AGENTS.md`) and skills (`~/.codex/skills`); select the project there. The Codex CLI remains installed. T3 Code was retired again on 2026-11-28. |
 | Editing and terminals | **VS Code** (`code .`); **Ghostty → Herdr → fish**. Detaching preserves server processes; reboot does not. Terminal editor: `nano`. |
 | Search and Git | `rg`, `fd`, `bat`, `eza`, `fzf`, `z`/`zi` (zoxide), `git`, `gh`. |
 | Python/notebooks | `uv sync`, `uv run …`, Ruff/Pyright; JupyterLab or VS Code with the project's `.venv` kernel. Jupytext pairing is opt-in; dependencies stay per-project. |
@@ -39,6 +39,14 @@ Use `awake status` / `awake stop` or `remote status` / `remote stop`.
 Durations accept `30m`, `5h`, `1h30m` (1s–7d); starting again resets the deadline.
 One mode at a time; start/stop need administrator authorization. **Expiry
 requests native sleep**; stop restores settings without forcing sleep.
+Start/stop run only the root-owned copy in `/Library/PrivilegedHelperTools`;
+run `awake install` once per Mac and again whenever `start` says the script
+changed (it shows the diff, then asks for the password).
+
+Both keep the Mac running with the lid closed. To follow a closed-lid run from
+the Claude iPhone app, `awake` is enough (it reaches the session through
+Anthropic, not Tailscale); use `remote` only for SSH or Screen Sharing. On
+battery a closed, awake Mac keeps draining and warming, so plug it in.
 
 The Claude Code app's "Keep computer awake while Claude works" setting is on.
 After a usage limit the app does not resume on its own: resume the session
@@ -70,10 +78,10 @@ all trusting the same canonical host key:
 | `NAME-lan` | Bonjour `NAME.local` | Same home network only |
 
 Pro and Air often share eduroam, which blocks SSH between devices, so even
-there they reach each other through Tailscale. For a person, T3 Code's T3
-Connect route and Screen Sharing are non-SSH fallbacks. Each Mac's HostName
-and LocalHostName equal its name. Screen Sharing is on for all
-three: `open vnc://NAME.tailed8082.ts.net` (or `NAME.local` on the same LAN).
+there they reach each other through Tailscale. For a person, Screen Sharing is
+the non-SSH fallback. Each Mac's HostName and LocalHostName equal its name.
+Screen Sharing is on for all three: `open vnc://NAME.tailed8082.ts.net` (or
+`NAME.local` on the same LAN).
 It must be switched on in System Settings > Sharing (enabling the launchd job
 by command alone leaves logins "not permitted"); the user must be in
 `com.apple.access_screensharing`. Each Mac's Screen Sharing app saves a host
@@ -230,8 +238,7 @@ Studio follows Pro's curated extras through symlinked machine manifests. Keep
 repositories in `~/Developer/<repo>` and use session worktrees for independent
 changes. The app creates them in `<repo>/.claude/worktrees` (git-ignored per
 repo); use `git -C ~/Developer/<repo> worktree list` to find an agent's exact
-directory. Open that directory when reviewing its files. Old `~/.t3/worktrees`
-entries should be checked the same way and removed once clean and pushed.
+directory. Open that directory when reviewing its files.
 
 Studio keeps Tailscale connected continuously. On Pro/Air in Milan, enable
 Tailscale when needed: eduroam does not permit direct LAN peer access.

@@ -878,31 +878,10 @@ the actual project before concluding that a previous CPU issue is resolved.
 ### Codex
 
 The Claude Code desktop app (Code tab) is the entry point for coding agents;
-T3 Code (Nightly) was retired on 2026-11-26 and reinstated on 2026-11-27 as a
-shared app. The MCP and Peekaboo retirements are unchanged. The terminal CLI
-remains installed for direct use and configuration diagnostics.
-
-`app-preferences.py` shares reviewed top-level keys of three `~/.t3/userdata`
-files: `t3ClientSettings` (`client-settings.json`: fonts, notifications,
-sidebar, diff and confirmation choices), `t3ServerSettings` (`settings.json`:
-hidden models, enabled providers, compaction, auto-resume, linked
-environments) and `t3DesktopSettings` (`desktop-settings.json`: network
-exposure, Tailscale Serve). T3 omits default values from the last two files,
-so capture reads a missing key as T3's default. Writes wait while T3 runs; a
-T3 server that another Mac started over SSH blocks only `settings.json`. Every
-other key stays local, for example window bounds, onboarding, microphones,
-browser profiles and Studio's `defaultThreadEnvMode: worktree`. Keybindings
-are not tracked: Pro's file held only T3's defaults.
-
-Saved connections live in `connection-catalog.json`, encrypted with a
-keychain key, so they are never copied or decrypted. `t3Connections` declares
-SSH routes `pro`, `air` and `studio`. When a Mac has no catalog (a fresh or
-wiped T3), sync reads each other Mac's `environment-id` over SSH and writes
-`saved-environments.json`, the plain registry T3 imports once at startup.
-T3 then pairs over SSH and stores the credential locally. A Mac that already
-has a catalog keeps it; add a missing Mac there in Settings > Connections
-with SSH host `NAME`. Linked environments (`t3 environment link`) need a
-pairing code from the other Mac and stay manual.
+T3 Code (Nightly) was retired on 2026-11-26, reinstated on 2026-11-27 and
+retired again on 2026-11-28, so its settings and connections are no longer
+shared. The terminal CLI remains installed for direct use and configuration
+diagnostics.
 
 Provide concrete requests: desired outcome, relevant files, constraints, and
 verification. Ask the agent to inspect before editing when the problem is not
@@ -1420,13 +1399,13 @@ continue to use the dotfiles workflow. Apps may need reopening to load changed
 preferences.
 
 The published shared app entries were reviewed on 2026-11-01 (the T3 Code
-profile was removed on 2026-11-26 and restored on 2026-11-27):
+profile was removed on 2026-11-26, restored on 2026-11-27 and removed again on
+2026-11-28):
 
 | Shared app | Settings route and current coverage |
 | --- | --- |
 | Ghostty, Karabiner-Elements, Visual Studio Code | Existing tracked configuration; VS Code's selected extensions are installed during sync. |
 | Codex | Existing reviewed plugin choices and public MCP endpoints; account connections stay local. |
-| T3 Code (Nightly) | Reviewed client, server and desktop settings keys plus SSH connection seeding for a Mac without saved connections (see Codex). Threads, credentials, the connection catalog and window state stay local. |
 | QuickRecorder | Encoder, HDR/audio choices, mouse/background and menu/Dock visibility. Recording areas, microphones and save locations stay local. |
 | MacWhisper | App visibility, playback-window behavior and completion sound. Models, recordings, transcripts, microphones and AI credentials stay local. |
 | Raycast | Selected general interface/navigation preferences. Extensions, aliases and command hotkeys need its native export or optional [Pro Cloud Sync](https://manual.raycast.com/cloud-sync). No subscription or cloud-data upload was enabled. |
@@ -1640,7 +1619,9 @@ preferences live in `~/.codex/AGENTS.md`. Commands and inventory are in
 - `awake start [duration]` defaults to 3h30m on battery/AC, never manages VPN;
   `remote start [duration]` defaults to 12h, AC and Tailscale required. Shared
   helper/state; stop the owning mode before switching. Renewing resets the
-  deadline while retaining the original snapshot. Normal sudo only. Expiry
+  deadline while retaining the original snapshot. Normal sudo only, and
+  only on the root-owned helper; `install` is the single step that copies
+  the user-writable `~/.local/bin/remote` into it. Expiry
   requests native sleep; stop restores without forcing sleep. Logout/reboot
   restore settings; unplug also ends remote. No unattended wake or lid-close
   guarantee. Inspect `status`, source `~/.local/bin/remote`, and
@@ -2163,3 +2144,9 @@ without Peekaboo and QGIS, and QGIS was added to `retired-apps.tsv`. The
 Codex desktop cask (`codex-app`) is discontinued upstream in favour of ChatGPT,
 which is already shared, so no Codex app entry was added.
 
+### T3 Code retired again (2026-11-28)
+
+Fausto stopped using T3 Code (Nightly). The Claude Code desktop app and its
+Remote Control replace it. `mac-sync` stops T3's service and removes the app on
+each Mac through `retired-apps.tsv`; its shared settings, connection seeding
+and firewall exception are gone. `~/.t3` stays on each Mac for manual deletion.

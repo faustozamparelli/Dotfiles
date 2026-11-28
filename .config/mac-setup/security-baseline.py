@@ -25,10 +25,7 @@ def user():
     if os.getuid() == 0:
         raise RuntimeError('Run user mode without sudo')
     home = Path.home()
-    private(home / '.t3/userdata', 0o700)
-    private(home / '.t3/userdata/secrets', 0o700)
-    for relative in ('.t3/userdata/clerk-tokens.json', '.config/fish/secrets.fish',
-                     '.codex/auth.json', '.config/gh/hosts.yml',
+    for relative in ('.config/fish/secrets.fish', '.codex/auth.json', '.config/gh/hosts.yml',
                      '.gemini/oauth_creds.json', '.claude/.credentials.json'):
         private(home / relative, 0o600)
 
@@ -77,8 +74,7 @@ def system():
         print('Retired obsolete Vorssaint passwordless pmset rule; sudoers validated')
     firewall = '/usr/libexec/ApplicationFirewall/socketfilterfw'
     for executable in ('/usr/sbin/sshd', '/usr/libexec/sshd-keygen-wrapper',
-                       '/Applications/Tailscale.app/Contents/MacOS/Tailscale',
-                       '/Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)'):
+                       '/Applications/Tailscale.app/Contents/MacOS/Tailscale'):
         if Path(executable).exists():
             run([firewall, '--add', executable])
             run([firewall, '--unblockapp', executable])

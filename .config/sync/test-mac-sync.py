@@ -705,15 +705,12 @@ class AppPreferencesTests(unittest.TestCase):
         self.profile = {'preferences': {'example.demo': {
             'application': 'Demo.app', 'settings': {'showMenubar': True}}}}
 
-    def run_profile(self, action, *, process_running=False, application=None):
+    def run_profile(self, action, *, application=None):
         self.module.PROFILE.write_text(json.dumps(self.profile))
         arguments = ['app-preferences.py', action] + ([application] if application else [])
         with patch.object(sys, 'argv', arguments), \
              patch.object(self.module.subprocess, 'run') as run:
             run.return_value.returncode = 0
-            run.return_value.stdout = (
-                '/Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)\n'
-                if process_running else '/usr/libexec/lsd\n')
             self.module.main()
         return run
 
@@ -754,141 +751,6 @@ class AppPreferencesTests(unittest.TestCase):
             captured = json.loads(self.module.PROFILE.read_text())
             expected = value if type(value) is bool else True
             self.assertEqual(captured['preferences']['example.demo']['settings'], {'showMenubar': expected})
-
-    def test_t3_settings_preserve_local_connections_and_wait_while_running(self):
-        (self.home / 'Applications/T3 Code (Nightly).app').mkdir()
-        self.manifest.write_text('cask\tt3-code@nightly\tT3 Code (Nightly)\n')
-        config = self.home / '.t3/userdata/client-settings.json'
-        config.parent.mkdir(parents=True)
-        local = {'wordWrap': False, 'browserProfiles': [{'id': 'device-only'}]}
-        config.write_text(json.dumps(local))
-        self.profile = {'preferences': {}, 't3ClientSettings': {'wordWrap': True}}
-        run = self.run_profile('apply', process_running=True)
-        run.assert_called_once_with(['/bin/ps', '-ax', '-o', 'comm='], capture_output=True, text=True)
-        self.assertEqual(json.loads(config.read_text()), local)
-        self.run_profile('apply')
-        self.assertEqual(json.loads(config.read_text()), dict(local, wordWrap=True))
-        local['wordWrap'] = False
-        config.write_text(json.dumps(local))
-        self.run_profile('capture').assert_not_called()
-        self.assertEqual(json.loads(self.module.PROFILE.read_text())['t3ClientSettings'], {'wordWrap': False})
-
-
-    def t3_fixture(self):
-        (self.home / 'Applications/T3 Code (Nightly).app').mkdir()
-        self.manifest.write_text('cask\tt3-code@nightly\tT3 Code (Nightly)\n')
-        userdata = self.home / '.t3/userdata'
-        userdata.mkdir(parents=True)
-        return userdata
-
-    def test_t3_server_settings_wait_only_for_a_running_server(self):
-        userdata = self.t3_fixture()
-        files = {
-            'client-settings.json': {'wordWrap': False, 'voiceMicrophone': 'local-mic'},
-            'desktop-settings.json': {'mainWindowBounds': {'x': 1}, 'serverExposureMode': 'local-only'},
-            'settings.json': {'defaultThreadEnvMode': 'worktree', 'idleCompaction': 'never'},
-        }
-        for name, value in files.items():
-            (userdata / name).write_text(json.dumps(value))
-        self.profile = {'preferences': {},
-                        't3ClientSettings': {'wordWrap': True},
-                        't3DesktopSettings': {'serverExposureMode': 'network-accessible'},
-                        't3ServerSettings': {'idleCompaction': 'onReturn'}}
-        self.module.PROFILE.write_text(json.dumps(self.profile))
-        server = '/Users/me/.t3/runtime/versions/0.1.14-nightly/t3\n'
-        with patch.object(sys, 'argv', ['app-preferences.py', 'apply']), \
-             patch.object(self.module.subprocess, 'run') as run:
-            run.return_value.returncode = 0
-            run.return_value.stdout = server
-            self.module.main()
-        read = lambda name: json.loads((userdata / name).read_text())
-        self.assertEqual(read('client-settings.json'), dict(files['client-settings.json'], wordWrap=True))
-        self.assertEqual(read('desktop-settings.json'),
-                         dict(files['desktop-settings.json'], serverExposureMode='network-accessible'))
-        self.assertEqual(read('settings.json'), files['settings.json'])
-        self.run_profile('apply')
-        self.assertEqual(read('settings.json'), dict(files['settings.json'], idleCompaction='onReturn'))
-
-    def test_t3_connections_seed_ssh_targets_for_the_other_macs_only(self):
-        userdata = self.t3_fixture()
-        registry = userdata / 'saved-environments.json'
-        self.profile = {'preferences': {}, 't3Connections': [
-            {'mac': mac, 'label': mac.title(), 'hostname': f'{mac}.example'}
-            for mac in ('pro', 'air', 'studio')]}
-        ids = {'pro': 'pro-environment-id\n', 'studio': 'studio-environment-id\n'}
-
-        def run_apply():
-            self.module.PROFILE.write_text(json.dumps(self.profile))
-            calls = []
-
-            def fake_run(arguments, **kwargs):
-                calls.append(arguments)
-                alias = arguments[-2] if arguments[0] == '/usr/bin/ssh' else None
-                return subprocess.CompletedProcess(arguments, 0 if alias in ids else 255,
-                                                   stdout=ids.get(alias, ''), stderr='')
-            with patch.object(sys, 'argv', ['app-preferences.py', 'apply']), \
-                 patch.object(self.module, 'machine_name', return_value='air'), \
-                 patch.object(self.module.subprocess, 'run', side_effect=fake_run):
-                self.module.main()
-            return calls
-
-        calls = run_apply()
-        self.assertEqual([call[-2] for call in calls], ['pro', 'studio'])
-        records = json.loads(registry.read_text())['records']
-        self.assertEqual([(r['environmentId'], r['desktopSsh']) for r in records], [
-            ('pro-environment-id', {'alias': 'pro', 'hostname': 'pro.example', 'username': None, 'port': None}),
-            ('studio-environment-id', {'alias': 'studio', 'hostname': 'studio.example',
-                                       'username': None, 'port': None})])
-        self.assertFalse(any('Token' in key or 'credential' in key for r in records for key in r))
-        written = registry.read_text()
-        run_apply()
-        self.assertEqual(registry.read_text(), written)
-        del ids['studio']
-        run_apply()
-        self.assertEqual(registry.read_text(), written)
-        (userdata / 'connection-catalog.json').write_text('{"version":1,"encryptedCatalog":"x"}')
-        registry.unlink()
-        self.assertEqual(run_apply(), [])
-        self.assertFalse(registry.exists())
-
-
-    def test_t3_capture_treats_a_missing_key_as_the_t3_default(self):
-        userdata = self.t3_fixture()
-        (userdata / 'desktop-settings.json').write_text(json.dumps({'mainWindowMaximized': True}))
-        (userdata / 'settings.json').write_text(json.dumps({'providerInstances': {'codex': {'enabled': False}}}))
-        self.profile = {'preferences': {},
-                        't3DesktopSettings': {'serverExposureMode': 'network-accessible',
-                                              'tailscaleServeEnabled': True},
-                        't3ServerSettings': {'linkedEnvironmentsEnabled': True, 'idleCompaction': 'onReturn',
-                                             'providerInstances': {}}}
-        self.run_profile('capture').assert_not_called()
-        captured = json.loads(self.module.PROFILE.read_text())
-        self.assertEqual(captured['t3DesktopSettings'],
-                         {'serverExposureMode': 'local-only', 'tailscaleServeEnabled': False})
-        self.assertEqual(captured['t3ServerSettings'], {'linkedEnvironmentsEnabled': False,
-                                                        'providerInstances': {'codex': {'enabled': False}}})
-        self.profile = captured
-        before = (userdata / 'desktop-settings.json').read_text()
-        self.run_profile('apply', process_running=True).assert_not_called()
-        self.assertEqual((userdata / 'desktop-settings.json').read_text(), before)
-
-    def test_t3_connections_ignore_malformed_registry_records(self):
-        userdata = self.t3_fixture()
-        registry = userdata / 'saved-environments.json'
-        self.profile = {'preferences': {}, 't3Connections': [
-            {'mac': 'pro', 'label': 'Pro', 'hostname': 'pro.example'}]}
-        for document in ({'records': None}, {'records': [1, {'desktopSsh': 'x'}]}, []):
-            with self.subTest(document=document):
-                registry.write_text(json.dumps(document))
-                self.module.PROFILE.write_text(json.dumps(self.profile))
-                result = subprocess.CompletedProcess([], 0, stdout='pro-environment-id\n', stderr='')
-                with patch.object(sys, 'argv', ['app-preferences.py', 'apply']), \
-                     patch.object(self.module, 'machine_name', return_value='air'), \
-                     patch.object(self.module.subprocess, 'run', return_value=result):
-                    self.module.main()
-                records = json.loads(registry.read_text())['records']
-                self.assertEqual(records[-1]['environmentId'], 'pro-environment-id')
-
 
 class TailscalePolicyTests(unittest.TestCase):
     def setUp(self):

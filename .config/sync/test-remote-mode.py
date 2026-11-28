@@ -16,6 +16,13 @@ loader.exec_module(mode)
 
 
 class RemoteModeTests(unittest.TestCase):
+    def setUp(self):
+        # CLI tests must not depend on this Mac's installed helper.
+        for name, value in (("helper_trusted", True), ("helper_current", True)):
+            patcher = patch.object(mode, name, return_value=value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
     def state(self, **changes):
         state = dict(uid=501, gui=True, cli=mode.APP, boot="boot-A", sleep_before=0,
                      deadline=1000, phase="active", connected_by_mode=True,
@@ -371,7 +378,68 @@ class RemoteModeTests(unittest.TestCase):
              patch.dict(mode.os.environ, {"SUDO_UID": "501"}), patch.object(mode.os, "execv") as execute:
             mode.main()
             self.assertEqual(execute.call_args.args[1][-4:], ["start", "501", "7200", "local"])
-            self.assertEqual(execute.call_args.args[1][3], str(source.resolve()))
+            self.assertEqual(execute.call_args.args[1][3], str(mode.HELPER))
+
+    def test_start_runs_only_a_trusted_current_helper(self):
+        for trusted, current, message in ((False, True, "install once"), (True, False, "was updated")):
+            with self.subTest(trusted=trusted, current=current), \
+                 patch.object(mode.sys, "argv", ["awake", "start"]), \
+                 patch.object(mode, "helper_trusted", return_value=trusted), \
+                 patch.object(mode, "helper_current", return_value=current), \
+                 patch.object(mode.os, "execv") as execute:
+                with self.assertRaisesRegex(mode.ModeError, message):
+                    mode.main()
+                execute.assert_not_called()
+
+    def test_stop_uses_installed_helper_even_when_outdated(self):
+        with patch.object(mode.sys, "argv", ["remote", "stop"]), \
+             patch.object(mode, "helper_current", return_value=False), \
+             patch.object(mode.os, "execv") as execute:
+            mode.main()
+            self.assertEqual(execute.call_args.args[1][3:], [str(mode.HELPER), "_root", "stop"])
+
+    def test_install_is_the_only_sudo_call_on_the_user_copy(self):
+        with patch.object(mode.sys, "argv", ["/Users/test/.local/bin/awake", "install"]), \
+             patch.object(mode, "HELPER", Mock(exists=Mock(return_value=False))), \
+             patch("builtins.input", return_value="y"), \
+             patch.object(mode.os, "execv") as execute:
+            mode.main()
+            self.assertEqual(execute.call_args.args[1][1], "-k")
+            self.assertEqual(execute.call_args.args[1][4:], [str(source.resolve()), "_root", "install"])
+
+    def test_install_needs_explicit_yes(self):
+        with patch.object(mode.sys, "argv", ["remote", "install"]), \
+             patch.object(mode, "HELPER", Mock(exists=Mock(return_value=False))), \
+             patch("builtins.input", return_value=""), patch.object(mode.os, "execv") as execute:
+            with self.assertRaisesRegex(mode.ModeError, "Not installed"):
+                mode.main()
+            execute.assert_not_called()
+
+    def test_helper_trust_requires_root_owned_regular_file_and_directory(self):
+        import stat
+        def info(kind, uid=0, perm=0o755):
+            return Mock(st_mode=kind | perm, st_uid=uid)
+        good_file, good_dir = info(stat.S_IFREG), info(stat.S_IFDIR)
+        cases = [((good_file, good_dir), True),
+                 ((info(stat.S_IFREG, uid=501), good_dir), False),
+                 ((info(stat.S_IFREG, perm=0o775), good_dir), False),
+                 ((info(stat.S_IFLNK), good_dir), False),
+                 ((good_file, info(stat.S_IFDIR, perm=0o777)), False)]
+        self.addCleanup(patch.stopall)
+        patch.stopall()  # use the real check, not setUp's stub
+        for results, expected in cases:
+            with self.subTest(results=results), patch.object(mode.os, "lstat", side_effect=list(results)):
+                self.assertEqual(mode.helper_trusted(), expected)
+        with patch.object(mode.os, "lstat", side_effect=FileNotFoundError):
+            self.assertFalse(mode.helper_trusted())
+
+    def test_watchdog_refuses_untrusted_helper(self):
+        with patch.object(mode, "helper_trusted", return_value=False), \
+             patch.object(mode, "atomic_write") as write, patch.object(mode, "run") as run:
+            with self.assertRaisesRegex(mode.ModeError, "install"):
+                mode.install_watchdog()
+            write.assert_not_called()
+            run.assert_not_called()
 
     def test_awake_defaults_to_three_and_a_half_hours_remote_stays_twelve(self):
         for command, seconds in (("awake", "12600"), ("remote", "43200")):

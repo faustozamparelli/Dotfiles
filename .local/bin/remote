@@ -10,6 +10,7 @@ import plistlib
 import pwd
 import re
 import socket
+from stat import S_ISDIR, S_ISREG
 import subprocess
 import sys
 import tempfile
@@ -180,9 +181,37 @@ def app_running(uid):
     return run(["/usr/bin/pgrep", "-u", str(uid), "-fx", APP], check=False).returncode == 0
 
 
-def install_watchdog():
+def helper_trusted():
+    # Root only runs a helper that only root can change; ~/.local/bin is user-writable.
+    try:
+        helper, parent = os.lstat(HELPER), os.lstat(HELPER.parent)
+    except FileNotFoundError:
+        return False
+    return (S_ISREG(helper.st_mode) and S_ISDIR(parent.st_mode)
+            and all(info.st_uid == 0 and not info.st_mode & 0o022 for info in (helper, parent)))
+
+
+def helper_current():
+    return HELPER.read_bytes() == Path(__file__).resolve().read_bytes()
+
+
+def root_install():
+    # The one deliberate step that copies the user's copy into the root-owned helper.
     HELPER.parent.mkdir(mode=0o755, exist_ok=True)
-    atomic_write(HELPER, Path(__file__).read_bytes(), 0o755)
+    atomic_write(HELPER, Path(__file__).resolve().read_bytes(), 0o755)
+    with locked():
+        if load() is not None:
+            try:
+                install_watchdog()  # restart an active session's watchdog on the new version
+            except (ModeError, OSError) as error:
+                raise ModeError("Installed, but the active session's watchdog did not restart ("
+                                + str(error) + "). Run stop now to restore sleep settings.")
+    print("Installed " + str(HELPER) + ".")
+
+
+def install_watchdog():
+    if not helper_trusted():
+        raise ModeError("The root-owned helper is missing. Run awake install or remote install.")
     config = {
         "Label": LABEL,
         "ProgramArguments": ["/usr/bin/python3", "-I", str(HELPER), "_watch"],
@@ -499,6 +528,8 @@ def main():
             if local_only:
                 raise ModeError("Invalid internal operation")
             watch()
+        elif internal == ["_root", "install"]:
+            root_install()
         elif internal == ["_root", "stop"]:
             root_stop(local_only=local_only)
         elif len(internal) == 4 and internal[:2] == ["_root", "start"]:
@@ -516,20 +547,37 @@ def main():
     parser = argparse.ArgumentParser(
         description=("Keep this Mac awake on battery or AC for local work, without managing Tailscale or SSH."
                      if local_only else "Temporary AC-only, lid-closed remote access over Tailscale."),
-        usage=name + " {start [duration],stop,status}",
+        usage=name + " {start [duration],stop,status,install}",
         epilog="Examples: " + name + " start; " + name + " start 30m; " + name + " start 2h. "
                "Default: " + default_duration + "; range: 1s–7d. Starting again resets the timer. Expiry restores settings "
                "and requests native system sleep. Standby/hibernation settings stay unchanged. "
                "Stop restores settings without forcing sleep. Nothing auto-starts on AC. "
                "Only one awake/remote session can run at a time. "
+               "install copies this script into the root-owned helper that start/stop run; "
+               "run it once, and again after the script changes. "
                "Errors return a nonzero status; automatic failures appear in " + name + " status.")
-    parser.add_argument("action", choices=("start", "stop", "status"))
+    parser.add_argument("action", choices=("start", "stop", "status", "install"))
     parser.add_argument("arguments", nargs="*")
     args = parser.parse_args()
     if args.action == "status" and not args.arguments:
         return status(local_only=local_only)
+    elif args.action == "install":
+        if args.arguments:
+            parser.error("Usage: " + name + " install")
+        source = str(Path(__file__).resolve())
+        if HELPER.exists():
+            subprocess.run(["/usr/bin/diff", "-u", str(HELPER), source])
+        if input("Install this version as root? [y/N] ").strip().lower() not in ("y", "yes"):
+            raise ModeError("Not installed.")
+        # -k: always ask for the password, even with cached sudo credentials.
+        command = ["/usr/bin/sudo", "-k", "/usr/bin/python3", "-I", source, "_root", "install"]
+        os.execv(command[0], command)
     elif args.action in ("start", "stop"):
-        command = ["/usr/bin/sudo", "/usr/bin/python3", "-I", str(Path(__file__).resolve()), "_root", args.action]
+        if not helper_trusted():
+            raise ModeError("Run " + name + " install once to set up the root-owned helper.")
+        if args.action == "start" and not helper_current():
+            raise ModeError(name + " was updated. Run " + name + " install to review the change and install it.")
+        command = ["/usr/bin/sudo", "/usr/bin/python3", "-I", str(HELPER), "_root", args.action]
         if args.action == "start":
             if len(args.arguments) > 1:
                 parser.error("Usage: " + name + " start [duration], e.g. " + name + " start 30m")
